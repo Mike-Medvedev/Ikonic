@@ -1,20 +1,25 @@
+import React from "react";
 import { Tabs } from "expo-router";
 import { StyleSheet, Text } from "react-native";
+import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
 export default function TabLayout() {
+  const theme = useTheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#ffd33d",
+        tabBarActiveTintColor: theme.colors.primary,
         headerStyle: {
-          backgroundColor: "#25292e",
+          backgroundColor: theme.colors.background,
         },
         headerShadowVisible: true,
-        headerTintColor: "#fff",
+        headerTintColor: theme.colors.onPrimary,
         tabBarStyle: {
-          backgroundColor: "#25292e",
+          backgroundColor: theme.colors.surface,
         },
       }}
     >
@@ -22,27 +27,35 @@ export default function TabLayout() {
         name="trips"
         options={{
           title: "Trips",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <FontAwesome name="newspaper-o" size={24} color={color} />
           ),
-          headerLeft: () => <Text style={styles.headerRight}>Stashly</Text>,
+          headerLeft: () => (
+            <Text style={[styles.headerRight, { color: theme.colors.primary }]}>
+              Stashly
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="index"
         options={{
           title: "Plan",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <AntDesign name="pluscircle" size={24} color={color} />
           ),
-          headerTitle: () => <Text style={styles.headerRight}>Stashly</Text>,
+          headerTitle: () => (
+            <Text style={[styles.headerRight, { color: theme.colors.primary }]}>
+              Stashly
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <FontAwesome6 name="user-circle" size={24} color={color} />
           ),
         }}
@@ -50,9 +63,9 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
 const styles = StyleSheet.create({
   headerRight: {
     fontSize: 26,
-    color: "#ffd33d",
   },
 });

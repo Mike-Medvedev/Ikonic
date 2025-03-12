@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Button, View, Alert } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useTripContext } from "@/context/TripContext";
 import SelectMountain from "@/components/SelectMountain";
 import TripDatePicker from "@/components/TripDatePicker";
 import { router } from "expo-router";
+import { Button } from "react-native-paper";
 
 const Index = () => {
   const { mountain, date, setTrips } = useTripContext();
@@ -33,7 +34,9 @@ const Index = () => {
         <View style={styles.tripPlannerContainer}>
           <SelectMountain />
           <TripDatePicker />
-          <Button title="Create Trip" onPress={handleSubmit} />
+          <Button mode="contained-tonal" onPress={handleSubmit}>
+            Create Trip
+          </Button>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
   },
   tripPlannerContainer: {
     margin: 64,
-    justifyContent: "center",
+    flex: 1,
     gap: 20,
   },
 });

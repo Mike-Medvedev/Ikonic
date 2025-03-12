@@ -31,16 +31,17 @@ export default function TripDatePicker() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView>
       <View
         style={{
-          justifyContent: "center",
-          flex: 1,
-          alignItems: "center",
           gap: 20,
         }}
       >
-        <Button onPress={() => setOpen(true)} uppercase={false} mode="outlined">
+        <Button
+          onPress={() => setOpen(true)}
+          uppercase={false}
+          mode="contained-tonal"
+        >
           Select a Date
         </Button>
         <DatePickerModal
@@ -55,13 +56,16 @@ export default function TripDatePicker() {
           startYear={2023}
           endYear={2024}
         />
-        <Text style={{ fontSize: 16, marginTop: 16 }}>Date Selected</Text>
+
         {range.startDate instanceof Date && range.endDate instanceof Date ? (
-          <View style={{ flexDirection: "row", gap: 10 }}>
-            <Text>{range.startDate.toDateString()}</Text>
-            <Text> - </Text>
-            <Text>{range.endDate.toDateString()}</Text>
-          </View>
+          <>
+            <Text style={{ fontSize: 16, marginTop: 16 }}>Date Selected</Text>
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              <Text>{range.startDate.toDateString()}</Text>
+              <Text> - </Text>
+              <Text>{range.endDate.toDateString()}</Text>
+            </View>
+          </>
         ) : null}
       </View>
     </SafeAreaView>

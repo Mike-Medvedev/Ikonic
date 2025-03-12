@@ -1,10 +1,10 @@
 import Trip from "@/components/Trip";
 import { useTripContext } from "@/context/TripContext";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
-import { Badge } from "react-native-paper";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Badge, Text, Button, useTheme } from "react-native-paper";
 const Trips = () => {
   const { trips } = useTripContext();
-
+  const theme = useTheme();
   return (
     <View style={{ padding: 10 }}>
       <View
@@ -12,13 +12,14 @@ const Trips = () => {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          margin: 10,
         }}
       >
-        <Text style={{ fontSize: 30, fontWeight: "600" }}>Upcoming Trips</Text>
+        <Text variant="headlineLarge">Upcoming Trips</Text>
         <Badge
           style={{
             alignSelf: "flex-start",
-            backgroundColor: "grey",
+            backgroundColor: theme.colors.onSurfaceDisabled,
             color: "black",
           }}
         >
@@ -26,8 +27,8 @@ const Trips = () => {
         </Badge>
       </View>
 
-      <ScrollView>
-        <View>
+      <ScrollView style={{ marginTop: 10 }}>
+        <View style={{ gap: 20 }}>
           {trips.map((trip, index) => (
             <Trip key={index} trip={trip} />
           ))}

@@ -1,5 +1,7 @@
 import { useTripContext } from "@/context/TripContext";
 import { useContext, useEffect, useState } from "react";
+import { View } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 import {
   AutocompleteDropdown,
   AutocompleteDropdownItem,
@@ -24,6 +26,7 @@ const newEnglandSkiResorts = [
 ];
 
 const SelectMountain = () => {
+  const theme = useTheme();
   const { setMountain } = useTripContext();
   const [selectedItem, setSelectedItem] =
     useState<AutocompleteDropdownItem | null>(null);
@@ -36,18 +39,48 @@ const SelectMountain = () => {
   if (!isClient) return null; // Prevent rendering on the server
 
   return (
-    <AutocompleteDropdown
-      clearOnFocus={false}
-      closeOnBlur={true}
-      closeOnSubmit={false}
-      inputContainerStyle={{ minWidth: 200 }}
-      initialValue={"1"} // or just '2'
-      onSelectItem={(item) => {
-        setSelectedItem(item);
-        setMountain(item?.title ?? "");
-      }}
-      dataSet={newEnglandSkiResorts}
-    />
+    <View>
+      <Text>Select a Destination</Text>
+      <AutocompleteDropdown
+        clearOnFocus={false}
+        closeOnBlur={true}
+        closeOnSubmit={false}
+        initialValue={"1"}
+        onSelectItem={(item) => {
+          setSelectedItem(item);
+          setMountain(item?.title ?? "");
+        }}
+        textInputProps={{
+          style: {
+            color: theme.colors.onSurface,
+            paddingLeft: 18,
+          },
+        }}
+        rightButtonsContainerStyle={{
+          right: 8,
+          height: 30,
+
+          alignSelf: "center",
+        }}
+        useFilter={false}
+        inputContainerStyle={{
+          minWidth: 200,
+          backgroundColor: theme.colors.primaryContainer,
+          borderRadius: 25,
+        }}
+        suggestionsListContainerStyle={{
+          backgroundColor: theme.colors.primaryContainer,
+        }}
+        containerStyle={{}}
+        renderItem={(item) => (
+          <Text style={{ color: theme.colors.onSurface, padding: 15 }}>
+            {item.title}
+          </Text>
+        )}
+        showChevron={false}
+        dataSet={newEnglandSkiResorts}
+      />
+    </View>
   );
 };
 
