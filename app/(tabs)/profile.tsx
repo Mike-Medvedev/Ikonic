@@ -1,6 +1,3 @@
-import ContentPost from "@/components/FeedComponents/ContentPost";
-import ContentPostImage from "@/components/FeedComponents/ContestPostImage";
-import ProfileActivity from "@/components/ProfileComponents/ProfileActivity";
 import ProfileStatus from "@/components/ProfileComponents/ProfileStatus";
 import { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
@@ -42,7 +39,7 @@ const Profile = () => {
         </View>
       </View>
       <ScrollView>
-        {isActivityTabSelected ? <ProfileActivity /> : <ProfileStatus />}
+        <ProfileStatus />
       </ScrollView>
     </View>
   );

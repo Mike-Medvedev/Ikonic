@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SMS from "expo-sms";
 
 interface movie {
   id: string;
@@ -16,6 +17,19 @@ interface movies {
 
 const Loader = () => {
   return <Text>Loading...</Text>;
+};
+
+const sendSms = async () => {
+  const isAvailable = await SMS.isAvailableAsync();
+  if (isAvailable) {
+    const { result } = await SMS.sendSMSAsync(
+      ["2038587135"],
+      "My sample HelloWorld message"
+    );
+    console.log(result);
+  } else {
+    console.log("SMS is not avaliable");
+  }
 };
 
 const getStatusValue = async (): Promise<movies | null> => {
@@ -69,6 +83,12 @@ const ProfileStatus = () => {
       ) : (
         <Loader />
       )}
+      <Button
+        onPress={sendSms}
+        title="Send A Text"
+        color="#841584"
+        accessibilityLabel="Send A Text"
+      />
     </View>
   );
 };
