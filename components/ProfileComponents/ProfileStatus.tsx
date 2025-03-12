@@ -1,33 +1,62 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+interface movie {
+  id: string;
+  title: string;
+  releaseYear: string;
+}
+
+interface movies {
+  title: string;
+  description: string;
+  movies: movie[];
+}
+
+const Loader = () => {
+  return <Text>Loading...</Text>;
+};
+
+const getStatusValue = async (): Promise<movies | null> => {
+  try {
+    const status = await AsyncStorage.getItem("status");
+    if (status) return JSON.parse(status);
+    return null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
+const storeStatusValue = async (movies: movies) => {
+  try {
+    await AsyncStorage.setItem("status", JSON.stringify(movies));
+  } catch (e) {
+    console.error(e);
+  }
+
+  console.log("Done.");
+};
 const ProfileStatus = () => {
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<movies>();
 
   useEffect(() => {
     (async () => {
       try {
-        const cachedStatus = await AsyncStorage.getItem("status");
+        const cachedStatus = await getStatusValue();
         if (cachedStatus) {
-          setStatus(cachedStatus);
-          return;
-        }
-        const response = await fetch(
-          "https://4317-2600-480a-33b3-8300-8929-fab4-fe2c-d649.ngrok-free.app/",
-          {
+          const status = cachedStatus;
+          setStatus(status);
+        } else {
+          const response = await fetch("https://reactnative.dev/movies.json", {
             method: "GET",
-            headers: {
-              Accept: "application/text",
-              "ngrok-skip-browser-warning": "1337",
-            },
-          }
-        );
-        if (!response.ok) throw new Error("Error fetching status");
-        const result = await response.text();
-        if (typeof result != "string")
-          throw new Error("Response not a string!");
-        setStatus(result);
-        AsyncStorage.setItem("status", result);
+          });
+          if (!response.ok) throw new Error("Error fetching status");
+          const result = await response.json();
+          setStatus(result);
+          storeStatusValue(result);
+        }
       } catch (error) {
         console.log("error is ", error);
       }
@@ -35,7 +64,11 @@ const ProfileStatus = () => {
   }, []);
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ color: "#ffffff", fontSize: 50 }}>{status}</Text>
+      {status ? (
+        <Text style={{ color: "#ffffff", fontSize: 50 }}>{status.title}</Text>
+      ) : (
+        <Loader />
+      )}
     </View>
   );
 };
