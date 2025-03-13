@@ -6,7 +6,7 @@ import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TripDatePicker() {
-  const { setDate } = useTripContext();
+  const { date, setDate } = useTripContext();
   const [range, setRange] = React.useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
@@ -26,6 +26,7 @@ export default function TripDatePicker() {
       setOpen(false);
       setRange({ startDate, endDate });
       setDate({ startDate: startDate, endDate: endDate });
+      console.log(date);
     },
     []
   );
@@ -42,7 +43,7 @@ export default function TripDatePicker() {
           uppercase={false}
           mode="contained-tonal"
         >
-          Select a Date
+          Select Date Range
         </Button>
         <DatePickerModal
           presentationStyle={"pageSheet"}
@@ -55,18 +56,8 @@ export default function TripDatePicker() {
           onConfirm={onConfirm}
           startYear={2023}
           endYear={2024}
+          placeholder="HIHIHI"
         />
-
-        {range.startDate instanceof Date && range.endDate instanceof Date ? (
-          <>
-            <Text style={{ fontSize: 16, marginTop: 16 }}>Date Selected</Text>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Text>{range.startDate.toDateString()}</Text>
-              <Text> - </Text>
-              <Text>{range.endDate.toDateString()}</Text>
-            </View>
-          </>
-        ) : null}
       </View>
     </SafeAreaView>
   );

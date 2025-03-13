@@ -26,14 +26,11 @@ const Trips = () => {
           {trips.length}
         </Badge>
       </View>
-
-      <ScrollView style={{ marginTop: 10 }}>
-        <View style={{ gap: 20 }}>
-          {trips.map((trip, index) => (
-            <Trip key={index} trip={trip} />
-          ))}
-        </View>
-      </ScrollView>
+      <View style={{ gap: 10 }}>
+        {trips.map((trip, index) => (
+          <Trip key={index} trip={trip} />
+        ))}
+      </View>
     </View>
   );
 };
