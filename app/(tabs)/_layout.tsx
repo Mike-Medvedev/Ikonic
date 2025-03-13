@@ -27,37 +27,23 @@ export default function TabLayout() {
         name="trips"
         options={{
           title: "Trips",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome name="newspaper-o" size={24} color={color} />
-          ),
-          headerLeft: () => (
-            <Text style={[styles.headerRight, { color: theme.colors.primary }]}>
-              Stashly
-            </Text>
-          ),
+          tabBarIcon: ({ color }) => <FontAwesome name="newspaper-o" size={24} color={color} />,
+          headerLeft: () => <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Stashly</Text>,
         }}
       />
       <Tabs.Screen
-        name="index"
+        name="plan"
         options={{
           title: "Plan",
-          tabBarIcon: ({ color }) => (
-            <AntDesign name="pluscircle" size={24} color={color} />
-          ),
-          headerTitle: () => (
-            <Text style={[styles.headerRight, { color: theme.colors.primary }]}>
-              Stashly
-            </Text>
-          ),
+          tabBarIcon: ({ color }) => <AntDesign name="pluscircle" size={24} color={color} />,
+          headerTitle: () => <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Stashly</Text>,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="user-circle" size={24} color={color} />
-          ),
+          tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
         }}
       />
     </Tabs>

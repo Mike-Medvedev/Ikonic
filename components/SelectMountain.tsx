@@ -2,18 +2,9 @@ import { useTripContext } from "@/context/TripContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import {
-  AutocompleteDropdown,
-  AutocompleteDropdownItem,
-} from "react-native-autocomplete-dropdown";
+import { AutocompleteDropdown, AutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
 
 const newEnglandSkiResorts = [
-  // Connecticut
-  { id: "1", title: "Mohawk Mountain Ski Area" },
-  { id: "2", title: "Mount Southington" },
-  { id: "3", title: "Powder Ridge Ski Area" },
-  { id: "4", title: "Ski Sundown" },
-
   // Maine
   { id: "5", title: "Baker Mountain" },
   { id: "6", title: "Big Rock" },
@@ -116,8 +107,7 @@ const newEnglandSkiResorts = [
 const SelectMountain = () => {
   const theme = useTheme();
   const { mountain, setMountain } = useTripContext();
-  const [selectedItem, setSelectedItem] =
-    useState<AutocompleteDropdownItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<AutocompleteDropdownItem | null>(null);
   const [isClient, setIsClient] = useState(false);
   const dropdownController = useRef<{ clear: () => void } | null>(null);
 
@@ -126,8 +116,7 @@ const SelectMountain = () => {
   }, []);
 
   useEffect(() => {
-    if (!mountain && dropdownController.current)
-      dropdownController.current.clear();
+    if (!mountain && dropdownController.current) dropdownController.current.clear();
   }, [mountain]);
 
   if (!isClient) return null; // Prevent rendering on the server
@@ -168,11 +157,7 @@ const SelectMountain = () => {
           backgroundColor: theme.colors.primaryContainer,
         }}
         containerStyle={{}}
-        renderItem={(item) => (
-          <Text style={{ color: theme.colors.onSurface, padding: 15 }}>
-            {item.title}
-          </Text>
-        )}
+        renderItem={(item) => <Text style={{ color: theme.colors.onSurface, padding: 15 }}>{item.title}</Text>}
         showChevron={true}
         dataSet={newEnglandSkiResorts}
       />

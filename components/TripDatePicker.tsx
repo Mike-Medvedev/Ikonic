@@ -21,15 +21,12 @@ export default function TripDatePicker() {
     setOpen(false);
   }, []);
 
-  const onConfirm = React.useCallback(
-    ({ startDate, endDate }: { startDate: any; endDate: any }) => {
-      setOpen(false);
-      setRange({ startDate, endDate });
-      setDate({ startDate: startDate, endDate: endDate });
-      console.log(date);
-    },
-    []
-  );
+  const onConfirm = React.useCallback(({ startDate, endDate }: { startDate: any; endDate: any }) => {
+    setOpen(false);
+    setRange({ startDate, endDate });
+    setDate({ startDate: startDate, endDate: endDate });
+    console.log(date);
+  }, []);
 
   return (
     <SafeAreaView>
@@ -38,11 +35,7 @@ export default function TripDatePicker() {
           gap: 20,
         }}
       >
-        <Button
-          onPress={() => setOpen(true)}
-          uppercase={false}
-          mode="contained-tonal"
-        >
+        <Button onPress={() => setOpen(true)} uppercase={false} mode="contained-tonal">
           Select Date Range
         </Button>
         <DatePickerModal

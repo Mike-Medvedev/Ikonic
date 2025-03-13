@@ -18,13 +18,7 @@ const Trip = ({ trip }: TripProps) => {
       <Card.Title
         title={`${trip.mountain} Trip`}
         subtitle={`${trip.date.startDate.toDateString()} - ${trip.date.endDate.toDateString()}`}
-        left={(props) => (
-          <Avatar.Image
-            {...props}
-            source={require("@/assets/images/snow1.jpeg")}
-            size={40}
-          />
-        )}
+        left={(props) => <Avatar.Image {...props} source={require("@/assets/images/snow1.jpeg")} size={40} />}
       />
     </Card>
   );

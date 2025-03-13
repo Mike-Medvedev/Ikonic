@@ -1,8 +1,5 @@
 import { Stack } from "expo-router";
-import {
-  PaperProvider,
-  MD3LightTheme as DefaultTheme,
-} from "react-native-paper";
+import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { TripContextProvider } from "@/context/TripContext";
 import colors from "@/theme/myGeneratedColors.json";
@@ -18,12 +15,10 @@ registerTranslation("en", {
   selectSingle: "Select date",
   selectMultiple: "Select dates",
   selectRange: "Select Range",
-  notAccordingToDateFormat: (inputFormat) =>
-    `Date format must be ${inputFormat}`,
+  notAccordingToDateFormat: (inputFormat) => `Date format must be ${inputFormat}`,
   mustBeHigherThan: (date) => `Must be later then ${date}`,
   mustBeLowerThan: (date) => `Must be earlier then ${date}`,
-  mustBeBetween: (startDate, endDate) =>
-    `Must be between ${startDate} - ${endDate}`,
+  mustBeBetween: (startDate, endDate) => `Must be between ${startDate} - ${endDate}`,
   dateIsDisabled: "Day is not allowed",
   previous: "Previous",
   next: "Next",

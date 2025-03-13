@@ -22,10 +22,7 @@ const Loader = () => {
 const sendSms = async () => {
   const isAvailable = await SMS.isAvailableAsync();
   if (isAvailable) {
-    const { result } = await SMS.sendSMSAsync(
-      ["2038587135"],
-      "My sample HelloWorld message"
-    );
+    const { result } = await SMS.sendSMSAsync(["2038587135"], "My sample HelloWorld message");
     console.log(result);
   } else {
     console.log("SMS is not avaliable");
@@ -78,17 +75,8 @@ const ProfileStatus = () => {
   }, []);
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
-      {status ? (
-        <Text style={{ color: "#ffffff", fontSize: 50 }}>{status.title}</Text>
-      ) : (
-        <Loader />
-      )}
-      <Button
-        onPress={sendSms}
-        title="Send A Text"
-        color="#841584"
-        accessibilityLabel="Send A Text"
-      />
+      {status ? <Text style={{ color: "#ffffff", fontSize: 50 }}>{status.title}</Text> : <Loader />}
+      <Button onPress={sendSms} title="Send A Text" color="#841584" accessibilityLabel="Send A Text" />
     </View>
   );
 };

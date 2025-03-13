@@ -6,32 +6,21 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: "row", marginBottom: 20 }}>
-        <Image
-          source={require("@/assets/images/mike.png")}
-          style={styles.AvatarImage}
-        />
+        <Image source={require("@/assets/images/mike.png")} style={styles.AvatarImage} />
         <View>
-          <Text style={{ color: "#ffffff", fontSize: 20 }}>
-            Michael Medvedev
-          </Text>
+          <Text style={{ color: "#ffffff", fontSize: 20 }}>Michael Medvedev</Text>
         </View>
       </View>
       <View style={styles.ProfileTabContainer}>
         <View style={styles.ProfileTab}>
           <Text
-            style={[
-              styles.selectedTab,
-              isActivityTabSelected ? {} : { borderBottomColor: "red" },
-            ]}
+            style={[styles.selectedTab, isActivityTabSelected ? {} : { borderBottomColor: "red" }]}
             onPress={() => setisActivityTabSelected((prev) => !prev)}
           >
             Status
           </Text>
           <Text
-            style={[
-              styles.selectedTab,
-              isActivityTabSelected ? { borderBottomColor: "red" } : {},
-            ]}
+            style={[styles.selectedTab, isActivityTabSelected ? { borderBottomColor: "red" } : {}]}
             onPress={() => setisActivityTabSelected((prev) => !prev)}
           >
             Activity
