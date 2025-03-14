@@ -1,7 +1,8 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { TripContextProvider } from "@/context/TripContext";
+import { AuthProvider } from "@/context/AuthContext";
 import colors from "@/theme/myGeneratedColors.json";
 import { registerTranslation } from "react-native-paper-dates";
 
@@ -33,11 +34,11 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={theme}>
       <AutocompleteDropdownContextProvider>
-        <TripContextProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-        </TripContextProvider>
+        <AuthProvider>
+          <TripContextProvider>
+            <Slot />
+          </TripContextProvider>
+        </AuthProvider>
       </AutocompleteDropdownContextProvider>
     </PaperProvider>
   );

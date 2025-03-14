@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Alert, Image } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import TripPlanner from "@/components/TripPlanner";
 
