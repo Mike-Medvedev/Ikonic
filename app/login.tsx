@@ -1,7 +1,6 @@
 import React, { memo, useState } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import Logo from "@/ui/Logo";
-import Header from "@/ui/Header";
 import { Button, useTheme } from "react-native-paper";
 import TextInput from "@/ui/TextInput";
 import { nameValidator, passwordValidator } from "@/utils/validators";
@@ -51,6 +50,7 @@ const Login = () => {
       fontWeight: "bold",
       color: theme.colors.primary,
     },
+    header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
   });
 
   return (
@@ -64,7 +64,7 @@ const Login = () => {
       <Background>
         <Logo />
 
-        <Header>Welcome</Header>
+        <Text style={styles.header}>Welcome</Text>
 
         <TextInput
           label="Username"

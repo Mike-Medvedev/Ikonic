@@ -1,7 +1,7 @@
 import Trip from "@/components/Trip";
 import { useTripContext } from "@/context/TripContext";
-import { View, StyleSheet, ScrollView } from "react-native";
-import { Badge, Text, Button, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import { Badge, Text, useTheme } from "react-native-paper";
 const Trips = () => {
   const { trips } = useTripContext();
   const theme = useTheme();

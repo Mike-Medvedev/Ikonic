@@ -47,6 +47,7 @@ export default function TripDatePicker() {
           startDate={range.startDate}
           endDate={range.endDate}
           onConfirm={onConfirm}
+          validRange={{ startDate: new Date(), endDate: undefined }}
           startYear={2023}
           endYear={2024}
           placeholder="HIHIHI"
