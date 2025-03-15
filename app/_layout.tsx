@@ -5,6 +5,8 @@ import { TripContextProvider } from "@/context/TripContext";
 import { AuthProvider } from "@/context/AuthContext";
 import colors from "@/theme/myGeneratedColors.json";
 import { registerTranslation } from "react-native-paper-dates";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const theme = {
   ...DefaultTheme,
@@ -35,9 +37,12 @@ export default function RootLayout() {
     <PaperProvider theme={theme}>
       <AutocompleteDropdownContextProvider>
         <AuthProvider>
-          <TripContextProvider>
-            <Slot />
-          </TripContextProvider>
+          <SafeAreaProvider>
+            <TripContextProvider>
+              <StatusBar style="dark" />
+              <Slot />
+            </TripContextProvider>
+          </SafeAreaProvider>
         </AuthProvider>
       </AutocompleteDropdownContextProvider>
     </PaperProvider>

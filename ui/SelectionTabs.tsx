@@ -15,7 +15,6 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
   const queryParam = params.selectedTrip;
   const handleOnPress = (option) => {
     const url = queryParam ? `trips/${queryParam}/${(option.label as string).toLowerCase()}` : "/";
-    console.log(option.label);
     router.navigate(url as any);
   };
 

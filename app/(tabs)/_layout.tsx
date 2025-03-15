@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, router, Tabs } from "expo-router";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";

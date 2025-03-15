@@ -1,5 +1,5 @@
-// import { Redirect } from "expo-router";
+import { Redirect } from "expo-router";
 
-// export default function CatchAll() {
-//   return <Redirect href="/login" />;
-// }
+export default function CatchAll() {
+  return <Redirect href="/login" />;
+}
