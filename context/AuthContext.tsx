@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   async function login(username: string, password: string) {
     const payload = JSON.stringify({ username: username, password: password });
 
-    const response = await fetch("https://d66d-2600-480a-33b3-8300-389c-6f93-12e9-fc24.ngrok-free.app/login", {
+    const response = await fetch("https://e74d-2600-480a-33b3-8300-8b-5b91-8d1a-aaa7.ngrok-free.app/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: payload,

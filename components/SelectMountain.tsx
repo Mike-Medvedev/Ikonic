@@ -1,8 +1,11 @@
 import { useTripContext } from "@/context/TripContext";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown, AutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import React from "react";
+import CustomAutoCompleteInput from "@/ui/CustomAutoCompleteInput";
 
 const newEnglandSkiResorts = [
   // Maine
@@ -127,6 +130,8 @@ const SelectMountain = () => {
         clearOnFocus={false}
         closeOnBlur={true}
         closeOnSubmit={false}
+        showClear={false}
+        enableLoadingIndicator={false}
         onSelectItem={(item) => {
           setSelectedItem(item);
           setMountain(item?.title ?? "");
@@ -134,9 +139,10 @@ const SelectMountain = () => {
         controller={(controller) => {
           dropdownController.current = controller;
         }}
+        InputComponent={CustomAutoCompleteInput}
         textInputProps={{
           placeholder: "Choose a mountain",
-          placeholderTextColor: theme.colors.onSurface,
+          placeholderTextColor: theme.colors.inverseSurface,
           style: {
             color: theme.colors.onSurface,
             paddingLeft: 18,
@@ -148,17 +154,16 @@ const SelectMountain = () => {
 
           alignSelf: "center",
         }}
+        ItemSeparatorComponent={() => null}
         inputContainerStyle={{
           minWidth: 300,
-          backgroundColor: theme.colors.primaryContainer,
-          borderRadius: 25,
+          backgroundColor: theme.colors.surface,
         }}
         suggestionsListContainerStyle={{
-          backgroundColor: theme.colors.primaryContainer,
+          backgroundColor: theme.colors.surface,
         }}
-        containerStyle={{}}
         renderItem={(item) => <Text style={{ color: theme.colors.onSurface, padding: 15 }}>{item.title}</Text>}
-        showChevron={true}
+        showChevron={false}
         dataSet={newEnglandSkiResorts}
       />
     </View>

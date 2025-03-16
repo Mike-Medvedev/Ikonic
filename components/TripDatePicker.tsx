@@ -1,9 +1,10 @@
 import { useTripContext } from "@/context/TripContext";
 import React, { useContext } from "react";
 import { View, Text } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, useTheme, TextInput } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function TripDatePicker() {
   const { date, setDate } = useTripContext();
@@ -14,7 +15,7 @@ export default function TripDatePicker() {
     startDate: undefined,
     endDate: undefined,
   });
-
+  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const onDismiss = React.useCallback(() => {
@@ -35,9 +36,20 @@ export default function TripDatePicker() {
           gap: 20,
         }}
       >
-        <Button onPress={() => setOpen(true)} uppercase={false} mode="contained-tonal">
-          Select Date Range
-        </Button>
+        <TextInput
+          placeholder="Select Date Range"
+          value={date ? `${date.startDate?.toLocaleDateString()} - ${date.endDate?.toLocaleDateString()}` : ""}
+          selectionColor={theme.colors.primary}
+          underlineColor="transparent"
+          mode="outlined"
+          right={
+            <TextInput.Icon
+              icon={({ size, color }) => <AntDesign name="calendar" size={size} color={color} />}
+              onPress={() => setOpen(true)}
+            />
+          }
+        />
+
         <DatePickerModal
           presentationStyle={"pageSheet"}
           locale="en"

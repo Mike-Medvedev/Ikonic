@@ -5,6 +5,8 @@ interface Trip {
 }
 
 interface TripContextProps {
+  tripTitle: { value: string; error: string };
+  setTripTitle: React.Dispatch<React.SetStateAction<{ value: string; error: string }>>;
   mountain: string;
   setMountain: React.Dispatch<React.SetStateAction<string>>;
   date: { startDate: Date; endDate: Date } | null;
@@ -34,6 +36,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       date: { startDate: new Date("2025-03-25T09:34:00"), endDate: new Date("2025-04-01T00:00:00") },
     },
   ]);
+  const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
 
   const contextValue = {
     mountain,
@@ -42,6 +45,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     setDate,
     trips,
     setTrips,
+    tripTitle,
+    setTripTitle,
   };
 
   return <TripContext.Provider value={contextValue}>{children}</TripContext.Provider>;

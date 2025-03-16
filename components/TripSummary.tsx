@@ -9,16 +9,19 @@ const TripSummary = () => {
       {date && mountain ? (
         <Card>
           <Card.Title
-            title={mountain}
+            title={<Text variant="titleLarge">{mountain}</Text>}
+            subtitle={
+              <View>
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <Text variant="titleSmall">{date.startDate.toDateString()}</Text>
+                  <Text variant="titleSmall">-</Text>
+                  <Text variant="titleSmall">{date.endDate.toDateString()}</Text>
+                </View>
+              </View>
+            }
+            subtitleNumberOfLines={2}
             left={(props) => <Avatar.Image {...props} source={require("@/assets/images/snow1.jpeg")} size={50} />}
           />
-          <Card.Content style={{ gap: 7 }}>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Text variant="titleMedium">{date.startDate.toDateString()}</Text>
-              <Text variant="titleMedium"> - </Text>
-              <Text variant="titleMedium">{date.endDate.toDateString()}</Text>
-            </View>
-          </Card.Content>
         </Card>
       ) : null}
     </>
