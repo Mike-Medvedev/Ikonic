@@ -5,7 +5,8 @@ import { Card, Avatar, useTheme } from "react-native-paper";
 
 interface Trip {
   mountain: string;
-  date: { startDate: Date; endDate: Date };
+  startDate: Date;
+  endDate: Date;
 }
 
 interface TripProps {
@@ -15,7 +16,6 @@ interface TripProps {
 const Trip = ({ trip }: TripProps) => {
   const theme = useTheme();
   const [isPressed, setIsPressed] = useState<boolean>(false);
-
   const onPressHandler = () => {
     setIsPressed(true);
     let rand = Math.floor(Math.random() * 10);
@@ -26,7 +26,7 @@ const Trip = ({ trip }: TripProps) => {
       <Card style={{ backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}` }}>
         <Card.Title
           title={`${trip.mountain} Trip`}
-          subtitle={`${trip.date.startDate.toDateString()} - ${trip.date.endDate.toDateString()}`}
+          subtitle={`${trip.startDate.toDateString()} - ${trip.endDate.toDateString()}`}
           left={(props) => <Avatar.Image {...props} source={require("@/assets/images/snow1.jpeg")} size={40} />}
         />
       </Card>

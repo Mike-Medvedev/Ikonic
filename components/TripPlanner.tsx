@@ -10,11 +10,13 @@ import { nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const TripPlanner = () => {
-  const { mountain, date, setTrips, setMountain, setDate, tripTitle, setTripTitle } = useTripContext();
+  const { mountain, startDate, setStartDate, endDate, setEndDate, setTrips, setMountain, tripTitle, setTripTitle } =
+    useTripContext();
   const theme = useTheme();
   const clearSelections = () => {
     setMountain("");
-    setDate(null);
+    setStartDate(null);
+    setEndDate(null);
     setTripTitle({ value: "", error: "" });
   };
 
@@ -25,15 +27,16 @@ const TripPlanner = () => {
       return;
     }
 
-    if (!mountain || !date) {
+    if (!mountain || !startDate || !endDate) {
       Alert.alert("Error", "Please select a mountain and a date!");
       return;
     }
-    console.log("Trip Created:", { mountain, date });
+    console.log("Trip Created:", { mountain, startDate, endDate });
     const newTrip = {
       title: tripTitle.value,
       mountain: mountain,
-      date: { startDate: date.startDate, endDate: date.endDate },
+      startDate: startDate,
+      endDate: endDate,
     };
     clearSelections();
     setTrips((prev) => [...prev, newTrip]);
@@ -51,7 +54,7 @@ const TripPlanner = () => {
     } catch (error) {
       console.error(error);
     }
-    Alert.alert("Success", `Trip planned to ${mountain} on ${date.startDate.toDateString()}`);
+    Alert.alert("Success", `Trip planned to ${mountain} on ${startDate.toDateString()}`);
     router.replace("/trips");
   };
   const styles = StyleSheet.create({

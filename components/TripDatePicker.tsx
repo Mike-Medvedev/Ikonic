@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function TripDatePicker() {
-  const { date, setDate } = useTripContext();
+  const { startDate, setStartDate, endDate, setEndDate } = useTripContext();
   const [range, setRange] = React.useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
@@ -25,8 +25,8 @@ export default function TripDatePicker() {
   const onConfirm = React.useCallback(({ startDate, endDate }: { startDate: any; endDate: any }) => {
     setOpen(false);
     setRange({ startDate, endDate });
-    setDate({ startDate: startDate, endDate: endDate });
-    console.log(date);
+    setStartDate(startDate);
+    setEndDate(endDate);
   }, []);
 
   return (
@@ -38,7 +38,7 @@ export default function TripDatePicker() {
       >
         <TextInput
           placeholder="Select Date Range"
-          value={date ? `${date.startDate?.toLocaleDateString()} - ${date.endDate?.toLocaleDateString()}` : ""}
+          value={startDate && endDate ? `${startDate?.toLocaleDateString()} - ${endDate?.toLocaleDateString()}` : ""}
           selectionColor={theme.colors.primary}
           underlineColor="transparent"
           mode="outlined"

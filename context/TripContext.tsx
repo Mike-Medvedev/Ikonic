@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState } from "react";
 interface Trip {
   mountain: string;
-  date: { startDate: Date; endDate: Date };
+  startDate: Date;
+  endDate: Date;
 }
 
 interface TripContextProps {
@@ -9,8 +10,10 @@ interface TripContextProps {
   setTripTitle: React.Dispatch<React.SetStateAction<{ value: string; error: string }>>;
   mountain: string;
   setMountain: React.Dispatch<React.SetStateAction<string>>;
-  date: { startDate: Date; endDate: Date } | null;
-  setDate: React.Dispatch<React.SetStateAction<{ startDate: Date; endDate: Date } | null>>;
+  startDate: Date | null;
+  setStartDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  endDate: Date | null;
+  setEndDate: React.Dispatch<React.SetStateAction<Date | null>>;
   trips: Trip[];
   setTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
 }
@@ -29,11 +32,13 @@ interface TripContextProviderProps {
 
 export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children }) => {
   const [mountain, setMountain] = useState<string>("");
-  const [date, setDate] = useState<{ startDate: Date; endDate: Date } | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [trips, setTrips] = useState<Trip[]>([
     {
       mountain: "Stowe",
-      date: { startDate: new Date("2025-03-25T09:34:00"), endDate: new Date("2025-04-01T00:00:00") },
+      startDate: new Date("2025-03-25T09:34:00"),
+      endDate: new Date("2025-04-01T00:00:00"),
     },
   ]);
   const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
@@ -41,8 +46,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const contextValue = {
     mountain,
     setMountain,
-    date,
-    setDate,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
     trips,
     setTrips,
     tripTitle,
