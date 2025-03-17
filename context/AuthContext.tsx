@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -17,12 +18,12 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   async function login(username: string, password: string) {
     const payload = JSON.stringify({ username: username, password: password });
 
-    const response = await fetch("https://e74d-2600-480a-33b3-8300-8b-5b91-8d1a-aaa7.ngrok-free.app/login", {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: payload,
@@ -33,6 +34,12 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
       throw new Error("Error logging in");
     }
     setIsAuthenticated(true);
+    try {
+      const data = await response.json();
+      await AsyncStorage.setItem("user_id", data.user_id);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login }}>{children}</AuthContext.Provider>;
 };

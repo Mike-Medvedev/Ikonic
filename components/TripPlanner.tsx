@@ -8,6 +8,7 @@ import { router } from "expo-router";
 import TextInput from "@/ui/TextInput";
 import { nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const TripPlanner = () => {
   const { mountain, date, setTrips, setMountain, setDate, tripTitle, setTripTitle } = useTripContext();
   const theme = useTheme();
@@ -17,7 +18,7 @@ const TripPlanner = () => {
     setTripTitle({ value: "", error: "" });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const titleError = nameValidator(tripTitle.value);
     if (titleError) {
       setTripTitle((prev) => ({ ...prev, error: titleError }));
@@ -30,11 +31,26 @@ const TripPlanner = () => {
     }
     console.log("Trip Created:", { mountain, date });
     const newTrip = {
+      title: tripTitle.value,
       mountain: mountain,
       date: { startDate: date.startDate, endDate: date.endDate },
     };
     clearSelections();
     setTrips((prev) => [...prev, newTrip]);
+    try {
+      const user_id = await AsyncStorage.getItem("user_id");
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/create-trip`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${user_id}`,
+        },
+        body: JSON.stringify(newTrip),
+      });
+      if (!response.ok) throw new Error("Error creating new trip");
+    } catch (error) {
+      console.error(error);
+    }
     Alert.alert("Success", `Trip planned to ${mountain} on ${date.startDate.toDateString()}`);
     router.replace("/trips");
   };

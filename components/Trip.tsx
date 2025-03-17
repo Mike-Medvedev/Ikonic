@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Image, Pressable } from "react-native";
-import { Card, Avatar, useTheme, Text } from "react-native-paper";
+import { Pressable } from "react-native";
+import { Card, Avatar, useTheme } from "react-native-paper";
 
 interface Trip {
   mountain: string;
