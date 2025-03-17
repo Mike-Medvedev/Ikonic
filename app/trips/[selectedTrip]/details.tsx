@@ -4,7 +4,19 @@ import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Background from "@/ui/Background";
+import { useLocalSearchParams } from "expo-router/build/hooks";
+import { useTripContext } from "@/context/TripContext";
+import Entypo from "@expo/vector-icons/Entypo";
+import { Link } from "expo-router";
 export default function TripDetails() {
+  const { selectedTrip: selectedTripID } = useLocalSearchParams();
+  const { trips } = useTripContext();
+  const selectedTrip = trips.find((trip) => {
+    console.log(trip.id, selectedTripID);
+    return trip.id == selectedTripID;
+  });
+  console.log(selectedTrip);
+  if (!selectedTrip) return <Text>selected Trip doesnt exist in db</Text>;
   const styles = StyleSheet.create({
     container: {
       padding: 20,
@@ -14,6 +26,11 @@ export default function TripDetails() {
     },
     iconText: { flexDirection: "row", gap: 10 },
     imageContainer: { height: "70%" },
+    link: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
   });
   return (
     <Background>
@@ -24,15 +41,24 @@ export default function TripDetails() {
         <View style={{ marginTop: 20 }}>
           <View style={styles.iconText}>
             <Ionicons name="location" size={24} color="black" />
-            <Text variant="titleLarge">Killington</Text>
+            <Text variant="titleLarge">{selectedTrip.mountain}</Text>
           </View>
           <View style={styles.iconText}>
             <AntDesign name="calendar" size={24} color="black" />
-            <Text variant="titleMedium">March 12th, 2025 - March 13th, 2025 </Text>
+            <Text variant="titleMedium">
+              {selectedTrip.startDate.toDateString()} - {selectedTrip.endDate.toDateString()}
+            </Text>
           </View>
         </View>
         <View style={{ marginTop: 20, gap: 15 }}>
-          <Text>Whose Going?</Text>
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <Text>Whose Going?</Text>
+            <Link href={`/trips/${selectedTripID}/attendance`} style={styles.link}>
+              Add People
+              <Entypo name="add-user" size={24} color="black" />
+            </Link>
+          </View>
+
           <View style={{ flexDirection: "row" }}>
             <Avatar.Image source={require("@/assets/images/mike.png")} />
             <Avatar.Image source={require("@/assets/images/mike.png")} />

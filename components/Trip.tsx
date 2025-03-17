@@ -18,8 +18,7 @@ const Trip = ({ trip }: TripProps) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const onPressHandler = () => {
     setIsPressed(true);
-    let rand = Math.floor(Math.random() * 10);
-    router.push(`/trips/${rand}`);
+    router.push(`/trips/${trip.id}`);
   };
   return (
     <Pressable onPressIn={onPressHandler} onPressOut={() => setIsPressed(false)}>

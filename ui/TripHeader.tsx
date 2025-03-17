@@ -16,13 +16,14 @@ const TripHeader = ({ props }) => {
       borderBottomColor: theme.colors.surfaceDisabled,
       borderBottomWidth: 1,
       backgroundColor: theme.colors.surface,
+      padding: 15,
     },
   });
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.view}>
         <Pressable onPress={() => router.navigate("/trips")} style={{ width: 50 }}>
-          <Ionicons name="arrow-back-outline" size={24} color={theme.colors.primary} />
+          <Ionicons name="arrow-back-outline" size={34} color={theme.colors.primary} />
         </Pressable>
         <View style={{ flex: 1, alignItems: "center", gap: 10 }}>
           <Text variant="headlineMedium">{props.options.title}</Text>
