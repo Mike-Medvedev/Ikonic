@@ -9,12 +9,16 @@ export default function TripAttendance() {
     container: { flex: 1, padding: 15 },
   });
   const friends = [
-    { firstname: "Mike", lastname: "Medvedev" },
-    { firstname: "Johnny", lastname: "Roslin" },
+    { firstname: "Mike", lastname: "Medvedev", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
+    { firstname: "Johnny", lastname: "Roslin", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
   ];
   const filteredUsers = friends.filter((friend) => friend.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
   function CalculateInitials(firstname: string, lastname: string, middlename?: string) {
     return (firstname[0] + lastname[0] + (middlename?.[0] ?? "")).toUpperCase();
+  }
+  async function handleInvite(userId: string) {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite/${userId}`, { method: "POST" });
+    if (!response.ok) throw new Error("Error inviting user: " + userId);
   }
   return (
     <Background>
@@ -38,7 +42,7 @@ export default function TripAttendance() {
                   )}
                 />
                 <Card.Actions>
-                  <Button mode="contained" onPress={() => console.log("yo")}>
+                  <Button mode="contained" onPress={() => handleInvite(friend.userId)}>
                     Invite
                   </Button>
                 </Card.Actions>
