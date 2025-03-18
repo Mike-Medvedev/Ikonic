@@ -3,19 +3,19 @@ import { View } from "react-native";
 import { useTripContext } from "@/context/TripContext";
 import { Card, Text, Avatar } from "react-native-paper";
 const TripSummary = () => {
-  const { mountain, date } = useTripContext();
+  const { mountain, startDate, endDate } = useTripContext();
   return (
     <>
-      {date && mountain ? (
+      {startDate && endDate && mountain ? (
         <Card>
           <Card.Title
             title={<Text variant="titleLarge">{mountain}</Text>}
             subtitle={
               <View>
                 <View style={{ flexDirection: "row", gap: 10 }}>
-                  <Text variant="titleSmall">{date.startDate.toDateString()}</Text>
+                  <Text variant="titleSmall">{startDate.toDateString()}</Text>
                   <Text variant="titleSmall">-</Text>
-                  <Text variant="titleSmall">{date.endDate.toDateString()}</Text>
+                  <Text variant="titleSmall">{endDate.toDateString()}</Text>
                 </View>
               </View>
             }

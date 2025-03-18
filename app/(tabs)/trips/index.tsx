@@ -3,7 +3,7 @@ import { useTripContext } from "@/context/TripContext";
 import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Badge, Text, useTheme } from "react-native-paper";
 const Trips = () => {
   const { trips, setTrips } = useTripContext();
@@ -71,11 +71,11 @@ const Trips = () => {
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <View style={{ gap: 10 }}>
+          <ScrollView style={{ gap: 10 }}>
             {trips.map((trip, index) => (
               <Trip key={index} trip={trip} />
             ))}
-          </View>
+          </ScrollView>
         )}
       </View>
     </Background>

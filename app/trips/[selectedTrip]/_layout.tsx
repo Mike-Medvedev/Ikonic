@@ -1,5 +1,5 @@
 import Background from "@/ui/Background";
-import TripHeader from "@/ui/TripHeader";
+import TripHeader from "@/components/TripHeader";
 import { Stack } from "expo-router";
 import { View } from "react-native";
 

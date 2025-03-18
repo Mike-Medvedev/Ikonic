@@ -1,7 +1,17 @@
+import PhoneNumberForm from "@/components/PhoneNumberForm";
 import ProfileStatus from "@/components/ProfileComponents/ProfileStatus";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 const Profile = () => {
   const [isActivityTabSelected, setisActivityTabSelected] = useState(false);
   const [profileData, setProfileData] = useState<any>(null);
@@ -40,33 +50,42 @@ const Profile = () => {
     );
   }
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: "row", marginBottom: 20 }}>
-        <Image source={require("@/assets/images/mike.png")} style={styles.AvatarImage} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={90}
+    >
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", marginBottom: 20 }}>
+          <Image source={require("@/assets/images/mike.png")} style={styles.AvatarImage} />
+          <View>
+            <Text style={{ color: "#ffffff", fontSize: 20 }}>{`${profileData.firstname} ${profileData.lastname}`}</Text>
+          </View>
+        </View>
+        <View style={styles.ProfileTabContainer}>
+          <View style={styles.ProfileTab}>
+            <Text
+              style={[styles.selectedTab, isActivityTabSelected ? {} : { borderBottomColor: "red" }]}
+              onPress={() => setisActivityTabSelected((prev) => !prev)}
+            >
+              Status
+            </Text>
+            <Text
+              style={[styles.selectedTab, isActivityTabSelected ? { borderBottomColor: "red" } : {}]}
+              onPress={() => setisActivityTabSelected((prev) => !prev)}
+            >
+              Activity
+            </Text>
+          </View>
+        </View>
+        <ScrollView>
+          <ProfileStatus />
+        </ScrollView>
         <View>
-          <Text style={{ color: "#ffffff", fontSize: 20 }}>{`${profileData.firstname} ${profileData.lastname}`}</Text>
+          <PhoneNumberForm />
         </View>
       </View>
-      <View style={styles.ProfileTabContainer}>
-        <View style={styles.ProfileTab}>
-          <Text
-            style={[styles.selectedTab, isActivityTabSelected ? {} : { borderBottomColor: "red" }]}
-            onPress={() => setisActivityTabSelected((prev) => !prev)}
-          >
-            Status
-          </Text>
-          <Text
-            style={[styles.selectedTab, isActivityTabSelected ? { borderBottomColor: "red" } : {}]}
-            onPress={() => setisActivityTabSelected((prev) => !prev)}
-          >
-            Activity
-          </Text>
-        </View>
-      </View>
-      <ScrollView>
-        <ProfileStatus />
-      </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 const styles = StyleSheet.create({
