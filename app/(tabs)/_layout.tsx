@@ -31,13 +31,23 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="trips"
+        name="trips/index"
         options={{
           title: "Trips",
           tabBarIcon: ({ color }) => <FontAwesome name="newspaper-o" size={24} color={color} />,
           headerTitle: () => <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Ikonic</Text>,
         }}
       />
+      <Tabs.Screen
+        name="trips/[selectedTrip]"
+        options={{
+          title: "Trips",
+          href: null,
+          headerShown: false,
+          tabBarStyle: { display: "none" },
+        }}
+      />
+
       <Tabs.Screen
         name="plan"
         options={{

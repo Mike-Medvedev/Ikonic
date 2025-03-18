@@ -309,6 +309,9 @@ export default function PhoneNumberForm() {
             />
           }
         />
+        <Text style={{ marginTop: 10 }}>
+          {"\t"}*By entering your number you agree to recieve RSVP texts from Ikonic
+        </Text>
         <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={() => setModalVisible(false)}>
           <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPressOut={() => setModalVisible(false)}>
             <View style={styles.modalContent}>
