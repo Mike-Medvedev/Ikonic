@@ -78,9 +78,7 @@ const Profile = () => {
             </Text>
           </View>
         </View>
-        <ScrollView>
-          <ProfileStatus />
-        </ScrollView>
+        <ProfileStatus />
         <View>
           <PhoneNumberForm />
         </View>
