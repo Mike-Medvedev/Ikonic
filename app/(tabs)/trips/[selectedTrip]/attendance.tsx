@@ -3,11 +3,16 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Card, Text, TextInput, Button, Avatar } from "react-native-paper";
+import * as Linking from "expo-linking";
+import { useLocalSearchParams } from "expo-router";
 export default function TripAttendance() {
+  const tripID = useLocalSearchParams().selectedTrip;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 15 },
   });
+  const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
+  console.log("heres ", deepLink);
   const friends = [
     { firstname: "Mike", lastname: "Medvedev", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
     { firstname: "Johnny", lastname: "Roslin", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
@@ -16,13 +21,16 @@ export default function TripAttendance() {
   function CalculateInitials(firstname: string, lastname: string, middlename?: string) {
     return (firstname[0] + lastname[0] + (middlename?.[0] ?? "")).toUpperCase();
   }
+
   async function handleInvite(userId: string) {
+    const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
+    console.log(tripID);
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_id: userId }),
+      body: JSON.stringify({ user_id: userId, deep_link: deepLink }),
     });
     if (!response.ok) throw new Error("Error inviting user: " + userId);
   }

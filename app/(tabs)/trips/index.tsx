@@ -71,7 +71,7 @@ const Trips = () => {
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <View style={{ gap: 20, overflow: "scroll" }}>
+          <View style={{ gap: 20 }}>
             {trips.map((trip, index) => (
               <Trip key={index} trip={trip} />
             ))}
