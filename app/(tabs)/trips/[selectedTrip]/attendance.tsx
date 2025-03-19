@@ -1,28 +1,24 @@
 import Background from "@/ui/Background";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Card, Text, TextInput, Button, Avatar } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
+import CalculateInitials from "@/utils/CalculateInitials";
+import { useUsers } from "@/hooks/useUsers";
+import User from "@/models/User";
 export default function TripAttendance() {
+  const { users, isLoading, error } = useUsers();
   const tripID = useLocalSearchParams().selectedTrip;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 15 },
   });
-  const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
-  console.log("heres ", deepLink);
-  const friends = [
-    { firstname: "Mike", lastname: "Medvedev", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
-    { firstname: "Johnny", lastname: "Roslin", userId: "6556cf1c-88e7-4f6a-bff7-b8be7d546628" },
-  ];
-  const filteredUsers = friends.filter((friend) => friend.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
-  function CalculateInitials(firstname: string, lastname: string, middlename?: string) {
-    return (firstname[0] + lastname[0] + (middlename?.[0] ?? "")).toUpperCase();
-  }
 
-  async function handleInvite(userId: string) {
+  const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  async function handleInvite(user: User) {
     const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
     console.log(tripID);
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite`, {
@@ -30,9 +26,9 @@ export default function TripAttendance() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_id: userId, deep_link: deepLink }),
+      body: JSON.stringify({ user: user, deep_link: deepLink }),
     });
-    if (!response.ok) throw new Error("Error inviting user: " + userId);
+    if (!response.ok) throw new Error("Error inviting user: " + user.user_id);
   }
   return (
     <Background>
@@ -46,23 +42,22 @@ export default function TripAttendance() {
             label={"Search Friends"}
             right={<TextInput.Icon icon={({ size, color }) => <AntDesign name="search1" size={24} color="black" />} />}
           />
-          <View style={{ gap: 15 }}>
-            {filteredUsers.map((friend, index) => (
-              <Card key={index}>
+          <ScrollView style={{ padding: 10 }}>
+            {filteredUsers.map((user, index) => (
+              <Card key={index} style={{ marginVertical: 10 }}>
                 <Card.Title
-                  title={`${friend.firstname} ${friend.lastname}`}
-                  left={(props) => (
-                    <Avatar.Text size={44} label={CalculateInitials(friend.firstname, friend.lastname)} />
-                  )}
+                  title={`${user.firstname} ${user.lastname}`}
+                  titleStyle={{ textTransform: "capitalize" }}
+                  left={(props) => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
                 />
                 <Card.Actions>
-                  <Button mode="contained" onPress={() => handleInvite(friend.userId)}>
+                  <Button mode="contained" onPress={() => handleInvite(user)}>
                     Invite
                   </Button>
                 </Card.Actions>
               </Card>
             ))}
-          </View>
+          </ScrollView>
         </View>
       </View>
     </Background>

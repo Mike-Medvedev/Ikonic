@@ -8,6 +8,7 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTripContext } from "@/context/TripContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Link } from "expo-router";
+import UsersAvatarList from "@/components/UsersAvatarList";
 export default function TripDetails() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const { trips } = useTripContext();
@@ -58,18 +59,7 @@ export default function TripDetails() {
               <Entypo name="add-user" size={24} color="black" />
             </Link>
           </View>
-
-          <View style={{ flexDirection: "row" }}>
-            <Avatar.Image source={require("@/assets/images/mike.png")} />
-            <Avatar.Image source={require("@/assets/images/mike.png")} />
-            <Avatar.Image source={require("@/assets/images/mike.png")} />
-            <Avatar.Image source={require("@/assets/images/mike.png")} />
-            <Avatar.Text
-              label={`+${2}`}
-              style={{ backgroundColor: "grey", marginRight: 4 }}
-              labelStyle={{ fontSize: 16 }}
-            />
-          </View>
+          <UsersAvatarList />
         </View>
       </View>
     </Background>
