@@ -24,20 +24,19 @@ export default function TripDetails() {
       height: "100%",
       width: "100%",
       flex: 1,
+      alignItems: "center",
+      overflow: "hidden",
     },
     iconText: { flexDirection: "row", gap: 10 },
     imageContainer: { height: "70%" },
-    link: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-    },
+    link: {},
   });
   return (
     <Background>
       <View style={styles.container}>
+        <Text style={{ fontSize: 40, marginBottom: 10 }}>{selectedTrip.title}</Text>
         <View style={styles.imageContainer}>
-          <Image source={require("@/assets/images/snow1.jpeg")} style={{ width: "100%", height: "100%" }} />
+          <Image source={require("@/assets/images/snow1.jpeg")} style={{ height: "100%" }} resizeMode="contain" />
         </View>
         <View style={{ marginTop: 20 }}>
           <View style={styles.iconText}>
@@ -52,10 +51,10 @@ export default function TripDetails() {
           </View>
         </View>
         <View style={{ marginTop: 20, gap: 15 }}>
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View style={{ flexDirection: "row", gap: 10, justifyContent: "space-between", alignItems: "center" }}>
             <Text>Whose Going?</Text>
-            <Link href={`/trips/${selectedTripID}/attendance`} style={styles.link}>
-              Add People
+            <Link href={`/trips/${selectedTripID}/attendance`} style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text>Add People</Text>
               <Entypo name="add-user" size={24} color="black" />
             </Link>
           </View>

@@ -26,7 +26,6 @@ const TripHeader = ({ props }) => {
           <Ionicons name="arrow-back-outline" size={34} color={theme.colors.primary} />
         </Pressable>
         <View style={{ flex: 1, alignItems: "center", gap: 10 }}>
-          <Text variant="headlineMedium">{props.options.title}</Text>
           <SelectionTabs
             options={[
               { value: "Details", label: "Details" },
