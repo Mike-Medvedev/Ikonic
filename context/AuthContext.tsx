@@ -18,7 +18,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   async function login(username: string, password: string) {
     const payload = JSON.stringify({ username: username, password: password });

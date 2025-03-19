@@ -23,7 +23,8 @@ const Trip = ({ trip }: TripProps) => {
     setIsPressed(true);
     router.push(`/trips/${trip.id}`);
   };
-  async function handleTripDelete(trip_id) {
+  async function handleTripDelete(event, trip_id) {
+    event.stopPropagation();
     console.log(typeof trip_id);
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/delete-trip/${trip_id}`, { method: "DELETE" });
     if (!response.ok) throw new Error("Error deleting trip!");
@@ -40,7 +41,7 @@ const Trip = ({ trip }: TripProps) => {
           right={(props) => (
             <AntDesign
               name="closecircleo"
-              onPress={() => handleTripDelete(trip.id)}
+              onPress={(event) => handleTripDelete(event, trip.id)}
               size={20}
               color={theme.colors.error}
               style={{ marginRight: 10 }}
