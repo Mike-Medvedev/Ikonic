@@ -3,9 +3,9 @@ import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 import { Button, Divider, Text } from "react-native-paper";
 export default function RSVP() {
+  const params = useLocalSearchParams();
+  const tripId = params.selectedTrip;
   async function handleRSVP(userResponse: string) {
-    const params = useLocalSearchParams();
-    const tripId = params.selectedTrip;
     const user_id = await AsyncStorage.getItem("user_id");
     if (!user_id) throw new Error("Please sign in to RSVP");
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/rsvp`, {
