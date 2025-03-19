@@ -17,7 +17,13 @@ export default function TripAttendance() {
     return (firstname[0] + lastname[0] + (middlename?.[0] ?? "")).toUpperCase();
   }
   async function handleInvite(userId: string) {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite/${userId}`, { method: "POST" });
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: userId }),
+    });
     if (!response.ok) throw new Error("Error inviting user: " + userId);
   }
   return (

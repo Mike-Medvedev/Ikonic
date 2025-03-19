@@ -13,12 +13,7 @@ export default function TripsNoTabLayout() {
           header: (props) => <TripHeader props={props} />,
           animation: "none",
         }}
-      >
-        <Stack.Screen name="details" />
-        <Stack.Screen name="carpool" />
-        <Stack.Screen name="attendance" />
-        <Stack.Screen name="lodging" />
-      </Stack>
+      ></Stack>
     </View>
   );
 }
