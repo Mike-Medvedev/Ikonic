@@ -1,5 +1,6 @@
 import PhoneNumberForm from "@/components/PhoneNumberForm";
 import ProfileStatus from "@/components/ProfileComponents/ProfileStatus";
+import useProfile from "@/hooks/useProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import {
@@ -14,35 +15,9 @@ import {
 } from "react-native";
 const Profile = () => {
   const [isActivityTabSelected, setisActivityTabSelected] = useState(false);
-  const [profileData, setProfileData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { profile, isLoading, error } = useProfile();
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        setIsLoading(true);
-        const user_id = await AsyncStorage.getItem("user_id");
-        console.log("user_id");
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/profile/${user_id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "any" },
-        });
-        if (!response.ok) {
-          throw new Error("Error fetching profile data");
-        }
-        const data = await response.json();
-        setProfileData(data.profile_data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfileData();
-  }, []);
-
-  if (isLoading || !profileData) {
+  if (isLoading || !profile) {
     return (
       <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
         <ActivityIndicator size="large" color="#ffffff" />
@@ -59,7 +34,7 @@ const Profile = () => {
         <View style={{ flexDirection: "row", marginBottom: 20 }}>
           <Image source={require("@/assets/images/mike.png")} style={styles.AvatarImage} />
           <View>
-            <Text style={{ color: "#ffffff", fontSize: 20 }}>{`${profileData.firstname} ${profileData.lastname}`}</Text>
+            <Text style={{ color: "#ffffff", fontSize: 20 }}>{`${profile.firstname} ${profile.lastname}`}</Text>
           </View>
         </View>
         <View style={styles.ProfileTabContainer}>

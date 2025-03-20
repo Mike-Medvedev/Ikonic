@@ -4,7 +4,7 @@ import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Background from "@/ui/Background";
-import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useTripContext } from "@/context/TripContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Link, router } from "expo-router";
