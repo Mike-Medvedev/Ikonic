@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Image, ScrollView, Pressable } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,7 +12,6 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 export default function TripDetails() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const { trips } = useTripContext();
-  console.log(trips, "5555");
   const selectedTrip = trips.find((trip) => {
     console.log(trips);
     return trip.id == selectedTripID;
@@ -29,6 +28,23 @@ export default function TripDetails() {
     },
     iconText: { flexDirection: "row", gap: 10 },
     link: {},
+    modalContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modalText: {
+      fontSize: 24,
+      marginBottom: 20,
+    },
+    closeButton: {
+      backgroundColor: "#ccc",
+      padding: 10,
+      borderRadius: 4,
+    },
+    closeButtonText: {
+      fontSize: 16,
+    },
   });
   return (
     <Background>
@@ -59,8 +75,9 @@ export default function TripDetails() {
         >
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "space-between", alignItems: "center" }}>
             <Text>Whose Going?</Text>
+            <AntDesign name="addusergroup" size={24} color="black" />
           </View>
-          <UsersAvatarList rsvp="going" />
+          {<UsersAvatarList rsvp="going" />}
         </Pressable>
       </View>
     </Background>
