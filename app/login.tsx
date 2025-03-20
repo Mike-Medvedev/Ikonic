@@ -7,10 +7,13 @@ import { nameValidator, passwordValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import Background from "@/ui/Background";
 import { router } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
 
 const Login = () => {
   const theme = useTheme();
   const { login } = useAuth();
+  const params = useSearchParams();
+  const callback = params.get("callback");
   const [username, setUsername] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
 
@@ -26,7 +29,11 @@ const Login = () => {
 
     try {
       await login(username.value, password.value);
-      router.push("/plan");
+      if (callback) {
+        router.push(callback as any);
+      } else {
+        router.push("/plan");
+      }
     } catch (error) {
       setUsername({ ...username, error: "Account not found. Please try again!" });
       console.error(error);

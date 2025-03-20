@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, router, Tabs } from "expo-router";
+import { Redirect, router, Tabs, usePathname } from "expo-router";
 import { StyleSheet, Text, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -10,6 +10,11 @@ import { useAuth } from "@/context/AuthContext";
 export default function TabLayout() {
   const theme = useTheme();
   const { isAuthenticated } = useAuth();
+  const pathname = usePathname();
+
+  if (pathname.endsWith("/rsvp") && !isAuthenticated) {
+    return <Redirect href={`/login/?callback=${pathname}`} />;
+  }
 
   if (!isAuthenticated) {
     return <Redirect href="/login" />;
