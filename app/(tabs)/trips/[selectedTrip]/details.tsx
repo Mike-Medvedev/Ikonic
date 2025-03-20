@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { View, StyleSheet, Image, ScrollView, Pressable } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -7,7 +7,7 @@ import Background from "@/ui/Background";
 import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
 import { useTripContext } from "@/context/TripContext";
 import Entypo from "@expo/vector-icons/Entypo";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import UsersAvatarList from "@/components/UsersAvatarList";
 export default function TripDetails() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
@@ -53,16 +53,15 @@ export default function TripDetails() {
             </Text>
           </View>
         </View>
-        <View style={{ marginTop: 20, gap: 15 }}>
+        <Pressable
+          style={{ marginTop: 20, gap: 15, alignItems: "center" }}
+          onPress={() => router.replace(`/trips/${selectedTripID}/attendance`)}
+        >
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "space-between", alignItems: "center" }}>
             <Text>Whose Going?</Text>
-            <Link href={`/trips/${selectedTripID}/attendance`} style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text>Add People</Text>
-              <Entypo name="add-user" size={24} color="black" />
-            </Link>
           </View>
-          <UsersAvatarList />
-        </View>
+          <UsersAvatarList rsvp="going" />
+        </Pressable>
       </View>
     </Background>
   );

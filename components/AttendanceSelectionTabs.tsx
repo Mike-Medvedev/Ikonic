@@ -36,7 +36,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 2 ? styles.selectedTab : ""}
       >
-        {`Not Going(${attendanceNumbers.maybe})`}
+        {`Not Going(${attendanceNumbers.notGoing})`}
       </Text>
     </View>
   );

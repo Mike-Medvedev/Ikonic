@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 
+type RSVPStatus = "going" | "maybe" | "not going";
+
 const MAX_AVATARS = 5;
 
-export default function UsersAvatarList() {
+export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
   const { setAttendanceNumbers } = useTripContext();
-  const [invitedUsers, setIinvitedUsers] = useState<any[]>([]);
+  const [invitedUsers, setInvitedUsers] = useState<any[]>([]);
+  console.log("HERE IS RSVP STATUS!", rsvp);
   const params = useLocalSearchParams();
   console.log(params);
   useEffect(() => {
@@ -25,8 +28,12 @@ export default function UsersAvatarList() {
       });
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
-      setIinvitedUsers(result.invited_users);
-      setAttendanceNumbers((prev) => ({ ...prev, going: result.invited_users.length }));
+      setInvitedUsers(result.invited_users[rsvp]);
+      setAttendanceNumbers({
+        going: result.invited_users.going.length,
+        maybe: result.invited_users.maybe.length,
+        notGoing: result.invited_users.not_going.length,
+      });
     })();
   }, [params.selectedTrip]);
   //   if (isLoading) {

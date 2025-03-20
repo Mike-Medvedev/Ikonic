@@ -26,13 +26,13 @@ export default function RSVP() {
       </Text>
       <Text variant="displaySmall">Rsvp here</Text>
       <View style={{ flexDirection: "row", gap: 40, marginVertical: 40 }}>
-        <Button mode="contained" onPress={() => handleRSVP("accept")}>
+        <Button mode="contained" onPress={() => handleRSVP("going")}>
           Going✅
         </Button>
         <Button mode="contained" onPress={() => handleRSVP("maybe")}>
           Maybe🤔
         </Button>
-        <Button mode="contained" onPress={() => handleRSVP("deny")}>
+        <Button mode="contained" onPress={() => handleRSVP("not going")}>
           Cant🚫
         </Button>
       </View>

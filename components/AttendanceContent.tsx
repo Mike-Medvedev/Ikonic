@@ -4,11 +4,11 @@ export default function AttendanceContent({ selectedTab }: { selectedTab: number
   const Switch = () => {
     switch (selectedTab) {
       case 0:
-        return <UsersAvatarList />;
+        return <UsersAvatarList rsvp="going" />;
       case 1:
-        return <Text>1</Text>;
+        return <UsersAvatarList rsvp="maybe" />;
       case 2:
-        return <Text>2</Text>;
+        return <UsersAvatarList rsvp="not going" />;
     }
   };
   return (
