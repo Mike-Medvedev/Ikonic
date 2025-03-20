@@ -1,9 +1,9 @@
 import { Redirect } from "expo-router";
-import { useSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 
 export default function TripData() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("selectedTrip");
-  console.log(id);
+  const searchParams = useLocalSearchParams();
+  const id = searchParams.selectedTrip;
+  console.log(searchParams);
   return id ? <Redirect href={`/trips/${id}/details`} /> : null;
 }

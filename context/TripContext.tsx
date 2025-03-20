@@ -5,6 +5,12 @@ interface Trip {
   endDate: Date;
 }
 
+export interface AttendanceNumber {
+  going: number;
+  maybe: number;
+  notGoing: number;
+}
+
 interface TripContextProps {
   tripTitle: { value: string; error: string };
   setTripTitle: React.Dispatch<React.SetStateAction<{ value: string; error: string }>>;
@@ -16,6 +22,8 @@ interface TripContextProps {
   setEndDate: React.Dispatch<React.SetStateAction<Date | null>>;
   trips: Trip[];
   setTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
+  attendanceNumbers: AttendanceNumber;
+  setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceNumber>>;
 }
 const TripContext = createContext<TripContextProps | undefined>(undefined);
 
@@ -34,14 +42,9 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const [mountain, setMountain] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [trips, setTrips] = useState<Trip[]>([
-    {
-      mountain: "Stowe",
-      startDate: new Date("2025-03-25T09:34:00"),
-      endDate: new Date("2025-04-01T00:00:00"),
-    },
-  ]);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
+  const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceNumber>({ going: 0, maybe: 0, notGoing: 0 });
 
   const contextValue = {
     mountain,
@@ -54,6 +57,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     setTrips,
     tripTitle,
     setTripTitle,
+    attendanceNumbers,
+    setAttendanceNumbers,
   };
 
   return <TripContext.Provider value={contextValue}>{children}</TripContext.Provider>;

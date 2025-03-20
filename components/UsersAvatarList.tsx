@@ -1,3 +1,4 @@
+import { useTripContext } from "@/context/TripContext";
 import { useUsers } from "@/hooks/useUsers";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useLocalSearchParams } from "expo-router";
@@ -8,6 +9,7 @@ import { Avatar, Text } from "react-native-paper";
 const MAX_AVATARS = 5;
 
 export default function UsersAvatarList() {
+  const { setAttendanceNumbers } = useTripContext();
   const [invitedUsers, setIinvitedUsers] = useState<any[]>([]);
   const params = useLocalSearchParams();
   console.log(params);
@@ -23,8 +25,8 @@ export default function UsersAvatarList() {
       });
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
-      console.log(result);
       setIinvitedUsers(result.invited_users);
+      setAttendanceNumbers((prev) => ({ ...prev, going: result.invited_users.length }));
     })();
   }, [params.selectedTrip]);
   //   if (isLoading) {

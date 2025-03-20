@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { RelativePathString, router } from "expo-router";
 import { useLocalSearchParams, useSegments } from "expo-router/build/hooks";
 import { useState } from "react";
 import { Pressable, View, StyleSheet } from "react-native";
@@ -14,8 +14,11 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
   const params = useLocalSearchParams();
   const queryParam = params.selectedTrip;
   const handleOnPress = (option) => {
-    const url = queryParam ? `trips/${queryParam}/${(option.label as string).toLowerCase()}` : "/";
-    router.navigate(url as any);
+    console.log(`/trips/${queryParam}/${option.label}`);
+    router.replace({
+      pathname: "/trips/[selectedTrip]/[option]" as RelativePathString,
+      params: { selectedTrip: queryParam, option: option.label.toLowerCase() },
+    });
   };
 
   const styles = StyleSheet.create({

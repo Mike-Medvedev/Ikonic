@@ -4,7 +4,7 @@ import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Background from "@/ui/Background";
-import { useLocalSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
 import { useTripContext } from "@/context/TripContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Link } from "expo-router";
@@ -12,8 +12,9 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 export default function TripDetails() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const { trips } = useTripContext();
+  console.log(trips, "5555");
   const selectedTrip = trips.find((trip) => {
-    console.log(trip.id, selectedTripID);
+    console.log(trips);
     return trip.id == selectedTripID;
   });
   console.log(selectedTrip);
