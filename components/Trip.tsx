@@ -36,7 +36,7 @@ const Trip = ({ trip }: TripProps) => {
   const CardTitle = ({ trip }: { trip: Trip }) => {
     return (
       <View style={{ width: "100%" }}>
-        <Text style={{}}>{trip.title}</Text>
+        <Text variant="titleMedium">{trip.title}</Text>
       </View>
     );
   };
@@ -56,8 +56,17 @@ const Trip = ({ trip }: TripProps) => {
     );
   };
   return (
-    <Pressable onPress={onPressHandler} onPressOut={() => setIsPressed(false)}>
-      <Card style={{ backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}` }}>
+    <Pressable
+      onPress={onPressHandler}
+      onPressOut={() => setIsPressed(false)}
+      style={{ marginVertical: 10, alignItems: "center", width: "100%" }}
+    >
+      <Card
+        style={{
+          backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}`,
+          width: "99%",
+        }}
+      >
         <Card.Title
           title={<CardTitle trip={trip} />}
           titleStyle={{ fontSize: 20, marginVertical: 5 }}

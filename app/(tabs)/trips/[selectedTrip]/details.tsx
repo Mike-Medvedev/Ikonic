@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, ScrollView } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -25,18 +25,20 @@ export default function TripDetails() {
       width: "100%",
       flex: 1,
       alignItems: "center",
-      overflow: "hidden",
     },
     iconText: { flexDirection: "row", gap: 10 },
-    imageContainer: { height: "70%" },
     link: {},
   });
   return (
     <Background>
       <View style={styles.container}>
         <Text style={{ fontSize: 40, marginBottom: 10 }}>{selectedTrip.title}</Text>
-        <View style={styles.imageContainer}>
-          <Image source={require("@/assets/images/snow1.jpeg")} style={{ height: "100%" }} resizeMode="contain" />
+        <View style={{ height: "40%" }}>
+          <Image
+            source={require("@/assets/images/snow1.jpeg")}
+            style={{ height: "100%", width: 400 }}
+            resizeMode="contain"
+          />
         </View>
         <View style={{ marginTop: 20 }}>
           <View style={styles.iconText}>
