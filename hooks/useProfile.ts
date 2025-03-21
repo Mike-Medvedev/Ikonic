@@ -11,7 +11,8 @@ const useProfile = () => {
       try {
         setIsLoading(true);
         const user_id = await AsyncStorage.getItem("user_id");
-        console.log("user_id");
+        console.log(user_id);
+        if (!user_id) throw new Error("WHERE IS THE USER ID?");
         const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/profile/${user_id}`, {
           method: "GET",
           headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "any" },

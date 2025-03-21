@@ -7,7 +7,7 @@ import CarSeating from "@/components/CarSeating";
 import { useEffect, useState } from "react";
 import useCarpool from "@/hooks/useCarpool";
 export default function TripCarpool() {
-  const { cars, setCars, addCar, isLoading, error } = useCarpool();
+  const { cars, removeCar, addCar, isLoading, error } = useCarpool();
 
   return (
     <Background>
@@ -27,7 +27,7 @@ export default function TripCarpool() {
             mode="outlined"
             onPress={() => {
               if (cars.length < 1) return;
-              setCars((prev) => prev.slice(0, prev.length - 1));
+              removeCar(7);
             }}
           >
             <Text variant="labelLarge">Remove Car</Text>

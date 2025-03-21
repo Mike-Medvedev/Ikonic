@@ -28,7 +28,8 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       });
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
-      setInvitedUsers(result.invited_users[rsvp]);
+      console.log(result);
+      setInvitedUsers(rsvp === "not going" ? result.invited_users["not_going"] : result.invited_users[rsvp]);
       setAttendanceNumbers({
         going: result.invited_users.going.length,
         maybe: result.invited_users.maybe.length,
