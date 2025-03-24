@@ -45,15 +45,19 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
           />
         )}
         {currentCar.passengers[0] ? (
-          <Text
+          <Pressable
+            style={{ position: "absolute", top: 80, right: 2 }}
             onPress={() => {
               setVisible(true);
               setSelectedSeat(2);
             }}
-            style={{ position: "absolute", top: 80, right: 2, color: "red", fontSize: 30 }}
           >
-            {currentCar.passengers[0].firstname}
-          </Text>
+            <Avatar.Text
+              label={CalculateInitials(currentCar.passengers[0].firstname, currentCar.passengers[0].lastname)}
+              size={44}
+              labelStyle={{ fontSize: 22 }}
+            />
+          </Pressable>
         ) : (
           <Ionicons
             name="add-circle-outline"

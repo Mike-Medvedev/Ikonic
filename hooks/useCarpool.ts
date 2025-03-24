@@ -45,6 +45,8 @@ const useCarpool = () => {
     }
   }
   async function addPassenger(carId: number, user: User, seatPosition: number) {
+    console.log(`CALLED ADD WITH ${carId} ${user}, ${seatPosition}`);
+    console.log("PRINTING THE CARS", cars);
     try {
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_API_URL}/${carId}/${user.user_id}/${seatPosition}/add-passenger`,
@@ -60,7 +62,10 @@ const useCarpool = () => {
       console.log(result);
       Alert.alert("Successfully added passenger!");
       setCars((cars) =>
-        cars.map((car) => (car.id === carId ? { ...car, passengers: [...(car.passengers || []), user] } : car))
+        cars.map((car) => {
+          if (car.id !== carId) return car;
+          return { ...car, passengers: [user] };
+        })
       );
     } catch (error) {
       console.error(error);
@@ -86,7 +91,6 @@ const useCarpool = () => {
         console.log(response);
         const result = await response.json();
         setCars(result);
-        // setCars(result.cars);
       } catch (error: any) {
         setError(error as Error);
       } finally {
