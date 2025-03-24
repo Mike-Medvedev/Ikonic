@@ -7,6 +7,7 @@ import colors from "@/theme/myGeneratedColors.json";
 import { registerTranslation } from "react-native-paper-dates";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const theme = {
   ...DefaultTheme,
@@ -35,16 +36,18 @@ registerTranslation("en", {
 export default function RootLayout() {
   return (
     <PaperProvider theme={theme}>
-      <AutocompleteDropdownContextProvider>
-        <AuthProvider>
-          <SafeAreaProvider>
-            <TripContextProvider>
-              <StatusBar style="dark" />
-              <Slot />
-            </TripContextProvider>
-          </SafeAreaProvider>
-        </AuthProvider>
-      </AutocompleteDropdownContextProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AutocompleteDropdownContextProvider>
+          <AuthProvider>
+            <SafeAreaProvider>
+              <TripContextProvider>
+                <StatusBar style="dark" />
+                <Slot />
+              </TripContextProvider>
+            </SafeAreaProvider>
+          </AuthProvider>
+        </AutocompleteDropdownContextProvider>
+      </GestureHandlerRootView>
     </PaperProvider>
   );
 }

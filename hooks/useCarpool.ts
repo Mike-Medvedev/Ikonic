@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import useProfile from "./useProfile";
 import User from "@/models/User";
 import { Alert } from "react-native";
+import { useTripContext } from "@/context/TripContext";
 
 const useCarpool = () => {
   const selectedTripId = useLocalSearchParams().selectedTrip;
-  const [cars, setCars] = useState<Car[]>([]);
+  const { cars, setCars } = useTripContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
   const { profile: owner } = useProfile();
@@ -35,12 +36,31 @@ const useCarpool = () => {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error Creating Car");
-      console.log(cars);
-      setCars((prev) => prev.filter((car) => car.id !== carId));
+      console.log(`DELETING CARS AND SHOULD BE OPTIMISTICALLY UPDATING: ${carId}`);
+      setCars((cars) => cars.filter((car) => car.id !== carId));
       Alert.alert("Successfully deleted!");
     } catch (error) {
       setError(error as Error);
       console.error(error);
+    }
+  }
+  async function addPassenger(carId: number, user: User) {
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${carId}/${user.user_id}/add-passenger`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) throw new Error("Error adding passenger");
+      const result = await response.json();
+      console.log(result);
+      setCars((cars) =>
+        cars.map((car) => (car.id === carId ? { ...car, passengers: [...car.passengers, user] } : car))
+      );
+    } catch (error) {
+      console.error(error);
+      setError(error as Error);
     }
   }
   useEffect(() => {
@@ -72,7 +92,7 @@ const useCarpool = () => {
     fetchCars();
   }, []);
 
-  return { cars, removeCar, addCar, isLoading, error };
+  return { cars, removeCar, addCar, addPassenger, isLoading, error };
 };
 
 export default useCarpool;

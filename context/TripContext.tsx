@@ -1,3 +1,5 @@
+import { Car } from "@/models/Car";
+import User from "@/models/User";
 import React, { createContext, useContext, useState } from "react";
 interface Trip {
   mountain: string;
@@ -24,6 +26,10 @@ interface TripContextProps {
   setTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
   attendanceNumbers: AttendanceNumber;
   setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceNumber>>;
+  cars: Car[];
+  setCars: React.Dispatch<React.SetStateAction<Car[]>>;
+  invitedUsers: { going: User[]; maybe: User[]; not_going: User[] };
+  setInvitedUsers: React.Dispatch<React.SetStateAction<{ going: User[]; maybe: User[]; not_going: User[] }>>;
 }
 const TripContext = createContext<TripContextProps | undefined>(undefined);
 
@@ -45,6 +51,12 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const [trips, setTrips] = useState<Trip[]>([]);
   const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
   const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceNumber>({ going: 0, maybe: 0, notGoing: 0 });
+  const [cars, setCars] = useState<Car[]>([]);
+  const [invitedUsers, setInvitedUsers] = useState<{ going: User[]; maybe: User[]; not_going: User[] }>({
+    going: [],
+    maybe: [],
+    not_going: [],
+  });
 
   const contextValue = {
     mountain,
@@ -59,6 +71,10 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     setTripTitle,
     attendanceNumbers,
     setAttendanceNumbers,
+    cars,
+    setCars,
+    invitedUsers,
+    setInvitedUsers,
   };
 
   return <TripContext.Provider value={contextValue}>{children}</TripContext.Provider>;

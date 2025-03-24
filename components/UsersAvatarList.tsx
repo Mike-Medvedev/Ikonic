@@ -6,13 +6,12 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 
-type RSVPStatus = "going" | "maybe" | "not going";
+type RSVPStatus = "going" | "maybe" | "not_going";
 
 const MAX_AVATARS = 5;
 
 export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
-  const { setAttendanceNumbers } = useTripContext();
-  const [invitedUsers, setInvitedUsers] = useState<any[]>([]);
+  const { setAttendanceNumbers, invitedUsers, setInvitedUsers } = useTripContext();
   console.log("HERE IS RSVP STATUS!", rsvp);
   const params = useLocalSearchParams();
   console.log(params);
@@ -29,7 +28,7 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
       console.log(result);
-      setInvitedUsers(rsvp === "not going" ? result.invited_users["not_going"] : result.invited_users[rsvp]);
+      setInvitedUsers(result.invited_users);
       setAttendanceNumbers({
         going: result.invited_users.going.length,
         maybe: result.invited_users.maybe.length,
@@ -46,9 +45,9 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
   //   }
   return (
     <View style={{ flexDirection: "row", gap: 5, overflow: "hidden" }}>
-      {invitedUsers && (
+      {invitedUsers[rsvp] && (
         <>
-          {invitedUsers.slice(0, MAX_AVATARS).map((user, index) => (
+          {invitedUsers[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
             <Avatar.Text
               key={user.user_id}
               label={CalculateInitials(user.firstname, user.lastname)}
@@ -56,9 +55,9 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
               labelStyle={{ fontSize: 22 }}
             />
           ))}
-          {invitedUsers.length > MAX_AVATARS && (
+          {invitedUsers[rsvp].length > MAX_AVATARS && (
             <Avatar.Text
-              label={`+${invitedUsers.length - MAX_AVATARS}`}
+              label={`+${invitedUsers[rsvp].length - MAX_AVATARS}`}
               style={{ backgroundColor: "grey" }}
               size={50}
               labelStyle={{ fontSize: 22 }}

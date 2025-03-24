@@ -32,7 +32,7 @@ export default function RSVP() {
         <Button mode="contained" onPress={() => handleRSVP("maybe")}>
           Maybe🤔
         </Button>
-        <Button mode="contained" onPress={() => handleRSVP("not going")}>
+        <Button mode="contained" onPress={() => handleRSVP("not_going")}>
           Cant🚫
         </Button>
       </View>

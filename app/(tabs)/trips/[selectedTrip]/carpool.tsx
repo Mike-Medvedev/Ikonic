@@ -3,11 +3,14 @@ import { Pressable, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import CarSeating from "@/components/CarSeating";
-import { useEffect, useState } from "react";
+import Car from "@/components/Car";
+import { useEffect, useRef, useState } from "react";
 import useCarpool from "@/hooks/useCarpool";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 export default function TripCarpool() {
-  const { cars, removeCar, addCar, isLoading, error } = useCarpool();
+  const { cars, addCar, isLoading, error } = useCarpool();
+  const [isDeleteMode, setDeleteMode] = useState<boolean>(false);
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <Background>
@@ -27,7 +30,7 @@ export default function TripCarpool() {
             mode="outlined"
             onPress={() => {
               if (cars.length < 1) return;
-              removeCar(7);
+              setDeleteMode((prev) => !prev);
             }}
           >
             <Text variant="labelLarge">Remove Car</Text>
@@ -36,9 +39,17 @@ export default function TripCarpool() {
         </View>
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           {cars.map((car, index) => (
-            <CarSeating key={index} />
+            <Car key={index} isDeleteMode={isDeleteMode} car={car} />
           ))}
         </View>
+        {/* <BottomSheet ref={bottomSheetRef}>
+          <BottomSheetView style={{ flex: 1, padding: 36, alignItems: "center", height: "100%" }}>
+            <Text>Awesome 🎉</Text>
+            <Text>Awesome 🎉</Text>
+            <Text>Awesome 🎉</Text>
+            <Text>Awesome 🎉</Text>
+          </BottomSheetView>
+        </BottomSheet> */}
       </View>
     </Background>
   );
