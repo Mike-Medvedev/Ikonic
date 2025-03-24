@@ -44,19 +44,23 @@ const useCarpool = () => {
       console.error(error);
     }
   }
-  async function addPassenger(carId: number, user: User) {
+  async function addPassenger(carId: number, user: User, seatPosition: number) {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${carId}/${user.user_id}/add-passenger`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_API_URL}/${carId}/${user.user_id}/${seatPosition}/add-passenger`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (!response.ok) throw new Error("Error adding passenger");
       const result = await response.json();
       console.log(result);
+      Alert.alert("Successfully added passenger!");
       setCars((cars) =>
-        cars.map((car) => (car.id === carId ? { ...car, passengers: [...car.passengers, user] } : car))
+        cars.map((car) => (car.id === carId ? { ...car, passengers: [...(car.passengers || []), user] } : car))
       );
     } catch (error) {
       console.error(error);

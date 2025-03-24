@@ -1,4 +1,4 @@
-import { View, Image, ScrollView } from "react-native";
+import { View, Image, ScrollView, Pressable } from "react-native";
 import { Avatar, Text, useTheme, Dialog, Portal } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -19,6 +19,7 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
   const { profile, isLoading } = useProfile();
   const [visible, setVisible] = useState<boolean>(false);
   const { invitedUsers } = useTripContext();
+  const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   const hideDialog = () => setVisible(false);
   return (
@@ -43,13 +44,28 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
             style={{ position: "absolute", top: 80, left: 2 }}
           />
         )}
-        <Ionicons
-          name="add-circle-outline"
-          size={44}
-          color="green"
-          style={{ position: "absolute", top: 80, right: 2 }}
-          onPress={() => setVisible(true)}
-        />
+        {currentCar.passengers[0] ? (
+          <Text
+            onPress={() => {
+              setVisible(true);
+              setSelectedSeat(2);
+            }}
+            style={{ position: "absolute", top: 80, right: 2, color: "red", fontSize: 30 }}
+          >
+            {currentCar.passengers[0].firstname}
+          </Text>
+        ) : (
+          <Ionicons
+            name="add-circle-outline"
+            size={44}
+            color="green"
+            style={{ position: "absolute", top: 80, right: 2 }}
+            onPress={() => {
+              setVisible(true);
+              setSelectedSeat(2);
+            }}
+          />
+        )}
         <Ionicons
           name="add-circle-outline"
           size={44}
@@ -66,20 +82,27 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.ScrollArea>
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 24, flexDirection: "row" }}>
-              {/* {invitedUsers.going.map((user, index) => (
-                <Avatar.Text
-                  key={user.user_id}
-                  label={CalculateInitials(user.firstname, user.lastname)}
-                  size={50}
-                  labelStyle={{ fontSize: 22 }}
-                />
-              ))} */}
-              <Avatar.Text label={CalculateInitials("Michael", "Medvedev")} size={50} labelStyle={{ fontSize: 22 }} />
-              <Avatar.Text label={CalculateInitials("Michael", "Medvedev")} size={50} labelStyle={{ fontSize: 22 }} />
-              <Avatar.Text label={CalculateInitials("Michael", "Medvedev")} size={50} labelStyle={{ fontSize: 22 }} />
-              <Avatar.Text label={CalculateInitials("Michael", "Medvedev")} size={50} labelStyle={{ fontSize: 22 }} />
-              <Avatar.Text label={CalculateInitials("Michael", "Medvedev")} size={50} labelStyle={{ fontSize: 22 }} />
+            <Text variant="titleLarge" style={{ marginVertical: 20 }}>
+              Select Passenger
+            </Text>
+            <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 24, flexDirection: "row", gap: 5 }}>
+              {invitedUsers.going.map((user, index) => (
+                <Pressable
+                  onPress={async () => {
+                    if (!selectedSeat) return;
+                    await addPassenger(currentCar.id, user, selectedSeat);
+                    setVisible(false);
+                  }}
+                  key={index}
+                >
+                  <Avatar.Text
+                    key={user.user_id}
+                    label={CalculateInitials(user.firstname, user.lastname)}
+                    size={50}
+                    labelStyle={{ fontSize: 22 }}
+                  />
+                </Pressable>
+              ))}
             </ScrollView>
           </Dialog.ScrollArea>
         </Dialog>
