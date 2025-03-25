@@ -48,7 +48,7 @@ export default function UsersAvatarPriceList({ rsvp }: { rsvp: RSVPStatus }) {
       {invitedUsers[rsvp] && (
         <>
           {invitedUsers[rsvp].map((user, index) => (
-            <View style={{ alignItems: "center", gap: 10 }}>
+            <View style={{ alignItems: "center", gap: 10 }} key={index}>
               <Avatar.Text
                 key={user.user_id}
                 label={CalculateInitials(user.firstname, user.lastname)}

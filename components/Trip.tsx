@@ -7,6 +7,7 @@ import { useTripContext } from "@/context/TripContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface Trip {
+  image: string | null;
   mountain: string;
   startDate: Date;
   endDate: Date;
@@ -72,7 +73,7 @@ const Trip = ({ trip }: TripProps) => {
           titleStyle={{ fontSize: 20, marginVertical: 5 }}
           subtitle={<CardSubTitle trip={trip} />}
           subtitleNumberOfLines={2}
-          left={(props) => <Avatar.Image {...props} source={require("@/assets/images/snow1.jpeg")} size={50} />}
+          left={(props) => <Avatar.Image {...props} source={{ uri: trip.image ?? "" }} size={50} />}
           rightStyle={{
             bottom: 30,
             left: 5,

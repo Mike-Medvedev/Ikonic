@@ -100,10 +100,10 @@ export default function Expenses() {
           <Surface style={styles.surfaceLeft} elevation={4}>
             <View style={{ marginBottom: 50, marginLeft: 20 }}>
               <Text variant="headlineSmall" style={{ color: "white" }}>
-                $500, 000
+                $500,000
               </Text>
               <Text style={{ color: "white" }} variant="labelLarge">
-                Total Spent
+                AirBnb Total Cost
               </Text>
             </View>
           </Surface>

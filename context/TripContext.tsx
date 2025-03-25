@@ -5,6 +5,7 @@ interface Trip {
   mountain: string;
   startDate: Date;
   endDate: Date;
+  image: string | null;
 }
 
 export interface AttendanceNumber {
