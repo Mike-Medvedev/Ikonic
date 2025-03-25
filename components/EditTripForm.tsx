@@ -21,9 +21,7 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
       alignItems: "center",
-      justifyContent: "center",
     },
     image: {
       width: 200,
@@ -31,7 +29,7 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
     },
   });
   return (
-    <View style={{ flex: 1, width: "100%", height: "100%" }}>
+    <View style={{ flex: 1, width: "100%", height: "100%", gap: 30 }}>
       <TextInput
         mode="outlined"
         label="Edit Trip Title"

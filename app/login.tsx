@@ -32,7 +32,7 @@ const Login = () => {
       if (callback) {
         router.push(callback as any);
       } else {
-        router.push("/plan");
+        router.push("/trips");
       }
     } catch (error) {
       setUsername({ ...username, error: "Account not found. Please try again!" });
