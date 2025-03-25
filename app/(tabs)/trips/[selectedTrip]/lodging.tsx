@@ -1,46 +1,51 @@
-// import Background from "@/ui/Background";
-// import { View } from "react-native";
-// import { Text } from "react-native-paper";
-// export default function TripLodging() {
-//   return (
-//     <Background>
-//       <View style={{ flex: 1, width: "100%", height: "100%" }}>
-//         <Text>Lodging!</Text>
-//       </View>
-//     </Background>
-//   );
-// }
+import UsersAvatarList from "@/components/UsersAvatarList";
 import Background from "@/ui/Background";
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Card, Title, Paragraph, Button, Text, IconButton } from "react-native-paper";
+import { useState } from "react";
+import { Alert, Linking, Pressable, View, StyleSheet } from "react-native";
+import { Button, Card, Paragraph, Text, TextInput, Title } from "react-native-paper";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import { nameValidator } from "@/utils/validators";
+import UsersAvatarPriceList from "@/components/UsersAvatarPriceList";
+export default function TripLodging() {
+  const [airbnbLink, setLink] = useState<{ value: string; error: string }>({ value: "", error: "" });
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-export default function Lodging() {
+  function handleLinkSubmit() {
+    if (nameValidator(airbnbLink.value)) return;
+    setIsSubmitted(true);
+  }
+
+  const openAirbnbLink = (url) => {
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      Linking.openURL(url).catch(() => {
+        Alert.alert("Failed to open URL");
+      });
+    } else {
+      Alert.alert("Invalid URL", "Please provide a valid link that starts with http:// or https://");
+    }
+  };
+  const styles = StyleSheet.create({
+    link: {
+      color: "#1B95E0", // typical blue link color
+      textDecorationLine: "none",
+      fontSize: 28,
+      marginVertical: 8,
+      textAlign: "center",
+    },
+  });
   const airbnb = {
     title: "Cozy Mountain Retreat",
     location: "Aspen, CO",
     rating: 4.8,
-    imageUrl: require("@/assets/images/airbnb.png"),
-    totalCost: 400,
+    imageUrl: "https://via.placeholder.com/300x200.png?text=Airbnb+Image", // Replace with the actual image URL.
+    totalCost: 400, // Total lodging cost for the trip.
   };
-
-  const [guests, setGuests] = useState(2);
-
-  const costPerPerson = (airbnb.totalCost / guests).toFixed(2);
-
-  const incrementGuests = () => {
-    setGuests(guests + 1);
-  };
-
-  const decrementGuests = () => {
-    if (guests > 1) setGuests(guests - 1);
-  };
-
   return (
     <Background>
-      <View style={styles.container}>
-        <Card style={styles.card}>
-          <Card.Cover source={airbnb.imageUrl} />
+      <View style={{ flex: 1, width: "100%", height: "100%", alignItems: "center" }}>
+        {/* <Card>
+          <Card.Cover source={require("@/assets/images/airbnb.png")} />
           <Card.Content>
             <Title>{airbnb.title}</Title>
             <Paragraph>{airbnb.location}</Paragraph>
@@ -51,43 +56,41 @@ export default function Lodging() {
               View Details
             </Button>
           </Card.Actions>
-        </Card>
-
-        <Card style={styles.card}>
-          <Card.Content>
-            <Title>Lodging Cost Forecast</Title>
-            <Paragraph>Total Cost: ${airbnb.totalCost}</Paragraph>
-            <Paragraph>Guests: {guests}</Paragraph>
-            <Paragraph>Cost Per Person: ${costPerPerson}</Paragraph>
-            <View style={styles.guestControls}>
-              <IconButton icon="minus" size={20} onPress={decrementGuests} />
-              <Text style={styles.guestText}>{guests}</Text>
-              <IconButton icon="plus" size={20} onPress={incrementGuests} />
-            </View>
-          </Card.Content>
-        </Card>
+        </Card> */}
+        {isSubmitted ? (
+          <View style={{ flexDirection: "row", width: "70%", alignItems: "center" }}>
+            <View style={{ width: 24 }}></View>
+            <Pressable onPress={() => openAirbnbLink(airbnbLink.value)} style={{ flex: 1 }}>
+              <Text style={styles.link}>View Airbnb Listing</Text>
+            </Pressable>
+            <Feather name="edit-3" size={24} color="black" onPress={() => setIsSubmitted(false)} />
+          </View>
+        ) : (
+          <TextInput
+            mode="outlined"
+            label="Enter Airbnb link"
+            style={{ width: "80%" }}
+            value={airbnbLink.value}
+            error={!!airbnbLink.error}
+            onChangeText={(text) => setLink({ value: text, error: "" })}
+            right={
+              <TextInput.Icon
+                icon={({ size, color }) => <AntDesign name="enter" size={24} color="black" />}
+                onPress={handleLinkSubmit}
+              />
+            }
+          />
+        )}
+        <View style={{ marginTop: 70, width: "100%", alignItems: "center" }}>
+          <Text variant="displayMedium" style={{ marginVertical: 15 }}>
+            Pay tracker
+          </Text>
+          <Text variant="labelLarge">Cost per person: ${100}</Text>
+          <View style={{ padding: 20, alignItems: "center" }}>
+            <UsersAvatarPriceList rsvp="going" />
+          </View>
+        </View>
       </View>
     </Background>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-  card: {
-    marginVertical: 8,
-  },
-  guestControls: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 16,
-  },
-  guestText: {
-    fontSize: 18,
-    marginHorizontal: 8,
-  },
-});
