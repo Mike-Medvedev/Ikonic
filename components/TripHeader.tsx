@@ -31,7 +31,7 @@ const TripHeader = ({ props }) => {
               { value: "Details", label: "Details" },
               { value: "Attendance", label: "Attendance" },
               { value: "Carpool", label: "Carpool" },
-              { value: "Lodging", label: "Lodging" },
+              { value: "Expenses", label: "Expenses" },
             ]}
           />
         </View>

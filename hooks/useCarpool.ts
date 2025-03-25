@@ -13,6 +13,16 @@ const useCarpool = () => {
   const [error, setError] = useState<Error | null>(null);
   const { profile: owner } = useProfile();
   async function addCar() {
+    const userAlreadyHasACar = cars.find((car) => car.owner === owner.user_id);
+    const passengerFound = cars.some(
+      (car) => car.passengers && car.passengers.some((passenger) => passenger.user_id === owner.user_id)
+    );
+
+    if (userAlreadyHasACar || passengerFound) {
+      window.alert("User already has a car!");
+      Alert.alert("User already has a car!");
+      return;
+    }
     try {
       const newCar = { owner, seatCount: 4 };
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${selectedTripId}/create-car`, {
