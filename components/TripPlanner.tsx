@@ -32,14 +32,13 @@ const TripPlanner = () => {
       return;
     }
     const newTrip = {
-      id: Math.random() * 10,
       title: tripTitle.value,
       mountain: mountain,
       startDate: startDate,
       endDate: endDate,
     };
     clearSelections();
-    setTrips((prev) => [...prev, newTrip]);
+
     try {
       const user_id = await AsyncStorage.getItem("user_id");
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/create-trip`, {
@@ -51,11 +50,21 @@ const TripPlanner = () => {
         body: JSON.stringify(newTrip),
       });
       if (!response.ok) throw new Error("Error creating new trip");
+      const result = await response.json();
+      const createdTrip = {
+        id: result.new_trip[0],
+        title: result.new_trip[1],
+        startDate: new Date(result.new_trip[2]),
+        endDate: new Date(result.new_trip[3]),
+        mountain: result.new_trip[4],
+        user_id: result.new_trip[5],
+      };
+      setTrips((prev) => [...prev, createdTrip]);
+      Alert.alert("Success", `Trip planned to ${mountain} on ${startDate.toDateString()}`);
+      router.replace(`/trips/${createdTrip.id}`);
     } catch (error) {
       console.error(error);
     }
-    Alert.alert("Success", `Trip planned to ${mountain} on ${startDate.toDateString()}`);
-    router.replace("/trips");
   };
   const styles = StyleSheet.create({
     tripPlannerContainer: {
