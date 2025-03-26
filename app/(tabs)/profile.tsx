@@ -1,20 +1,14 @@
 import PhoneNumberForm from "@/components/PhoneNumberForm";
 import ProfileStatus from "@/components/ProfileComponents/ProfileStatus";
 import useProfile from "@/hooks/useProfile";
+import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
+import { Avatar, Card, Divider, Text, useTheme } from "react-native-paper";
 const Profile = () => {
   const [isActivityTabSelected, setisActivityTabSelected] = useState(false);
+  const theme = useTheme();
   const { profile, isLoading, error } = useProfile();
 
   if (isLoading || !profile) {
@@ -25,40 +19,34 @@ const Profile = () => {
     );
   }
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-      keyboardVerticalOffset={90}
-    >
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", marginBottom: 20 }}>
-          <Image source={require("@/assets/images/mike.png")} style={styles.AvatarImage} />
-          <View>
-            <Text style={{ color: "#ffffff", fontSize: 20 }}>{`${profile.firstname} ${profile.lastname}`}</Text>
-          </View>
+    <Background>
+      <View style={{ flex: 1, width: "100%", height: "100%" }}>
+        <View style={{ height: "15%", width: "100%", padding: 30 }}>
+          <Text variant="headlineSmall" style={{ textAlign: "center" }}>
+            Profile
+          </Text>
+          <Divider style={{ marginTop: 20 }} />
         </View>
-        <View style={styles.ProfileTabContainer}>
-          <View style={styles.ProfileTab}>
-            <Text
-              style={[styles.selectedTab, isActivityTabSelected ? {} : { borderBottomColor: "red" }]}
-              onPress={() => setisActivityTabSelected((prev) => !prev)}
-            >
-              Status
-            </Text>
-            <Text
-              style={[styles.selectedTab, isActivityTabSelected ? { borderBottomColor: "red" } : {}]}
-              onPress={() => setisActivityTabSelected((prev) => !prev)}
-            >
-              Activity
-            </Text>
-          </View>
-        </View>
-        <ProfileStatus />
-        <View>
-          <PhoneNumberForm />
+        <View style={{ flex: 1, width: "100%", height: "100%" }}>
+          <Card
+            style={{
+              backgroundColor: theme.colors.surface,
+              marginVertical: 40,
+            }}
+          >
+            <Card.Title
+              title={`${profile.firstname} ${profile.lastname}`}
+              titleStyle={{ textTransform: "capitalize" }}
+              subtitle={profile.phone_number}
+              left={(props) => <Avatar.Image {...props} source={require("@/assets/images/mike.png")} size={50} />}
+            />
+            <Card.Content>
+              <PhoneNumberForm />
+            </Card.Content>
+          </Card>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </Background>
   );
 };
 const styles = StyleSheet.create({

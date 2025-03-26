@@ -33,7 +33,7 @@ const useProfile = () => {
     fetchProfileData();
   }, []);
 
-  return { profile, isLoading, error };
+  return { profile, setProfile, isLoading, error };
 };
 
 export default useProfile;

@@ -18,3 +18,9 @@ export const nameValidator = (name: string) => {
 
   return "";
 };
+
+export const phoneValidator = (phone: string) => {
+  if (!phone || phone.length != 10) return "Phone Number cannot be empty or non 10-digit";
+
+  return "";
+};

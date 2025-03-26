@@ -1,9 +1,9 @@
 import { useTripContext } from "@/context/TripContext";
 import { useUsers } from "@/hooks/useUsers";
 import CalculateInitials from "@/utils/CalculateInitials";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 
 type RSVPStatus = "going" | "maybe" | "not_going";
@@ -48,12 +48,14 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       {invitedUsers[rsvp] && (
         <>
           {invitedUsers[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
-            <Avatar.Text
-              key={user.user_id}
-              label={CalculateInitials(user.firstname, user.lastname)}
-              size={50}
-              labelStyle={{ fontSize: 22 }}
-            />
+            <Pressable>
+              <Avatar.Text
+                key={user.user_id}
+                label={CalculateInitials(user.firstname, user.lastname)}
+                size={50}
+                labelStyle={{ fontSize: 22 }}
+              />
+            </Pressable>
           ))}
           {invitedUsers[rsvp].length > MAX_AVATARS && (
             <Avatar.Text

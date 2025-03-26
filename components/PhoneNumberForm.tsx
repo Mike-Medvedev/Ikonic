@@ -1,7 +1,9 @@
+import useProfile from "@/hooks/useProfile";
+import { phoneValidator } from "@/utils/validators";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";
 import { Modal, ScrollView, TouchableOpacity, View, StyleSheet } from "react-native";
-import { TextInput, Menu, Provider, Text } from "react-native-paper";
+import { TextInput, Menu, Provider, Text, HelperText } from "react-native-paper";
 type CountryCode = keyof typeof CountryCodeEmojiMap;
 
 const CountryCodeEmojiMap: Record<string, string> = {
@@ -257,21 +259,32 @@ const CountryCodeEmojiMap: Record<string, string> = {
 };
 
 export default function PhoneNumberForm() {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const { profile } = useProfile();
+  const [phoneNumber, setPhoneNumber] = useState<{ value: string; error: string }>({ value: "", error: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState("🇺🇸");
 
-  function formatPhoneInput(input: string) {
-    if (input.length === 3) {
-      return "(" + input + ") - ";
+  async function handleSave() {
+    const phoneError = phoneValidator(phoneNumber.value);
+    if (phoneError) {
+      setPhoneNumber((prev) => ({ ...prev, error: phoneError }));
+      return;
     }
-    return input;
-  }
-
-  function handlePhoneInput(input: string) {
-    const formattedNumber = formatPhoneInput(input);
-    setPhoneNumber(formattedNumber);
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${profile.user_id}/update-phone`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone_number: phoneNumber.value }),
+      });
+      if (!response.ok) throw new Error("Error updating phone number");
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const filteredFlags = Object.entries(CountryCodeEmojiMap)
@@ -294,25 +307,27 @@ export default function PhoneNumberForm() {
     ));
 
   return (
-    <Provider>
-      <View style={{ padding: 20 }}>
-        <TextInput
-          label="Phone Number"
-          value={`+1 ${phoneNumber}`}
-          onChangeText={handlePhoneInput}
-          mode="outlined"
-          placeholder="Enter Phone Number"
-          left={
-            <TextInput.Icon
-              onPress={() => setModalVisible(true)}
-              icon={() => <Text style={{ fontSize: 28 }}>{selectedItem}</Text>}
-            />
-          }
-        />
-        <Text style={{ marginTop: 10 }}>
-          {"\t"}*By entering your number you agree to recieve RSVP texts from Ikonic
-        </Text>
-        <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={() => setModalVisible(false)}>
+    <View style={{ padding: 20 }}>
+      <TextInput
+        label="Enter Phone Number"
+        value={phoneNumber.value}
+        error={!!phoneNumber.error}
+        onChangeText={(text) => setPhoneNumber({ value: text, error: "" })}
+        mode="outlined"
+        placeholder="Enter Phone Number"
+        inputMode="tel"
+        returnKeyType="done"
+        right={
+          <TextInput.Icon onPress={handleSave} icon={(props) => <AntDesign name="save" size={24} color="black" />} />
+        }
+      />
+      <HelperText type="error" visible={!!phoneNumber.error}>
+        {phoneNumber.error}
+      </HelperText>
+      <Text style={{ marginTop: 10, color: "black" }}>
+        {"\t"}*By entering your number you agree to recieve RSVP texts from Ikonic
+      </Text>
+      {/* <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={() => setModalVisible(false)}>
           <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPressOut={() => setModalVisible(false)}>
             <View style={styles.modalContent}>
               <TextInput
@@ -328,9 +343,8 @@ export default function PhoneNumberForm() {
               <ScrollView>{filteredFlags}</ScrollView>
             </View>
           </TouchableOpacity>
-        </Modal>
-      </View>
-    </Provider>
+        </Modal> */}
+    </View>
   );
 }
 
