@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 
-type RSVPStatus = "going" | "maybe" | "not_going";
+type RSVPStatus = "going" | "pending" | "maybe" | "not_going";
 
 const MAX_AVATARS = 5;
 
@@ -28,6 +28,7 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       setInvitedUsers(result.invited_users);
       setAttendanceNumbers({
         going: result.invited_users.going.length,
+        pending: result.invited_users.pending.length,
         maybe: result.invited_users.maybe.length,
         notGoing: result.invited_users.not_going.length,
       });

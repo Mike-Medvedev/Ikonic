@@ -10,6 +10,7 @@ interface Trip {
 
 export interface AttendanceNumber {
   going: number;
+  pending: number;
   maybe: number;
   notGoing: number;
 }
@@ -29,8 +30,10 @@ interface TripContextProps {
   setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceNumber>>;
   cars: Car[];
   setCars: React.Dispatch<React.SetStateAction<Car[]>>;
-  invitedUsers: { going: User[]; maybe: User[]; not_going: User[] };
-  setInvitedUsers: React.Dispatch<React.SetStateAction<{ going: User[]; maybe: User[]; not_going: User[] }>>;
+  invitedUsers: { going: User[]; pending: User[]; maybe: User[]; not_going: User[] };
+  setInvitedUsers: React.Dispatch<
+    React.SetStateAction<{ going: User[]; pending: User[]; maybe: User[]; not_going: User[] }>
+  >;
 }
 const TripContext = createContext<TripContextProps | undefined>(undefined);
 
@@ -51,10 +54,21 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [trips, setTrips] = useState<Trip[]>([]);
   const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
-  const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceNumber>({ going: 0, maybe: 0, notGoing: 0 });
+  const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceNumber>({
+    going: 0,
+    pending: 0,
+    maybe: 0,
+    notGoing: 0,
+  });
   const [cars, setCars] = useState<Car[]>([]);
-  const [invitedUsers, setInvitedUsers] = useState<{ going: User[]; maybe: User[]; not_going: User[] }>({
+  const [invitedUsers, setInvitedUsers] = useState<{
+    going: User[];
+    pending: User[];
+    maybe: User[];
+    not_going: User[];
+  }>({
     going: [],
+    pending: [],
     maybe: [],
     not_going: [],
   });

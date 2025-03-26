@@ -29,7 +29,7 @@ export default function TripInviteList() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user: user, deep_link: deepLink }),
+      body: JSON.stringify({ user: user, trip_id: tripID, deep_link: deepLink }),
     });
     if (!response.ok) {
       setIsInviteSending(false);

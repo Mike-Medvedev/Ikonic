@@ -23,6 +23,7 @@ export default function TripDetails() {
   });
   useEffect(() => {
     AsyncStorage.getItem("user_id").then((result) => {
+      console.log(selectedTrip);
       if (result && selectedTrip && result === selectedTrip.owner) {
         setOwner(result);
       }

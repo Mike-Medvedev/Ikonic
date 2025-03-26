@@ -58,6 +58,7 @@ const TripPlanner = () => {
         endDate: new Date(result.new_trip[3]),
         mountain: result.new_trip[4],
         user_id: result.new_trip[5],
+        owner: result.new_trip[5],
       };
       setTrips((prev) => [...prev, createdTrip]);
       Alert.alert("Success", `Trip planned to ${mountain} on ${startDate.toDateString()}`);

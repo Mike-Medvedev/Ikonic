@@ -28,13 +28,21 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 1 ? styles.selectedTab : ""}
       >
-        {`Not Sure (${attendanceNumbers.maybe})`}
+        {`Pending(${attendanceNumbers.pending})`}
       </Text>
       <Text
         onPress={() => {
           setSelectedTab(2);
         }}
         style={selectedTab === 2 ? styles.selectedTab : ""}
+      >
+        {`Not Sure (${attendanceNumbers.maybe})`}
+      </Text>
+      <Text
+        onPress={() => {
+          setSelectedTab(3);
+        }}
+        style={selectedTab === 3 ? styles.selectedTab : ""}
       >
         {`Not Going(${attendanceNumbers.notGoing})`}
       </Text>

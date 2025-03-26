@@ -6,8 +6,10 @@ export default function AttendanceContent({ selectedTab }: { selectedTab: number
       case 0:
         return <UsersAvatarList rsvp="going" />;
       case 1:
-        return <UsersAvatarList rsvp="maybe" />;
+        return <UsersAvatarList rsvp="pending" />;
       case 2:
+        return <UsersAvatarList rsvp="maybe" />;
+      case 3:
         return <UsersAvatarList rsvp="not_going" />;
     }
   };
