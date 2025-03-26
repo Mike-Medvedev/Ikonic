@@ -44,44 +44,57 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
             style={{ position: "absolute", top: 80, left: 2 }}
           />
         )}
-        {currentCar.passengers[0] ? (
-          <Pressable
-            style={{ position: "absolute", top: 80, right: 2 }}
-            onPress={() => {
-              setVisible(true);
-              setSelectedSeat(2);
-            }}
-          >
+        <Pressable
+          style={{ position: "absolute", top: 80, right: 2 }}
+          onPress={() => {
+            setVisible(true);
+            setSelectedSeat(2);
+          }}
+        >
+          {currentCar.passengers[0] ? (
             <Avatar.Text
               label={CalculateInitials(currentCar.passengers[0].firstname, currentCar.passengers[0].lastname)}
               size={44}
               labelStyle={{ fontSize: 22 }}
             />
-          </Pressable>
-        ) : (
-          <Ionicons
-            name="add-circle-outline"
-            size={44}
-            color="green"
-            style={{ position: "absolute", top: 80, right: 2 }}
-            onPress={() => {
-              setVisible(true);
-              setSelectedSeat(2);
-            }}
-          />
-        )}
-        <Ionicons
-          name="add-circle-outline"
-          size={44}
-          color="green"
+          ) : (
+            <Ionicons name="add-circle-outline" size={44} color="green" />
+          )}
+        </Pressable>
+        <Pressable
           style={{ position: "absolute", bottom: 30, right: 2 }}
-        />
-        <Ionicons
-          name="add-circle-outline"
-          size={44}
-          color="green"
+          onPress={() => {
+            setVisible(true);
+            setSelectedSeat(3);
+          }}
+        >
+          {currentCar.passengers[1] ? (
+            <Avatar.Text
+              label={CalculateInitials(currentCar.passengers[1].firstname, currentCar.passengers[1].lastname)}
+              size={44}
+              labelStyle={{ fontSize: 22 }}
+            />
+          ) : (
+            <Ionicons name="add-circle-outline" size={44} color="green" />
+          )}
+        </Pressable>
+        <Pressable
           style={{ position: "absolute", bottom: 30, left: 2 }}
-        />
+          onPress={() => {
+            setVisible(true);
+            setSelectedSeat(4);
+          }}
+        >
+          {currentCar.passengers[2] ? (
+            <Avatar.Text
+              label={CalculateInitials(currentCar.passengers[2].firstname, currentCar.passengers[2].lastname)}
+              size={44}
+              labelStyle={{ fontSize: 22 }}
+            />
+          ) : (
+            <Ionicons name="add-circle-outline" size={44} color="green" />
+          )}
+        </Pressable>
       </View>
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
@@ -94,6 +107,7 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
                 <Pressable
                   onPress={async () => {
                     if (!selectedSeat) return;
+                    console.log("PRESSED THIS SEAT ===>", selectedSeat);
                     await addPassenger(currentCar.id, user, selectedSeat);
                     setVisible(false);
                   }}

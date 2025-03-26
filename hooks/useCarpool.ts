@@ -74,7 +74,18 @@ const useCarpool = () => {
       setCars((cars) =>
         cars.map((car) => {
           if (car.id !== carId) return car;
-          return { ...car, passengers: [user] };
+          // Clone the existing passengers array (or default to empty array)
+          const updatedPassengers = car.passengers ? [...car.passengers] : [];
+          // Remove any passenger already assigned to this seat
+          const filtered = updatedPassengers.filter((p) => p.seat_position !== seatPosition);
+          // Add the new passenger with the seat position included and sort by seat_position
+          const newPassengers = [...filtered, { ...user, seat_position: seatPosition }].sort(
+            (a, b) => a.seat_position - b.seat_position
+          );
+          return {
+            ...car,
+            passengers: newPassengers,
+          };
         })
       );
     } catch (error) {
