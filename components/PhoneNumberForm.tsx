@@ -281,7 +281,6 @@ export default function PhoneNumberForm() {
       });
       if (!response.ok) throw new Error("Error updating phone number");
       const result = await response.json();
-      console.log(result);
     } catch (error) {
       console.error(error);
     }

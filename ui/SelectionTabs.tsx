@@ -14,7 +14,6 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
   const params = useLocalSearchParams();
   const queryParam = params.selectedTrip;
   const handleOnPress = (option) => {
-    console.log(`/trips/${queryParam}/${option.label}`);
     router.replace({
       pathname: "/trips/[selectedTrip]/[option]" as RelativePathString,
       params: { selectedTrip: queryParam, option: option.label.toLowerCase() },

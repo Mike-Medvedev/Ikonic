@@ -11,9 +11,6 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
-
     if (!result.canceled) {
       setFormData((data) => ({ ...data, image: result.assets[0].uri }));
     }

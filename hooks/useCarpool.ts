@@ -46,7 +46,6 @@ const useCarpool = () => {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Error Creating Car");
-      console.log(`DELETING CARS AND SHOULD BE OPTIMISTICALLY UPDATING: ${carId}`);
       setCars((cars) => cars.filter((car) => car.id !== carId));
       Alert.alert("Successfully deleted!");
     } catch (error) {
@@ -55,8 +54,6 @@ const useCarpool = () => {
     }
   }
   async function addPassenger(carId: number, user: User, seatPosition: number) {
-    console.log(`CALLED ADD WITH ${carId} ${user}, ${seatPosition}`);
-    console.log("PRINTING THE CARS", cars);
     try {
       const response = await fetch(
         `${process.env.EXPO_PUBLIC_API_URL}/${carId}/${user.user_id}/${seatPosition}/add-passenger`,
@@ -69,7 +66,6 @@ const useCarpool = () => {
       );
       if (!response.ok) throw new Error("Error adding passenger");
       const result = await response.json();
-      console.log(result);
       Alert.alert("Successfully added passenger!");
       setCars((cars) =>
         cars.map((car) => {
@@ -109,7 +105,6 @@ const useCarpool = () => {
           },
         });
         if (!response.ok) throw new Error("Error Fetching Cars");
-        console.log(response);
         const result = await response.json();
         setCars(result);
       } catch (error: any) {

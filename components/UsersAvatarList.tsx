@@ -12,9 +12,7 @@ const MAX_AVATARS = 5;
 
 export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
   const { setAttendanceNumbers, invitedUsers, setInvitedUsers } = useTripContext();
-  console.log("HERE IS RSVP STATUS!", rsvp);
   const params = useLocalSearchParams();
-  console.log(params);
   useEffect(() => {
     if (!params.selectedTrip) return;
     (async () => {
@@ -27,7 +25,6 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       });
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
-      console.log(result);
       setInvitedUsers(result.invited_users);
       setAttendanceNumbers({
         going: result.invited_users.going.length,
@@ -48,7 +45,10 @@ export default function UsersAvatarList({ rsvp }: { rsvp: RSVPStatus }) {
       {invitedUsers[rsvp] && (
         <>
           {invitedUsers[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
-            <Pressable>
+            <Pressable
+              onPress={() => router.push(`/profile/${user.user_id}?previousTripId=${params.selectedTrip}`)}
+              key={index}
+            >
               <Avatar.Text
                 key={user.user_id}
                 label={CalculateInitials(user.firstname, user.lastname)}

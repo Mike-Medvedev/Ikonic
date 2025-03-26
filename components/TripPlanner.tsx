@@ -31,7 +31,6 @@ const TripPlanner = () => {
       Alert.alert("Error", "Please select a mountain and a date!");
       return;
     }
-    console.log("Trip Created:", { mountain, startDate, endDate });
     const newTrip = {
       title: tripTitle.value,
       mountain: mountain,

@@ -17,7 +17,6 @@ export default function RSVP() {
       body: JSON.stringify({ trip_id: tripId, user_response: userResponse }),
     });
     if (!response.ok) throw new Error("Error RSVPing");
-    console.log(response);
   }
   return (
     <View style={{ alignItems: "center", padding: 20 }}>

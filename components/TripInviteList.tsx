@@ -24,7 +24,6 @@ export default function TripInviteList() {
   async function handleInvite(user: User) {
     setIsInviteSending(true);
     const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
-    console.log(tripID);
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite`, {
       method: "POST",
       headers: {
@@ -38,7 +37,6 @@ export default function TripInviteList() {
     }
     Alert.alert("Invite Sent Successfully!");
     const result = await response.json();
-    console.log(result.response);
     setIsInviteSending(false);
   }
   return (

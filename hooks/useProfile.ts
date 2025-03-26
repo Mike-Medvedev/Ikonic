@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 
-const useProfile = () => {
+const useProfile = ({ userId }: { userId?: string } = {}) => {
   const [profile, setProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
@@ -10,8 +10,7 @@ const useProfile = () => {
     const fetchProfileData = async () => {
       try {
         setIsLoading(true);
-        const user_id = await AsyncStorage.getItem("user_id");
-        console.log(user_id);
+        const user_id = userId ? userId : await AsyncStorage.getItem("user_id");
         if (!user_id) throw new Error("WHERE IS THE USER ID?");
         const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/profile/${user_id}`, {
           method: "GET",
@@ -31,7 +30,7 @@ const useProfile = () => {
     };
 
     fetchProfileData();
-  }, []);
+  }, [userId]);
 
   return { profile, setProfile, isLoading, error };
 };

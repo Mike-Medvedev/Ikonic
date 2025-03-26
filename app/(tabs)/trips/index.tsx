@@ -30,7 +30,6 @@ const Trips = () => {
         endDate: new Date(trip.endDate),
       }));
       setTrips(tripsWithDates);
-      console.log(tripsWithDates);
     } catch (error) {
       console.error(error);
     } finally {

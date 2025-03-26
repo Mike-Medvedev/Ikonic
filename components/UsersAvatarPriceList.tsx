@@ -12,9 +12,7 @@ type RSVPStatus = "going" | "maybe" | "not_going";
 
 export default function UsersAvatarPriceList({ rsvp }: { rsvp: RSVPStatus }) {
   const { setAttendanceNumbers, invitedUsers, setInvitedUsers } = useTripContext();
-  console.log("HERE IS RSVP STATUS!", rsvp);
   const params = useLocalSearchParams();
-  console.log(params);
   useEffect(() => {
     if (!params.selectedTrip) return;
     (async () => {
@@ -27,7 +25,6 @@ export default function UsersAvatarPriceList({ rsvp }: { rsvp: RSVPStatus }) {
       });
       if (!response.ok) throw new Error("Error fetching users for selected trip");
       const result = await response.json();
-      console.log(result);
       setInvitedUsers(result.invited_users);
       setAttendanceNumbers({
         going: result.invited_users.going.length,

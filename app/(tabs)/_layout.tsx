@@ -62,11 +62,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="profile/index"
         options={{
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
           headerTitle: () => <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Ikonic</Text>,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/[profileId]"
+        options={{
+          title: "Profile",
+          href: null,
+          headerShown: false,
+          tabBarStyle: { display: "none" },
         }}
       />
     </Tabs>

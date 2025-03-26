@@ -19,7 +19,6 @@ export default function TripDetails() {
   const [modalVisible, setModalVisible] = useState(false);
   const { trips } = useTripContext();
   const selectedTrip = trips.find((trip) => {
-    console.log(trips);
     return trip.id == selectedTripID;
   });
   useEffect(() => {
@@ -29,8 +28,6 @@ export default function TripDetails() {
       }
     });
   }, [selectedTrip]);
-
-  console.log(selectedTrip);
   if (!selectedTrip) return <Text>selected Trip doesnt exist in db</Text>;
   const styles = StyleSheet.create({
     container: {

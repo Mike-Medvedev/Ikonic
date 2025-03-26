@@ -17,7 +17,6 @@ export default function TripDetailsModal({ currentTrip, visible, setVisible }: a
   }, {});
   const [loading, setLoading] = useState<boolean>(false);
   async function handleSubmit() {
-    console.log(formData);
     try {
       setLoading(true);
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${currentTrip.id}/update-trip`, {
@@ -29,7 +28,6 @@ export default function TripDetailsModal({ currentTrip, visible, setVisible }: a
       });
       if (!response.ok) throw new Error("Error updating trip details");
       const result = await response.json();
-      console.log(result);
       setTrips((trips) =>
         trips.map((trip) =>
           trip.id === currentTrip.id

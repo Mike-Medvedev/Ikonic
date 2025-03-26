@@ -107,7 +107,6 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
                 <Pressable
                   onPress={async () => {
                     if (!selectedSeat) return;
-                    console.log("PRESSED THIS SEAT ===>", selectedSeat);
                     await addPassenger(currentCar.id, user, selectedSeat);
                     setVisible(false);
                   }}

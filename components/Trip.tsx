@@ -27,11 +27,9 @@ const Trip = ({ trip }: TripProps) => {
   };
   async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
     event.stopPropagation();
-    console.log(typeof trip_id);
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/delete-trip/${trip_id}`, { method: "DELETE" });
     if (!response.ok) throw new Error("Error deleting trip!");
     setTrips((trips) => trips.filter((trip) => trip.id !== trip_id));
-    console.log(response);
   }
 
   const CardTitle = ({ trip }: { trip: Trip }) => {

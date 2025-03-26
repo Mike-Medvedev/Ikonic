@@ -33,7 +33,6 @@ export default function Expenses() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const theme = useTheme();
   const selectedTrip = trips.find((trip) => {
-    console.log(trips);
     return trip.id == selectedTripID;
   });
   if (!selectedTrip) return <Text>selected Trip doesnt exist in db</Text>;
@@ -54,7 +53,6 @@ export default function Expenses() {
       });
       if (!response.ok) throw new Error("Error updating paid status");
       const result = await response.json();
-      console.log(result);
       setInvitedUsers((prev) => ({
         ...prev,
         going: prev.going.map((u) => (u.user_id === user.user_id ? { ...u, paid: updatedPaidStatus } : u)),
