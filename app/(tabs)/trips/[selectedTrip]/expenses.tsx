@@ -2,7 +2,18 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 import Background from "@/ui/Background";
 import { useState } from "react";
 import { Alert, Linking, Pressable, View, StyleSheet, ScrollView } from "react-native";
-import { Avatar, Button, Card, Paragraph, Surface, Text, TextInput, Title, useTheme } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Card,
+  Paragraph,
+  Surface,
+  Text,
+  TextInput,
+  Title,
+  useTheme,
+} from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { nameValidator } from "@/utils/validators";
@@ -10,11 +21,50 @@ import UsersAvatarPriceList from "@/components/UsersAvatarPriceList";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useTripContext } from "@/context/TripContext";
 import PriceCheck from "@/components/PriceCheck";
+import { useLocalSearchParams } from "expo-router";
+import User from "@/models/User";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Expenses() {
   const [airbnbLink, setLink] = useState<{ value: string; error: string }>({ value: "", error: "" });
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const { invitedUsers } = useTripContext();
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const { invitedUsers, trips, setInvitedUsers } = useTripContext();
+  const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const theme = useTheme();
+  const selectedTrip = trips.find((trip) => {
+    console.log(trips);
+    return trip.id == selectedTripID;
+  });
+  if (!selectedTrip) return <Text>selected Trip doesnt exist in db</Text>;
+
+  async function togglePaid(user: User) {
+    const currentUser = await AsyncStorage.getItem("user_id");
+    if (currentUser != selectedTrip.owner) return;
+    setLoading(true);
+    setSelectedUser(user);
+    const updatedPaidStatus = !user.paid;
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${selectedTripID}/${user.user_id}/update-paid`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ new_status: updatedPaidStatus }),
+      });
+      if (!response.ok) throw new Error("Error updating paid status");
+      const result = await response.json();
+      console.log(result);
+      setInvitedUsers((prev) => ({
+        ...prev,
+        going: prev.going.map((u) => (u.user_id === user.user_id ? { ...u, paid: updatedPaidStatus } : u)),
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleLinkSubmit() {
     if (nameValidator(airbnbLink.value)) return;
@@ -59,6 +109,16 @@ export default function Expenses() {
       marginVertical: 8,
       backgroundColor: theme.colors.surface,
     },
+    loadingOverlay: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(255, 255, 255, 0.7)",
+      alignItems: "center",
+      justifyContent: "center",
+    },
   });
   const airbnb = {
     title: "Cozy Mountain Retreat",
@@ -100,7 +160,7 @@ export default function Expenses() {
           <Surface style={styles.surfaceLeft} elevation={4}>
             <View style={{ marginBottom: 50, marginLeft: 20 }}>
               <Text variant="headlineSmall" style={{ color: "white" }}>
-                $500,000
+                {`\$${selectedTrip.total_cost}`}
               </Text>
               <Text style={{ color: "white" }} variant="labelLarge">
                 AirBnb Total Cost
@@ -116,31 +176,48 @@ export default function Expenses() {
         </View>
         <ScrollView style={{ width: 300, marginVertical: 30 }}>
           {invitedUsers["going"].map((user, index) => (
-            <Pressable style={{ marginVertical: 10, alignItems: "center", width: "100%" }} key={index}>
-              <Card
-                style={{
-                  backgroundColor: `${theme.colors.surface}`,
-                  width: "99%",
-                }}
-              >
-                <Card.Title
-                  title={`${user.firstname} ${user.lastname}`}
-                  titleStyle={{ textTransform: "capitalize" }}
-                  right={(props) => (
-                    <View style={{ flexDirection: "row", alignItems: "center", marginRight: 20, gap: 10 }}>
-                      <Text>$211</Text>
-                      <PriceCheck paid={index / 2 === 0} />
-                    </View>
-                  )}
-                  left={(props) => (
-                    <Avatar.Text
-                      label={CalculateInitials(user.firstname, user.lastname)}
-                      size={50}
-                      labelStyle={{ fontSize: 22 }}
-                    />
-                  )}
-                />
-              </Card>
+            <Pressable
+              style={{ marginVertical: 10, alignItems: "center", width: "100%" }}
+              key={index}
+              onPress={() => togglePaid(user)}
+            >
+              <View style={{ width: "99%", position: "relative" }}>
+                <Card
+                  style={{
+                    backgroundColor: theme.colors.surface,
+                  }}
+                >
+                  <Card.Title
+                    title={`${user.firstname} ${user.lastname}`}
+                    titleStyle={{ textTransform: "capitalize" }}
+                    right={(props) => (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginRight: 20,
+                          gap: 10,
+                        }}
+                      >
+                        <Text>{`\$${Math.floor(selectedTrip.total_cost / invitedUsers.going.length)}`}</Text>
+                        <PriceCheck paid={user.paid} />
+                      </View>
+                    )}
+                    left={(props) => (
+                      <Avatar.Text
+                        label={CalculateInitials(user.firstname, user.lastname)}
+                        size={50}
+                        labelStyle={{ fontSize: 22 }}
+                      />
+                    )}
+                  />
+                </Card>
+                {isLoading && user.user_id === selectedUser?.user_id && (
+                  <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size="large" color={theme.colors.primary} />
+                  </View>
+                )}
+              </View>
             </Pressable>
           ))}
         </ScrollView>

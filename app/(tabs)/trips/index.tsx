@@ -4,7 +4,7 @@ import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Badge, Text, useTheme } from "react-native-paper";
 const Trips = () => {
   const { trips, setTrips } = useTripContext();
@@ -75,15 +75,13 @@ const Trips = () => {
             {trips.length}
           </Badge>
         </View>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <ScrollView>
-            {trips.map((trip, index) => (
-              <Trip key={index} trip={trip} />
-            ))}
-          </ScrollView>
-        )}
+        <FlatList
+          data={trips}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <Trip trip={item} />}
+          onRefresh={async () => fetchTrips()}
+          refreshing={isLoading}
+        />
       </View>
     </Background>
   );
