@@ -32,6 +32,7 @@ const TripPlanner = () => {
       return;
     }
     const newTrip = {
+      id: Math.random() * 10,
       title: tripTitle.value,
       mountain: mountain,
       startDate: startDate,

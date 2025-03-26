@@ -76,7 +76,7 @@ const Trips = () => {
         </View>
         <FlatList
           data={trips}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item?.id?.toString()}
           renderItem={({ item }) => <Trip trip={item} />}
           onRefresh={async () => fetchTrips()}
           refreshing={isLoading}
