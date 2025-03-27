@@ -8,6 +8,8 @@ import { registerTranslation } from "react-native-paper-dates";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ErrorBoundary } from "react-error-boundary";
+import Fallback from "@/components/Fallback";
 
 const theme = {
   ...DefaultTheme,
@@ -35,19 +37,25 @@ registerTranslation("en", {
 
 export default function RootLayout() {
   return (
-    <PaperProvider theme={theme}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <AutocompleteDropdownContextProvider>
-          <AuthProvider>
-            <SafeAreaProvider>
-              <TripContextProvider>
-                <StatusBar style="dark" />
-                <Slot />
-              </TripContextProvider>
-            </SafeAreaProvider>
-          </AuthProvider>
-        </AutocompleteDropdownContextProvider>
-      </GestureHandlerRootView>
-    </PaperProvider>
+    <ErrorBoundary
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <Fallback error={error} resetErrorBoundary={resetErrorBoundary} />
+      )}
+    >
+      <PaperProvider theme={theme}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AutocompleteDropdownContextProvider>
+            <AuthProvider>
+              <SafeAreaProvider>
+                <TripContextProvider>
+                  <StatusBar style="dark" />
+                  <Slot />
+                </TripContextProvider>
+              </SafeAreaProvider>
+            </AuthProvider>
+          </AutocompleteDropdownContextProvider>
+        </GestureHandlerRootView>
+      </PaperProvider>
+    </ErrorBoundary>
   );
 }
