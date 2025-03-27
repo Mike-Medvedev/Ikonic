@@ -1,23 +1,25 @@
 import React, { memo, useState } from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import Logo from "@/ui/Logo";
 import { Button, useTheme } from "react-native-paper";
 import TextInput from "@/ui/TextInput";
 import { nameValidator, passwordValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import Background from "@/ui/Background";
-import { router } from "expo-router";
-import { useSearchParams } from "expo-router/build/hooks";
+import { ExternalPathString, router } from "expo-router";
+import { useLocalSearchParams } from "expo-router/build/hooks";
+import { SimpleForm } from "@/models/SimpleForm";
 
 const Login = () => {
   const theme = useTheme();
   const { login } = useAuth();
-  const params = useSearchParams();
-  const callback = params.get("callback");
-  const [username, setUsername] = useState({ value: "", error: "" });
-  const [password, setPassword] = useState({ value: "", error: "" });
+  const { callback: rsvpPathCallback } = useLocalSearchParams();
+  const [username, setUsername] = useState<SimpleForm>({ value: "", error: "" });
+  const [password, setPassword] = useState<SimpleForm>({ value: "", error: "" });
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const _onLoginPressed = async () => {
+  const handleLogin = async () => {
+    setLoading(true);
     const nameError = nameValidator(username.value);
     const passwordError = passwordValidator(password.value);
 
@@ -27,20 +29,21 @@ const Login = () => {
       return;
     }
 
-    try {
-      await login(username.value, password.value);
-      if (callback) {
-        router.push(callback as any);
-      } else {
-        router.push("/trips");
-      }
-    } catch (error) {
+    const isLoginSuccessful = await login(username.value, password.value);
+    if (isLoginSuccessful) {
+      rsvpPathCallback ? router.navigate(rsvpPathCallback as ExternalPathString) : router.navigate("/");
+    } else {
       setUsername({ ...username, error: "Account not found. Please try again!" });
-      console.error(error);
     }
+    setLoading(false);
   };
 
   const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
     forgotPassword: {
       width: "100%",
       alignItems: "flex-end",
@@ -61,13 +64,7 @@ const Login = () => {
   });
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <Background>
         <Logo />
 
@@ -96,20 +93,20 @@ const Login = () => {
         />
 
         <View style={styles.forgotPassword}>
-          <TouchableOpacity>
+          <Pressable>
             <Text style={styles.label}>Forgot your password?</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
-        <Button mode="contained" onPress={_onLoginPressed}>
+        <Button mode="contained" onPress={handleLogin} loading={loading}>
           Login
         </Button>
 
         <View style={styles.row}>
           <Text style={styles.label}>Don’t have an account? </Text>
-          <TouchableOpacity>
+          <Pressable>
             <Text style={styles.link}>Sign up</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </Background>
     </View>
