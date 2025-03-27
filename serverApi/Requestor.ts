@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/config";
 import { APIResponse } from "@/models/Api";
-
-const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 type ResponseData = "json" | "text" | "blob";
 
@@ -19,7 +18,7 @@ export default async function Requestor<T>(
   dataType: ResponseData,
   requestOptions?: RequestInit
 ): Promise<APIResponse<T>> {
-  const response = await fetch(`${BASE_URL}/${path}`, { ...requestOptions });
+  const response = await fetch(`${BASE_URL}${path}`, { ...requestOptions });
 
   if (!response.ok) {
     throw new Error(response.statusText || "An error occurred");

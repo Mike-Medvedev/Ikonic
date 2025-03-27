@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { initiateLogin } from "@/api/LoginApi";
+import { initiateLogin } from "@/serverApi/LoginApi";
 
 interface AuthContextProps {
   isAuthenticated: boolean;

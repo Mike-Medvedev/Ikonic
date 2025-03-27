@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Requestor from "./requestor";
 import User from "@/models/User";
+import Requestor from "@/serverApi/Requestor";
 
 export async function initiateLogin(username: string, password: string): Promise<boolean> {
   const payload = JSON.stringify({ username: username, password: password });
