@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { initiateLogin } from "@/serverApi/LoginApi";
+import { initiateLogin } from "@/http/LoginApi";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -18,7 +18,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
 
   const login = async (username: string, password: string): Promise<boolean> => {
     const isLoginSuccessful = await initiateLogin(username, password);
