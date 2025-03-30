@@ -3,17 +3,17 @@ import { useTripContext } from "@/context/TripContext";
 import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Badge, Text, useTheme } from "react-native-paper";
+import { useCallback, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Badge, Text, useTheme } from "react-native-paper";
 const Trips = () => {
-  const { trips, setTrips } = useTripContext();
+  const { trips, setTrips } = useTripContext(); //memoize
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchTrips = async () => {
     setIsLoading(true);
     try {
-      const userID = await AsyncStorage.getItem("user_id");
+      const userID = await AsyncStorage.getItem("user_id"); //make custom hok for getting async storage stuff
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/get-trips`, {
         method: "GET",
         headers: {

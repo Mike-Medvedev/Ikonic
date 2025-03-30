@@ -16,7 +16,6 @@ import TripDetailsModal from "@/components/TripDetailsModal";
 import * as ImagePicker from "expo-image-picker";
 
 export default function TripDetails() {
-  throw new Error("yooo");
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const { setTrips } = useTripContext();
   const [isOwner, setOwner] = useState<string | null>(null);
