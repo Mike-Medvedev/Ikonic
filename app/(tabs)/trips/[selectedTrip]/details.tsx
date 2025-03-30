@@ -32,7 +32,6 @@ export default function TripDetails() {
       }
     });
   }, [selectedTrip]);
-  if (!selectedTrip) return <Text>selected Trip doesnt exist in db</Text>;
   const styles = StyleSheet.create({
     container: {
       padding: 20,
