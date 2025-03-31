@@ -1,33 +1,14 @@
+import { AttendanceCount } from "@/models/AttendanceCount";
 import { Car } from "@/models/Car";
+import { Trip } from "@/models/TripModel";
 import User from "@/models/User";
-import React, { createContext, useContext, useState } from "react";
-interface Trip {
-  mountain: string;
-  startDate: Date;
-  endDate: Date;
-  image: string | null;
-}
-
-export interface AttendanceNumber {
-  going: number;
-  pending: number;
-  maybe: number;
-  notGoing: number;
-}
+import React, { createContext, useContext, useMemo, useState } from "react";
 
 interface TripContextProps {
-  tripTitle: { value: string; error: string };
-  setTripTitle: React.Dispatch<React.SetStateAction<{ value: string; error: string }>>;
-  mountain: string;
-  setMountain: React.Dispatch<React.SetStateAction<string>>;
-  startDate: Date | null;
-  setStartDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  endDate: Date | null;
-  setEndDate: React.Dispatch<React.SetStateAction<Date | null>>;
   trips: Trip[];
   setTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
-  attendanceNumbers: AttendanceNumber;
-  setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceNumber>>;
+  attendanceNumbers: AttendanceCount;
+  setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceCount>>;
   cars: Car[];
   setCars: React.Dispatch<React.SetStateAction<Car[]>>;
   invitedUsers: { going: User[]; pending: User[]; maybe: User[]; not_going: User[] };
@@ -49,12 +30,8 @@ interface TripContextProviderProps {
 }
 
 export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children }) => {
-  const [mountain, setMountain] = useState<string>("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [tripTitle, setTripTitle] = useState<{ value: string; error: string }>({ value: "", error: "" });
-  const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceNumber>({
+  const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceCount>({
     going: 0,
     pending: 0,
     maybe: 0,
@@ -73,24 +50,18 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     not_going: [],
   });
 
-  const contextValue = {
-    mountain,
-    setMountain,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    trips,
-    setTrips,
-    tripTitle,
-    setTripTitle,
-    attendanceNumbers,
-    setAttendanceNumbers,
-    cars,
-    setCars,
-    invitedUsers,
-    setInvitedUsers,
-  };
+  const contextValue = useMemo(() => {
+    return {
+      trips,
+      setTrips,
+      attendanceNumbers,
+      setAttendanceNumbers,
+      cars,
+      setCars,
+      invitedUsers,
+      setInvitedUsers,
+    };
+  }, [trips, attendanceNumbers, cars, invitedUsers]);
 
   return <TripContext.Provider value={contextValue}>{children}</TripContext.Provider>;
 };

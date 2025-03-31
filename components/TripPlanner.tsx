@@ -1,70 +1,82 @@
 import SelectMountain from "@/components/SelectMountain";
 import TripDatePicker from "@/components/TripDatePicker";
-import { Button, Card, Text, useTheme } from "react-native-paper";
+import { Button, Text, useTheme } from "react-native-paper";
 import TripSummary from "@/components/TripSummary";
 import { Alert, View, StyleSheet } from "react-native";
-import { useTripContext } from "@/context/TripContext";
 import { router } from "expo-router";
 import TextInput from "@/ui/TextInput";
 import { nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SimpleForm } from "@/models/SimpleForm";
+import { useState } from "react";
+
+interface NewTripForm {
+  mountain: SimpleForm<string>;
+  startDate: SimpleForm<Date | undefined>;
+  endDate: SimpleForm<Date | undefined>;
+  title: SimpleForm<string>;
+}
+
 const TripPlanner = () => {
-  const { mountain, startDate, setStartDate, endDate, setEndDate, setTrips, setMountain, tripTitle, setTripTitle } =
-    useTripContext();
+  const [tripForm, setTripForm] = useState<NewTripForm>({
+    mountain: { value: "", error: "" },
+    startDate: { value: undefined, error: "" },
+    endDate: { value: undefined, error: "" },
+    title: { value: "", error: "" },
+  });
   const theme = useTheme();
-  const clearSelections = () => {
-    setMountain("");
-    setStartDate(null);
-    setEndDate(null);
-    setTripTitle({ value: "", error: "" });
-  };
+  const clearSelections = () => {};
 
   const handleSubmit = async () => {
-    const titleError = nameValidator(tripTitle.value);
+    const titleError = nameValidator(tripForm.title.value);
     if (titleError) {
-      setTripTitle((prev) => ({ ...prev, error: titleError }));
+      setTripForm((prev) => ({ ...prev, title: { value: prev.title.value, error: titleError } }));
       return;
     }
 
-    if (!mountain || !startDate || !endDate) {
+    if ((Object.values(tripForm) as SimpleForm<string | Date>[]).every((value) => !value.error)) {
+      const newTrip = (Object.entries(tripForm) as Array<[keyof NewTripForm, SimpleForm<string | Date>]>).reduce(
+        (acc, [key, value]) => {
+          acc[key] = value.value;
+          return acc;
+        },
+        {} as Record<keyof NewTripForm, string | Date>
+      );
+      clearSelections();
+
+      try {
+        const user_id = await AsyncStorage.getItem("user_id");
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/create-trip`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${user_id}`,
+          },
+          body: JSON.stringify(newTrip),
+        });
+        if (!response.ok) throw new Error("Error creating new trip");
+        const result = await response.json();
+        const createdTrip = {
+          id: result.new_trip[0],
+          title: result.new_trip[1],
+          startDate: new Date(result.new_trip[2]),
+          endDate: new Date(result.new_trip[3]),
+          mountain: result.new_trip[4],
+          user_id: result.new_trip[5],
+          owner: result.new_trip[5],
+        };
+        Alert.alert(
+          "Success",
+          `Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`
+        );
+        router.replace(`/trips/${createdTrip.id}`);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
       Alert.alert("Error", "Please select a mountain and a date!");
       return;
-    }
-    const newTrip = {
-      title: tripTitle.value,
-      mountain: mountain,
-      startDate: startDate,
-      endDate: endDate,
-    };
-    clearSelections();
-
-    try {
-      const user_id = await AsyncStorage.getItem("user_id");
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/create-trip`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${user_id}`,
-        },
-        body: JSON.stringify(newTrip),
-      });
-      if (!response.ok) throw new Error("Error creating new trip");
-      const result = await response.json();
-      const createdTrip = {
-        id: result.new_trip[0],
-        title: result.new_trip[1],
-        startDate: new Date(result.new_trip[2]),
-        endDate: new Date(result.new_trip[3]),
-        mountain: result.new_trip[4],
-        user_id: result.new_trip[5],
-        owner: result.new_trip[5],
-      };
-      setTrips((prev) => [...prev, createdTrip]);
-      Alert.alert("Success", `Trip planned to ${mountain} on ${startDate.toDateString()}`);
-      router.replace(`/trips/${createdTrip.id}`);
-    } catch (error) {
-      console.error(error);
     }
   };
   const styles = StyleSheet.create({
@@ -83,10 +95,10 @@ const TripPlanner = () => {
         <TextInput
           label="Name Your Trip"
           returnKeyType="next"
-          value={tripTitle.value}
-          onChangeText={(text) => setTripTitle({ value: text, error: "" })}
-          error={!!tripTitle.error}
-          errorText={tripTitle.error}
+          value={tripForm.title.value}
+          onChangeText={(text) => setTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
+          error={!!tripForm.title.error}
+          errorText={tripForm.title.error}
           autoCapitalize="words"
           keyboardType="default"
         />

@@ -1,14 +1,10 @@
 import PhoneNumberForm from "@/components/PhoneNumberForm";
-import ProfileStatus from "@/components/ProfileComponents/ProfileStatus";
 import useProfile from "@/hooks/useProfile";
 import Background from "@/ui/Background";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, Image, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { Avatar, Card, Divider, Text, useTheme } from "react-native-paper";
 const Profile = () => {
-  const [isActivityTabSelected, setisActivityTabSelected] = useState(false);
   const { profileId } = useLocalSearchParams();
 
   const theme = useTheme();

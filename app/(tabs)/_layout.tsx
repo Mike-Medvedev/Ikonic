@@ -16,10 +16,6 @@ export default function TabLayout() {
   const theme = useTheme();
   const { isAuthenticated } = useAuth();
   const pathname = usePathname();
-
-  if (!isAuthenticated) {
-    return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
-  }
   const tabScreenOptions = useMemo(
     () => ({
       tabBarActiveTintColor: theme.colors.primary,
@@ -34,6 +30,10 @@ export default function TabLayout() {
     }),
     [theme]
   );
+
+  if (!isAuthenticated) {
+    return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
+  }
 
   return (
     <Tabs initialRouteName="plan" screenOptions={tabScreenOptions}>
