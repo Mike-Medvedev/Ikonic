@@ -1,3 +1,5 @@
+import { SimpleForm } from "./SimpleForm";
+
 export interface Trip {
   id: number;
   title: string;
@@ -8,4 +10,11 @@ export interface Trip {
   image?: string;
   desc?: string;
   total_cost?: string;
+}
+
+export interface NewTripForm {
+  mountain: SimpleForm<string>;
+  startDate: SimpleForm<Date | undefined>;
+  endDate: SimpleForm<Date | undefined>;
+  title: SimpleForm<string>;
 }

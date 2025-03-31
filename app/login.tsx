@@ -10,10 +10,19 @@ import { ExternalPathString, router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/models/SimpleForm";
 
+export interface LoginForm {
+  username: SimpleForm<string>;
+  password: SimpleForm<string>;
+}
+
 const Login = () => {
   const theme = useTheme();
   const { login, isLoggingIn } = useAuth();
   const { callback: rsvpPathCallback } = useLocalSearchParams();
+  const [loginForm, setLoginForm] = useState<LoginForm>({
+    username: { value: "", error: "" },
+    password: { value: "", error: "" },
+  });
   const [username, setUsername] = useState<SimpleForm<string>>({ value: "", error: "" });
   const [password, setPassword] = useState<SimpleForm<string>>({ value: "", error: "" });
 
