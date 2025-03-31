@@ -14,8 +14,8 @@ const Login = () => {
   const theme = useTheme();
   const { login, isLoggingIn } = useAuth();
   const { callback: rsvpPathCallback } = useLocalSearchParams();
-  const [username, setUsername] = useState<SimpleForm>({ value: "", error: "" });
-  const [password, setPassword] = useState<SimpleForm>({ value: "", error: "" });
+  const [username, setUsername] = useState<SimpleForm<string>>({ value: "", error: "" });
+  const [password, setPassword] = useState<SimpleForm<string>>({ value: "", error: "" });
 
   function validateLogin() {
     const nameError = nameValidator(username.value);

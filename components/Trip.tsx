@@ -5,16 +5,10 @@ import { Card, Avatar, useTheme, Text, Divider } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useTripContext } from "@/context/TripContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Trip as TripModel } from "@/models/TripModel";
 
-interface Trip {
-  image: string | null;
-  mountain: string;
-  startDate: Date;
-  endDate: Date;
-}
-
-interface TripProps {
-  trip: Trip;
+export interface TripProps {
+  trip: TripModel;
 }
 
 const Trip = ({ trip }: TripProps) => {
@@ -32,7 +26,7 @@ const Trip = ({ trip }: TripProps) => {
     setTrips((trips) => trips.filter((trip) => trip.id !== trip_id));
   }
 
-  const CardTitle = ({ trip }: { trip: Trip }) => {
+  const CardTitle = ({ trip }: { trip: TripModel }) => {
     return (
       <View style={{ width: "100%" }}>
         <Text variant="titleMedium">{trip.title}</Text>
@@ -40,7 +34,7 @@ const Trip = ({ trip }: TripProps) => {
     );
   };
 
-  const CardSubTitle = ({ trip }: { trip: Trip }) => {
+  const CardSubTitle = ({ trip }: { trip: TripModel }) => {
     return (
       <View style={{ gap: 3, padding: 10 }}>
         <View style={{ flexDirection: "row", gap: 5 }}>

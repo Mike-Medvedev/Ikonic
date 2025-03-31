@@ -1,4 +1,4 @@
-export interface SimpleForm {
-  value: string;
+export interface SimpleForm<T> {
+  value: T;
   error: string;
 }
