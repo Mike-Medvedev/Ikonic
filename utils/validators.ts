@@ -32,3 +32,13 @@ export const dateValidator = (date: Date | undefined) => {
 
   return "";
 };
+
+export type ValidatorTypes = "email" | "date" | "phone" | "name" | "password";
+
+export const ValidatorMap = {
+  email: () => emailValidator,
+  date: () => dateValidator,
+  phone: () => phoneValidator,
+  name: () => nameValidator,
+  passwordValidator: () => passwordValidator,
+};

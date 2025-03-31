@@ -23,16 +23,14 @@ const Login = () => {
     username: { value: "", error: "" },
     password: { value: "", error: "" },
   });
-  const [username, setUsername] = useState<SimpleForm<string>>({ value: "", error: "" });
-  const [password, setPassword] = useState<SimpleForm<string>>({ value: "", error: "" });
 
   function validateLogin() {
-    const nameError = nameValidator(username.value);
-    const passwordError = passwordValidator(password.value);
+    const nameError = nameValidator(loginForm.username.value);
+    const passwordError = passwordValidator(loginForm.password.value);
 
     if (nameError || passwordError) {
-      setUsername({ ...username, error: nameError });
-      setPassword({ ...password, error: passwordError });
+      setLoginForm((prev) => ({ ...prev, username: { value: prev.username.value, error: nameError } }));
+      setLoginForm((prev) => ({ ...prev, password: { value: prev.password.value, error: passwordError } }));
       return false;
     }
     return true;
@@ -41,13 +39,16 @@ const Login = () => {
   const handleLogin = async () => {
     if (!validateLogin()) return;
 
-    const isLoginSuccessful = await login(username.value, password.value);
+    const isLoginSuccessful = await login(loginForm.username.value, loginForm.password.value);
 
     if (isLoginSuccessful) {
       //if a user clicks on an rsvp link and logs in, redirect to rsvp page
       rsvpPathCallback ? router.navigate(rsvpPathCallback as ExternalPathString) : router.navigate("/");
     } else {
-      setUsername({ ...username, error: "Account not found. Please try again!" });
+      setLoginForm((prev) => ({
+        ...prev,
+        username: { value: prev.username.value, error: "Account not found. Please try again!" },
+      }));
     }
   };
 
@@ -88,10 +89,10 @@ const Login = () => {
         <TextInput
           label="Username"
           returnKeyType="next"
-          value={username.value}
-          onChangeText={(text) => setUsername({ value: text, error: "" })}
-          error={!!username.error}
-          errorText={username.error}
+          value={loginForm.username.value}
+          onChangeText={(text) => setLoginForm((prev) => ({ ...prev, username: { value: text, error: "" } }))}
+          error={!!loginForm.username.error}
+          errorText={loginForm.username.error}
           autoCapitalize="none"
           textContentType="username"
           keyboardType="default"
@@ -100,10 +101,10 @@ const Login = () => {
         <TextInput
           label="Password"
           returnKeyType="done"
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: "" })}
-          error={!!password.error}
-          errorText={password.error}
+          value={loginForm.password.value}
+          onChangeText={(text) => setLoginForm((prev) => ({ ...prev, password: { value: text, error: "" } }))}
+          error={!!loginForm.password.error}
+          errorText={loginForm.password.error}
           secureTextEntry
         />
 

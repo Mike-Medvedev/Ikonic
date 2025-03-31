@@ -12,21 +12,26 @@ import { SimpleForm } from "@/models/SimpleForm";
 import { useState } from "react";
 import { createTrip } from "@/http/TripApi";
 import { NewTripForm } from "@/models/TripModel";
-import FormBuilder from "@/utils/FormBuilder";
+import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import useToast from "@/hooks/useToast";
 
 const TripPlanner = () => {
-  const [tripForm, setTripForm] = useState<NewTripForm>({
+  const initialTripForm = {
     mountain: { value: "", error: "" },
     startDate: { value: undefined, error: "" },
     endDate: { value: undefined, error: "" },
     title: { value: "", error: "" },
-  });
+  };
+  const [tripForm, setTripForm] = useState<NewTripForm>(initialTripForm);
   const theme = useTheme();
-  const clearSelections = () => {};
+  const { showSuccess, showFailure } = useToast();
+  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
+  const clearSelections = () => {
+    setTripForm(initialTripForm);
+  };
 
   function isFormValid(): boolean {
-    //used in login form, can abstract further
-
     const errors = {
       title: nameValidator(tripForm.title.value),
       mountain: nameValidator(tripForm.mountain.value),
@@ -34,41 +39,26 @@ const TripPlanner = () => {
       endDate: dateValidator(tripForm.endDate.value),
     };
 
-    for (const [key, error] of Object.entries(errors) as Array<[keyof NewTripForm, string]>) {
-      if (error) {
-        setTripForm((prev) => ({ ...prev, [key]: { value: prev[key].value, error: error } }));
-        return false;
-      }
-    }
-    return true;
+    return ValidateErrors<NewTripForm>(errors, setTripForm);
   }
 
   const handleSubmit = async () => {
     if (!isFormValid()) {
-      Alert.alert("Error", "Please select a mountain and a date!");
+      showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
-    } //handle form validation
+    }
+    const user_id = await retrieve();
 
-    const newTrip = FormBuilder<NewTripForm, string | Date | undefined>(tripForm);
-    // const newTrip = (Object.entries(tripForm) as Array<[keyof NewTripForm, SimpleForm<string | Date>]>).reduce(
-    //   (acc, [key, value]) => {
-    //     acc[key] = value.value;
-    //     return acc;
-    //   },
-    //   {} as Record<keyof NewTripForm, string | Date>
-    // ); //create trip object
-    clearSelections(); //clear form values
-
-    const user_id = await AsyncStorage.getItem("user_id");
-    if (!user_id) {
-      router.replace("/login");
-      return;
-    } //get user id from local storage, and navigate on error
+    const newTrip = FormPayloadFactory<NewTripForm, string | Date | undefined>(tripForm);
 
     const newTripId = await createTrip(user_id, newTrip);
-    if (!newTripId) return; //mutate server state with new trip
-    Alert.alert("Success", `Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`);
-    router.replace(`/trips/${newTripId}`); //feedback to succesfful mutation and navigation
+
+    clearSelections();
+
+    showSuccess({
+      message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
+      url: `/trips/${newTripId}`,
+    });
   };
   const styles = StyleSheet.create({
     tripPlannerContainer: {
