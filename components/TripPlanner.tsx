@@ -2,17 +2,14 @@ import SelectMountain from "@/components/SelectMountain";
 import TripDatePicker from "@/components/TripDatePicker";
 import { Button, Text, useTheme } from "react-native-paper";
 import TripSummary from "@/components/TripSummary";
-import { Alert, View, StyleSheet } from "react-native";
-import { router } from "expo-router";
+import { View, StyleSheet } from "react-native";
 import TextInput from "@/ui/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SimpleForm } from "@/models/SimpleForm";
 import { useState } from "react";
 import { createTrip } from "@/http/TripApi";
 import { NewTripForm } from "@/models/TripModel";
-import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
+import { ValidateErrors } from "@/utils/FormBuilder";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useToast from "@/hooks/useToast";
 
@@ -27,7 +24,7 @@ const TripPlanner = () => {
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
   const { retrieve } = useLocalStorage<string>({ key: "user_id" });
-  const clearSelections = () => {
+  const resetForm = () => {
     setTripForm(initialTripForm);
   };
 
@@ -48,13 +45,8 @@ const TripPlanner = () => {
       return;
     }
     const user_id = await retrieve();
-
-    const newTrip = FormPayloadFactory<NewTripForm, string | Date | undefined>(tripForm);
-
-    const newTripId = await createTrip(user_id, newTrip);
-
-    clearSelections();
-
+    const newTripId = await createTrip(user_id, tripForm);
+    resetForm();
     showSuccess({
       message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
       url: `/trips/${newTripId}`,
@@ -71,8 +63,8 @@ const TripPlanner = () => {
     <Background>
       <View style={styles.tripPlannerContainer}>
         <Text style={styles.header}>Plan your trip</Text>
-        <SelectMountain />
-        <TripDatePicker />
+        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
+        <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
         <TextInput
           label="Name Your Trip"
           returnKeyType="next"
@@ -91,7 +83,7 @@ const TripPlanner = () => {
           <Button onPress={handleSubmit} mode="contained">
             Create Trip
           </Button>
-          <Button onPress={clearSelections} mode="outlined">
+          <Button onPress={resetForm} mode="outlined">
             Clear
           </Button>
         </View>

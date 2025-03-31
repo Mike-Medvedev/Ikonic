@@ -1,11 +1,14 @@
 import { NewTripForm, Trip } from "@/models/TripModel";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
+import { FormPayloadFactory } from "@/utils/FormBuilder";
 
 type NewTripId = number;
 
-export async function createTrip(user_id: string, newTrip: unknown) {
+export async function createTrip(user_id: string, tripForm: NewTripForm) {
   try {
+    const newTrip = FormPayloadFactory<NewTripForm, string | Date | undefined>(tripForm);
+
     const payload = JSON.stringify(newTrip);
 
     const requestOptions: RequestInit = {

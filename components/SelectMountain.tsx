@@ -1,11 +1,14 @@
-import { useTripContext } from "@/context/TripContext";
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { AutocompleteDropdown, AutocompleteDropdownItem } from "react-native-autocomplete-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import React from "react";
+import { NewTripForm } from "@/models/TripModel";
 import CustomAutoCompleteInput from "@/ui/CustomAutoCompleteInput";
+interface SelectMountainProps {
+  tripForm: NewTripForm;
+  setTripForm: React.Dispatch<React.SetStateAction<NewTripForm>>;
+}
 
 const newEnglandSkiResorts = [
   // Maine
@@ -107,10 +110,8 @@ const newEnglandSkiResorts = [
   { id: "92", title: "Sugarbush Resort" },
 ];
 
-const SelectMountain = () => {
+const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
   const theme = useTheme();
-  const { mountain, setMountain } = useTripContext();
-  const [selectedItem, setSelectedItem] = useState<AutocompleteDropdownItem | null>(null);
   const [isClient, setIsClient] = useState(false);
   const dropdownController = useRef<{ clear: () => void } | null>(null);
 
@@ -119,8 +120,8 @@ const SelectMountain = () => {
   }, []);
 
   useEffect(() => {
-    if (!mountain && dropdownController.current) dropdownController.current.clear();
-  }, [mountain]);
+    if (!tripForm.mountain && dropdownController.current) dropdownController.current.clear();
+  }, [tripForm.mountain]);
 
   if (!isClient) return null; // Prevent rendering on the server
 
@@ -133,19 +134,20 @@ const SelectMountain = () => {
         showClear={false}
         enableLoadingIndicator={false}
         onSelectItem={(item) => {
-          setSelectedItem(item);
-          setMountain(item?.title ?? "");
+          setTripForm((prev) => ({ ...prev, mountain: { value: item?.title ?? "", error: "" } }));
         }}
         controller={(controller) => {
           dropdownController.current = controller;
         }}
         InputComponent={CustomAutoCompleteInput}
         textInputProps={{
+          value: tripForm.mountain.value,
           placeholder: "Choose a mountain",
           placeholderTextColor: theme.colors.inverseSurface,
           style: {
             color: theme.colors.onSurface,
             paddingLeft: 18,
+            borderColor: tripForm.mountain.error ? theme.colors.error : "",
           },
         }}
         rightButtonsContainerStyle={{
