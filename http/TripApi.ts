@@ -8,9 +8,7 @@ type NewTripId = number;
 export async function createTrip(user_id: string, tripForm: NewTripForm) {
   try {
     const newTrip = FormPayloadFactory<NewTripForm>(tripForm);
-
     const payload = JSON.stringify(newTrip);
-
     const requestOptions: RequestInit = {
       method: "POST",
       headers: {
@@ -19,7 +17,6 @@ export async function createTrip(user_id: string, tripForm: NewTripForm) {
       },
       body: payload,
     };
-
     return await Requestor<APIResponse<NewTripId>>("/create-trip", "json", requestOptions);
   } catch (error) {
     console.error(error);
@@ -46,6 +43,15 @@ export async function fetchTrips(userID: string): Promise<Trip[]> {
     return tripsWithDates;
   } catch (error) {
     console.error(error);
+    throw new Error(String(error));
+  }
+}
+
+export async function deleteTrip(trip_id: number) {
+  const requestOptions: RequestInit = { method: "DELETE" };
+  try {
+    return await Requestor(`/delete-trip/${trip_id}`, "json", requestOptions);
+  } catch (error) {
     throw new Error(String(error));
   }
 }

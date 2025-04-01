@@ -1,47 +1,56 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, View, GestureResponderEvent } from "react-native";
-import { Card, Avatar, useTheme, Text, Divider } from "react-native-paper";
+import { Pressable, View, GestureResponderEvent, StyleSheet } from "react-native";
+import { Card, Avatar, useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useTripContext } from "@/context/TripContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trip as TripModel } from "@/models/TripModel";
+import { deleteTrip } from "@/http/TripApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { APIResponse } from "@/models/Api";
+import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 
 export interface TripProps {
   trip: TripModel;
 }
 
 const Trip = ({ trip }: TripProps) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation<APIResponse<any>, unknown, number>({
+    mutationFn: (trip_id) => deleteTrip(trip_id),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
+  });
   const theme = useTheme();
-  const { setTrips } = useTripContext();
   const [isPressed, setIsPressed] = useState<boolean>(false);
-  const onPressHandler = () => {
+
+  const onTripSelect = () => {
     setIsPressed(true);
     router.push(`/trips/${trip.id}`);
   };
   async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
     event.stopPropagation();
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/delete-trip/${trip_id}`, { method: "DELETE" });
-    if (!response.ok) throw new Error("Error deleting trip!");
-    setTrips((trips) => trips.filter((trip) => trip.id !== trip_id));
+    DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });
   }
 
-  const CardTitle = ({ trip }: { trip: TripModel }) => {
-    return (
-      <View style={{ width: "100%" }}>
-        <Text variant="titleMedium">{trip.title}</Text>
-      </View>
-    );
-  };
+  const styles = StyleSheet.create({
+    tripContainer: { marginVertical: 10, alignItems: "center", width: "100%" },
+    subtitleContainer: { gap: 3, padding: 10 },
+    subtitleLabel: { flexDirection: "row", gap: 5 },
+    cardContainer: {
+      backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}`,
+      width: "99%",
+    },
+    cardTitleStyle: { fontSize: 20, marginVertical: 5 },
+  });
 
   const CardSubTitle = ({ trip }: { trip: TripModel }) => {
     return (
-      <View style={{ gap: 3, padding: 10 }}>
-        <View style={{ flexDirection: "row", gap: 5 }}>
+      <View style={styles.subtitleContainer}>
+        <View style={styles.subtitleLabel}>
           <Ionicons name="location" size={12} color="black" />
           <Text>{`${trip.mountain}\n`}</Text>
         </View>
-        <View style={{ flexDirection: "row", gap: 5 }}>
+        <View style={styles.subtitleLabel}>
           <AntDesign name="calendar" size={12} color="black" />
           <Text>{`${trip.startDate.toDateString()} - ${trip.endDate.toDateString()}`}</Text>
         </View>
@@ -49,20 +58,11 @@ const Trip = ({ trip }: TripProps) => {
     );
   };
   return (
-    <Pressable
-      onPress={onPressHandler}
-      onPressOut={() => setIsPressed(false)}
-      style={{ marginVertical: 10, alignItems: "center", width: "100%" }}
-    >
-      <Card
-        style={{
-          backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}`,
-          width: "99%",
-        }}
-      >
+    <Pressable onPress={onTripSelect} onPressOut={() => setIsPressed(false)} style={styles.tripContainer}>
+      <Card style={styles.cardContainer}>
         <Card.Title
-          title={<CardTitle trip={trip} />}
-          titleStyle={{ fontSize: 20, marginVertical: 5 }}
+          title={<Text variant="titleMedium">{trip.title}</Text>}
+          titleStyle={styles.cardTitleStyle}
           subtitle={<CardSubTitle trip={trip} />}
           subtitleNumberOfLines={2}
           left={(props) => <Avatar.Image {...props} source={{ uri: trip.image ?? "" }} size={50} />}
@@ -70,7 +70,7 @@ const Trip = ({ trip }: TripProps) => {
             bottom: 30,
             left: 5,
           }}
-          right={(props) => (
+          right={() => (
             <AntDesign
               name="closecircleo"
               onPress={(event) => handleTripDelete(event, trip.id)}

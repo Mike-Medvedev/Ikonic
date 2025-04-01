@@ -10,7 +10,7 @@ export default function TripsNoTabLayout() {
       <Stack
         screenOptions={{
           title: "Trip",
-          header: (props) => <TripHeader props={props} />,
+          header: () => <TripHeader />,
           animation: "none",
         }}
       ></Stack>
