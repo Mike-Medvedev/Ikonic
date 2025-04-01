@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Image, ScrollView, Pressable, Modal } from "react-native";
-import { Avatar, Button, Paragraph, Text } from "react-native-paper";
+import { ActivityIndicator, Avatar, Button, Paragraph, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Background from "@/ui/Background";
@@ -14,24 +14,46 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EditTripForm from "@/components/EditTripForm";
 import TripDetailsModal from "@/components/TripDetailsModal";
 import * as ImagePicker from "expo-image-picker";
+import { useQuery } from "@tanstack/react-query";
+import { Trip } from "@/models/TripModel";
+import { fetchSelectedTrip } from "@/http/TripApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function TripDetails() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
-  const { setTrips } = useTripContext();
+  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
   const [isOwner, setOwner] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [image, setImage] = useState<string>("");
-  const { trips } = useTripContext();
-  const selectedTrip = trips.find((trip) => {
-    return trip.id == selectedTripID;
+  const [userId, setUserId] = useState<string>("");
+
+  // prettier-ignore
+  const { data: trip, isLoading, isError } = useQuery({
+    queryKey: ["trip", selectedTripID], queryFn: async () => {
+      return fetchSelectedTrip(selectedTripID as string);
+    },
+    enabled: !!selectedTripID
   });
+
   useEffect(() => {
-    AsyncStorage.getItem("user_id").then((result) => {
-      if (result && selectedTrip && result === selectedTrip.owner) {
+    retrieve().then((result) => {
+      if (result && trip && result === trip.owner) {
+        setUserId(result);
         setOwner(result);
       }
     });
-  }, [selectedTrip]);
+  }, [trip]);
+
+  if (isLoading) return <ActivityIndicator />;
+
+  if (isError || !trip) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Trip not found.</Text>
+      </View>
+    );
+  }
+
   const styles = StyleSheet.create({
     container: {
       padding: 20,
@@ -43,31 +65,31 @@ export default function TripDetails() {
     iconText: { flexDirection: "row", gap: 10 },
     link: {},
   });
-  async function handleSubmit(image: string) {
-    try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${selectedTripID}/update-trip`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ image: image ? image : null }),
-      });
-      if (!response.ok) throw new Error("Error updating trip details");
-      const result = await response.json();
-      setTrips((trips) =>
-        trips.map((trip) =>
-          trip.id === selectedTripID
-            ? {
-                ...trip,
-                image: image.trim() ? image : trip.image,
-              }
-            : trip
-        )
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function handleSubmit(image: string) {
+  //   try {
+  //     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${selectedTripID}/update-trip`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ image: image ? image : null }),
+  //     });
+  //     if (!response.ok) throw new Error("Error updating trip details");
+  //     const result = await response.json();
+  //     setTrips((trips) =>
+  //       trips.map((trip) =>
+  //         trip.id === selectedTripID
+  //           ? {
+  //               ...trip,
+  //               image: image.trim() ? image : trip.image,
+  //             }
+  //           : trip
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,7 +101,7 @@ export default function TripDetails() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
-    await handleSubmit(result.assets[0].uri);
+    // await handleSubmit(result.assets[0].uri);
   };
   return (
     <Background>
@@ -94,10 +116,10 @@ export default function TripDetails() {
               onPress={() => setModalVisible(true)}
             />
           )}
-          <Text style={{ fontSize: 40, marginBottom: 10 }}>{selectedTrip.title}</Text>
+          <Text style={{ fontSize: 40, marginBottom: 10 }}>{trip.title}</Text>
           <View style={{ height: "40%" }}>
-            {selectedTrip.image ? (
-              <Image source={{ uri: selectedTrip.image }} style={{ height: "100%", width: 400 }} resizeMode="contain" />
+            {trip.image ? (
+              <Image source={{ uri: trip.image }} style={{ height: "100%", width: 400 }} resizeMode="contain" />
             ) : (
               <View style={styles.container}>
                 <Button onPress={pickImage}>Pick an image from camera roll</Button>
@@ -108,12 +130,12 @@ export default function TripDetails() {
           <View style={{ marginTop: 20 }}>
             <View style={styles.iconText}>
               <Ionicons name="location" size={24} color="black" />
-              <Text variant="titleLarge">{selectedTrip.mountain}</Text>
+              <Text variant="titleLarge">{trip.mountain}</Text>
             </View>
             <View style={styles.iconText}>
               <AntDesign name="calendar" size={24} color="black" />
               <Text variant="titleMedium">
-                {selectedTrip.startDate.toDateString()} - {selectedTrip.endDate.toDateString()}
+                {trip.startDate.toDateString()} - {trip.endDate.toDateString()}
               </Text>
             </View>
           </View>
@@ -129,9 +151,9 @@ export default function TripDetails() {
           </Pressable>
           <View style={{ alignSelf: "flex-start", marginVertical: 20 }}>
             <Text variant="headlineMedium">Description:</Text>
-            <Paragraph>{selectedTrip.desc}</Paragraph>
+            <Paragraph>{trip.desc}</Paragraph>
           </View>
-          <TripDetailsModal currentTrip={selectedTrip} visible={modalVisible} setVisible={setModalVisible} />
+          {/* <TripDetailsModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} /> */}
         </ScrollView>
       </View>
     </Background>

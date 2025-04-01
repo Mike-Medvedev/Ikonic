@@ -24,6 +24,27 @@ export async function createTrip(user_id: string, tripForm: NewTripForm) {
   }
 }
 
+export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "any",
+    },
+  };
+  try {
+    const requstedTrip = (await Requestor<Trip>(`/get-trip/${selectedTripId}`, "json", requestOptions)).data;
+    return {
+      ...requstedTrip,
+      startDate: new Date(requstedTrip.startDate),
+      endDate: new Date(requstedTrip.endDate),
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error(String(error));
+  }
+}
+
 export async function fetchTrips(userID: string): Promise<Trip[]> {
   const requestOptions: RequestInit = {
     method: "GET",

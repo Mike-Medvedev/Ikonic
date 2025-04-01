@@ -6,7 +6,6 @@ import { useTripContext } from "@/context/TripContext";
 import Background from "@/ui/Background";
 
 export default function TripDetailsModal({ currentTrip, visible, setVisible }: any) {
-  const { setTrips } = useTripContext();
   const [formData, setFormData] = useState<any>({ title: "", desc: "", image: "", totalCost: "" });
   const filteredFormData = Object.keys(formData).reduce((acc, key) => {
     const value = formData[key];
