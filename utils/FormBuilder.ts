@@ -1,10 +1,10 @@
 import { SimpleForm } from "@/models/SimpleForm";
 
-export function FormPayloadFactory<T, K>(form: Record<keyof T, SimpleForm<K>>): Record<keyof T, K> {
-  return (Object.entries(form) as Array<[keyof T, SimpleForm<K>]>).reduce((acc, [key, value]) => {
+export function FormPayloadFactory<T>(form: Record<keyof T, SimpleForm<any>>): Record<keyof T, any> {
+  return (Object.entries(form) as Array<[keyof T, SimpleForm<any>]>).reduce((acc, [key, value]) => {
     acc[key] = value.value;
     return acc;
-  }, {} as Record<keyof T, K>);
+  }, {} as Record<keyof T, any>);
 }
 
 export function ValidateErrors<T extends Record<keyof T, SimpleForm<any>>>(

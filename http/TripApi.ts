@@ -7,7 +7,7 @@ type NewTripId = number;
 
 export async function createTrip(user_id: string, tripForm: NewTripForm) {
   try {
-    const newTrip = FormPayloadFactory<NewTripForm, string | Date | undefined>(tripForm);
+    const newTrip = FormPayloadFactory<NewTripForm>(tripForm);
 
     const payload = JSON.stringify(newTrip);
 

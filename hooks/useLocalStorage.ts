@@ -8,7 +8,7 @@ const useLocalStorage = <T>({ key }: { key: string }) => {
       return JSON.parse(item);
     } catch (error) {
       console.error(error);
-      throw error;
+      throw new Error(String(error));
     }
   };
 
@@ -18,7 +18,7 @@ const useLocalStorage = <T>({ key }: { key: string }) => {
       await AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error;
-      throw error;
+      throw new Error(String(error));
     }
   };
 

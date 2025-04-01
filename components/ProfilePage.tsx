@@ -6,13 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { fetchUser } from "@/http/UsersApi";
 import ProfileCard from "@/components/ProfileCard";
-export default function ProfilePage() {
+export default function ProfilePage({ userId }: { userId?: string }) {
   const { retrieve } = useLocalStorage<string>({ key: "user_id" });
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const user_id = await retrieve();
+      const user_id = userId ? userId : await retrieve();
       return fetchUser(user_id);
     },
   });

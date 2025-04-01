@@ -11,7 +11,7 @@ export async function initiateLogin(username: string, password: string): Promise
     body: payload,
   };
   try {
-    const response = await Requestor<User>("/login", "json", requestOptions);
+    const response = await Requestor<User>("/login", "json", requestOptions); //we should persist user data in a session
     user_id = response.data.user_id;
   } catch (error) {
     console.error(error);
