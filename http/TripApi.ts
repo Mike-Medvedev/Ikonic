@@ -28,18 +28,17 @@ export async function createTrip(user_id: string, tripForm: NewTripForm) {
 }
 
 export async function fetchTrips(userID: string): Promise<Trip[]> {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "any",
+      authorization: `${userID}`,
+    },
+  };
   try {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/get-trips`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "any",
-        authorization: `${userID}`,
-      },
-    });
-    if (!response.ok) throw new Error("Error Fetching trips");
-    const data = await response.json();
-    const tripsWithDates = data.trips.map((trip: Trip) => ({
+    const result = await Requestor<Trip[]>("/get-trips", "json", requestOptions);
+    const tripsWithDates = result.data.map((trip: Trip) => ({
       ...trip,
       startDate: new Date(trip.startDate),
       endDate: new Date(trip.endDate),
@@ -47,6 +46,6 @@ export async function fetchTrips(userID: string): Promise<Trip[]> {
     return tripsWithDates;
   } catch (error) {
     console.error(error);
-    throw error;
+    throw new Error(String(error));
   }
 }

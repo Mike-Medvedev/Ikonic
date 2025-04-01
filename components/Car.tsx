@@ -3,7 +3,6 @@ import { Avatar, Text, useTheme, Dialog, Portal } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import useCarpool from "@/hooks/useCarpool";
-import useProfile from "@/hooks/useProfile";
 import { Car as CarType } from "@/models/Car";
 import { useState } from "react";
 import { useTripContext } from "@/context/TripContext";

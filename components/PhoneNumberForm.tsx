@@ -1,4 +1,4 @@
-import useProfile from "@/hooks/useProfile";
+import User from "@/models/User";
 import { phoneValidator } from "@/utils/validators";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";
@@ -258,8 +258,7 @@ const CountryCodeEmojiMap: Record<string, string> = {
   ZW: "🇿🇼",
 };
 
-export default function PhoneNumberForm() {
-  const { profile } = useProfile();
+export default function PhoneNumberForm({ profile }: { profile: User }) {
   const [phoneNumber, setPhoneNumber] = useState<{ value: string; error: string }>({ value: "", error: "" });
   const [searchTerm, setSearchTerm] = useState("");
   const [modalVisible, setModalVisible] = useState(false);

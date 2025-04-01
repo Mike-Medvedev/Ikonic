@@ -1,7 +1,6 @@
 import { Car } from "@/models/Car";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import useProfile from "./useProfile";
 import User from "@/models/User";
 import { Alert } from "react-native";
 import { useTripContext } from "@/context/TripContext";

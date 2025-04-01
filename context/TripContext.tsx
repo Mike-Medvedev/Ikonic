@@ -5,8 +5,6 @@ import User from "@/models/User";
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 interface TripContextProps {
-  trips: Trip[];
-  setTrips: React.Dispatch<React.SetStateAction<Trip[]>>;
   attendanceNumbers: AttendanceCount;
   setAttendanceNumbers: React.Dispatch<React.SetStateAction<AttendanceCount>>;
   cars: Car[];
@@ -30,7 +28,6 @@ interface TripContextProviderProps {
 }
 
 export const TripContextProvider: React.FC<TripContextProviderProps> = ({ children }) => {
-  const [trips, setTrips] = useState<Trip[]>([]);
   const [attendanceNumbers, setAttendanceNumbers] = useState<AttendanceCount>({
     going: 0,
     pending: 0,
@@ -54,8 +51,6 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
     //useMemo stabilizes this object reference so its the same across re-renders
     //preventing consumers for re rendering unnecessarily
     return {
-      trips,
-      setTrips,
       attendanceNumbers,
       setAttendanceNumbers,
       cars,
@@ -63,7 +58,7 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
       invitedUsers,
       setInvitedUsers,
     };
-  }, [trips, attendanceNumbers, cars, invitedUsers]);
+  }, [attendanceNumbers, cars, invitedUsers]);
 
   return <TripContext.Provider value={contextValue}>{children}</TripContext.Provider>;
 };

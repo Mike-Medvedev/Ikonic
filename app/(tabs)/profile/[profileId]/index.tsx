@@ -1,5 +1,4 @@
 import PhoneNumberForm from "@/components/PhoneNumberForm";
-import useProfile from "@/hooks/useProfile";
 import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
