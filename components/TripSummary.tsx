@@ -2,20 +2,21 @@ import React from "react";
 import { View } from "react-native";
 import { useTripContext } from "@/context/TripContext";
 import { Card, Text, Avatar } from "react-native-paper";
-const TripSummary = () => {
-  const { mountain, startDate, endDate } = useTripContext();
+import { NewTripForm } from "@/models/TripModel";
+
+const TripSummary = ({ tripForm }: { tripForm: NewTripForm }) => {
   return (
     <>
-      {startDate && endDate && mountain ? (
+      {tripForm.startDate.value && tripForm.endDate.value && tripForm.mountain.value ? (
         <Card>
           <Card.Title
-            title={<Text variant="titleLarge">{mountain}</Text>}
+            title={<Text variant="titleLarge">{tripForm.mountain.value}</Text>}
             subtitle={
               <View>
                 <View style={{ flexDirection: "row", gap: 10 }}>
-                  <Text variant="titleSmall">{startDate.toDateString()}</Text>
+                  <Text variant="titleSmall">{tripForm.startDate.value.toDateString()}</Text>
                   <Text variant="titleSmall">-</Text>
-                  <Text variant="titleSmall">{endDate.toDateString()}</Text>
+                  <Text variant="titleSmall">{tripForm.endDate.value.toDateString()}</Text>
                 </View>
               </View>
             }

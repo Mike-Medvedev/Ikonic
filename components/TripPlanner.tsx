@@ -6,7 +6,7 @@ import { View, StyleSheet } from "react-native";
 import TextInput from "@/ui/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createTrip } from "@/http/TripApi";
 import { NewTripForm } from "@/models/TripModel";
 import { ValidateErrors } from "@/utils/FormBuilder";
@@ -32,7 +32,6 @@ const TripPlanner = () => {
     const errors = {
       mountain: nameValidator(tripForm.mountain.value),
       title: nameValidator(tripForm.title.value),
-
       startDate: dateValidator(tripForm.startDate.value),
       endDate: dateValidator(tripForm.endDate.value),
     };
@@ -53,13 +52,15 @@ const TripPlanner = () => {
       url: `/trips/${newTripId}`,
     });
   };
-  const styles = StyleSheet.create({
-    tripPlannerContainer: {
-      flex: 1,
-      width: 350,
-    },
-    header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
-  });
+  const styles = useMemo(() => {
+    return StyleSheet.create({
+      tripPlannerContainer: {
+        flex: 1,
+        width: 350,
+      },
+      header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
+    });
+  }, [theme]);
   return (
     <Background>
       <View style={styles.tripPlannerContainer}>
@@ -77,7 +78,7 @@ const TripPlanner = () => {
           keyboardType="default"
         />
         <View style={{ marginVertical: 20 }}>
-          <TripSummary />
+          <TripSummary tripForm={tripForm} />
         </View>
 
         <View style={{ gap: 20 }}>

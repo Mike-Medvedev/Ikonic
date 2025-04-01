@@ -51,6 +51,8 @@ export const TripContextProvider: React.FC<TripContextProviderProps> = ({ childr
   });
 
   const contextValue = useMemo(() => {
+    //useMemo stabilizes this object reference so its the same across re-renders
+    //preventing consumers for re rendering unnecessarily
     return {
       trips,
       setTrips,

@@ -10,6 +10,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "@/components/Fallback";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const theme = {
   ...DefaultTheme,
@@ -45,14 +48,16 @@ export default function RootLayout() {
       <PaperProvider theme={theme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <AutocompleteDropdownContextProvider>
-            <AuthProvider>
-              <SafeAreaProvider>
-                <TripContextProvider>
-                  <StatusBar style="dark" />
-                  <Slot />
-                </TripContextProvider>
-              </SafeAreaProvider>
-            </AuthProvider>
+            <QueryClientProvider client={queryClient}>
+              <AuthProvider>
+                <SafeAreaProvider>
+                  <TripContextProvider>
+                    <StatusBar style="dark" />
+                    <Slot />
+                  </TripContextProvider>
+                </SafeAreaProvider>
+              </AuthProvider>
+            </QueryClientProvider>
           </AutocompleteDropdownContextProvider>
         </GestureHandlerRootView>
       </PaperProvider>
