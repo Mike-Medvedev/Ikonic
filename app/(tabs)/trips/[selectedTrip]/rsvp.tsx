@@ -1,13 +1,15 @@
+import useLocalStorage from "@/hooks/useLocalStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { Alert, View } from "react-native";
 import { Button, Divider, Text } from "react-native-paper";
 export default function RSVP() {
   const params = useLocalSearchParams();
+  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
   const tripId = params.selectedTrip;
   async function handleRSVP(userResponse: string) {
     try {
-      const user_id = await AsyncStorage.getItem("user_id");
+      const user_id = await retrieve();
       if (!user_id) throw new Error("Please sign in to RSVP");
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/rsvp`, {
         method: "POST",

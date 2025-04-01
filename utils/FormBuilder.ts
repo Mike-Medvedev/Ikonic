@@ -11,11 +11,12 @@ export function ValidateErrors<T extends Record<keyof T, SimpleForm<any>>>(
   errors: Record<keyof T, string>,
   setter: React.Dispatch<React.SetStateAction<T>>
 ): boolean {
-  for (const [key, error] of Object.entries(errors) as Array<[keyof T, string]>) {
+  let hasError = false;
+  (Object.entries(errors) as Array<[keyof T, string]>).forEach(([key, error]) => {
     if (error) {
       setter((prev) => ({ ...prev, [key]: { value: prev[key].value, error: error } }));
-      return false;
+      hasError = true;
     }
-  }
-  return true;
+  });
+  return hasError ? false : true;
 }

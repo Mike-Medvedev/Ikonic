@@ -28,7 +28,7 @@ export const phoneValidator = (phone: string) => {
 
 export const dateValidator = (date: Date | undefined) => {
   if (!date) return "Date cannot be empty.";
-  if (date.getTime() < Date.now() || isNaN(date.getTime())) return "Date outside the valid range";
+  if (date.getTime() < Date.now() - 8.64e7 || isNaN(date.getTime())) return "Date outside the valid range";
 
   return "";
 };

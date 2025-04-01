@@ -14,6 +14,7 @@ const useLocalStorage = <T>({ key }: { key: string }) => {
 
   const store = async (value: T): Promise<void> => {
     try {
+      if (!value) throw new Error("Error item is null or undefined");
       await AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error;

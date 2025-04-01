@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { initiateLogin } from "@/http/LoginApi";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -20,12 +21,14 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [isLoggingIn, setLoggingIn] = useState<boolean>(false);
+  const { store } = useLocalStorage<string>({ key: "user_id" });
 
   const login = async (username: string, password: string): Promise<boolean> => {
     setLoggingIn(true);
-    const isLoginSuccessful = await initiateLogin(username, password);
+    const [isLoginSuccessful, user_id] = await initiateLogin(username, password);
+    await store(user_id);
     setLoggingIn(false);
     setIsAuthenticated(isLoginSuccessful ? true : false);
     return isLoginSuccessful;

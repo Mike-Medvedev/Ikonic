@@ -30,8 +30,9 @@ const TripPlanner = () => {
 
   function isFormValid(): boolean {
     const errors = {
-      title: nameValidator(tripForm.title.value),
       mountain: nameValidator(tripForm.mountain.value),
+      title: nameValidator(tripForm.title.value),
+
       startDate: dateValidator(tripForm.startDate.value),
       endDate: dateValidator(tripForm.endDate.value),
     };

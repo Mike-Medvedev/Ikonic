@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { HelperText, Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import React from "react";
 import { NewTripForm } from "@/models/TripModel";
@@ -147,7 +147,8 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
           style: {
             color: theme.colors.onSurface,
             paddingLeft: 18,
-            borderColor: tripForm.mountain.error ? theme.colors.error : "",
+            borderColor: theme.colors.error,
+            borderWidth: tripForm.mountain.error ? 1 : 0,
           },
         }}
         rightButtonsContainerStyle={{
@@ -160,6 +161,8 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
         inputContainerStyle={{
           minWidth: 300,
           backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.error,
+          borderWidth: tripForm.mountain.error ? 1 : 0,
         }}
         suggestionsListContainerStyle={{
           backgroundColor: theme.colors.surface,
@@ -168,6 +171,9 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
         showChevron={false}
         dataSet={newEnglandSkiResorts}
       />
+      <HelperText type="error" visible={!!tripForm.mountain.error}>
+        Please Select A Mountain!
+      </HelperText>
     </View>
   );
 };

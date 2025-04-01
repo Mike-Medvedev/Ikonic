@@ -1,5 +1,6 @@
 import Trip from "@/components/Trip";
 import { useTripContext } from "@/context/TripContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import Background from "@/ui/Background";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -10,10 +11,11 @@ const Trips = () => {
   const { trips, setTrips } = useTripContext(); //memoize
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { retrieve } = useLocalStorage({ key: "user_id" });
   const fetchTrips = async () => {
     setIsLoading(true);
     try {
-      const userID = await AsyncStorage.getItem("user_id"); //make custom hok for getting async storage stuff
+      const userID = await retrieve(); //make custom hok for getting async storage stuff
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/get-trips`, {
         method: "GET",
         headers: {

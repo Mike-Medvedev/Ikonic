@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import User from "@/models/User";
 import Requestor from "@/http/Requestor";
 
-export async function initiateLogin(username: string, password: string): Promise<boolean> {
+export async function initiateLogin(username: string, password: string): Promise<[boolean, string]> {
+  let user_id = "";
   const payload = JSON.stringify({ username: username, password: password });
   const requestOptions: RequestInit = {
     method: "POST",
@@ -11,10 +12,10 @@ export async function initiateLogin(username: string, password: string): Promise
   };
   try {
     const response = await Requestor<User>("/login", "json", requestOptions);
-    await AsyncStorage.setItem("user_id", response.data.user_id);
+    user_id = response.data.user_id;
   } catch (error) {
     console.error(error);
-    return false;
+    return [false, user_id];
   }
-  return true;
+  return [true, user_id];
 }
