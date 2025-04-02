@@ -8,5 +8,5 @@ export default function SeatingModalHeader() {
   );
 }
 const styles = StyleSheet.create({
-  seatingSelectionTitle: { marginVertical: 20 },
+  seatingSelectionTitle: { marginVertical: 10 },
 });

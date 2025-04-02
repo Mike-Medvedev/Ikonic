@@ -38,7 +38,6 @@ export default function SeatingSelectionPopup({
   });
 
   function addPassengerHandler(user: User) {
-    if (!seatPosition) return;
     addPassengerMutation.mutate({ carId, user, seatPosition });
     setVisible(false);
   }

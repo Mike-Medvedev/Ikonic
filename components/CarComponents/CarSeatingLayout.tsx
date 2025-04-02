@@ -1,9 +1,6 @@
 import { Car } from "@/models/Car";
 import UserAvatar from "@/ui/UserAvatar";
-import CalculateInitials from "@/utils/CalculateInitials";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Image, Pressable, StyleSheet } from "react-native";
-import { Avatar } from "react-native-paper";
 import CarPositionSelect from "@/components/CarComponents/CarPositionSelect";
 
 export default function CarSeatingLayout({ currentCar }: { currentCar: Car }) {
@@ -11,9 +8,9 @@ export default function CarSeatingLayout({ currentCar }: { currentCar: Car }) {
     <View style={styles.container}>
       <Image source={require("@/assets/images/seats.png")} style={{ width: 100, height: 200 }} resizeMode="cover" />
       <UserAvatar user={currentCar.owner} styles={styles.driverPosition} />
-      <CarPositionSelect currentCar={currentCar} user={currentCar.passengers[0]} styles={styles.shotgunPosition} />
-      <CarPositionSelect currentCar={currentCar} user={currentCar.passengers[1]} styles={styles.backSeatLeft} />
-      <CarPositionSelect currentCar={currentCar} user={currentCar.passengers[2]} styles={styles.backSeatRight} />
+      <CarPositionSelect currentCar={currentCar} styles={styles.shotgunPosition} position={0} />
+      <CarPositionSelect currentCar={currentCar} styles={styles.backSeatLeft} position={1} />
+      <CarPositionSelect currentCar={currentCar} styles={styles.backSeatRight} position={2} />
     </View>
   );
 }

@@ -46,7 +46,7 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
   }
 }
 
-export async function fetchAttendees(trip_id: string) {
+export async function fetchAttendees(trip_id: string): Promise<Attendees> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {

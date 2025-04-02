@@ -1,6 +1,7 @@
 import { User } from "@/models/User";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
+import { RSVPStatus } from "@/models/Attendance";
 
 export async function fetchUsers() {
   const requestOptions: RequestInit = {
@@ -42,6 +43,23 @@ export async function inviteUser(user: User, trip_id: string, deepLink: string) 
   };
   try {
     return await Requestor(`/invite`, "json", requestOptions);
+  } catch (error) {
+    console.error(error);
+    throw new Error(String(error));
+  }
+}
+
+export async function handleRSVP(userResponse: RSVPStatus, user_id: string, selectedTripId: string) {
+  const requestOptions: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: user_id,
+    },
+    body: JSON.stringify({ trip_id: selectedTripId, user_response: userResponse }),
+  };
+  try {
+    return await Requestor("/rsvp", "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));

@@ -8,21 +8,25 @@ import { Car } from "@/models/Car";
 
 interface CarPositionSelectProps {
   currentCar: Car;
-  user?: User;
   styles: StyleProp<ViewStyle>;
+  position: number;
 }
-export default function CarPositionSelect({ currentCar, user, styles }: CarPositionSelectProps) {
+export default function CarPositionSelect({ currentCar, styles, position }: CarPositionSelectProps) {
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   function seatSelectionHandler() {
     setVisible(true);
-    setSelectedSeat(2);
+    setSelectedSeat(position);
   }
   return (
     <>
       <Pressable style={styles} onPress={seatSelectionHandler}>
-        {user ? <UserAvatar user={user} /> : <Ionicons name="add-circle-outline" size={44} color="green" />}
+        {currentCar.passengers[position] ? (
+          <UserAvatar user={currentCar.passengers[position]} />
+        ) : (
+          <Ionicons name="add-circle-outline" size={44} color="green" />
+        )}
       </Pressable>
 
       <SeatingSelectionPopup

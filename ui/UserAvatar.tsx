@@ -13,8 +13,8 @@ export default function UserAvatar({ user, styles }: UserAvatarProps) {
     <Avatar.Text
       key={user.user_id}
       label={CalculateInitials(user.firstname, user.lastname)}
-      size={50}
-      labelStyle={{ fontSize: 22 }}
+      size={40}
+      labelStyle={{ fontSize: 20 }}
       style={styles}
     />
   );

@@ -21,7 +21,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoggingIn, setLoggingIn] = useState<boolean>(false);
   const { store } = useLocalStorage<string>({ key: "user_id" });
 

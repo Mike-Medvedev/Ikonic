@@ -17,16 +17,16 @@ export default function TripInviteList() {
   } = useQuery({ queryKey: ["users"], queryFn: fetchUsers, initialData: [] });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
-  const tripID = useLocalSearchParams().selectedTrip;
+  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
 
   async function handleInvite(user: User) {
     setIsInviteSending(true);
-    const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
+    const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
     try {
-      await inviteUser(user, tripID as string, deepLink);
+      await inviteUser(user, selectedTripId, deepLink);
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");

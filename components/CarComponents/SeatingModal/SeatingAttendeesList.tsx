@@ -20,5 +20,5 @@ export default function SeatingAttendeesList({ attendees, addPassengerHandler }:
 }
 
 const styles = StyleSheet.create({
-  avatarScrollContainer: { paddingHorizontal: 24, flexDirection: "row", gap: 5 },
+  avatarScrollContainer: { marginVertical: 10, flexDirection: "row", gap: 5 },
 });

@@ -1,14 +1,24 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { GestureResponderEvent, View } from "react-native";
+import { GestureResponderEvent, View, StyleSheet } from "react-native";
 import { Button, Text } from "react-native-paper";
 
-export default function CreateCarButton({ onPress }: { onPress: (event: GestureResponderEvent) => void }) {
+interface CreateCarButtonProps {
+  onPress: (event: GestureResponderEvent) => void;
+  disabled: boolean;
+}
+
+export default function CreateCarButton({ onPress, disabled }: CreateCarButtonProps) {
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-      <Button mode="outlined" onPress={onPress}>
-        <Text variant="labelLarge">Add Car</Text>
-        <Ionicons name="add" size={18} color="black" />
+      <Button mode="outlined" onPress={onPress} disabled={disabled}>
+        <Text variant="labelLarge" style={disabled && styles.disabledText}>
+          Add Car
+        </Text>
+        <Ionicons name="add" size={18} color="black" style={disabled && styles.disabledText} />
       </Button>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  disabledText: { opacity: 0.5 },
+});

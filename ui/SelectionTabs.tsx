@@ -1,6 +1,5 @@
 import { RelativePathString, router } from "expo-router";
 import { useLocalSearchParams, useSegments } from "expo-router/build/hooks";
-import { useState } from "react";
 import { Pressable, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 

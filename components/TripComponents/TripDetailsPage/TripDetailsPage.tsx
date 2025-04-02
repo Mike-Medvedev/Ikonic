@@ -5,17 +5,17 @@ import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSelectedTrip } from "@/http/TripApi";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import TripImage from "@/components/TripComponents/TripDetailsPage/TripImage";
 import EditButton from "@/ui/EditButton";
 import TripDetailsContent from "@/components/TripComponents/TripDetailsPage/TripDetailsContent";
 import TripAttendeesView from "@/components/TripComponents/TripDetailsPage/TripAttendeesView";
 import TripDescription from "@/components/TripComponents/TripDetailsPage/TripDescription";
 import EditTripModal from "@/components/TripComponents/EditTripPage/EditTripModal";
+import useUser from "@/hooks/useUser";
 
 export default function TripDetailsPage() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
-  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
+  const { userId } = useUser();
   const [isOwner, setOwner] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -29,11 +29,9 @@ export default function TripDetailsPage() {
 
   useEffect(() => {
     if (!trip) return;
-    retrieve().then((userId) => {
-      console.log(trip.owner);
-      setOwner(trip.owner === userId);
-    });
+    setOwner(trip.owner.user_id === userId);
   }, [trip]);
+
   if (isLoading) return <ActivityIndicator />;
 
   if (isError || !trip) {

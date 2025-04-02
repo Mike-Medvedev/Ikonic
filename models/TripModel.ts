@@ -1,4 +1,5 @@
 import { SimpleForm } from "./SimpleForm";
+import { User } from "@/models/User";
 
 export interface Trip {
   id: number;
@@ -6,7 +7,7 @@ export interface Trip {
   startDate: Date;
   endDate: Date;
   mountain: string;
-  owner: string;
+  owner: User;
   image?: string;
   desc?: string;
   total_cost?: string;

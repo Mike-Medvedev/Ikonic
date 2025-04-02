@@ -37,7 +37,7 @@ const Trip = ({ trip }: TripProps) => {
     subtitleContainer: { gap: 3, padding: 10 },
     subtitleLabel: { flexDirection: "row", gap: 5 },
     cardContainer: {
-      backgroundColor: `${isPressed ? theme.colors.primaryContainer : "white"}`,
+      backgroundColor: `${"white"}`,
       width: "99%",
     },
     cardTitleStyle: { fontSize: 20, marginVertical: 5 },

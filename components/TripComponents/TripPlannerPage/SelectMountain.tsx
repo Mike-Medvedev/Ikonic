@@ -142,6 +142,7 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
         InputComponent={CustomAutoCompleteInput}
         textInputProps={{
           value: tripForm.mountain.value,
+          onChangeText: (text) => setTripForm((prev) => ({ ...prev, mountain: { value: text, error: "" } })),
           placeholder: "Choose a mountain",
           placeholderTextColor: theme.colors.inverseSurface,
           style: {
