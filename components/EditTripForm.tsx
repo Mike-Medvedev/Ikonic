@@ -24,9 +24,10 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
       width: 200,
       height: 200,
     },
+    form: { height: "65%", width: "80%", gap: 30 },
   });
   return (
-    <View style={{ flex: 1, width: "100%", height: "100%", gap: 30 }}>
+    <View style={styles.form}>
       <TextInput
         mode="outlined"
         label="Edit Trip Title"

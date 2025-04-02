@@ -45,7 +45,7 @@ const TripPlanner = () => {
       return;
     }
     const user_id = await retrieve();
-    const newTripId = await createTrip(user_id, tripForm);
+    const newTripId = (await createTrip(user_id, tripForm)).data;
     resetForm();
     showSuccess({
       message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
