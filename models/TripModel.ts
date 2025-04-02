@@ -18,3 +18,15 @@ export interface NewTripForm {
   endDate: SimpleForm<Date | undefined>;
   title: SimpleForm<string>;
 }
+
+export interface TripUpdateForm {
+  title?: string;
+  desc?: string;
+  image?: string;
+  totalCost?: string;
+}
+
+export type UpdateTripMutation = {
+  currentTripId: number;
+  form: TripUpdateForm;
+};

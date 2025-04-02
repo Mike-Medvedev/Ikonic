@@ -1,7 +1,21 @@
+import { updateTrip } from "@/http/TripApi";
+import { TripUpdateForm, UpdateTripMutation } from "@/models/TripModel";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
-import { Pressable, View, Image, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet, Image } from "react-native";
 import { Button } from "react-native-paper";
-export default function TripImage({ tripImage }: { tripImage: string | undefined }) {
+
+interface TripImageProps {
+  tripImage: string | undefined;
+  currentTripId: number;
+}
+
+export default function TripImage({ tripImage, currentTripId }: TripImageProps) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation<void, any, UpdateTripMutation>({
+    mutationFn: ({ currentTripId, form }) => updateTrip(currentTripId, form),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["trip", currentTripId] }),
+  });
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -11,14 +25,16 @@ export default function TripImage({ tripImage }: { tripImage: string | undefined
       quality: 1,
     });
     if (!result.canceled) {
-      // setImage(result.assets[0].uri);
+      const form: TripUpdateForm = {
+        image: result.assets[0].uri,
+      };
+      mutation.mutate({ currentTripId, form });
     }
-    // await handleSubmit(result.assets[0].uri);
   };
   return (
     <View style={{ height: "40%" }}>
       {tripImage ? (
-        <Pressable onPress={pickImage}>
+        <Pressable onPress={pickImage} style={styles.container}>
           <Image source={{ uri: tripImage }} style={styles.image} resizeMode="contain" />
         </Pressable>
       ) : (

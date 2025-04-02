@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Image, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import TripDetailsModal from "@/components/EditTripModal";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSelectedTrip } from "@/http/TripApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -19,11 +18,10 @@ export default function TripDetailsPage() {
   const { retrieve } = useLocalStorage<string>({ key: "user_id" });
   const [isOwner, setOwner] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [image, setImage] = useState<string>("");
 
   // prettier-ignore
   const { data: trip, isLoading, isError } = useQuery({
-    queryKey: ["trip", selectedTripID], queryFn: async () => {
+    queryKey: ["trip", Number(selectedTripID)], queryFn: async () => {
       return fetchSelectedTrip(selectedTripID as string);
     },
     enabled: !!selectedTripID
@@ -36,32 +34,6 @@ export default function TripDetailsPage() {
       setOwner(trip.owner === userId);
     });
   }, [trip]);
-
-  // async function handleSubmit(image: string) {
-  //   try {
-  //     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/${selectedTripID}/update-trip`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ image: image ? image : null }),
-  //     });
-  //     if (!response.ok) throw new Error("Error updating trip details");
-  //     const result = await response.json();
-  //     setTrips((trips) =>
-  //       trips.map((trip) =>
-  //         trip.id === selectedTripID
-  //           ? {
-  //               ...trip,
-  //               image: image.trim() ? image : trip.image,
-  //             }
-  //           : trip
-  //       )
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
   if (isLoading) return <ActivityIndicator />;
 
   if (isError || !trip) {
@@ -73,7 +45,7 @@ export default function TripDetailsPage() {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
           <Text style={styles.tripTitle}>{trip.title}</Text>
-          <TripImage tripImage={trip.image} />
+          <TripImage tripImage={trip.image} currentTripId={Number(selectedTripID)} />
           <TripDetailsContent trip={trip} />
           <TripAttendeesView selectedTripID={selectedTripID as string} />
           <TripDescription tripDesc={trip.desc} />

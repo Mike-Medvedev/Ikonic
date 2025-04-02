@@ -1,8 +1,14 @@
 import { View, StyleSheet, Image } from "react-native";
-import { Button, TextInput, Text } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
+import { TripUpdateForm } from "@/models/TripModel";
 
-export default function EditTripForm({ currentTrip, formData, setFormData, loading }: any) {
+interface EditTripFormProps {
+  tripUpdateForm: TripUpdateForm;
+  setTripUpdateForm: React.Dispatch<React.SetStateAction<TripUpdateForm>>;
+}
+
+export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: EditTripFormProps) {
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -12,7 +18,7 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
       quality: 1,
     });
     if (!result.canceled) {
-      setFormData((data) => ({ ...data, image: result.assets[0].uri }));
+      setTripUpdateForm((data) => ({ ...data, image: result.assets[0].uri }));
     }
   };
 
@@ -32,33 +38,31 @@ export default function EditTripForm({ currentTrip, formData, setFormData, loadi
         mode="outlined"
         label="Edit Trip Title"
         returnKeyType="done"
-        value={formData.title}
-        onChangeText={(text) => setFormData((prev) => ({ ...prev, title: text }))}
+        value={tripUpdateForm.title}
+        onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, title: text }))}
         style={{ marginBottom: 18 }}
       />
       <TextInput
         mode="outlined"
         label="Edit Trip Description"
-        value={formData.desc}
-        onChangeText={(text) => setFormData((prev) => ({ ...prev, desc: text }))}
+        value={tripUpdateForm.desc}
+        onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, desc: text }))}
         multiline
       />
       <TextInput
         mode="outlined"
         label="Add Total Airbnb Cost"
         returnKeyType="done"
-        value={formData.totalCost}
-        onChangeText={(text) => setFormData((prev) => ({ ...prev, totalCost: text }))}
+        value={tripUpdateForm.totalCost}
+        onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, totalCost: text }))}
         style={{ marginBottom: 18, width: 150, textAlign: "right" }}
         keyboardType="decimal-pad"
         left={<TextInput.Affix text="$" />}
       />
 
       <View style={styles.container}>
-        <Button onPress={pickImage} loading={loading}>
-          Pick an image from camera roll
-        </Button>
-        {formData.image ? <Image source={{ uri: formData.image }} style={styles.image} /> : null}
+        <Button onPress={pickImage}>Pick an image from camera roll</Button>
+        {tripUpdateForm.image ? <Image source={{ uri: tripUpdateForm.image }} style={styles.image} /> : null}
       </View>
     </View>
   );

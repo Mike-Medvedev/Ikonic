@@ -16,7 +16,7 @@ export interface TripProps {
 
 const Trip = ({ trip }: TripProps) => {
   const queryClient = useQueryClient();
-  const mutation = useMutation<APIResponse<any>, unknown, number>({
+  const mutation = useMutation<void, unknown, number>({
     mutationFn: (trip_id) => deleteTrip(trip_id),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
   });
