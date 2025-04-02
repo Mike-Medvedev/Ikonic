@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "@/models/User";
 import Requestor from "@/http/Requestor";
 

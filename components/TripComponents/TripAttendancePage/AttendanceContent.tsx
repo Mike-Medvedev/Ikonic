@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
-import UsersAvatarList from "../../UsersAvatarList";
+import { View } from "react-native";
+import UsersAvatarList from "@/ui/UsersAvatarList";
 
 interface AttendanceContentProps {
   selectedTab: number;

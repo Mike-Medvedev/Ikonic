@@ -14,7 +14,7 @@ export default function useUser() {
   }, []);
 
   function isOwner(trip: Trip): boolean {
-    return trip.owner === userId;
+    return trip.owner.user_id === userId;
   }
 
   return { isOwner, userId };

@@ -30,7 +30,7 @@ export default function TripInviteList() {
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");
-      throw new Error("Error inviting user: " + user.user_id);
+      throw new Error("Error inviting user: " + user.user_id + String(error));
     } finally {
       setIsInviteSending(false);
     }

@@ -2,9 +2,8 @@ import { User } from "@/models/User";
 import { phoneValidator } from "@/utils/validators";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";
-import { Modal, ScrollView, TouchableOpacity, View, StyleSheet } from "react-native";
-import { TextInput, Menu, Provider, Text, HelperText } from "react-native-paper";
-type CountryCode = keyof typeof CountryCodeEmojiMap;
+import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { TextInput, Text, HelperText } from "react-native-paper";
 
 const CountryCodeEmojiMap: Record<string, string> = {
   AF: "🇦🇫",

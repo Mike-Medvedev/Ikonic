@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
-import UsersAvatarList from "@/components/UsersAvatarList";
+import UsersAvatarList from "@/ui/UsersAvatarList";
 import { router } from "expo-router";
 export default function TripAttendeesView({ selectedTripID }: { selectedTripID: string }) {
   return (

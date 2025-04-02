@@ -1,6 +1,6 @@
 import { Car } from "@/models/Car";
 import UserAvatar from "@/ui/UserAvatar";
-import { View, Image, Pressable, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import CarPositionSelect from "@/components/CarComponents/CarPositionSelect";
 
 export default function CarSeatingLayout({ currentCar }: { currentCar: Car }) {

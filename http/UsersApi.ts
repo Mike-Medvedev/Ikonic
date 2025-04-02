@@ -1,6 +1,5 @@
 import { User } from "@/models/User";
-import Requestor from "./Requestor";
-import { APIResponse } from "@/models/Api";
+import Requestor from "@/http/Requestor";
 import { RSVPStatus } from "@/models/Attendance";
 
 export async function fetchUsers() {

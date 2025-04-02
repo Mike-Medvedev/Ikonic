@@ -1,7 +1,6 @@
 import { Slot } from "expo-router";
 import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { TripContextProvider } from "@/context/TripContext";
 import { AuthProvider } from "@/context/AuthContext";
 import colors from "@/theme/myGeneratedColors.json";
 import { registerTranslation } from "react-native-paper-dates";
@@ -51,10 +50,8 @@ export default function App() {
             <QueryClientProvider client={queryClient}>
               <AuthProvider>
                 <SafeAreaProvider>
-                  <TripContextProvider>
-                    <StatusBar style="dark" />
-                    <Slot />
-                  </TripContextProvider>
+                  <StatusBar style="dark" />
+                  <Slot />
                 </SafeAreaProvider>
               </AuthProvider>
             </QueryClientProvider>

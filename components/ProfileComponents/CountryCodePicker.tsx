@@ -1,7 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native";
-import { Button, Text } from "react-native-paper";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { useRef, useState } from "react";
+import { Text } from "react-native-paper";
+import { useState } from "react";
 
 type CountryCode = keyof typeof CountryCodeEmojiMap;
 

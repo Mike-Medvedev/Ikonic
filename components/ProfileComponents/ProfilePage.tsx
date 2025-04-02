@@ -1,6 +1,5 @@
 import Background from "@/ui/Background";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import { useTheme } from "react-native-paper";
 import ProfilePageHeader from "./ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
 import useLocalStorage from "@/hooks/useLocalStorage";

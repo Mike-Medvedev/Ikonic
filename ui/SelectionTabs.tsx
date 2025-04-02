@@ -3,8 +3,10 @@ import { useLocalSearchParams, useSegments } from "expo-router/build/hooks";
 import { Pressable, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
+type option = { value: string; label: string };
+
 interface SelectionTabsProps {
-  options: any[];
+  options: option[];
 }
 
 const SelectionTabs = ({ options }: SelectionTabsProps) => {
@@ -12,7 +14,7 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
   const currentTab = segments[segments.length - 1]?.toLowerCase();
   const params = useLocalSearchParams();
   const queryParam = params.selectedTrip;
-  const handleOnPress = (option) => {
+  const handleOnPress = (option: option) => {
     router.replace({
       pathname: "/trips/[selectedTrip]/[option]" as RelativePathString,
       params: { selectedTrip: queryParam, option: option.label.toLowerCase() },

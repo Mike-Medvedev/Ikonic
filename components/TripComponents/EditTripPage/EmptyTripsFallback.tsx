@@ -1,5 +1,5 @@
 import { useTheme, Text } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 export default function EmptyTripsFallback() {
   const theme = useTheme();

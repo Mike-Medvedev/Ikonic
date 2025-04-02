@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { ImageBackground, StyleSheet, KeyboardAvoidingView, View } from "react-native";
+import { ImageBackground, StyleSheet, KeyboardAvoidingView } from "react-native";
 
 type Props = {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import React, { memo, forwardRef, useMemo } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { HelperText, TextInput as Input, useTheme } from "react-native-paper";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };

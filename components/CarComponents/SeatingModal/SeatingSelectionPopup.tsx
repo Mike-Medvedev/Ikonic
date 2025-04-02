@@ -2,11 +2,9 @@ import { addPassenger } from "@/http/CarApi";
 import { fetchAttendees } from "@/http/TripApi";
 import { newPassenger } from "@/models/Car";
 import { User } from "@/models/User";
-import UserAvatar from "@/ui/UserAvatar";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
-import { Dialog, Portal, Text } from "react-native-paper";
+import { Dialog, Portal } from "react-native-paper";
 import SeatingModalHeader from "@/components/CarComponents/SeatingModal/SeatingModalHeader";
 import SeatingAttendeesList from "@/components/CarComponents/SeatingModal/SeatingAttendeesList";
 
@@ -26,7 +24,7 @@ export default function SeatingSelectionPopup({
   const queryClient = useQueryClient();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   //prettier-ignore
-  const { data: attendees, isLoading, isError, error } = useQuery({
+  const { data: attendees } = useQuery({
     queryKey: ["attendees", selectedTripId],
     queryFn: async () => fetchAttendees(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },

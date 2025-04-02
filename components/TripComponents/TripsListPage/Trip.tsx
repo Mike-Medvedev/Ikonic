@@ -7,7 +7,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trip as TripModel } from "@/models/TripModel";
 import { deleteTrip } from "@/http/TripApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { APIResponse } from "@/models/Api";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 
 export interface TripProps {
@@ -21,11 +20,9 @@ const Trip = ({ trip }: TripProps) => {
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
   });
   const theme = useTheme();
-  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const onTripSelect = () => {
     router.push(`/trips/${trip.id}`);
-    setIsPressed(true);
   };
   async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
     event.stopPropagation();
@@ -58,7 +55,7 @@ const Trip = ({ trip }: TripProps) => {
     );
   };
   return (
-    <Pressable onPress={onTripSelect} onPressOut={() => setIsPressed(false)} style={styles.tripContainer}>
+    <Pressable onPress={onTripSelect} style={styles.tripContainer}>
       <Card style={styles.cardContainer}>
         <Card.Title
           title={<Text variant="titleMedium">{trip.title}</Text>}

@@ -1,4 +1,3 @@
-import { User } from "@/models/User";
 import UserAvatar from "@/ui/UserAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";

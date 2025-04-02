@@ -2,7 +2,7 @@ import { fetchAttendees } from "@/http/TripApi";
 import { Attendees } from "@/models/Attendance";
 import { User } from "@/models/User";
 import { useQuery } from "@tanstack/react-query";
-import { View, Text, StyleSheet } from "react-native";
+import { View } from "react-native";
 import AttendanceTab from "./AttendanceTab";
 
 interface TabProps {

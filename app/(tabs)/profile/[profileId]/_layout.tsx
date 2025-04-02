@@ -1,12 +1,11 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useMemo } from "react";
-import { View, Text, Pressable, StyleSheet, SafeAreaView } from "react-native";
+import { View, Pressable, StyleSheet, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 
 export default function SelectedProfile() {
   const theme = useTheme();
-  // const { previousTripId } = useLocalSearchParams();
   const styles = useMemo(() => {
     return StyleSheet.create({
       container: {
