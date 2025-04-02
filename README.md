@@ -4,6 +4,8 @@ Ski/Snowboard Trip Planner
 
 Built with Expo and React native
 
+Tanstack Query for data management
+
 # Images
 
 <div style="display: flex, justify-content: center, align-items: center">
