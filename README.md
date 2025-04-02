@@ -5,6 +5,7 @@ Ski/Snowboard Trip Planner
 Built with Expo and React native
 
 # Images
+
 <div style="display: flex, justify-content: center, align-items: center">
 <img src="./assets/screenshots/LoginPage.png" alt="Login Page" width="300" />
 <img src="./assets/screenshots/TripPlanPage.png" alt="Trip Plan Page" width="300" />
@@ -15,4 +16,3 @@ Built with Expo and React native
 <img src="./assets/screenshots/InviteUsersList.png" alt="Invite Users List" width="300" />
 <img src="./assets/screenshots/CarpoolPage.png" alt="Carpool Page" width="300" />
 </div>
-
