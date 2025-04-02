@@ -8,19 +8,14 @@ import { Dialog, Portal } from "react-native-paper";
 import SeatingModalHeader from "@/components/CarComponents/SeatingModal/SeatingModalHeader";
 import SeatingAttendeesList from "@/components/CarComponents/SeatingModal/SeatingAttendeesList";
 
-interface SeatingSelectionPopupProps {
+interface SeatingModalProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   seatPosition: number;
   carId: number;
 }
 
-export default function SeatingSelectionPopup({
-  visible,
-  setVisible,
-  seatPosition,
-  carId,
-}: SeatingSelectionPopupProps) {
+export default function SeatingModal({ visible, setVisible, seatPosition, carId }: SeatingModalProps) {
   const queryClient = useQueryClient();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   //prettier-ignore

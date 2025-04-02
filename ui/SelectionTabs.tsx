@@ -21,10 +21,6 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
     });
   };
 
-  const styles = StyleSheet.create({
-    activeTab: { borderBottomColor: "blue", borderBottomWidth: 1, height: 50 },
-    tab: { height: 50 },
-  });
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
       {options.map((option, index) => (
@@ -37,4 +33,8 @@ const SelectionTabs = ({ options }: SelectionTabsProps) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  activeTab: { borderBottomColor: "blue", borderBottomWidth: 1, height: 50 },
+  tab: { height: 50 },
+});
 export default SelectionTabs;

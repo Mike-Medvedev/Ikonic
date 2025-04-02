@@ -2,7 +2,7 @@ import UserAvatar from "@/ui/UserAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
-import SeatingSelectionPopup from "@/components/CarComponents/SeatingModal/SeatingSelectionPopup";
+import SeatingSelectionPopup from "@/components/CarComponents/SeatingModal/SeatingModal";
 import { Car } from "@/models/Car";
 
 interface CarPositionSelectProps {
