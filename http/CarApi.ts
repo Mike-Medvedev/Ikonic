@@ -17,7 +17,7 @@ export async function fetchCars(selectedTripId: string) {
     throw new Error(String(error));
   }
 }
-export async function createCar(newCar: NewCar) {
+export async function createCar(selectedTripId: string, newCar: NewCar) {
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {
@@ -26,7 +26,7 @@ export async function createCar(newCar: NewCar) {
     body: JSON.stringify(newCar),
   };
   try {
-    await Requestor<Car[]>("/create-car", "json", requestOptions);
+    await Requestor<Car[]>(`/${selectedTripId}/create-car`, "json", requestOptions);
   } catch (error) {
     throw new Error(String(error));
   }

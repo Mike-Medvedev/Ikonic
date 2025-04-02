@@ -1,7 +1,7 @@
 import { User } from "@/models/User";
 
 export interface Car {
-  carId: number;
+  id: number;
   owner: User;
   passengers: User[];
   seatCount: number;
