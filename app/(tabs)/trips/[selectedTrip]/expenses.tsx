@@ -22,7 +22,7 @@ import CalculateInitials from "@/utils/CalculateInitials";
 import { useTripContext } from "@/context/TripContext";
 import PriceCheck from "@/components/PriceCheck";
 import { useLocalSearchParams } from "expo-router";
-import User from "@/models/User";
+import { User } from "@/models/User";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Expenses() {
   const [airbnbLink, setLink] = useState<{ value: string; error: string }>({ value: "", error: "" });

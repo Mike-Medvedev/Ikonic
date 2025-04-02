@@ -12,7 +12,7 @@ interface TabProps {
 
 export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, selectedTripId }: TabProps) {
   //prettier-ignore
-  const { data: attendees, isLoading, isError, error } = useQuery({
+  const { data: attendees} = useQuery({
     queryKey: ["attendees", selectedTripId],
     queryFn: async () => fetchAttendees(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },

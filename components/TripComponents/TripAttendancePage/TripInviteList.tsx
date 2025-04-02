@@ -1,43 +1,44 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
-import { Card, TextInput, Button, Avatar } from "react-native-paper";
+import { Card, TextInput, Button, Avatar, ActivityIndicator, Text } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
-import { useUsers } from "@/hooks/useUsers";
-import User from "@/models/User";
+import { User } from "@/models/User";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUsers, inviteUser } from "@/http/UsersApi";
 export default function TripInviteList() {
-  const { users, isLoading, error } = useUsers();
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({ queryKey: ["users"], queryFn: fetchUsers, initialData: [] });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
   const tripID = useLocalSearchParams().selectedTrip;
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const styles = StyleSheet.create({
-    container: { flex: 1, padding: 15 },
-  });
 
   const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
 
   async function handleInvite(user: User) {
     setIsInviteSending(true);
     const deepLink = Linking.createURL(`trips/${tripID}/rsvp`);
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/invite`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: user, trip_id: tripID, deep_link: deepLink }),
-    });
-    if (!response.ok) {
-      setIsInviteSending(false);
+    try {
+      await inviteUser(user, tripID as string, deepLink);
+      Alert.alert("Invite Sent Successfully!");
+    } catch (error) {
+      Alert.alert("Error: Invite Failed");
       throw new Error("Error inviting user: " + user.user_id);
+    } finally {
+      setIsInviteSending(false);
     }
-    Alert.alert("Invite Sent Successfully!");
-    const result = await response.json();
-    setIsInviteSending(false);
   }
+
+  if (isLoading) return <ActivityIndicator />;
+
+  if (isError) return <Text>Error: {error.message}</Text>;
   return (
     <View style={styles.container}>
       <TextInput
@@ -54,8 +55,8 @@ export default function TripInviteList() {
             <Card.Title
               title={`${user.firstname} ${user.lastname}`}
               titleStyle={{ textTransform: "capitalize" }}
-              left={(props) => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
-              right={(props) => (
+              left={() => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
+              right={() => (
                 <Button
                   mode="contained"
                   onPress={() => {
@@ -74,3 +75,6 @@ export default function TripInviteList() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 15 },
+});

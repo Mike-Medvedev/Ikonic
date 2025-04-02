@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import { User } from "@/models/User";
 import { phoneValidator } from "@/utils/validators";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";

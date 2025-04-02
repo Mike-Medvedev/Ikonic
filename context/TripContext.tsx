@@ -1,7 +1,7 @@
 import { AttendanceCount } from "@/models/Attendance";
 import { Car } from "@/models/Car";
 import { Trip } from "@/models/TripModel";
-import User from "@/models/User";
+import { User } from "@/models/User";
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 interface TripContextProps {

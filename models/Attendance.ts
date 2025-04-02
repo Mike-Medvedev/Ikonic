@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import { User } from "@/models/User";
 export type RSVPStatus = "accepted" | "pending" | "uncertain" | "declined";
 export interface AttendanceCount {
   accepted: number;

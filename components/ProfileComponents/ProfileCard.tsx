@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Avatar, Card, useTheme } from "react-native-paper";
 import PhoneNumberForm from "./PhoneNumberForm";
-import User from "@/models/User";
+import { User } from "@/models/User";
 
 export default function ProfileCard({ profile }: { profile: User }) {
   const theme = useTheme();
