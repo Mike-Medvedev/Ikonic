@@ -1,12 +1,8 @@
-import { useTripContext } from "@/context/TripContext";
-import { useUsers } from "@/hooks/useUsers";
 import { fetchAttendees } from "@/http/TripApi";
-import { APIResponse } from "@/models/Api";
 import { RSVPStatus } from "@/models/Attendance";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { Avatar, Text } from "react-native-paper";
 

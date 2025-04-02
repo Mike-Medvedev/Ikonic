@@ -47,7 +47,7 @@ export default function TripInviteList() {
         style={{ marginBottom: 15 }}
         mode="outlined"
         label={"Search Friends"}
-        right={<TextInput.Icon icon={({ size, color }) => <AntDesign name="search1" size={24} color="black" />} />}
+        right={<TextInput.Icon icon={() => <AntDesign name="search1" size={24} color="black" />} />}
       />
       <ScrollView style={{ padding: 10 }}>
         {filteredUsers.map((user, index) => (

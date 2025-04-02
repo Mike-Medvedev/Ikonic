@@ -1,4 +1,4 @@
-import User from "./User";
+import { User } from "@/models/User";
 
 export interface Car {
   carId: number;
@@ -6,3 +6,10 @@ export interface Car {
   passengers: User[];
   seatCount: number;
 }
+
+export interface NewCar {
+  owner: string;
+  seatCount: number;
+}
+
+export type newPassenger = { carId: number; user: User; seatPosition: number };

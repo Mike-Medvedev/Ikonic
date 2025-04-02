@@ -3,29 +3,42 @@ import { Avatar, Text, useTheme, Dialog, Portal } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import useCarpool from "@/hooks/useCarpool";
-import { Car as CarType } from "@/models/Car";
+import { Car as CarType, newPassenger } from "@/models/Car";
 import { useState } from "react";
 import { useTripContext } from "@/context/TripContext";
 import CalculateInitials from "@/utils/CalculateInitials";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addPassenger, deleteCar } from "@/http/CarApi";
+import { useLocalSearchParams } from "expo-router";
+import SeatingSelectionPopup from "./SeatingSelectionPopup";
 
 interface CarProps {
   isDeleteMode: boolean;
   car: CarType;
 }
 export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
+  const queryClient = useQueryClient();
+  const { selectedTrip: selectedTripId } = useLocalSearchParams();
+
+  const deleteCarMutation = useMutation<void, Error, number>({
+    mutationFn: (carId) => deleteCar(carId),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
+  });
+
   const theme = useTheme();
-  const { removeCar, addPassenger } = useCarpool();
-  const { profile, isLoading } = useProfile();
   const [visible, setVisible] = useState<boolean>(false);
-  const { invitedUsers } = useTripContext();
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
-  const hideDialog = () => setVisible(false);
   return (
     <View style={{ alignItems: "center", margin: 20 }}>
       <View style={{ flexDirection: "row" }}>
-        <Text variant="labelLarge">{profile ? `${profile.firstname}'s Car` : isLoading}</Text>
-        <AntDesign name="closecircleo" onPress={() => removeCar(currentCar.id)} size={20} color={theme.colors.error} />
+        <Text variant="labelLarge">{currentCar.owner.firstname}</Text>
+        <AntDesign
+          name="closecircleo"
+          onPress={() => deleteCarMutation.mutate(currentCar.carId)}
+          size={20}
+          color={theme.colors.error}
+        />
       </View>
 
       <View style={{ position: "relative" }}>
@@ -95,34 +108,13 @@ export default function Car({ isDeleteMode, car: currentCar }: CarProps) {
           )}
         </Pressable>
       </View>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.ScrollArea>
-            <Text variant="titleLarge" style={{ marginVertical: 20 }}>
-              Select Passenger
-            </Text>
-            <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 24, flexDirection: "row", gap: 5 }}>
-              {invitedUsers.going.map((user, index) => (
-                <Pressable
-                  onPress={async () => {
-                    if (!selectedSeat) return;
-                    await addPassenger(currentCar.id, user, selectedSeat);
-                    setVisible(false);
-                  }}
-                  key={index}
-                >
-                  <Avatar.Text
-                    key={user.user_id}
-                    label={CalculateInitials(user.firstname, user.lastname)}
-                    size={50}
-                    labelStyle={{ fontSize: 22 }}
-                  />
-                </Pressable>
-              ))}
-            </ScrollView>
-          </Dialog.ScrollArea>
-        </Dialog>
-      </Portal>
+      <SeatingSelectionPopup
+        visible={visible}
+        setVisible={setVisible}
+        selectedTripId={selectedTripId as string}
+        seatPosition={selectedSeat!}
+        carId={currentCar.carId}
+      />
     </View>
   );
 }

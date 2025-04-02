@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { User } from "@/models/User";
 import { Alert } from "react-native";
 import { useTripContext } from "@/context/TripContext";
+import useTripOwner from "./useTripOwner";
 
 const useCarpool = () => {
   const selectedTripId = useLocalSearchParams().selectedTrip;
   const { cars, setCars } = useTripContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const { profile: owner } = useProfile();
+  const { isOwner } = useTripOwner();
   async function addCar() {
     const userAlreadyHasACar = cars.find((car) => car.owner === owner.user_id);
     const passengerFound = cars.some(
