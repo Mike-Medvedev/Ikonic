@@ -1,7 +1,7 @@
-import SelectMountain from "@/components/SelectMountain";
-import TripDatePicker from "@/components/TripDatePicker";
+import SelectMountain from "@/components/TripComponents/TripPlannerPage/SelectMountain";
+import TripDatePicker from "@/components/TripComponents/TripPlannerPage/TripDatePicker";
 import { Button, Text, useTheme } from "react-native-paper";
-import TripSummary from "@/components/TripSummary";
+import TripSummary from "@/components/TripComponents/TripPlannerPage/TripSummary";
 import { View, StyleSheet } from "react-native";
 import TextInput from "@/ui/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";

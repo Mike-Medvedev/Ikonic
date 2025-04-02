@@ -1,8 +1,8 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { View, Pressable, StyleSheet } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import SelectionTabs from "../ui/SelectionTabs";
+import { useTheme } from "react-native-paper";
+import SelectionTabs from "@/ui/SelectionTabs";
 import { SafeAreaView } from "react-native";
 const TripHeader = () => {
   const theme = useTheme();

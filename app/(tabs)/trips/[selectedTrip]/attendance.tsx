@@ -1,6 +1,6 @@
 import Background from "@/ui/Background";
 import { View, Text, StyleSheet, Pressable, Modal } from "react-native";
-import TripInviteList from "@/components/TripInviteList";
+import TripInviteList from "@/components/TripComponents/TripInviteList";
 import { Divider } from "react-native-paper";
 import { useState } from "react";
 import AttendanceSelectionTabs from "@/components/AttendanceSelectionTabs";

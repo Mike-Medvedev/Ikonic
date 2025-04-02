@@ -1,8 +1,7 @@
-import Background from "@/ui/Background";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
-import { Card, Text, TextInput, Button, Avatar } from "react-native-paper";
+import { Card, TextInput, Button, Avatar } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";

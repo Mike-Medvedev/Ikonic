@@ -3,7 +3,7 @@ import EditTripForm from "./EditTripForm";
 import { useState } from "react";
 import Background from "@/ui/Background";
 import EditTripButtonGroup from "./EditTripButtonGroup";
-import EditTripTitle from "@/components/EditTripTitle";
+import EditTripTitle from "@/components/TripComponents/EditTripPage/EditTripTitle";
 import { Trip, TripUpdateForm } from "@/models/TripModel";
 
 interface EditTripModalProps {

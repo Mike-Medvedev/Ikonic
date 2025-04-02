@@ -5,7 +5,7 @@ import ProfilePageHeader from "./ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { fetchUser } from "@/http/UsersApi";
-import ProfileCard from "@/components/ProfileCard";
+import ProfileCard from "@/components/ProfileComponents/ProfileCard";
 export default function ProfilePage({ userId }: { userId?: string }) {
   const { retrieve } = useLocalStorage<string>({ key: "user_id" });
 

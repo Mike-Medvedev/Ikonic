@@ -6,12 +6,12 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSelectedTrip } from "@/http/TripApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import TripImage from "@/components/TripImage";
-import EditButton from "@/components/EditButton";
-import TripDetailsContent from "@/components/TripDetailsContent";
-import TripAttendeesView from "@/components/TripAttendeesView";
-import TripDescription from "@/components/TripDescription";
-import EditTripModal from "@/components/EditTripModal";
+import TripImage from "@/components/TripComponents/TripDetailsPage/TripImage";
+import EditButton from "@/ui/EditButton";
+import TripDetailsContent from "@/components/TripComponents/TripDetailsPage/TripDetailsContent";
+import TripAttendeesView from "@/components/TripComponents/TripDetailsPage/TripAttendeesView";
+import TripDescription from "@/components/TripComponents/TripDetailsPage/TripDescription";
+import EditTripModal from "@/components/TripComponents/EditTripPage/EditTripModal";
 
 export default function TripDetailsPage() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();

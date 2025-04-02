@@ -1,4 +1,4 @@
-import ProfilePage from "@/components/ProfilePage";
+import ProfilePage from "@/components/ProfileComponents/ProfilePage";
 import { useLocalSearchParams } from "expo-router";
 export default function UserProfile() {
   const { profileId } = useLocalSearchParams();

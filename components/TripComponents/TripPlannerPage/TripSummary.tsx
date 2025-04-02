@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-import { useTripContext } from "@/context/TripContext";
 import { Card, Text, Avatar } from "react-native-paper";
 import { NewTripForm } from "@/models/TripModel";
 

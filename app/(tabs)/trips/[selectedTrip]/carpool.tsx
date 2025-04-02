@@ -1,10 +1,10 @@
 import Background from "@/ui/Background";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Car from "@/components/Car";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import useCarpool from "@/hooks/useCarpool";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 export default function TripCarpool() {

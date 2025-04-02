@@ -1,8 +1,6 @@
-import Background from "@/ui/Background";
-import TripHeader from "@/components/TripHeader";
+import TripHeader from "@/components/TripComponents/TripHeader";
 import { Stack } from "expo-router";
 import { View } from "react-native";
-import { useEffect } from "react";
 
 export default function TripsNoTabLayout() {
   return (

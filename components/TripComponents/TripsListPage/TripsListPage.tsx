@@ -1,12 +1,12 @@
-import Trip from "@/components/Trip";
-import TripListHeader from "@/components/TripListHeader";
+import Trip from "@/components/TripComponents/TripsListPage/Trip";
+import TripListHeader from "@/components/TripComponents/TripsListPage/TripListHeader";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { fetchTrips } from "@/http/TripApi";
 import Background from "@/ui/Background";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
-import EmptyTripsFallback from "@/components/EmptyTripsFallback";
+import EmptyTripsFallback from "@/components/TripComponents/EditTripPage/EmptyTripsFallback";
 const TripsListPage = () => {
   const { retrieve } = useLocalStorage<string>({ key: "user_id" });
 
