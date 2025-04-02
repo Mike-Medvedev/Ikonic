@@ -2,6 +2,7 @@ import { NewTripForm, Trip, TripUpdateForm } from "@/models/TripModel";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
 import { FormPayloadFactory } from "@/utils/FormBuilder";
+import { Attendees } from "@/models/Attendance";
 
 type NewTripId = number;
 
@@ -39,6 +40,23 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
       startDate: new Date(requstedTrip.startDate),
       endDate: new Date(requstedTrip.endDate),
     };
+  } catch (error) {
+    console.error(error);
+    throw new Error(String(error));
+  }
+}
+
+export async function fetchAttendees(trip_id: string) {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "any",
+    },
+  };
+  try {
+    const attendees = (await Requestor<Attendees>(`/invited-users/${trip_id}`, "json", requestOptions)).data;
+    return attendees;
   } catch (error) {
     console.error(error);
     throw new Error(String(error));

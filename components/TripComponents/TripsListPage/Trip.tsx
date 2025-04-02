@@ -24,8 +24,8 @@ const Trip = ({ trip }: TripProps) => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const onTripSelect = () => {
-    setIsPressed(true);
     router.push(`/trips/${trip.id}`);
+    setIsPressed(true);
   };
   async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
     event.stopPropagation();

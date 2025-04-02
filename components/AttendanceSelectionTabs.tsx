@@ -1,14 +1,23 @@
 import { useTripContext } from "@/context/TripContext";
+import { fetchAttendees } from "@/http/TripApi";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 interface TabProps {
   selectedTab: number;
   setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+  selectedTripId: string;
 }
 
-export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }: TabProps) {
-  const { attendanceNumbers } = useTripContext();
+export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, selectedTripId }: TabProps) {
+  //prettier-ignore
+  const { data: attendees, isLoading, isError, error } = useQuery({
+    queryKey: ["attendees", selectedTripId],
+    queryFn: async () => fetchAttendees(selectedTripId),
+    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
+    enabled: !!selectedTripId,
+  });
   const styles = StyleSheet.create({
     selectedTab: { borderBottomColor: "grey", borderBottomWidth: 5, height: 35 },
   });
@@ -20,7 +29,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 0 ? styles.selectedTab : ""}
       >
-        {`Going (${attendanceNumbers.going})`}
+        {`Going (${attendees.accepted.length})`}
       </Text>
       <Text
         onPress={() => {
@@ -28,7 +37,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 1 ? styles.selectedTab : ""}
       >
-        {`Pending(${attendanceNumbers.pending})`}
+        {`Pending(${attendees.pending.length})`}
       </Text>
       <Text
         onPress={() => {
@@ -36,7 +45,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 2 ? styles.selectedTab : ""}
       >
-        {`Not Sure (${attendanceNumbers.maybe})`}
+        {`Not Sure (${attendees.uncertain.length})`}
       </Text>
       <Text
         onPress={() => {
@@ -44,7 +53,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab }:
         }}
         style={selectedTab === 3 ? styles.selectedTab : ""}
       >
-        {`Not Going(${attendanceNumbers.notGoing})`}
+        {`Not Going(${attendees.declined.length})`}
       </Text>
     </View>
   );

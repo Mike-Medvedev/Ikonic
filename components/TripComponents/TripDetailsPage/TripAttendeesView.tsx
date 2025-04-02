@@ -13,7 +13,7 @@ export default function TripAttendeesView({ selectedTripID }: { selectedTripID: 
         <Text>Whose Going?</Text>
         <AntDesign name="addusergroup" size={24} color="black" />
       </View>
-      {<UsersAvatarList rsvp="going" />}
+      {<UsersAvatarList rsvp="accepted" selectedTripId={selectedTripID} />}
     </Pressable>
   );
 }
