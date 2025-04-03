@@ -42,9 +42,8 @@ export default function LoginPage() {
     const { data, error } = await supabase.auth.signInWithOtp({
       phone: loginForm.phoneNumber.value,
     });
-    console.log(data);
 
-    router.push("/verify");
+    router.push(`/verify/${loginForm.phoneNumber.value}`);
     // const { data: asf, error: erq } = await supabase.auth.verifyOtp({ phone: loginForm.username.value, token, type: 'sms'})
     // console.log(data);
 

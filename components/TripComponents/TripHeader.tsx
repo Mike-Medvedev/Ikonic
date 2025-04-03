@@ -4,6 +4,7 @@ import { View, Pressable, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
 import SelectionTabs from "@/ui/SelectionTabs";
 import { SafeAreaView } from "react-native";
+import BackButton from "@/ui/BackButton";
 const TripHeader = () => {
   const theme = useTheme();
   const styles = StyleSheet.create({
@@ -22,9 +23,7 @@ const TripHeader = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.view}>
-        <Pressable onPress={() => router.back()} style={{ width: 50 }}>
-          <Ionicons name="arrow-back-outline" size={34} color={theme.colors.primary} />
-        </Pressable>
+        <BackButton />
         <View style={{ flex: 1, alignItems: "center", gap: 10 }}>
           <SelectionTabs
             options={[

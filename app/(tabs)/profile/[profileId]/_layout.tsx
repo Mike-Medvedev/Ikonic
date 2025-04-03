@@ -1,3 +1,4 @@
+import BackButton from "@/ui/BackButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, Stack } from "expo-router";
 import { useMemo } from "react";
@@ -29,14 +30,7 @@ export default function SelectedProfile() {
           header: () => (
             <SafeAreaView style={{ backgroundColor: theme.colors.surface }}>
               <View style={styles.view}>
-                <Pressable
-                  onPress={() => {
-                    router.back();
-                  }}
-                  style={{ width: 50 }}
-                >
-                  <Ionicons name="arrow-back-outline" size={34} color={theme.colors.primary} />
-                </Pressable>
+                <BackButton />
               </View>
             </SafeAreaView>
           ),
