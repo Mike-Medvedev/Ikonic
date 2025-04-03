@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import Logo from "@/ui/Logo";
-import { Button, useTheme } from "react-native-paper";
+import { Button, useTheme, Text, TextInput as PaperInput } from "react-native-paper";
 import { nameValidator, passwordValidator, phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import TextInput from "@/ui/TextInput";
@@ -10,9 +10,11 @@ import { ExternalPathString, router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/models/SimpleForm";
 import { supabase } from "@/utils/Supabase";
+import PercentLayout from "@/ui/PercentLayout";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
+  countryCode: SimpleForm<string>;
   password: SimpleForm<string>;
 }
 
@@ -22,6 +24,7 @@ export default function LoginPage() {
   const { callback: rsvpPathCallback } = useLocalSearchParams();
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
+    countryCode: { value: "1", error: "" },
     password: { value: "", error: "" },
   });
 
@@ -40,7 +43,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     if (!validateLogin()) return;
     const { data, error } = await supabase.auth.signInWithOtp({
-      phone: loginForm.phoneNumber.value,
+      phone: `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`,
     });
 
     router.push(`/verify/${loginForm.phoneNumber.value}`);
@@ -64,31 +67,70 @@ export default function LoginPage() {
     return StyleSheet.create({
       container: {
         flex: 1,
+      },
+      logoContainer: {
         justifyContent: "center",
         alignItems: "center",
       },
-      header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
+      center: {
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      sendButton: { flex: 1, justifyContent: "center" },
+      header: { textTransform: "capitalize", color: theme.colors.primary, paddingVertical: 14 },
+      header2: { textTransform: "capitalize", color: theme.colors.tertiary, paddingVertical: 14 },
+      label: { color: theme.colors.secondary },
     });
   }, [theme]);
 
   return (
     <View style={styles.container}>
       <Background>
-        <Logo />
+        <PercentLayout>
+          <PercentLayout.View percent="10" styles={styles.center}>
+            <></>
+          </PercentLayout.View>
+          <PercentLayout.View percent="30" styles={styles.center}>
+            <Logo />
+          </PercentLayout.View>
+          <PercentLayout.View percent="30" styles={{ alignItems: "center" }}>
+            <Text variant="headlineMedium" style={styles.header}>
+              Enter Your Phone Number
+            </Text>
+            <Text variant="labelLarge" style={styles.label}>
+              We will send you a 6 digit verification code
+            </Text>
 
-        <Text style={styles.header}>Welcome</Text>
+            <TextInput
+              style={{ marginTop: 20 }}
+              label="Enter Phone Number"
+              returnKeyType="next"
+              value={loginForm.phoneNumber.value}
+              onChangeText={(text) =>
+                setLoginForm((prev) => ({
+                  ...prev,
+                  phoneNumber: { value: text, error: "" },
+                }))
+              }
+              error={!!loginForm.phoneNumber.error}
+              errorText={loginForm.phoneNumber.error}
+              autoCapitalize="none"
+              textContentType="telephoneNumber"
+              keyboardType="phone-pad"
+              maxLength={10}
+              left={<PaperInput.Affix text="+1" textStyle={{ color: theme.colors.secondary }} />}
+            />
+          </PercentLayout.View>
 
-        <TextInput
-          label="Enter Phone Number"
-          returnKeyType="next"
-          value={loginForm.phoneNumber.value}
-          onChangeText={(text) => setLoginForm((prev) => ({ ...prev, phoneNumber: { value: text, error: "" } }))}
-          error={!!loginForm.phoneNumber.error}
-          errorText={loginForm.phoneNumber.error}
-          autoCapitalize="none"
-          textContentType="telephoneNumber"
-          keyboardType="phone-pad"
-        />
+          <PercentLayout.View percent="20" styles={styles.center}>
+            <Button mode="contained" onPress={handleLogin} loading={isLoggingIn}>
+              Send Code
+            </Button>
+          </PercentLayout.View>
+          <PercentLayout.View percent="10" styles={styles.center}>
+            <></>
+          </PercentLayout.View>
+        </PercentLayout>
 
         {/* <TextInput
           label="Password"
@@ -99,10 +141,6 @@ export default function LoginPage() {
           errorText={loginForm.password.error}
           secureTextEntry
         /> */}
-
-        <Button mode="contained" onPress={handleLogin} loading={isLoggingIn}>
-          Send Code
-        </Button>
       </Background>
     </View>
   );

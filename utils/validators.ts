@@ -20,8 +20,7 @@ export const nameValidator = (name: string) => {
 };
 
 export const phoneValidator = (phone: string) => {
-  if (phone[0] !== "1") return "Phone Number must start with 1 for US Code";
-  if (!phone || phone.length !== 11) return "Phone Number cannot be empty or non 11-digit";
+  if (!phone || phone.length !== 10) return "Phone Number cannot be empty or non 10-digit";
 
   return "";
 };

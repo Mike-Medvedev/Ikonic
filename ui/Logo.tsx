@@ -5,8 +5,8 @@ const Logo = () => <Image source={require("@/assets/images/logo.png")} style={st
 
 const styles = StyleSheet.create({
   image: {
-    width: 128,
-    height: 128,
+    width: 178,
+    height: 178,
     marginBottom: 12,
   },
 });
