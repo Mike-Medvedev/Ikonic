@@ -29,8 +29,9 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, s
 
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-      {(Object.entries(attendees) as Array<[keyof Attendees, User[]]>).map(([rsvpStatus, users]) => (
+      {(Object.entries(attendees) as Array<[keyof Attendees, User[]]>).map(([rsvpStatus, users], index) => (
         <AttendanceTab
+          key={index}
           rsvpStatusCount={users.length}
           rsvpStatus={rsvpStatus}
           isSelected={selectedTab === rsvpStatusMap[rsvpStatus]}
