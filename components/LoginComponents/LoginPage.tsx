@@ -68,15 +68,12 @@ export default function LoginPage() {
       container: {
         flex: 1,
       },
-      logoContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-      },
       center: {
         justifyContent: "center",
         alignItems: "center",
       },
-      sendButton: { flex: 1, justifyContent: "center" },
+      phoneInput: { marginTop: 20 },
+      sendButton: { flex: 1, justifyContent: "center", alignItems: "center" },
       header: { textTransform: "capitalize", color: theme.colors.primary, paddingVertical: 14 },
       header2: { textTransform: "capitalize", color: theme.colors.tertiary, paddingVertical: 14 },
       label: { color: theme.colors.secondary },
@@ -86,14 +83,10 @@ export default function LoginPage() {
   return (
     <View style={styles.container}>
       <Background>
-        <PercentLayout>
-          <PercentLayout.View percent="10" styles={styles.center}>
-            <></>
-          </PercentLayout.View>
-          <PercentLayout.View percent="30" styles={styles.center}>
-            <Logo />
-          </PercentLayout.View>
-          <PercentLayout.View percent="30" styles={{ alignItems: "center" }}>
+        <PercentLayout percentLayout={[[10], [30, styles.center], [30, styles.center], [20, styles.sendButton], [10]]}>
+          <></>
+          <Logo />
+          <>
             <Text variant="headlineMedium" style={styles.header}>
               Enter Your Phone Number
             </Text>
@@ -102,7 +95,7 @@ export default function LoginPage() {
             </Text>
 
             <TextInput
-              style={{ marginTop: 20 }}
+              style={styles.phoneInput}
               label="Enter Phone Number"
               returnKeyType="next"
               value={loginForm.phoneNumber.value}
@@ -120,16 +113,12 @@ export default function LoginPage() {
               maxLength={10}
               left={<PaperInput.Affix text="+1" textStyle={{ color: theme.colors.secondary }} />}
             />
-          </PercentLayout.View>
+          </>
 
-          <PercentLayout.View percent="20" styles={styles.center}>
-            <Button mode="contained" onPress={handleLogin} loading={isLoggingIn}>
-              Send Code
-            </Button>
-          </PercentLayout.View>
-          <PercentLayout.View percent="10" styles={styles.center}>
-            <></>
-          </PercentLayout.View>
+          <Button mode="contained" onPress={handleLogin} loading={isLoggingIn}>
+            Send Code
+          </Button>
+          <></>
         </PercentLayout>
 
         {/* <TextInput

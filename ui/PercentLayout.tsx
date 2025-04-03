@@ -1,41 +1,33 @@
-import React, { ReactElement } from "react";
-import { DimensionValue, StyleProp, View, ViewStyle } from "react-native";
+import React from "react";
+import { StyleProp, View, ViewStyle } from "react-native";
 
 interface PercentLayoutProps {
-  children: ReactElement<PercentViewProps, typeof PercentView> | ReactElement<PercentViewProps, typeof PercentView>[];
-}
-interface PercentViewProps {
-  percent: `${number}`;
-  styles?: StyleProp<ViewStyle>;
   children: React.ReactNode;
+  styles?: StyleProp<ViewStyle>;
+  percentLayout: Array<[number, StyleProp<ViewStyle>?]>;
 }
 
-const PercentLayout = ({ children }: PercentLayoutProps) => {
-  let percentCount = 0;
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child)) {
-      const typeName = (child.type as any).displayName;
-      if (typeName !== "PercentLayoutView") {
-        throw new Error("Children of PercentLayout must be PercentLayout.View");
-      }
-      const percent = Number(child.props.percent);
-      percentCount += percent;
-    }
-  });
-  if (percentCount !== 100)
+const PercentLayout = ({ children, percentLayout, styles }: PercentLayoutProps) => {
+  const percentSum = percentLayout.reduce((a, b) => a + b[0], 0);
+  if (percentSum !== 100) {
     throw new Error(
-      `The Sum of the PercentView Percents must add up to 100% in a Percent Layout \n Current Percent: ${percentCount}`
+      `The Sum of the PercentView Percents must add up to 100% in a Percent Layout \n Current Percent: ${percentSum}`
     );
-  return <View style={{ width: "100%", height: "100%" }}>{children}</View>;
+  }
+  const childrenArray = React.Children.toArray(children);
+
+  if (childrenArray.length !== percentLayout.length)
+    throw new Error("Error The Number of Children must match the percentLayout Length");
+
+  return (
+    <View style={[{ flex: 1, width: "100%" }, styles]}>
+      {childrenArray.map((child, index) => (
+        <View style={[{ height: `${percentLayout[index][0]}%` }, percentLayout[index][1]]} key={index}>
+          {child}
+        </View>
+      ))}
+    </View>
+  );
 };
-
-function PercentView({ percent, styles, children }: PercentViewProps) {
-  console.log(percent);
-  return <View style={[{ height: `${percent}%` }, styles]}>{children}</View>;
-}
-
-PercentView.displayName = "PercentLayoutView";
-
-PercentLayout.View = PercentView;
 
 export default PercentLayout;

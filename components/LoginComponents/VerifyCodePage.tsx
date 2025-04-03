@@ -6,6 +6,8 @@ import { Button, TextInput, useTheme } from "react-native-paper";
 import OTPForm from "@/components/LoginComponents/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { useLocalSearchParams } from "expo-router";
+import PercentLayout from "@/ui/PercentLayout";
+import Logo from "@/ui/Logo";
 
 export default function VerifyCodePage() {
   const theme = useTheme();
@@ -16,12 +18,10 @@ export default function VerifyCodePage() {
     return StyleSheet.create({
       container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
       },
+      center: { alignItems: "center", justifyContent: "center" },
       header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
-      fillerContainer: { flex: 1 },
-      backButtonContainer: { flex: 1, justifyContent: "center" },
+      backButtonContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
     });
   }, [theme]);
 
@@ -39,14 +39,21 @@ export default function VerifyCodePage() {
   return (
     <View style={styles.container}>
       <Background>
-        <View style={styles.fillerContainer}></View>
-        <OTPForm code={code} setCode={setCode} />
-        <Button mode="contained" onPress={handleLogin} loading={loading}>
-          Verify Code
-        </Button>
-        <View style={styles.backButtonContainer}>
+        <PercentLayout
+          percentLayout={[
+            [40, styles.center],
+            [20, styles.center],
+            [10, styles.backButtonContainer],
+            [30, styles.center],
+          ]}
+        >
+          <Logo />
+          <OTPForm code={code} setCode={setCode} />
+          <Button mode="contained" onPress={handleLogin} loading={loading}>
+            Verify Code
+          </Button>
           <BackButton />
-        </View>
+        </PercentLayout>
       </Background>
     </View>
   );
