@@ -32,6 +32,7 @@ export default function TabLayout() {
   );
 
   if (!isAuthenticated) {
+    console.log(isAuthenticated);
     return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
   }
 

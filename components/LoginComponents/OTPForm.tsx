@@ -14,11 +14,6 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
   const inputRef = useRef<NativeTextInput[]>([]);
   const [hiddenInputCode, setHiddenInputCode] = useState<string>("");
 
-  // useEffect(() => {
-  //   if (!inputRef.current[0]) return;
-  //   inputRef.current[0].focus();
-  // }, []);
-
   function handleKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) {
     if (event.nativeEvent.key === "Backspace") {
       if (index === 0) return;

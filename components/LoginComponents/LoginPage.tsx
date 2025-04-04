@@ -20,7 +20,7 @@ export interface LoginForm {
 
 export default function LoginPage() {
   const theme = useTheme();
-  const { login, isLoggingIn } = useAuth();
+  const { login, isLoading } = useAuth();
   const { callback: rsvpPathCallback } = useLocalSearchParams();
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
@@ -42,9 +42,11 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     if (!validateLogin()) return;
-    const { data, error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       phone: `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`,
     });
+
+    if (error) throw new Error(error.message);
 
     router.push(`/verify/${loginForm.phoneNumber.value}`);
     // const { data: asf, error: erq } = await supabase.auth.verifyOtp({ phone: loginForm.username.value, token, type: 'sms'})
@@ -97,7 +99,7 @@ export default function LoginPage() {
             <TextInput
               style={styles.phoneInput}
               label="Enter Phone Number"
-              returnKeyType="next"
+              returnKeyType="done"
               value={loginForm.phoneNumber.value}
               onChangeText={(text) =>
                 setLoginForm((prev) => ({
@@ -115,7 +117,7 @@ export default function LoginPage() {
             />
           </>
 
-          <Button mode="contained" onPress={handleLogin} loading={isLoggingIn}>
+          <Button mode="contained" onPress={handleLogin} loading={isLoading}>
             Send Code
           </Button>
           <></>

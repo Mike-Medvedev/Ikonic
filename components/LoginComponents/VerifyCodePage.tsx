@@ -5,12 +5,14 @@ import { View, StyleSheet } from "react-native";
 import { Button, TextInput, useTheme } from "react-native-paper";
 import OTPForm from "@/components/LoginComponents/OTPForm";
 import BackButton from "@/ui/BackButton";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import PercentLayout from "@/ui/PercentLayout";
 import Logo from "@/ui/Logo";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function VerifyCodePage() {
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string };
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,13 +29,17 @@ export default function VerifyCodePage() {
 
   async function handleLogin() {
     setLoading(true);
-    const { data: asf, error: erq } = await supabase.auth.verifyOtp({
-      phone: phoneNumber,
+    console.log(code.join(""));
+    const { data, error } = await supabase.auth.verifyOtp({
+      phone: `1${phoneNumber}`,
       token: code.join(""),
       type: "sms",
     });
-    console.log(asf);
-    console.log(erq);
+    if (data?.session) {
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+      router.push("/trips");
+    }
+    console.log(data);
     setLoading(false);
   }
   return (
