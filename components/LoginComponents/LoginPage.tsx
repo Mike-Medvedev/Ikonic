@@ -11,6 +11,8 @@ import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/models/SimpleForm";
 import { supabase } from "@/utils/Supabase";
 import PercentLayout from "@/ui/PercentLayout";
+import { sendCode } from "@/http/AuthApi";
+import useToast from "@/hooks/useToast";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
@@ -20,7 +22,7 @@ export interface LoginForm {
 
 export default function LoginPage() {
   const theme = useTheme();
-  const { login, isLoading } = useAuth();
+  const { showSuccess, showFailure } = useToast();
   const { callback: rsvpPathCallback } = useLocalSearchParams();
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
@@ -42,27 +44,13 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     if (!validateLogin()) return;
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`,
-    });
+    const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
 
-    if (error) throw new Error(error.message);
+    const { data, error } = await sendCode(phoneNumber);
+
+    if (error) showFailure({ message: error.message });
 
     router.push(`/verify/${loginForm.phoneNumber.value}`);
-    // const { data: asf, error: erq } = await supabase.auth.verifyOtp({ phone: loginForm.username.value, token, type: 'sms'})
-    // console.log(data);
-
-    // const isLoginSuccessful = await login(loginForm.username.value, loginForm.password.value);
-
-    // if (isLoginSuccessful) {
-    //   //if a user clicks on an rsvp link and logs in, redirect to rsvp page
-    //   rsvpPathCallback ? router.navigate(rsvpPathCallback as ExternalPathString) : router.navigate("/");
-    // } else {
-    //   setLoginForm((prev) => ({
-    //     ...prev,
-    //     username: { value: prev.username.value, error: "Account not found. Please try again!" },
-    //   }));
-    // }
   };
 
   const styles = useMemo(() => {
@@ -117,7 +105,7 @@ export default function LoginPage() {
             />
           </>
 
-          <Button mode="contained" onPress={handleLogin} loading={isLoading}>
+          <Button mode="contained" onPress={handleLogin}>
             Send Code
           </Button>
           <></>

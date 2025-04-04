@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Redirect, Tabs, usePathname } from "expo-router";
 import { StyleSheet, Text } from "react-native";
-import { useTheme } from "react-native-paper";
+import { ActivityIndicator, useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -14,7 +14,7 @@ const HeaderTitle = () => {
 
 export default function TabLayout() {
   const theme = useTheme();
-  const { isAuthenticated } = useAuth();
+  const { session, loading } = useAuth();
   const pathname = usePathname();
   const tabScreenOptions = useMemo(
     () => ({
@@ -30,9 +30,13 @@ export default function TabLayout() {
     }),
     [theme]
   );
+  // Wait for auth data to be loaded before redirecting
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
-  if (!isAuthenticated) {
-    console.log(isAuthenticated);
+  if (!session) {
+    console.log("no session in (tabs)");
     return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
   }
 

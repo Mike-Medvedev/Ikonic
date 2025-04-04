@@ -1,21 +1,23 @@
 import Background from "@/ui/Background";
-import { supabase } from "@/utils/Supabase";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 import OTPForm from "@/components/LoginComponents/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
 import PercentLayout from "@/ui/PercentLayout";
 import Logo from "@/ui/Logo";
-import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/context/AuthContext";
+import { verifyCode } from "@/http/AuthApi";
+import useToast from "@/hooks/useToast";
 
 export default function VerifyCodePage() {
   const theme = useTheme();
-  const queryClient = useQueryClient();
+  const { loading, setLoading } = useAuth();
+  const { showSuccess, showFailure } = useToast();
   const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string };
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
-  const [loading, setLoading] = useState<boolean>(false);
+
   const styles = useMemo(() => {
     return StyleSheet.create({
       container: {
@@ -29,18 +31,11 @@ export default function VerifyCodePage() {
 
   async function handleLogin() {
     setLoading(true);
-    console.log(code.join(""));
-    const { data, error } = await supabase.auth.verifyOtp({
-      phone: `1${phoneNumber}`,
-      token: code.join(""),
-      type: "sms",
-    });
-    if (data?.session) {
-      await queryClient.invalidateQueries({ queryKey: ["user"] });
-      router.push("/trips");
-    }
-    console.log(data);
-    setLoading(false);
+    const phone = `1${phoneNumber}`;
+    const otp = code.join("");
+    const { data, error } = await verifyCode(phone, otp);
+
+    if (error) showFailure({ message: error.message });
   }
   return (
     <View style={styles.container}>

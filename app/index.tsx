@@ -1,7 +1,13 @@
 import { useAuth } from "@/context/AuthContext";
-import { Redirect, Slot } from "expo-router";
-export default function Index() {
-  const { isAuthenticated } = useAuth();
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Redirect } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
-  return isAuthenticated ? <Redirect href="/trips" /> : <Redirect href="/login" />;
+export default function Index() {
+  const { session, loading } = useAuth();
+  console.log(`Got here and the session is: ${session}`);
+  if (loading) return <ActivityIndicator size="large" />;
+  if (!session) return <Redirect href="/login" />;
+
+  return <Redirect href="/trips" />;
 }
