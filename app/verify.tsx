@@ -2,7 +2,7 @@ import Background from "@/ui/Background";
 import { useEffect, useMemo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, useTheme } from "react-native-paper";
-import OTPForm from "@/components/LoginComponents/OTPForm";
+import OTPForm from "@/ui/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
 import PercentLayout from "@/ui/PercentLayout";
@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { verifyCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
 
-export default function VerifyCodePage() {
+export default function Verify() {
   const theme = useTheme();
   const { loading, setLoading } = useAuth();
   const { showSuccess, showFailure } = useToast();
@@ -30,7 +30,7 @@ export default function VerifyCodePage() {
   }, [theme]);
 
   async function handleLogin() {
-    setLoading(true);
+    setLoading(true); //sets to false in AuthStateSubscription
     const phone = `1${phoneNumber}`;
     const otp = code.join("");
     const { data, error } = await verifyCode(phone, otp);
