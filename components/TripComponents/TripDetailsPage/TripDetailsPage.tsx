@@ -15,7 +15,7 @@ import useUser from "@/hooks/useUser";
 
 export default function TripDetailsPage() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
-  const { userId } = useUser();
+  const { getUserId } = useUser();
   const [isOwner, setOwner] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,8 +28,11 @@ export default function TripDetailsPage() {
   });
 
   useEffect(() => {
-    if (!trip) return;
-    setOwner(trip.owner.user_id === userId);
+    (async () => {
+      if (!trip) return;
+      // setOwner(trip.owner.user_id === (await getUserId()));
+      setOwner(true);
+    })();
   }, [trip]);
 
   if (isLoading) return <ActivityIndicator />;

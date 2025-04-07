@@ -24,7 +24,7 @@ export async function fetchUser(user_id: string) {
     headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "any" },
   };
   try {
-    const result = await Requestor<User>(`/profile/${user_id}`, "json", requestOptions);
+    const result = await Requestor<User>(`/users/${user_id}`, "json", requestOptions);
     return result.data;
   } catch (error) {
     console.error(error);
@@ -41,7 +41,7 @@ export async function inviteUser(user: User, trip_id: string, deepLink: string) 
     body: JSON.stringify({ user: user, trip_id: trip_id, deep_link: deepLink }),
   };
   try {
-    return await Requestor(`/invite`, "json", requestOptions);
+    return await Requestor(`/trips/${selectedTripid}/invites/${user_id}`, "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));
@@ -58,7 +58,7 @@ export async function handleRSVP(userResponse: RSVPStatus, user_id: string, sele
     body: JSON.stringify({ trip_id: selectedTripId, user_response: userResponse }),
   };
   try {
-    return await Requestor("/rsvp", "json", requestOptions);
+    return await Requestor(`/trips/${selectedTripid}/invites/${user_id}`, "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));

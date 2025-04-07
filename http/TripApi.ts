@@ -75,7 +75,7 @@ export async function fetchAttendees(trip_id: string): Promise<Attendees> {
     },
   };
   try {
-    const attendees = (await Requestor<Attendees>(`/invited-users/${trip_id}`, "json", requestOptions)).data;
+    const attendees = (await Requestor<Attendees>(`/trips/${trip_id}/invites`, "json", requestOptions)).data;
     return attendees;
   } catch (error) {
     console.error(error);
@@ -87,14 +87,14 @@ export async function updateTrip(trip_id: number, form: TripUpdateForm) {
   if (Object.values(form).every((value) => !value)) return; //check if every value is false, then we dont need to do anything
 
   const requestOptions: RequestInit = {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(form),
   };
   try {
-    await Requestor(`/${trip_id}/update-trip`, "json", requestOptions);
+    await Requestor(`/trips/${trip_id}`, "json", requestOptions);
   } catch (error) {
     console.log(error);
     throw new Error(String(error));
@@ -104,7 +104,7 @@ export async function updateTrip(trip_id: number, form: TripUpdateForm) {
 export async function deleteTrip(trip_id: number) {
   const requestOptions: RequestInit = { method: "DELETE" };
   try {
-    await Requestor(`/delete-trip/${trip_id}`, "json", requestOptions);
+    await Requestor(`/trips/${trip_id}`, "json", requestOptions);
   } catch (error) {
     throw new Error(String(error));
   }

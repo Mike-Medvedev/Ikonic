@@ -11,7 +11,7 @@ export async function fetchCars(selectedTripId: string) {
     },
   };
   try {
-    const cars = (await Requestor<Car[]>(`/${selectedTripId}/cars`, "json", requestOptions)).data;
+    const cars = (await Requestor<Car[]>(`/trips/${selectedTripId}/cars`, "json", requestOptions)).data;
     return cars;
   } catch (error) {
     throw new Error(String(error));
@@ -26,7 +26,7 @@ export async function createCar(selectedTripId: string, newCar: NewCar) {
     body: JSON.stringify(newCar),
   };
   try {
-    await Requestor<Car[]>(`/${selectedTripId}/create-car`, "json", requestOptions);
+    await Requestor<Car[]>(`/trips/${selectedTripId}/cars`, "json", requestOptions);
   } catch (error) {
     throw new Error(String(error));
   }
@@ -36,7 +36,7 @@ export async function deleteCar(carId: number) {
     method: "DELETE",
   };
   try {
-    await Requestor<Car[]>(`/${carId}/delete-car`, "json", requestOptions);
+    await Requestor<Car[]>(`/trips/${selectedTripId}/cars/${carId}`, "json", requestOptions);
   } catch (error) {
     throw new Error(String(error));
   }
@@ -49,7 +49,7 @@ export async function addPassenger(carId: number, user: User, seatPosition: numb
     },
   };
   try {
-    await Requestor<Car[]>(`/${carId}/${user.user_id}/${seatPosition}/add-passenger`, "json", requestOptions);
+    await Requestor<Car[]>(`/trips/${selectedTripId}/cars/${carId}/passengers`, "json", requestOptions);
   } catch (error) {
     throw new Error(String(error));
   }
