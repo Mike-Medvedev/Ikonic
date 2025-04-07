@@ -6,7 +6,28 @@ import { Attendees } from "@/models/Attendance";
 
 type NewTripId = number;
 
-export async function createTrip(user_id: string, tripForm: NewTripForm) {
+export async function fetchTrips(): Promise<Trip[]> {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "any",
+    },
+  };
+  try {
+    const result = await Requestor<Trip[]>("/trips", "json", requestOptions);
+    const tripsWithDates = result.data.map((trip: Trip) => ({
+      ...trip,
+      startDate: new Date(trip.startDate),
+      endDate: new Date(trip.endDate),
+    }));
+    return tripsWithDates;
+  } catch (error) {
+    console.error(error);
+    throw new Error(String(error));
+  }
+}
+export async function createTrip(tripForm: NewTripForm) {
   try {
     const newTrip = FormPayloadFactory<NewTripForm>(tripForm);
     const payload = JSON.stringify(newTrip);
@@ -14,11 +35,10 @@ export async function createTrip(user_id: string, tripForm: NewTripForm) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${user_id}`,
       },
       body: payload,
     };
-    return await Requestor<APIResponse<NewTripId>>("/create-trip", "json", requestOptions);
+    return await Requestor<APIResponse<NewTripId>>("/trips", "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error("Failed to create new trip");
@@ -34,7 +54,7 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
     },
   };
   try {
-    const requstedTrip = (await Requestor<Trip>(`/get-trip/${selectedTripId}`, "json", requestOptions)).data;
+    const requstedTrip = (await Requestor<Trip>(`/trips/${selectedTripId}`, "json", requestOptions)).data;
     return {
       ...requstedTrip,
       startDate: new Date(requstedTrip.startDate),
@@ -57,29 +77,6 @@ export async function fetchAttendees(trip_id: string): Promise<Attendees> {
   try {
     const attendees = (await Requestor<Attendees>(`/invited-users/${trip_id}`, "json", requestOptions)).data;
     return attendees;
-  } catch (error) {
-    console.error(error);
-    throw new Error(String(error));
-  }
-}
-
-export async function fetchTrips(userID: string): Promise<Trip[]> {
-  const requestOptions: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "any",
-      authorization: `${userID}`,
-    },
-  };
-  try {
-    const result = await Requestor<Trip[]>("/get-trips", "json", requestOptions);
-    const tripsWithDates = result.data.map((trip: Trip) => ({
-      ...trip,
-      startDate: new Date(trip.startDate),
-      endDate: new Date(trip.endDate),
-    }));
-    return tripsWithDates;
   } catch (error) {
     console.error(error);
     throw new Error(String(error));

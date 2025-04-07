@@ -1,10 +1,14 @@
 import { useEffect } from "react";
 import { router } from "expo-router";
-import { AuthChangeEvent } from "@supabase/supabase-js";
+import { AuthChangeEvent, Session } from "@supabase/supabase-js";
 import useToast from "./useToast";
 
-export default function useAuthNavigator(event: AuthChangeEvent | "") {
+export default function useAuthNavigator(event: AuthChangeEvent | "", session: Session | null) {
   const { showSuccess } = useToast();
+
+  useEffect(() => {
+    if (session) router.navigate("/");
+  }, [session]);
   useEffect(() => {
     if (!event) return;
     console.log(`Event changed ${event}`);

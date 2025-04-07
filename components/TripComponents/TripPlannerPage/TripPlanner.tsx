@@ -23,7 +23,6 @@ const TripPlanner = () => {
   const [tripForm, setTripForm] = useState<NewTripForm>(initialTripForm);
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
-  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
   const resetForm = () => {
     setTripForm(initialTripForm);
   };
@@ -44,8 +43,7 @@ const TripPlanner = () => {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
-    const user_id = await retrieve();
-    const newTripId = (await createTrip(user_id, tripForm)).data;
+    const newTripId = (await createTrip(tripForm)).data;
     resetForm();
     showSuccess({
       message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,

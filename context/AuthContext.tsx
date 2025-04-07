@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [authEvent, setAuthEvent] = useState<AuthChangeEvent | "">("");
 
-  useAuthNavigator(authEvent);
   const queryClient = useQueryClient();
 
   const { data, isLoading: isSessionLoading } = useQuery<Session | null>({
@@ -32,6 +31,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     queryFn: getSession,
     initialData: null,
   });
+  useAuthNavigator(authEvent, data);
 
   useEffect(() => {
     setLoading(isSessionLoading);

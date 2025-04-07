@@ -31,8 +31,8 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
     setRange({ startDate, endDate });
     setTripForm((prev) => ({
       ...prev,
-      startDate: { value: startDate, error: "" },
-      endDate: { value: endDate, error: "" },
+      startDate: { value: new Date(new Date(startDate).toISOString().split("T")[0]), error: "" },
+      endDate: { value: new Date(new Date(endDate).toISOString().split("T")[0]), error: "" },
     }));
   }, []);
 

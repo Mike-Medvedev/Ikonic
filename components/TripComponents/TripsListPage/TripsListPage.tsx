@@ -8,13 +8,10 @@ import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
 import EmptyTripsFallback from "@/components/TripComponents/EditTripPage/EmptyTripsFallback";
 const TripsListPage = () => {
-  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
-
   // prettier-ignore
   const { data: trips, isLoading, refetch } = useQuery({
     queryKey: ["trips"], queryFn: async () => {
-      const userID = await retrieve();
-      return fetchTrips(userID);
+      return fetchTrips();
     },
     initialData: [],
   });

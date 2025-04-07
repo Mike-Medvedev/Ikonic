@@ -5,7 +5,7 @@ import { ActivityIndicator } from "react-native";
 
 export default function Index() {
   const { session, loading } = useAuth();
-  console.log(`Got here and the session is: ${session}`);
+  console.log(session);
   if (loading) return <ActivityIndicator size="large" />;
   if (!session) return <Redirect href="/login" />;
 
