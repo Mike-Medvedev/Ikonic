@@ -1,7 +1,8 @@
 import { BASE_URL } from "@/config";
 import { APIResponse } from "@/models/Api";
-import { toCamelCase, toSnakeCase } from "@/utils/CaseConverters";
-import { getToken, supabase } from "@/utils/Supabase";
+import { getToken } from "@/utils/Supabase";
+import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 
 type ResponseData = "json" | "text" | "blob";
 
@@ -22,11 +23,10 @@ export default async function Requestor<T>(
 ): Promise<APIResponse<T>> {
   const token = await getToken();
   if (!token) throw new Error("Error fetching token");
-  console.log(requestOptions?.body);
+
   if (requestOptions?.body) {
     const parsedBody = JSON.parse(requestOptions.body as string);
-    const snake = toSnakeCase(parsedBody);
-
+    const snake = snakecaseKeys(parsedBody);
     requestOptions.body = JSON.stringify(snake);
   }
 
@@ -40,8 +40,10 @@ export default async function Requestor<T>(
   }
 
   const parsedData = await DataTypeResolver<T>(dataType, response);
-  if (parsedData.data) {
-    parsedData.data = toCamelCase(parsedData.data);
+  if (parsedData.data && typeof parsedData.data === "object") {
+    parsedData.data = camelcaseKeys(parsedData.data as Record<string, unknown> | Record<string, unknown>[], {
+      deep: true,
+    }) as T;
   }
 
   return parsedData;
