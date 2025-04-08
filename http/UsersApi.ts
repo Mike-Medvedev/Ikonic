@@ -41,7 +41,7 @@ export async function inviteUser(user: User, trip_id: string, deepLink: string) 
     body: JSON.stringify({ deep_link: deepLink }),
   };
   try {
-    return await Requestor(`/trips/${trip_id}/invites/${user.user_id}`, "json", requestOptions);
+    return await Requestor(`/trips/${trip_id}/invites/${user.id}`, "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));

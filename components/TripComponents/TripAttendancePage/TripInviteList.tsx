@@ -24,6 +24,7 @@ export default function TripInviteList() {
 
   async function handleInvite(user: User) {
     setIsInviteSending(true);
+    console.log(user);
     const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
     try {
       await inviteUser(user, selectedTripId, deepLink);

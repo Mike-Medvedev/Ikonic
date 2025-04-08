@@ -8,7 +8,6 @@ export interface Car {
 }
 
 export interface NewCar {
-  owner: string;
   seatCount: number;
 }
 

@@ -10,7 +10,7 @@ import CreateCarButton from "@/components/CarComponents/CreateCarButton";
 import CarList from "@/components/CarComponents/CarList";
 export default function CarpoolPage() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
-  const { userId } = useUser();
+  const { getUserId } = useUser();
   const queryClient = useQueryClient();
 
   //prettier-ignore
@@ -30,12 +30,13 @@ export default function CarpoolPage() {
   if (isError || !cars) return <Text>Error: {error?.message ?? "No cars"}</Text>;
 
   function userHasCar(): boolean {
-    return !!cars.find((car) => car.owner.user_id === userId);
+    // return !!cars.find((car) => car.owner.user_id === await getUserId());
+    return false;
   }
 
   function createCarHandler() {
     if (userHasCar()) return;
-    createCarMutation.mutate({ selectedTripId: selectedTripId as string, newCar: { owner: userId, seatCount: 4 } });
+    createCarMutation.mutate({ selectedTripId: selectedTripId as string, newCar: { seatCount: 4 } });
   }
 
   return (
