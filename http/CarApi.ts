@@ -1,6 +1,5 @@
 import { Car, NewCar } from "@/models/Car";
 import Requestor from "./Requestor";
-import { User } from "@/models/User";
 
 export async function fetchCars(selectedTripId: string) {
   const requestOptions: RequestInit = {
@@ -31,7 +30,7 @@ export async function createCar(selectedTripId: string, newCar: NewCar) {
     throw new Error(String(error));
   }
 }
-export async function deleteCar(carId: number) {
+export async function deleteCar(carId: number, selectedTripId: string) {
   const requestOptions: RequestInit = {
     method: "DELETE",
   };
@@ -41,11 +40,13 @@ export async function deleteCar(carId: number) {
     throw new Error(String(error));
   }
 }
-export async function addPassenger(carId: number, user: User, seatPosition: number) {
+export async function addPassenger(carId: number, selectedTripId: string, seatPosition: number) {
+  const payload = { seatPosition };
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      body: JSON.stringify(payload),
     },
   };
   try {

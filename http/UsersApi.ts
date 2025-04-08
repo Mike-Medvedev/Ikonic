@@ -38,10 +38,10 @@ export async function inviteUser(user: User, trip_id: string, deepLink: string) 
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ user: user, trip_id: trip_id, deep_link: deepLink }),
+    body: JSON.stringify({ deep_link: deepLink }),
   };
   try {
-    return await Requestor(`/trips/${selectedTripid}/invites/${user_id}`, "json", requestOptions);
+    return await Requestor(`/trips/${trip_id}/invites/${user.user_id}`, "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));
@@ -53,12 +53,11 @@ export async function handleRSVP(userResponse: RSVPStatus, user_id: string, sele
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: user_id,
     },
-    body: JSON.stringify({ trip_id: selectedTripId, user_response: userResponse }),
+    body: JSON.stringify({ rsvp: userResponse }),
   };
   try {
-    return await Requestor(`/trips/${selectedTripid}/invites/${user_id}`, "json", requestOptions);
+    return await Requestor(`/trips/${selectedTripId}/invites/${user_id}`, "json", requestOptions);
   } catch (error) {
     console.error(error);
     throw new Error(String(error));
