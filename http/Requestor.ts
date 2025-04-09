@@ -30,10 +30,14 @@ export default async function Requestor<T>(
     requestOptions.body = JSON.stringify(snake);
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, {
+  const finalRequestOptions = {
     ...requestOptions,
-    headers: { ...requestOptions?.headers, authorization: `bearer ${token}` },
-  });
+    headers: { ...requestOptions?.headers, Authorization: `bearer ${token}` },
+  };
+
+  console.log(finalRequestOptions);
+
+  const response = await fetch(`${BASE_URL}${path}`, finalRequestOptions);
 
   if (!response.ok) {
     throw new Error(response.statusText || "An error occurred");

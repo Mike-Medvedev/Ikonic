@@ -15,7 +15,6 @@ export const supabase = createClient(supabaseUrl!, supabaseAnonKey!, {
     detectSessionInUrl: false,
   },
 });
-
 export const getToken = async (): Promise<string | null> => {
   const { data, error } = await supabase.auth.getSession();
   if (!data.session || error) {

@@ -12,7 +12,7 @@ export default function CarHeader({ currentCar }: { currentCar: Car }) {
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
 
   const deleteCarMutation = useMutation<void, Error, number>({
-    mutationFn: (carId) => deleteCar(carId),
+    mutationFn: (carId) => deleteCar(carId, selectedTripId),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
   return (

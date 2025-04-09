@@ -2,21 +2,18 @@ import Background from "@/ui/Background";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import ProfilePageHeader from "./ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { fetchUser } from "@/http/UsersApi";
 import ProfileCard from "@/components/ProfileComponents/ProfileCard";
-export default function ProfilePage({ userId }: { userId?: string }) {
-  const { retrieve } = useLocalStorage<string>({ key: "user_id" });
-
+export default function ProfilePage({ userId }: { userId: string }) {
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const user_id = userId ? userId : await retrieve();
-      return fetchUser(user_id);
+      return fetchUser(userId);
     },
   });
 
   if (isLoading || !profile) {
+    console.log(profile);
     return (
       <View style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
         <ActivityIndicator size="large" color="#ffffff" />

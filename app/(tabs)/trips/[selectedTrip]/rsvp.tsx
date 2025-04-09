@@ -5,13 +5,22 @@ import { handleRSVP } from "@/http/UsersApi";
 import { RSVPStatus } from "@/models/Attendance";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
 
 export default function RSVP() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const { userId } = useUser();
+  const { getUserId } = useUser();
   const { showSuccess, showFailure } = useToast();
+  const [userId, setUserId] = useState<string>("");
+
+  useEffect(() => {
+    (async () => {
+      const newId = await getUserId();
+      setUserId(newId ?? "");
+    })();
+  }, []);
 
   const { data: tripData, isLoading } = useQuery({
     queryKey: ["trip", selectedTripId],
@@ -31,7 +40,7 @@ export default function RSVP() {
   return (
     <View style={{ alignItems: "center", padding: 20 }}>
       <Text variant="displayMedium" style={{ marginBottom: 30 }}>
-        {`You have been invited to ${tripData?.owner.firstname}'s trip🎉`}
+        {`You have been invited to ${tripData?.owner}'s trip🎉`}
       </Text>
       <Text variant="displaySmall">Rsvp here</Text>
       <View style={{ flexDirection: "row", gap: 40, marginVertical: 40 }}>

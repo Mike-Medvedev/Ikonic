@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import useLocalStorage from "./useLocalStorage";
 import { Trip } from "@/models/TripModel";
 import { supabase } from "@/utils/Supabase";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 
 export default function useUser() {
+  const [userId, setUserId] = useState<string>("");
   async function getUserId(): Promise<string | undefined> {
     //prettier-ignore
     const { data, error } = await supabase.auth.getSession()
@@ -17,6 +17,14 @@ export default function useUser() {
     return user;
   }
 
+  useEffect(() => {
+    (async () => {
+      const id = await getUserId();
+      if (!id) return;
+      setUserId(id);
+    })();
+  }, []);
+
   async function getSession(): Promise<Session | null> {
     //prettier-ignore
     const { data: { session }, error } = await supabase.auth.getSession();
@@ -28,5 +36,5 @@ export default function useUser() {
     return session;
   }
 
-  return { getUserId, getSession };
+  return { userId, getUserId, getSession };
 }

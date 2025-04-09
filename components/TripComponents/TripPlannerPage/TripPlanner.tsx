@@ -10,7 +10,6 @@ import { useMemo, useState } from "react";
 import { createTrip } from "@/http/TripApi";
 import { NewTripForm } from "@/models/TripModel";
 import { ValidateErrors } from "@/utils/FormBuilder";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useToast from "@/hooks/useToast";
 
 const TripPlanner = () => {

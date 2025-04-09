@@ -1,6 +1,5 @@
 import Trip from "@/components/TripComponents/TripsListPage/Trip";
 import TripListHeader from "@/components/TripComponents/TripsListPage/TripListHeader";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import { fetchTrips } from "@/http/TripApi";
 import Background from "@/ui/Background";

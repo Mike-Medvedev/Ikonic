@@ -7,7 +7,7 @@ export interface Trip {
   startDate: Date;
   endDate: Date;
   mountain: string;
-  owner: string;
+  owner: User;
   image?: string;
   desc?: string;
   total_cost?: string;
