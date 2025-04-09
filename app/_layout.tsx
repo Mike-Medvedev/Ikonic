@@ -1,8 +1,8 @@
 import { Slot } from "expo-router";
-import { PaperProvider, MD3LightTheme as DefaultTheme } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider } from "@/context/AuthContext";
-import colors from "@/theme/myGeneratedColors.json";
+import { theme } from "@/theme/theme";
 import { registerTranslation } from "react-native-paper-dates";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -12,11 +12,6 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
-
-const theme = {
-  ...DefaultTheme,
-  colors: colors.colors,
-};
 
 registerTranslation("en", {
   save: "Save",

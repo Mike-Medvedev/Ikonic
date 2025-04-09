@@ -1,6 +1,6 @@
 {
   "colors": {
-    "primary": "rgb(71, 85, 182)",
+    "primary": "rgb(0 230 255)",
     "onPrimary": "rgb(255, 255, 255)",
     "primaryContainer": "rgb(223, 224, 255)",
     "onPrimaryContainer": "rgb(0, 13, 95)",
@@ -16,10 +16,10 @@
     "onError": "rgb(255, 255, 255)",
     "errorContainer": "rgb(255, 218, 214)",
     "onErrorContainer": "rgb(65, 0, 2)",
-    "background": "rgb(255, 251, 255)",
+    "background": "rgb(10 10 15)",
     "onBackground": "rgb(27, 27, 31)",
-    "surface": "rgb(255, 251, 255)",
-    "onSurface": "rgb(27, 27, 31)",
+    "surface": "rgba(255, 255, 255, 0.03)",
+    "onSurface": "rgba(255, 255, 255, 0.10)",
     "surfaceVariant": "rgb(227, 225, 236)",
     "onSurfaceVariant": "rgb(70, 70, 79)",
     "outline": "rgb(118, 118, 128)",
@@ -39,6 +39,8 @@
     },
     "surfaceDisabled": "rgba(27, 27, 31, 0.12)",
     "onSurfaceDisabled": "rgba(27, 27, 31, 0.38)",
-    "backdrop": "rgba(47, 48, 56, 0.4)"
+    "backdrop": "rgba(47, 48, 56, 0.4)",
+    "text": "rgb(255, 255, 255)",
+    "secondaryText": "rgba(255, 255, 255, 0.5)"
   }
 }
