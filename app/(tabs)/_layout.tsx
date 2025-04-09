@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import { Redirect, Tabs, usePathname } from "expo-router";
-import { StyleSheet, Text } from "react-native";
-import { ActivityIndicator, useTheme } from "react-native-paper";
+import { Pressable, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, Button, useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useAuth } from "@/context/AuthContext";
+import SignOutButton from "@/ui/SignOutButton";
 
 const HeaderTitle = () => {
   const theme = useTheme();
@@ -48,6 +49,7 @@ export default function TabLayout() {
           title: "Trips",
           tabBarIcon: ({ color }) => <FontAwesome name="newspaper-o" size={24} color={color} />,
           headerTitle: HeaderTitle,
+          headerRight: SignOutButton,
         }}
       />
       <Tabs.Screen
@@ -66,6 +68,7 @@ export default function TabLayout() {
           title: "Plan",
           tabBarIcon: ({ color }) => <AntDesign name="pluscircle" size={24} color={color} />,
           headerTitle: HeaderTitle,
+          headerRight: SignOutButton,
         }}
       />
       <Tabs.Screen
@@ -74,6 +77,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
           headerTitle: HeaderTitle,
+          headerRight: SignOutButton,
         }}
       />
       <Tabs.Screen
@@ -83,6 +87,7 @@ export default function TabLayout() {
           href: null,
           headerShown: false,
           tabBarStyle: { display: "none" },
+          headerRight: SignOutButton,
         }}
       />
     </Tabs>

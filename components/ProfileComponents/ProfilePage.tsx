@@ -4,11 +4,14 @@ import ProfilePageHeader from "./ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/http/UsersApi";
 import ProfileCard from "@/components/ProfileComponents/ProfileCard";
-export default function ProfilePage({ userId }: { userId: string }) {
+import { useAuth } from "@/context/AuthContext";
+export default function ProfilePage() {
+  const { session } = useAuth();
+  if (!session?.user.id) return;
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      return fetchUser(userId);
+      return fetchUser(session?.user.id);
     },
   });
 

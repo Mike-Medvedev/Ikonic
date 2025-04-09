@@ -1,6 +1,5 @@
 import { View } from "react-native";
 import { Avatar, Card, useTheme } from "react-native-paper";
-import PhoneNumberForm from "./PhoneNumberForm";
 import { User } from "@/models/User";
 
 export default function ProfileCard({ profile }: { profile: User }) {
@@ -19,9 +18,9 @@ export default function ProfileCard({ profile }: { profile: User }) {
           subtitle={profile.phone_number}
           left={(props) => <Avatar.Image {...props} source={require("@/assets/images/mike.png")} size={50} />}
         />
-        <Card.Content>
+        {/* <Card.Content>
           <PhoneNumberForm profile={profile} />
-        </Card.Content>
+        </Card.Content> */}
       </Card>
     </View>
   );

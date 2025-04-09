@@ -2,23 +2,24 @@ import { User } from "@/models/User";
 import Requestor from "@/http/Requestor";
 import { RSVPStatus } from "@/models/Attendance";
 
-export async function fetchUsers() {
-  const requestOptions: RequestInit = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "any",
-    },
-  };
-  try {
-    const users = (await Requestor<User[]>("/users", "json", requestOptions)).data;
-    return users;
-  } catch (error) {
-    throw new Error(String(error));
-  }
-}
+// export async function fetchUsers() {
+//   const requestOptions: RequestInit = {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "ngrok-skip-browser-warning": "any",
+//     },
+//   };
+//   try {
+//     const users = (await Requestor<User[]>("/users", "json", requestOptions)).data;
+//     return users;
+//   } catch (error) {
+//     throw new Error(String(error));
+//   }
+// }
 
 export async function fetchUser(user_id: string) {
+  if (!user_id) throw new Error("No user id!");
   const requestOptions: RequestInit = {
     method: "GET",
     headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "any" },
