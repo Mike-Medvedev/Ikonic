@@ -1,33 +1,59 @@
-import { View } from "react-native";
-import { Avatar, useTheme } from "react-native-paper";
+import React from "react";
+import { View, Image, StyleSheet } from "react-native";
 
-export default function AvatarGlowImage() {
-  const theme = useTheme();
+const AvatarGlowImage = ({ imageUri, size = 400, glowColor = "#00e5ff", glowIntensity = 15 }) => {
   return (
-    <View>
+    <View style={styles.container}>
+      {/* Glow effect layer */}
       <View
-        style={{
-          position: "absolute",
-          right: -20,
-          top: 0,
-          width: 100, // explicit width
-          height: 100, // explicit height
-          borderRadius: 50, // half of the width/height for a perfect circle
-          borderWidth: 2,
-          borderColor: theme.colors.primary,
-          overflow: "hidden", // clip any overflow that might show slivers
-          alignItems: "center", // center the Avatar.Image within the View
-          justifyContent: "center",
-        }}
-      >
-        <Avatar.Image
-          size={100}
-          style={{
-            backgroundColor: "transparent",
-          }}
-          source={require("@/assets/images/penguin.png")}
-        />
-      </View>
+        style={[
+          styles.glowEffect,
+          {
+            width: size + glowIntensity * 0.3,
+            height: size + glowIntensity * 0.3,
+            borderRadius: (size + glowIntensity * 2) / 2,
+            backgroundColor: glowColor,
+          },
+        ]}
+      />
+
+      {/* Actual avatar image */}
+      <Image
+        source={require("@/assets/images/penguin.png")}
+        style={[
+          styles.avatar,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+          },
+        ]}
+      />
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    bottom: 20,
+    left: -10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  glowEffect: {
+    position: "absolute",
+    opacity: 0.8,
+    shadowColor: "#00e5ff",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 20,
+    elevation: 15,
+  },
+  avatar: {
+    position: "absolute",
+    zIndex: 1,
+  },
+});
+
+export default AvatarGlowImage;

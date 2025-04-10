@@ -62,7 +62,7 @@ const Trip = ({ trip }: TripProps) => {
       <Card
         coverSource={require("@/assets/images/react-logo.png")}
         overlayContent={
-          <View>
+          <View style={{ flex: 1 }}>
             <View style={{ alignItems: "flex-end", marginHorizontal: 20 }}>
               <AntDesign
                 name="closecircleo"

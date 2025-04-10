@@ -1,4 +1,3 @@
-import { BASE_URL } from "@/config";
 import { APIResponse } from "@/models/Api";
 import { getToken } from "@/utils/Supabase";
 import camelcaseKeys from "camelcase-keys";
@@ -37,7 +36,7 @@ export default async function Requestor<T>(
 
   console.log(finalRequestOptions);
 
-  const response = await fetch(`${BASE_URL}${path}`, finalRequestOptions);
+  const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}${path}`, finalRequestOptions);
 
   if (!response.ok) {
     throw new Error(response.statusText || "An error occurred");

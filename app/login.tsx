@@ -95,7 +95,7 @@ export default function Login() {
         <View>
           <View style={{ flexDirection: "row", position: "relative" }}>
             <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
-            <AvatarGlowImage />
+            <AvatarGlowImage imageUri="@/assets/images/penguin.png" size={100} glowColor="#00e5ff" glowIntensity={15} />
           </View>
 
           <View style={{ marginTop: 50 }}>
@@ -117,7 +117,7 @@ export default function Login() {
                     borderColor: theme.colors.onSurface,
                   }}
                 />
-                <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+                <Text variant="titleMedium" style={{ color: theme.colors.primary, fontFamily: "Poppins" }}>
                   Welcome
                 </Text>
               </View>

@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React, { memo } from "react";
 import { View, StyleSheet, ImageBackground } from "react-native";
 import { useTheme } from "react-native-paper";
@@ -17,7 +18,14 @@ const CardComponent = ({ children, coverSource, overlayContent, headline1 = "", 
     <View style={styles.card}>
       {coverSource && (
         <ImageBackground source={coverSource} style={styles.cover} imageStyle={styles.coverImage}>
-          {overlayContent && overlayContent}
+          <LinearGradient
+            colors={["rgba(10, 10, 15, 0.9)", "rgba(10, 10, 15, 0.7)", "rgba(10, 10, 15, 0)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}
+          >
+            {overlayContent && overlayContent}
+          </LinearGradient>
         </ImageBackground>
       )}
       <View style={styles.cardContent}>{children}</View>
@@ -52,5 +60,11 @@ const styles = StyleSheet.create({
   cardContent: {
     padding: 16,
     // your card content styling
+  },
+  gradient: {
+    flex: 1,
+    padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
