@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View, Pressable, TextInput as BaseInput } from "react-native";
 import { BlurView } from "expo-blur";
 import Logo from "@/ui/Logo";
@@ -16,6 +16,8 @@ import { sendCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
 import { LinearGradient } from "expo-linear-gradient";
 import AvatarGlowImage from "@/ui/AvatarGlowImage";
+import { Card } from "@/ui/Card";
+import TitleText from "@/ui/TitleText";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
@@ -55,57 +57,23 @@ export default function Login() {
 
     router.push({ pathname: "/verify", params: { phoneNumber: loginForm.phoneNumber.value } });
   };
-  const TitleText = () => {
-    theme;
-    return (
-      <View style={{ marginBottom: 100 }}>
-        <View style={{ flexDirection: "row", gap: 20, alignItems: "center", marginBottom: 15 }}>
-          <Avatar.Icon
-            icon="phone"
-            size={48}
-            color="black" // icon color (can be theme-based)
-            style={{ backgroundColor: theme.colors.primary }}
-          />
-          <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-            Welcome Back
-          </Text>
-        </View>
-        <View>
-          <Text variant="displayMedium" style={{ color: theme.colors.text }}>
-            Enter Your
-          </Text>
-          <Text variant="displayMedium" style={{ color: theme.colors.primary }}>
-            Phone Number
-          </Text>
-        </View>
-      </View>
-    );
-  };
 
-  const Card = ({ children }) => {
-    return <View style={styles.card}>{children}</View>;
-  };
+  const handlePhoneChange = useCallback(
+    (text) => {
+      setLoginForm((prev) => ({
+        ...prev,
+        phoneNumber: { value: text, error: "" },
+      }));
+    },
+    [setLoginForm]
+  );
 
   const styles = useMemo(() => {
     return StyleSheet.create({
       container: {
         flex: 1,
       },
-      card: {
-        width: 400,
-        gap: 16,
-        borderRadius: 24,
-        borderWidth: 1,
-        borderColor: "rgba(255, 255, 255, 0.10)",
-        backgroundColor: "rgba(255, 255, 255, 0.03)",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 20 },
-        shadowOpacity: 0.4,
-        shadowRadius: 40,
-        elevation: 20,
-        padding: 20, // for Android shadow
-        // backdrop-filter is not supported directly in React Native
-      },
+
       center: {
         justifyContent: "center",
         alignItems: "center",
@@ -125,26 +93,12 @@ export default function Login() {
     <View style={styles.container}>
       <Background>
         <View>
-          <View
-            style={{
-              position: "absolute",
-              width: 800,
-              height: 800,
-              borderWidth: 2,
-              borderRadius: 120000,
-              borderColor: "rgba(255, 255, 255, 0.02)",
-              top: -70,
-              left: -260,
-              bottom: 0,
-              right: 0,
-            }}
-          ></View>
           <View style={{ flexDirection: "row", position: "relative" }}>
-            <TitleText />
+            <TitleText welcomeText="Welcome Back" headline1="Enter Your" headline2="Phone Number" />
             <AvatarGlowImage />
           </View>
 
-          <View>
+          <View style={{ marginTop: 50 }}>
             {/* <Text variant="headlineMedium" style={styles.header}>
               Enter Your Phone Number
             </Text>
@@ -173,12 +127,7 @@ export default function Login() {
                 label="Enter Phone Number"
                 returnKeyType="done"
                 value={loginForm.phoneNumber.value}
-                onChangeText={(text) =>
-                  setLoginForm((prev) => ({
-                    ...prev,
-                    phoneNumber: { value: text, error: "" },
-                  }))
-                }
+                onChangeText={handlePhoneChange}
                 error={!!loginForm.phoneNumber.error}
                 errorText={loginForm.phoneNumber.error}
                 autoCapitalize="none"
@@ -204,21 +153,7 @@ export default function Login() {
               </Pressable>
             </Card>
           </View>
-
-          {/* <Button mode="contained" onPress={handleLogin}>
-            Send Code
-          </Button> */}
         </View>
-
-        {/* <TextInput
-          label="Password"
-          returnKeyType="done"
-          value={loginForm.password.value}
-          onChangeText={(text) => setLoginForm((prev) => ({ ...prev, password: { value: text, error: "" } }))}
-          error={!!loginForm.password.error}
-          errorText={loginForm.password.error}
-          secureTextEntry
-        /> */}
       </Background>
     </View>
   );

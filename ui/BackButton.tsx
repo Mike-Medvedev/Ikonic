@@ -3,10 +3,10 @@ import { router } from "expo-router";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
-export default function BackButton({ styles }: { styles?: StyleProp<ViewStyle> }) {
+export default function BackButton({ style }: { style?: StyleProp<ViewStyle> }) {
   const theme = useTheme();
   return (
-    <Pressable onPress={() => router.back()} style={[{ width: 50 }, styles]}>
+    <Pressable onPress={() => router.back()} style={[{ width: 50 }, style]}>
       <Ionicons name="arrow-back-outline" size={34} color={theme.colors.primary} />
     </Pressable>
   );

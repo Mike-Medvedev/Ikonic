@@ -1,7 +1,7 @@
 import Background from "@/ui/Background";
 import { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Button, useTheme } from "react-native-paper";
+import { View, StyleSheet, Pressable } from "react-native";
+import { Button, useTheme, Text } from "react-native-paper";
 import OTPForm from "@/ui/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
@@ -10,6 +10,8 @@ import Logo from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
 import { verifyCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
+import TitleText from "@/ui/TitleText";
+import { Card } from "@/ui/Card";
 
 export default function Verify() {
   const theme = useTheme();
@@ -40,21 +42,38 @@ export default function Verify() {
   return (
     <View style={styles.container}>
       <Background>
-        <PercentLayout
-          percentLayout={[
-            [40, styles.center],
-            [20, styles.center],
-            [10, styles.backButtonContainer],
-            [30, styles.center],
-          ]}
-        >
-          <Logo />
-          <OTPForm code={code} setCode={setCode} />
-          <Button mode="contained" onPress={handleLogin} loading={loading}>
-            Verify Code
-          </Button>
-          <BackButton />
-        </PercentLayout>
+        <View>
+          <TitleText welcomeText="Verify Your Number" headline1="Enter The" headline2="6-Digit Code" />
+          <View style={{ marginTop: 23 }}>
+            <Text style={{ color: theme.colors.secondary }}>We sent a code to {phoneNumber}</Text>
+          </View>
+
+          <View style={{ marginTop: 50 }}>
+            <Card>
+              <OTPForm code={code} setCode={setCode} />
+              <Pressable
+                style={{
+                  width: "100%",
+                  padding: 15,
+                  borderRadius: 12,
+                  backgroundColor: theme.colors.surface,
+                  alignItems: "center",
+                }}
+                onPress={handleLogin}
+              >
+                <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
+                  Verify Code
+                </Text>
+              </Pressable>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <Text style={{ color: theme.colors.secondary }}>Didn't recieve code?</Text>
+                <Text style={{ color: theme.colors.primary }}>Resend Code</Text>
+              </View>
+            </Card>
+          </View>
+
+          <BackButton style={{ marginTop: 50, alignSelf: "center" }} />
+        </View>
       </Background>
     </View>
   );
