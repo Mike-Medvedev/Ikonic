@@ -15,7 +15,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
     },
     header: {
       fontSize: 26,
-      color: theme.colors.onError,
+      color: "white",
       fontWeight: "bold",
       paddingVertical: 14,
       alignItems: "center",
@@ -28,11 +28,9 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
     button: {
       borderRadius: 12,
       backgroundColor: theme.colors.primary,
-      alignItems: "center",
-      justifyContent: "center",
       alignSelf: "center",
-      padding: 20,
-      height: 30,
+      paddingHorizontal: 20,
+      paddingVertical: 12,
     },
   });
 
@@ -51,7 +49,9 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
         </Badge>
       </View>
       <Pressable style={styles.button} onPress={handlePress}>
-        <Text style={{ color: "black" }}>+ New Trip</Text>
+        <Text variant="labelLarge" style={{ color: "#000000" }}>
+          + New Trip
+        </Text>
       </Pressable>
     </View>
   );
