@@ -1,13 +1,16 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, View, GestureResponderEvent, StyleSheet } from "react-native";
-import { Card, Avatar, useTheme, Text } from "react-native-paper";
+import { Pressable, View, GestureResponderEvent, StyleSheet, ImageBackground } from "react-native";
+import { Avatar, useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trip as TripModel } from "@/models/TripModel";
 import { deleteTrip } from "@/http/TripApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
+import { Card } from "@/ui/Card";
+import UsersAvatarList from "@/ui/UsersAvatarList";
+import Entypo from "@expo/vector-icons/Entypo";
 
 export interface TripProps {
   trip: TripModel;
@@ -56,7 +59,67 @@ const Trip = ({ trip }: TripProps) => {
   };
   return (
     <Pressable onPress={onTripSelect} style={styles.tripContainer}>
-      <Card style={styles.cardContainer}>
+      <Card
+        coverSource={require("@/assets/images/react-logo.png")}
+        overlayContent={
+          <View>
+            <View style={{ alignItems: "flex-end", marginHorizontal: 20 }}>
+              <AntDesign
+                name="closecircleo"
+                onPress={(event) => handleTripDelete(event, trip.id)}
+                size={20}
+                color={theme.colors.error}
+              />
+            </View>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", margin: 8, alignItems: "flex-end" }}>
+              <View style={{ alignItems: "center" }}>
+                <Text variant="headlineMedium" style={{ color: "#fff", margin: 8 }}>
+                  {trip.title}
+                </Text>
+                <Text variant="labelSmall" style={{ color: "#fff", margin: 8 }}>
+                  {trip.title}
+                </Text>
+              </View>
+              <View
+                style={{
+                  borderRadius: 12,
+                  backgroundColor: theme.colors.onSurface,
+                  flexDirection: "row",
+                  height: 30,
+                  gap: 10,
+                  padding: 7,
+                  alignItems: "center",
+                }}
+              >
+                <Entypo name="calendar" size={14} color="black" />
+                <Text style={{ color: "white" }}>Feb 15 - 20</Text>
+                {/* {date ?? ""} */}
+              </View>
+            </View>
+          </View>
+        }
+      >
+        {/* Overlay content goes here */}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <UsersAvatarList selectedTripId={trip.id as string} rsvp="accepted" size={24} />
+            <Text style={{ color: "rgba(255, 255, 255, 0.50)" }}>2 Friends Joined</Text>
+          </View>
+          <Pressable
+            style={{
+              alignSelf: "center",
+              borderWidth: 1,
+              borderRadius: 12,
+              borderColor: theme.colors.onSurface,
+              paddingVertical: 8,
+              paddingHorizontal: 18,
+            }}
+          >
+            <Text style={{ color: theme.colors.primary }}>View Trip</Text>
+          </Pressable>
+        </View>
+      </Card>
+      {/* <Card style={styles.cardContainer}>
         <Card.Title
           title={<Text variant="titleMedium">{trip.title}</Text>}
           titleStyle={styles.cardTitleStyle}
@@ -77,7 +140,7 @@ const Trip = ({ trip }: TripProps) => {
             />
           )}
         />
-      </Card>
+      </Card> */}
     </Pressable>
   );
 };

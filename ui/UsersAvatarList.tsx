@@ -4,11 +4,20 @@ import CalculateInitials from "@/utils/CalculateInitials";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { ActivityIndicator, Pressable, View } from "react-native";
-import { Avatar, Text } from "react-native-paper";
+import { Avatar, Text, useTheme } from "react-native-paper";
 
 const MAX_AVATARS = 5;
 
-export default function UsersAvatarList({ rsvp, selectedTripId }: { rsvp: RSVPStatus; selectedTripId: string }) {
+export default function UsersAvatarList({
+  rsvp,
+  selectedTripId,
+  size = 50,
+}: {
+  rsvp: RSVPStatus;
+  selectedTripId: string;
+  size?: number;
+}) {
+  const theme = useTheme();
   //prettier-ignore
   const { data: attendees, isLoading, isError, error } = useQuery({
     queryKey: ["attendees", selectedTripId],
@@ -36,8 +45,9 @@ export default function UsersAvatarList({ rsvp, selectedTripId }: { rsvp: RSVPSt
               <Avatar.Text
                 key={user.user_id}
                 label={CalculateInitials(user.firstname, user.lastname)}
-                size={50}
-                labelStyle={{ fontSize: 22 }}
+                size={size}
+                style={{ backgroundColor: theme.colors.surface }}
+                labelStyle={{ fontSize: 8, color: "white" }}
               />
             </Pressable>
           ))}
@@ -45,8 +55,8 @@ export default function UsersAvatarList({ rsvp, selectedTripId }: { rsvp: RSVPSt
             <Avatar.Text
               label={`+${attendees[rsvp].length - MAX_AVATARS}`}
               style={{ backgroundColor: "grey" }}
-              size={50}
-              labelStyle={{ fontSize: 22 }}
+              size={size}
+              labelStyle={{ fontSize: 12 }}
             />
           )}
         </>
