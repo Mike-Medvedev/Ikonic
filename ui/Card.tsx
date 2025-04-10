@@ -29,7 +29,7 @@ export const Card = memo(CardComponent);
 
 const styles = StyleSheet.create({
   card: {
-    width: 400,
+    width: "100%",
     borderRadius: 24,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.10)",
