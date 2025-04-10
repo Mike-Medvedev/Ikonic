@@ -1,4 +1,5 @@
 import TitleText from "@/ui/TitleText";
+import { router } from "expo-router";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Badge, Text, useTheme } from "react-native-paper";
 
@@ -34,6 +35,10 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
       height: 30,
     },
   });
+
+  function handlePress() {
+    router.navigate("/plan");
+  }
   return (
     <View style={styles.headerContainer}>
       {/* <TitleText welcomeText="Snow Trip Planner" headline1="Plan Your" headline2="Escape" /> */}
@@ -45,7 +50,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
           {tripLength}
         </Badge>
       </View>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={handlePress}>
         <Text style={{ color: "black" }}>+ New Trip</Text>
       </Pressable>
     </View>

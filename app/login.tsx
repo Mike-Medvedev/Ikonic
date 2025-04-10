@@ -94,7 +94,7 @@ export default function Login() {
       <Background>
         <View>
           <View style={{ flexDirection: "row", position: "relative" }}>
-            <TitleText welcomeText="Welcome Back" headline1="Enter Your" headline2="Phone Number" />
+            <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
             <AvatarGlowImage />
           </View>
 
@@ -118,7 +118,7 @@ export default function Login() {
                   }}
                 />
                 <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-                  Welcome Back
+                  Welcome
                 </Text>
               </View>
 
@@ -136,7 +136,7 @@ export default function Login() {
                 maxLength={10}
                 left={<PaperInput.Affix text="+1" textStyle={{ color: theme.colors.secondary }} />}
               />
-              <Text style={{ color: theme.colors.secondary }}>We will send you a one time code</Text>
+              <Text style={{ color: theme.colors.secondary, marginVertical: 8 }}>We will send you a one time code</Text>
               <Pressable
                 style={{
                   width: "100%",
