@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
   primary: "rgba(0, 230, 255, 1)",
   text: "rgba(255, 255, 255, 1)",
   secondaryText: "rgba(255, 255, 255, 0.5)",
@@ -6,7 +6,7 @@ const colors = {
   surface: "rgba(255, 255, 255, 0.03)",
   active: "rgba(255, 255, 255, 0.1)",
 };
-const fontSizes = {
+export const fontSizes = {
   labelText: 12,
   bodyText: 14,
   buttonText: 18,
@@ -14,13 +14,13 @@ const fontSizes = {
   heading1: 48,
 };
 
-const fontWeights = {
+export const fontWeights = {
   regular: "400",
   medium: "500",
   bold: "700",
 };
 
-const lineHeights = {
+export const lineHeights = {
   xs: 16,
   sm: 18,
   md: 20,
@@ -29,7 +29,7 @@ const lineHeights = {
   xxl: 48,
 };
 
-const spacing = {
+export const spacing = {
   xs: 4,
   sm: 8,
   md: 16,
@@ -37,7 +37,7 @@ const spacing = {
   xl: 32,
 };
 
-const borderRadius = {
+export const borderRadius = {
   primary: 12,
   avatar: 50,
 };

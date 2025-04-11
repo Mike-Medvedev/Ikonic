@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { memo } from "react";
-import { View, StyleSheet, ImageBackground } from "react-native";
+import { View, StyleSheet, ImageBackground, ViewStyle, StyleProp } from "react-native";
 import { useTheme } from "react-native-paper";
 
 type CardProps = {
@@ -10,12 +10,21 @@ type CardProps = {
   headline1?: string;
   headline2?: string;
   date?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
-const CardComponent = ({ children, coverSource, overlayContent, headline1 = "", headline2 = "", date }: CardProps) => {
+const CardComponent = ({
+  children,
+  coverSource,
+  overlayContent,
+  headline1 = "",
+  headline2 = "",
+  date,
+  style,
+}: CardProps) => {
   const theme = useTheme();
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       {coverSource && (
         <ImageBackground source={coverSource} style={styles.cover} imageStyle={styles.coverImage}>
           <LinearGradient

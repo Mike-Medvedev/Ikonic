@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View, Pressable, TextInput as BaseInput } from "react-native";
 import { BlurView } from "expo-blur";
 import Logo from "@/ui/Logo";
-import { Button, useTheme, Text, TextInput as PaperInput, Avatar } from "react-native-paper";
+import { Button, useTheme, TextInput as PaperInput, Avatar } from "react-native-paper";
 import { nameValidator, passwordValidator, phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import TextInput from "@/ui/TextInput";
@@ -11,13 +11,13 @@ import { ExternalPathString, router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/models/SimpleForm";
 import { supabase } from "@/utils/Supabase";
-import PercentLayout from "@/ui/PercentLayout";
 import { sendCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
 import { LinearGradient } from "expo-linear-gradient";
 import AvatarGlowImage from "@/ui/AvatarGlowImage";
 import { Card } from "@/ui/Card";
 import TitleText from "@/ui/TitleText";
+import Text from "@/ui/Text";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
