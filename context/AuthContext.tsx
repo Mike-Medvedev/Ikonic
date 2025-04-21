@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/utils/Supabase"; // Your Supabase client
 import { useSegments, useRouter } from "expo-router";
+import { AUTH_GROUP, APP_GROUP, LOGIN_PATH, DEFAULT_APP_PATH } from "@/constants/constants";
 
 // Define our auth context type
 type AuthContextType = {
@@ -36,12 +37,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Inside your AuthProvider component...
 
-  // Define constants (if you haven't already)
-  const AUTH_GROUP = "(auth)";
-  const PROTECTED_GROUP = "(app)";
-  const LOGIN_PATH = `/${AUTH_GROUP}/login`;
-  const DEFAULT_APP_PATH = `/${PROTECTED_GROUP}/trips`;
-
   useEffect(() => {
     if (isLoading) {
       return;
@@ -49,11 +44,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const currentSegment = segments[0];
     // Check if we are on the root route (index.tsx)
-    // segments might be empty [] or [''] for the root
-    const isRoot = segments.length === 0 || !currentSegment; // Or check currentSegment === ''
+    // For expo-router, the root route is indicated by undefined.
+    const isRoot = currentSegment === undefined;
 
     const isAuthRoute = currentSegment === AUTH_GROUP;
-    const isProtectedRoute = currentSegment === PROTECTED_GROUP;
+    const isProtectedRoute = currentSegment === APP_GROUP;
 
     // --- REDIRECTION LOGIC ---
 
