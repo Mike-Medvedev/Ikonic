@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -56,20 +57,22 @@ export default function RootLayout() {
         <Fallback error={error} resetErrorBoundary={resetErrorBoundary} />
       )}
     >
-      <PaperProvider theme={theme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AutocompleteDropdownContextProvider>
-            <QueryClientProvider client={queryClient}>
-              <AuthProvider>
-                <SafeAreaProvider>
-                  <StatusBar style="dark" />
-                  <Slot />
-                </SafeAreaProvider>
-              </AuthProvider>
-            </QueryClientProvider>
-          </AutocompleteDropdownContextProvider>
-        </GestureHandlerRootView>
-      </PaperProvider>
+      <ThemeProvider>
+        <PaperProvider theme={theme}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <AutocompleteDropdownContextProvider>
+              <QueryClientProvider client={queryClient}>
+                <AuthProvider>
+                  <SafeAreaProvider>
+                    <StatusBar style="dark" />
+                    <Slot />
+                  </SafeAreaProvider>
+                </AuthProvider>
+              </QueryClientProvider>
+            </AutocompleteDropdownContextProvider>
+          </GestureHandlerRootView>
+        </PaperProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

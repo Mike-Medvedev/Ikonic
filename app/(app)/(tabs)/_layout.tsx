@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
-import { Redirect, Tabs, usePathname } from "expo-router";
-import { Pressable, StyleSheet, Text } from "react-native";
-import { ActivityIndicator, Button, useTheme } from "react-native-paper";
+import { Tabs } from "expo-router";
+import { StyleSheet, Text } from "react-native";
+import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { useAuth } from "@/context/AuthContext";
 import SignOutButton from "@/ui/SignOutButton";
 
 const HeaderTitle = () => {
@@ -15,8 +14,6 @@ const HeaderTitle = () => {
 
 export default function TabLayout() {
   const theme = useTheme();
-  const { session, loading } = useAuth();
-  const pathname = usePathname();
   const tabScreenOptions = useMemo(
     () => ({
       tabBarActiveTintColor: theme.colors.primary,
@@ -31,16 +28,6 @@ export default function TabLayout() {
     }),
     [theme]
   );
-  // Wait for auth data to be loaded before redirecting
-  if (loading) {
-    return <ActivityIndicator size="large" />;
-  }
-
-  if (!session) {
-    console.log("no session in (tabs)");
-    return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
-  }
-
   return (
     <Tabs initialRouteName="plan" screenOptions={tabScreenOptions}>
       <Tabs.Screen

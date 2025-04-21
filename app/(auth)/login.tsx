@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, View, Pressable, TextInput as BaseInput } from "react-native";
 import { BlurView } from "expo-blur";
 import Logo from "@/ui/Logo";
-import { Button, useTheme, TextInput as PaperInput, Avatar } from "react-native-paper";
+import { Button, useTheme, TextInput as PaperInput, Avatar, Text, ActivityIndicator } from "react-native-paper";
 import { nameValidator, passwordValidator, phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import TextInput from "@/ui/TextInput";
@@ -17,7 +17,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import AvatarGlowImage from "@/ui/AvatarGlowImage";
 import { Card } from "@/ui/Card";
 import TitleText from "@/ui/TitleText";
-import Text from "@/ui/Text";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
@@ -27,7 +26,9 @@ export interface LoginForm {
 
 export default function Login() {
   const theme = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
   const { showSuccess, showFailure } = useToast();
+  const { signIn } = useAuth();
   const { callback: rsvpPathCallback } = useLocalSearchParams();
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
@@ -48,14 +49,19 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
+    setIsLoading(true);
     if (!validateLogin()) return;
     const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
 
-    const { data, error } = await sendCode(phoneNumber);
+    const { error } = await signIn(phoneNumber);
 
-    if (error) showFailure({ message: error.message });
+    setIsLoading(false);
 
-    router.push({ pathname: "/verify", params: { phoneNumber: loginForm.phoneNumber.value } });
+    showSuccess({
+      message: "We sent you a OTP",
+      url: "/(auth)/verify",
+      params: { phoneNumber: loginForm.phoneNumber.value },
+    });
   };
 
   const handlePhoneChange = useCallback(
@@ -147,9 +153,13 @@ export default function Login() {
                 }}
                 onPress={handleLogin}
               >
-                <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
-                  Continue
-                </Text>
+                {isLoading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
+                    Continue
+                  </Text>
+                )}
               </Pressable>
             </Card>
           </View>

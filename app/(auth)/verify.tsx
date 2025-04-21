@@ -1,11 +1,10 @@
 import Background from "@/ui/Background";
 import { useEffect, useMemo, useState } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Button, useTheme, Text } from "react-native-paper";
+import { Button, useTheme, Text, ActivityIndicator } from "react-native-paper";
 import OTPForm from "@/ui/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
-import PercentLayout from "@/ui/PercentLayout";
 import Logo from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
 import { verifyCode } from "@/http/AuthApi";
@@ -15,7 +14,8 @@ import { Card } from "@/ui/Card";
 
 export default function Verify() {
   const theme = useTheme();
-  const { loading, setLoading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { verifyOTP } = useAuth();
   const { showSuccess, showFailure } = useToast();
   const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string };
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
@@ -31,14 +31,22 @@ export default function Verify() {
     });
   }, [theme]);
 
-  async function handleLogin() {
-    setLoading(true); //sets to false in AuthStateSubscription
+  async function handleVerify() {
+    setIsLoading(true);
     const phone = `1${phoneNumber}`;
     const otp = code.join("");
-    const { data, error } = await verifyCode(phone, otp);
+    const { error } = await verifyOTP(phone, otp);
+
+    setIsLoading(false);
 
     if (error) showFailure({ message: error.message });
   }
+
+  const handleResendCode = async () => {
+    router.replace({
+      pathname: "/(auth)/login",
+    });
+  };
   return (
     <View style={styles.container}>
       <Background>
@@ -59,11 +67,15 @@ export default function Verify() {
                   backgroundColor: theme.colors.surface,
                   alignItems: "center",
                 }}
-                onPress={handleLogin}
+                onPress={handleVerify}
               >
-                <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
-                  Verify Code
-                </Text>
+                {isLoading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
+                    Continue
+                  </Text>
+                )}
               </Pressable>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <Text style={{ color: theme.colors.secondary }}>Didn't recieve code?</Text>
@@ -71,8 +83,9 @@ export default function Verify() {
               </View>
             </Card>
           </View>
-
-          <BackButton style={{ marginTop: 50, alignSelf: "center" }} />
+          <Pressable onPress={handleResendCode}>
+            <BackButton style={{ marginTop: 50, alignSelf: "center" }} />
+          </Pressable>
         </View>
       </Background>
     </View>
