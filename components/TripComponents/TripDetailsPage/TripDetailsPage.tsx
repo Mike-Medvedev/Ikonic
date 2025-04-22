@@ -29,6 +29,7 @@ export default function TripDetailsPage() {
 
   useEffect(() => {
     console.log("hoit trip details");
+    console.log(selectedTripID);
     (async () => {
       if (!trip) return;
       // setOwner(trip.owner.user_id === (await getUserId()));

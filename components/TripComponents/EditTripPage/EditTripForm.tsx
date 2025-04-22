@@ -49,16 +49,6 @@ export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: Edit
         onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, desc: text }))}
         multiline
       />
-      <TextInput
-        mode="outlined"
-        label="Add Total Airbnb Cost"
-        returnKeyType="done"
-        value={tripUpdateForm.totalCost}
-        onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, totalCost: text }))}
-        style={{ marginBottom: 18, width: 150, textAlign: "right" }}
-        keyboardType="decimal-pad"
-        left={<TextInput.Affix text="$" />}
-      />
 
       <View style={styles.container}>
         <Button onPress={pickImage}>Pick an image from camera roll</Button>

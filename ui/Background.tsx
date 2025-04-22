@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { ImageBackground, StyleSheet, KeyboardAvoidingView, View } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import Svg, { RadialGradient, Stop, Ellipse } from "react-native-svg";
 

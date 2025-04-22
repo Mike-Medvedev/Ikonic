@@ -2,21 +2,21 @@ import { User } from "@/models/User";
 import Requestor from "@/http/Requestor";
 import { RSVPStatus } from "@/models/Attendance";
 
-// export async function fetchUsers() {
-//   const requestOptions: RequestInit = {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "ngrok-skip-browser-warning": "any",
-//     },
-//   };
-//   try {
-//     const users = (await Requestor<User[]>("/users", "json", requestOptions)).data;
-//     return users;
-//   } catch (error) {
-//     throw new Error(String(error));
-//   }
-// }
+export async function fetchUsers() {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "any",
+    },
+  };
+  try {
+    const users = (await Requestor<User[]>("/users", "json", requestOptions)).data;
+    return users;
+  } catch (error) {
+    throw new Error(String(error));
+  }
+}
 
 export async function fetchUser(user_id: string) {
   if (!user_id) throw new Error("No user id!");
@@ -51,7 +51,7 @@ export async function inviteUser(user: User, trip_id: string, deepLink: string) 
 
 export async function handleRSVP(userResponse: RSVPStatus, user_id: string, selectedTripId: string) {
   const requestOptions: RequestInit = {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },

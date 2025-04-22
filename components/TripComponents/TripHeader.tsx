@@ -29,7 +29,7 @@ const TripHeader = () => {
             options={[
               { value: "Details", label: "Details" },
               { value: "Attendance", label: "Attendance" },
-              { value: "Carpool", label: "Carpool" },
+              // { value: "Carpool", label: "Carpool" },
             ]}
           />
         </View>

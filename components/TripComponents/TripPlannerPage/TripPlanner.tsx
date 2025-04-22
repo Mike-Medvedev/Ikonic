@@ -42,7 +42,7 @@ const TripPlanner = () => {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
-    const newTripId = (await createTrip(tripForm)).data;
+    const newTripId = (await createTrip(tripForm)).data.id;
     resetForm();
     showSuccess({
       message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
