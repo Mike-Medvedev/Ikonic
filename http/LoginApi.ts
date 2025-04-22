@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import { User } from "@/client";
 import Requestor from "@/http/Requestor";
 
 export async function initiateLogin(username: string, password: string): Promise<[boolean, string]> {

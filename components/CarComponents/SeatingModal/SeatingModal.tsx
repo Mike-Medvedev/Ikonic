@@ -1,7 +1,7 @@
 import { addPassenger } from "@/http/CarApi";
 import { fetchAttendees } from "@/http/TripApi";
 import { newPassenger } from "@/models/Car";
-import { User } from "@/models/User";
+import { User } from "@/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Dialog, Portal } from "react-native-paper";
@@ -26,7 +26,7 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
     enabled: !!selectedTripId,
   });
   const addPassengerMutation = useMutation<void, Error, newPassenger>({
-    mutationFn: ({ carId, user, seatPosition }) => addPassenger(carId, user, seatPosition),
+    mutationFn: ({ carId, user, seatPosition }) => addPassenger(carId, selectedTripId, seatPosition),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 

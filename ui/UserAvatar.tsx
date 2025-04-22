@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import { User } from "@/client";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { StyleProp, ViewStyle } from "react-native";
 import { Avatar } from "react-native-paper";
@@ -11,7 +11,7 @@ interface UserAvatarProps {
 export default function UserAvatar({ user, styles }: UserAvatarProps) {
   return (
     <Avatar.Text
-      key={user.user_id}
+      key={user.id}
       label={CalculateInitials(user.firstname, user.lastname)}
       size={40}
       labelStyle={{ fontSize: 20 }}

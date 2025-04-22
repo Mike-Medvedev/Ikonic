@@ -2,7 +2,7 @@ import { NewTripForm, Trip, TripUpdateForm } from "@/models/TripModel";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
 import { FormPayloadFactory } from "@/utils/FormBuilder";
-import { Attendees } from "@/models/Attendance";
+import { SortedUsersResponse } from "@/client";
 
 type NewTripId = number;
 
@@ -66,7 +66,7 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
   }
 }
 
-export async function fetchAttendees(trip_id: string): Promise<Attendees> {
+export async function fetchAttendees(trip_id: string): Promise<SortedUsersResponse> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -75,7 +75,7 @@ export async function fetchAttendees(trip_id: string): Promise<Attendees> {
     },
   };
   try {
-    const attendees = (await Requestor<Attendees>(`/trips/${trip_id}/invites`, "json", requestOptions)).data;
+    const attendees = (await Requestor<SortedUsersResponse>(`/trips/${trip_id}/invites`, "json", requestOptions)).data;
     return attendees;
   } catch (error) {
     console.error(error);

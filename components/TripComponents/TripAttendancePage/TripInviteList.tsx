@@ -5,7 +5,7 @@ import { Card, TextInput, Button, Avatar, ActivityIndicator, Text } from "react-
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
-import { User } from "@/models/User";
+import { User } from "@/client";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsers, inviteUser } from "@/http/UsersApi";
 export default function TripInviteList() {

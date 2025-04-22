@@ -1,17 +1,5 @@
 import { SimpleForm } from "./SimpleForm";
-import { User } from "@/models/User";
-
-export interface Trip {
-  id: number;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  mountain: string;
-  owner: User;
-  image?: string;
-  desc?: string;
-  total_cost?: string;
-}
+import { TripUpdate } from "@/client";
 
 export interface NewTripForm {
   mountain: SimpleForm<string>;
@@ -20,14 +8,7 @@ export interface NewTripForm {
   title: SimpleForm<string>;
 }
 
-export interface TripUpdateForm {
-  title?: string;
-  desc?: string;
-  image?: string;
-  totalCost?: string;
-}
-
 export type UpdateTripMutation = {
   currentTripId: number;
-  form: TripUpdateForm;
+  form: TripUpdate;
 };

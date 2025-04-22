@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Avatar, Card, useTheme } from "react-native-paper";
-import { User } from "@/models/User";
+import { User } from "@/client";
 
 export default function ProfileCard({ profile }: { profile: User }) {
   const theme = useTheme();

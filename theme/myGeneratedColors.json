@@ -19,7 +19,7 @@
     "background": "rgb(10 10 15)",
     "onBackground": "rgb(27, 27, 31)",
     "surface": "rgba(255, 255, 255, 0.03)",
-    "onSurface": "rgba(255, 255, 255, 0.10)",
+    "onSurface": "rgba(255, 255, 255, 1)",
     "surfaceVariant": "rgb(227, 225, 236)",
     "onSurfaceVariant": "rgb(70, 70, 79)",
     "outline": "rgb(118, 118, 128)",
