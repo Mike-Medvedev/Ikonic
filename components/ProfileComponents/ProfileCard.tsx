@@ -15,7 +15,7 @@ export default function ProfileCard({ profile }: { profile: User }) {
         <Card.Title
           title={`${profile.firstname} ${profile.lastname}`}
           titleStyle={{ textTransform: "capitalize" }}
-          subtitle={profile.phone_number}
+          subtitle={profile.phone}
           left={(props) => <Avatar.Image {...props} source={require("@/assets/images/mike.png")} size={50} />}
         />
         {/* <Card.Content>

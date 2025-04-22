@@ -1,7 +1,7 @@
 import { APIResponse } from "@/models/Api";
 import { getToken } from "@/utils/Supabase";
-import camelcaseKeys from "camelcase-keys";
-import snakecaseKeys from "snakecase-keys";
+// import camelcaseKeys from "camelcase-keys";
+// import snakecaseKeys from "snakecase-keys";
 
 type ResponseData = "json" | "text" | "blob";
 
@@ -23,12 +23,6 @@ export default async function Requestor<T>(
   const token = await getToken();
   if (!token) throw new Error("Error fetching token");
 
-  if (requestOptions?.body) {
-    const parsedBody = JSON.parse(requestOptions.body as string);
-    const snake = snakecaseKeys(parsedBody);
-    requestOptions.body = JSON.stringify(snake);
-  }
-
   const finalRequestOptions = {
     ...requestOptions,
     headers: { ...requestOptions?.headers, Authorization: `bearer ${token}` },
@@ -43,11 +37,6 @@ export default async function Requestor<T>(
   }
 
   const parsedData = await DataTypeResolver<T>(dataType, response);
-  if (parsedData.data && typeof parsedData.data === "object") {
-    parsedData.data = camelcaseKeys(parsedData.data as Record<string, unknown> | Record<string, unknown>[], {
-      deep: true,
-    }) as T;
-  }
 
   return parsedData;
 }

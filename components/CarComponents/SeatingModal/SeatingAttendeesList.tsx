@@ -1,9 +1,9 @@
-import { SortedUsersResponse } from "@/client";
+import { AttendanceList } from "@/client";
 import UserAvatar from "@/ui/UserAvatar";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 
 interface SeatingAttendeesListProps {
-  attendees: SortedUsersResponse;
+  attendees: AttendanceList;
   addPassengerHandler: any;
 }
 

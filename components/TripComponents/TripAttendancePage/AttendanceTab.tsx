@@ -1,9 +1,9 @@
-import { SortedUsersResponse } from "@/client";
+import { AttendanceList } from "@/client";
 import { GestureResponderEvent, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 interface AttendanceTabProps {
   rsvpStatusCount: number;
-  rsvpStatus: keyof SortedUsersResponse;
+  rsvpStatus: keyof AttendanceList;
   isSelected: boolean;
   onPress: (event: GestureResponderEvent) => void;
 }

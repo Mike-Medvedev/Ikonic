@@ -1,12 +1,12 @@
-import { NewTripForm, Trip, TripUpdateForm } from "@/models/TripModel";
+import { NewTripForm } from "@/models/TripModel";
+import { AttendanceList, TripPublic, TripUpdate } from "@/client";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
 import { FormPayloadFactory } from "@/utils/FormBuilder";
-import { SortedUsersResponse } from "@/client";
 
 type NewTripId = number;
 
-export async function fetchTrips(): Promise<Trip[]> {
+export async function fetchTrips(): Promise<TripPublic[]> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -15,8 +15,8 @@ export async function fetchTrips(): Promise<Trip[]> {
     },
   };
   try {
-    const result = await Requestor<Trip[]>("/trips", "json", requestOptions);
-    const tripsWithDates = result.data.map((trip: Trip) => ({
+    const result = await Requestor<TripPublic[]>("/trips", "json", requestOptions);
+    const tripsWithDates = result.data.map((trip: TripPublic) => ({
       ...trip,
       startDate: new Date(trip.startDate),
       endDate: new Date(trip.endDate),
@@ -45,7 +45,7 @@ export async function createTrip(tripForm: NewTripForm) {
   }
 }
 
-export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
+export async function fetchSelectedTrip(selectedTripId: string): Promise<TripPublic> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -54,7 +54,7 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
     },
   };
   try {
-    const requstedTrip = (await Requestor<Trip>(`/trips/${selectedTripId}`, "json", requestOptions)).data;
+    const requstedTrip = (await Requestor<TripPublic>(`/trips/${selectedTripId}`, "json", requestOptions)).data;
     return {
       ...requstedTrip,
       startDate: new Date(requstedTrip.startDate),
@@ -66,7 +66,7 @@ export async function fetchSelectedTrip(selectedTripId: string): Promise<Trip> {
   }
 }
 
-export async function fetchAttendees(trip_id: string): Promise<SortedUsersResponse> {
+export async function fetchAttendees(trip_id: string): Promise<AttendanceList> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -75,7 +75,7 @@ export async function fetchAttendees(trip_id: string): Promise<SortedUsersRespon
     },
   };
   try {
-    const attendees = (await Requestor<SortedUsersResponse>(`/trips/${trip_id}/invites`, "json", requestOptions)).data;
+    const attendees = (await Requestor<AttendanceList>(`/trips/${trip_id}/invites`, "json", requestOptions)).data;
     return attendees;
   } catch (error) {
     console.error(error);
@@ -83,7 +83,7 @@ export async function fetchAttendees(trip_id: string): Promise<SortedUsersRespon
   }
 }
 
-export async function updateTrip(trip_id: number, form: TripUpdateForm) {
+export async function updateTrip(trip_id: number, form: TripUpdate) {
   if (Object.values(form).every((value) => !value)) return; //check if every value is false, then we dont need to do anything
 
   const requestOptions: RequestInit = {

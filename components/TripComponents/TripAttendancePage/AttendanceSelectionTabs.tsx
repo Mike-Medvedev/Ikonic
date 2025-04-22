@@ -1,5 +1,5 @@
 import { fetchAttendees } from "@/http/TripApi";
-import { SortedUsersResponse } from "@/client";
+import { AttendanceList } from "@/client";
 import { User } from "@/client";
 import { useQuery } from "@tanstack/react-query";
 import { View } from "react-native";
@@ -11,7 +11,7 @@ interface TabProps {
   selectedTripId: string;
 }
 
-const rsvpStatusMap: Record<keyof SortedUsersResponse, number> = {
+const rsvpStatusMap: Record<keyof AttendanceList, number> = {
   accepted: 0,
   pending: 1,
   uncertain: 2,
@@ -29,7 +29,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, s
 
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-      {(Object.entries(attendees) as Array<[keyof SortedUsersResponse, User[]]>).map(([rsvpStatus, users], index) => (
+      {(Object.entries(attendees) as Array<[keyof AttendanceList, User[]]>).map(([rsvpStatus, users], index) => (
         <AttendanceTab
           key={index}
           rsvpStatusCount={users.length}
