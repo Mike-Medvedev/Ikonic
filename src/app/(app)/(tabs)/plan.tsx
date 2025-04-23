@@ -1,6 +1,6 @@
 import React from "react";
-import TripPlanner from "@/features/Trips/TripPlanning/View/TripPlanner";
+import TripPlannerView from "@/features/Trips/TripPlanning/View/TripPlannerView";
 
 export default function Plan() {
-  return <TripPlanner />;
+  return <TripPlannerView />;
 }

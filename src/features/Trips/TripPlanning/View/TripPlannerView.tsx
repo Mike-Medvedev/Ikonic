@@ -12,7 +12,7 @@ import { NewTripForm, TripCreateParsed } from "@/types";
 import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 
-const TripPlanner = () => {
+export default function TripPlannerView() {
   const initialTripForm = {
     mountain: { value: "", error: "" },
     startDate: { value: undefined, error: "" },
@@ -90,6 +90,4 @@ const TripPlanner = () => {
       </View>
     </Background>
   );
-};
-
-export default TripPlanner;
+}
