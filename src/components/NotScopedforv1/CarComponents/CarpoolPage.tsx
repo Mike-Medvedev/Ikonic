@@ -4,7 +4,7 @@ import { ActivityIndicator, Text } from "react-native-paper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { createCar, fetchCars } from "@/http/CarApi";
-import { CarCreate } from "@/client";
+import { CarCreate } from "@/types";
 import useUser from "@/hooks/useUser";
 import CreateCarButton from "@/components/NotScopedforv1/CarComponents/CreateCarButton";
 import CarList from "@/components/NotScopedforv1/CarComponents/CarList";

@@ -8,7 +8,7 @@ import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import { useMemo, useState } from "react";
 import { createTrip } from "@/http/TripApi";
-import { NewTripForm } from "@/models/TripModel";
+import { NewTripForm } from "@/types";
 import { ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 

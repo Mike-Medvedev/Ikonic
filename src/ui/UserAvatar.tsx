@@ -1,4 +1,4 @@
-import { User } from "@/client";
+import { User } from "@/types";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { StyleProp, ViewStyle } from "react-native";
 import { Avatar } from "react-native-paper";

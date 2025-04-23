@@ -1,10 +1,10 @@
-import { TripPublic } from "@/client";
+import { TripPublicParsed } from "@/types";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
-export default function TripDetailsContent({ trip }: { trip: TripPublic }) {
+export default function TripDetailsContent({ trip }: { trip: TripPublicParsed }) {
   return (
     <View style={styles.detailsContainer}>
       <View style={styles.iconText}>

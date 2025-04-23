@@ -1,13 +1,13 @@
 import { updateTrip } from "@/http/TripApi";
-import { UpdateTripMutation } from "@/models/TripModel";
-import { TripUpdate } from "@/client";
+import { UpdateTripMutation } from "@/types";
+import { TripUpdateParsed } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 
 interface ButtonGroupProps {
   currentTripId: number;
-  form: TripUpdate;
+  form: TripUpdateParsed;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

@@ -4,7 +4,7 @@ import { useTheme, TextInput, HelperText } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { NewTripForm } from "@/models/TripModel";
+import { NewTripForm } from "@/types";
 
 interface TripDatePickerProps {
   tripForm: NewTripForm;

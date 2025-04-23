@@ -1,4 +1,4 @@
-import { User } from "@/client";
+import { User } from "@/types";
 import Requestor from "@/http/Requestor";
 import { RSVPStatus } from "@/models/Attendance";
 

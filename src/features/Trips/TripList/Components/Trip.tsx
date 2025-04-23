@@ -1,10 +1,10 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, View, GestureResponderEvent, StyleSheet, ImageBackground } from "react-native";
+import { Pressable, View, GestureResponderEvent, StyleSheet } from "react-native";
 import { Avatar, useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { TripPublic } from "@/client";
+import { TripPublicParsed } from "@/types";
 import { deleteTrip } from "@/http/TripApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
@@ -13,7 +13,7 @@ import UsersAvatarList from "@/ui/UsersAvatarList";
 import Entypo from "@expo/vector-icons/Entypo";
 
 export interface TripProps {
-  trip: TripPublic;
+  trip: TripPublicParsed;
 }
 
 const Trip = ({ trip }: TripProps) => {
@@ -43,7 +43,7 @@ const Trip = ({ trip }: TripProps) => {
     cardTitleStyle: { fontSize: 20, marginVertical: 5 },
   });
 
-  const CardSubTitle = ({ trip }: { trip: TripPublic }) => {
+  const CardSubTitle = ({ trip }: { trip: TripPublicParsed }) => {
     return (
       <View style={styles.subtitleContainer}>
         <View style={styles.subtitleLabel}>

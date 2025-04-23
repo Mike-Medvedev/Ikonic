@@ -1,11 +1,11 @@
 import { View, StyleSheet, Image } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { TripUpdate } from "@/client";
+import { TripUpdateParsed } from "@/types";
 
 interface EditTripFormProps {
-  tripUpdateForm: TripUpdate;
-  setTripUpdateForm: React.Dispatch<React.SetStateAction<TripUpdate>>;
+  tripUpdateForm: TripUpdateParsed;
+  setTripUpdateForm: React.Dispatch<React.SetStateAction<TripUpdateParsed>>;
 }
 
 export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: EditTripFormProps) {

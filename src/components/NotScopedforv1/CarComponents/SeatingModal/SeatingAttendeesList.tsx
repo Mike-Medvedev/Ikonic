@@ -1,4 +1,4 @@
-import { AttendanceList } from "@/client";
+import { AttendanceList } from "@/types/domain";
 import UserAvatar from "@/ui/UserAvatar";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 
@@ -11,7 +11,7 @@ export default function SeatingAttendeesList({ attendees, addPassengerHandler }:
   return (
     <ScrollView horizontal contentContainerStyle={styles.avatarScrollContainer}>
       {attendees.accepted.map((user, index) => (
-        <Pressable key={index} onPress={() => addPassengerHandler(user)}>
+        <Pressable key={index} onPress={() => addPassengerHandler(user.id)}>
           <UserAvatar user={user} />
         </Pressable>
       ))}

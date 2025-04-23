@@ -4,16 +4,16 @@ import { useState } from "react";
 import Background from "@/ui/Background";
 import EditTripButtonGroup from "./EditTripButtonGroup";
 import EditTripTitle from "@/features/Trips/TripDetails/Components/EditTripTitle";
-import { TripPublic, TripUpdate } from "@/client";
+import { TripPublicParsed, TripUpdateParsed } from "@/types";
 
 interface EditTripModalProps {
-  currentTrip: TripPublic;
+  currentTrip: TripPublicParsed;
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function EditTripModal({ currentTrip, visible, setVisible }: EditTripModalProps) {
-  const [tripUpdateForm, setTripUpdateForm] = useState<TripUpdate>({
+  const [tripUpdateForm, setTripUpdateForm] = useState<TripUpdateParsed>({
     title: "",
     desc: "",
     image: "",

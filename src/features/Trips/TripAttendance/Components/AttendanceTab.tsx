@@ -1,4 +1,4 @@
-import { AttendanceList } from "@/client";
+import { AttendanceList } from "@/types";
 import { GestureResponderEvent, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 interface AttendanceTabProps {

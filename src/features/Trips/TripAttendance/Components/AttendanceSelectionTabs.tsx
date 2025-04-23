@@ -1,6 +1,6 @@
 import { fetchAttendees } from "@/http/TripApi";
-import { AttendanceList } from "@/client";
-import { User } from "@/client";
+import { AttendanceList } from "@/types";
+import { User } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { View } from "react-native";
 import AttendanceTab from "./AttendanceTab";

@@ -1,1 +1,1 @@
-Dummy Folder to satisfy Expo file router expecting assets in root
+Dummy Folder to satisfy Expo file router. (Real Assets in src)

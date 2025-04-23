@@ -1,8 +1,8 @@
 import { View } from "react-native";
 import { Avatar, Card, useTheme } from "react-native-paper";
-import { User } from "@/client";
+import { UserPublic } from "@/types";
 
-export default function ProfileCard({ profile }: { profile: User }) {
+export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const theme = useTheme();
   return (
     <View style={{ flex: 1, width: "100%", height: "100%" }}>

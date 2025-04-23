@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { Card, Text, Avatar } from "react-native-paper";
-import { NewTripForm } from "@/models/TripModel";
+import { NewTripForm } from "@/types";
 
 const TripSummary = ({ tripForm }: { tripForm: NewTripForm }) => {
   return (

@@ -9,7 +9,7 @@ import TextInput from "@/ui/TextInput";
 import Background from "@/ui/Background";
 import { ExternalPathString, router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import { SimpleForm } from "@/models/SimpleForm";
+import { SimpleForm } from "@/types";
 import { supabase } from "@/utils/Supabase";
 import { sendCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";

@@ -1,6 +1,6 @@
 import { updateTrip } from "@/http/TripApi";
-import { UpdateTripMutation } from "@/models/TripModel";
-import { TripUpdate } from "@/client";
+import { UpdateTripMutation } from "@/types";
+import { TripUpdateParsed } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable, View, StyleSheet, Image } from "react-native";
@@ -26,7 +26,7 @@ export default function TripImage({ tripImage, currentTripId }: TripImageProps) 
       quality: 1,
     });
     if (!result.canceled) {
-      const form: TripUpdate = {
+      const form: TripUpdateParsed = {
         image: result.assets[0].uri,
       };
       mutation.mutate({ currentTripId, form });

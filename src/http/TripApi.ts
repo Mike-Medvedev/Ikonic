@@ -1,5 +1,5 @@
 import { NewTripForm } from "@/models/TripModel";
-import { AttendanceList, TripPublic, TripUpdate } from "@/client";
+import { AttendanceList, TripPublic, TripUpdateParsed } from "@/types";
 import Requestor from "./Requestor";
 import { APIResponse } from "@/models/Api";
 import { FormPayloadFactory } from "@/utils/FormBuilder";

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Trip } from "@/models/TripModel";
 import { supabase } from "@/utils/Supabase";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 
