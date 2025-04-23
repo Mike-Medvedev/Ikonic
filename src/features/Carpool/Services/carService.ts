@@ -5,9 +5,9 @@ import {
   getCarByIdApiV1TripsTripIdCarsCarIdGet,
   getPassengersApiV1TripsTripIdCarsCarIdPassengersGet,
   addPassengerApiV1TripsTripIdCarsCarIdPassengersPost,
-} from "@/generated";
+} from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
-import type { CarCreate, CarPublic, PassengerPublic } from "@/generated/types.gen";
+import type { CarCreate, CarPublic, PassengerPublic } from "@/types";
 
 export const CarService = {
   /** Get all cars for a trip */

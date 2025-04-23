@@ -4,36 +4,11 @@ import {
   deleteTripApiV1TripsTripIdDelete,
   getTripApiV1TripsTripIdGet,
   updateTripApiV1TripsTripIdPatch,
-  TripCreate,
-  TripUpdate,
-  TripPublic,
-} from "@/generated";
+} from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import { TripCreateParsed, TripPublicParsed, TripUpdateParsed } from "@/types";
-
-export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
-  return {
-    ...trip,
-    startDate: trip.startDate.toISOString(),
-    endDate: trip.endDate.toISOString(),
-  };
-}
-
-// Conditionally serializes if dates are present
-export function serializeTripUpdate(trip: TripUpdateParsed): TripUpdate {
-  return {
-    ...trip,
-    ...(trip.startDate && { startDate: trip.startDate.toISOString() }),
-    ...(trip.endDate && { endDate: trip.endDate.toISOString() }),
-  };
-}
-
-// Convert from API format to parsed (Date)
-const parseTrip = (trip: TripPublic): TripPublicParsed => ({
-  ...trip,
-  startDate: new Date(trip.startDate),
-  endDate: new Date(trip.endDate),
-});
+import { parseTrip } from "@/utils/parseTrip";
+import { serializeTripCreate, serializeTripUpdate } from "@/utils/serializers";
 
 export const TripService = {
   /** Get all trips */

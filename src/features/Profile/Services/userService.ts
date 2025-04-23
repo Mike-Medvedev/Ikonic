@@ -1,4 +1,4 @@
-import { getUsersApiV1UsersGet, getUserByIdApiV1UsersUserIdGet } from "@/generated";
+import { getUsersApiV1UsersGet, getUserByIdApiV1UsersUserIdGet } from "@/types";
 
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 

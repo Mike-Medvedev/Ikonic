@@ -2,7 +2,7 @@ import {
   getInvitedUsersApiV1TripsTripIdInvitesGet,
   rsvpApiV1TripsTripIdInvitesUserIdPatch,
   inviteUserApiV1TripsTripIdInvitesUserIdPost,
-} from "@/generated";
+} from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import type { AttendanceList, TripParticipationRsvp, DeepLink } from "@/types";
 
