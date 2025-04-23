@@ -1,4 +1,4 @@
-import { InviteService } from "@/features/Trips/InviteApi";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 import { RSVPStatus } from "@/types";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useQuery } from "@tanstack/react-query";

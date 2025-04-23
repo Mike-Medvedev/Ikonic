@@ -5,7 +5,7 @@ import { Avatar, useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TripPublicParsed } from "@/types";
-import { TripService } from "../../TripApi";
+import { TripService } from "../../Services/tripService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import { Card } from "@/ui/Card";

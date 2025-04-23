@@ -3,7 +3,7 @@ import {
   rsvpApiV1TripsTripIdInvitesUserIdPatch,
   inviteUserApiV1TripsTripIdInvitesUserIdPost,
 } from "@/generated";
-import { createAuthenticatedClient } from "@/http/HttpClient";
+import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import type { AttendanceList, TripParticipationRsvp, DeepLink } from "@/types";
 
 export const InviteService = {

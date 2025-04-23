@@ -1,4 +1,4 @@
-import { SimpleForm } from "@/models/SimpleForm";
+import { SimpleForm } from "@/types";
 
 export function FormPayloadFactory<T>(form: Record<keyof T, SimpleForm<any>>): Record<keyof T, any> {
   return (Object.entries(form) as Array<[keyof T, SimpleForm<any>]>).reduce((acc, [key, value]) => {

@@ -2,7 +2,7 @@ import Background from "@/ui/Background";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import ProfilePageHeader from "@/features/Profile/Components/ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/http/UsersApi";
+import { UserService } from "@/features/Profile/Services/userService";
 import ProfileCard from "@/features/Profile/Components/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 export default function ProfileView() {
@@ -11,7 +11,7 @@ export default function ProfileView() {
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      return fetchUser(session?.user.id);
+      return UserService.getOne(session?.user.id);
     },
   });
 

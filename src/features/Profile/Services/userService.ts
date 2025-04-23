@@ -1,6 +1,6 @@
 import { getUsersApiV1UsersGet, getUserByIdApiV1UsersUserIdGet } from "@/generated";
 
-import { createAuthenticatedClient } from "@/http/HttpClient";
+import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 
 export const UserService = {
   getAll: async () => {

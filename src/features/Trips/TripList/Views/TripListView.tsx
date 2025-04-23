@@ -5,7 +5,7 @@ import Background from "@/ui/Background";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
 import EmptyTripsFallback from "@/features/Trips/TripDetails/Components/EmptyTripsFallback";
-import { TripService } from "@/features/Trips/TripApi";
+import { TripService } from "@/features/Trips/Services/tripService";
 
 export default function TripListView() {
   // prettier-ignore

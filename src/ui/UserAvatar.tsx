@@ -1,10 +1,10 @@
-import { User } from "@/types";
+import { UserPublic } from "@/types";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { StyleProp, ViewStyle } from "react-native";
 import { Avatar } from "react-native-paper";
 
 interface UserAvatarProps {
-  user: User;
+  user: UserPublic;
   styles?: StyleProp<ViewStyle>;
 }
 

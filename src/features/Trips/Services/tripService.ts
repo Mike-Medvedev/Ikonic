@@ -8,7 +8,7 @@ import {
   TripUpdate,
   TripPublic,
 } from "@/generated";
-import { createAuthenticatedClient } from "@/http/HttpClient";
+import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import { TripCreateParsed, TripPublicParsed, TripUpdateParsed } from "@/types";
 
 function serializeTrip(trip: TripCreateParsed): TripCreate;
