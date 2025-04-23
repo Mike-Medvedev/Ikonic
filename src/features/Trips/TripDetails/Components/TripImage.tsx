@@ -1,4 +1,4 @@
-import { updateTrip } from "@/http/TripApi";
+import { TripService } from "@/features/Trips/Services/tripService";
 import { UpdateTripMutation } from "@/types";
 import { TripUpdateParsed } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +14,9 @@ interface TripImageProps {
 export default function TripImage({ tripImage, currentTripId }: TripImageProps) {
   const queryClient = useQueryClient();
   const mutation = useMutation<void, any, UpdateTripMutation>({
-    mutationFn: ({ currentTripId, form }) => updateTrip(currentTripId, form),
+    mutationFn: async ({ currentTripId, form }) => {
+      TripService.update(currentTripId, form);
+    },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trip", currentTripId] }),
   });
   const pickImage = async () => {

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { ActivityIndicator, Text } from "react-native-paper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { createCar, fetchCars } from "@/http/CarApi";
+import { CarService } from "@/features/Carpool/Services/carService";
 import { CarCreate } from "@/types";
 import useUser from "@/hooks/useUser";
 import CreateCarButton from "@/components/NotScopedforv1/CarComponents/CreateCarButton";
@@ -16,12 +16,14 @@ export default function CarpoolView() {
   //prettier-ignore
   const { data: cars, isLoading, isError, error } = useQuery({
     queryKey: ["cars", selectedTripId], 
-    queryFn: async () => fetchCars(selectedTripId as string),
+    queryFn: async () => CarService.getAll(Number(selectedTripId as string)),
     initialData: []
   })
 
   const createCarMutation = useMutation<void, Error, { selectedTripId: string; newCar: CarCreate }>({
-    mutationFn: ({ selectedTripId, newCar }) => createCar(selectedTripId, newCar),
+    mutationFn: async ({ selectedTripId, newCar }) => {
+      await CarService.create(Number(selectedTripId), newCar);
+    },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 

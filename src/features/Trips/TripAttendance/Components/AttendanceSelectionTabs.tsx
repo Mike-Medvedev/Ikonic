@@ -1,6 +1,6 @@
-import { fetchAttendees } from "@/http/TripApi";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 import { AttendanceList } from "@/types";
-import { User } from "@/types";
+import { UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { View } from "react-native";
 import AttendanceTab from "./AttendanceTab";
@@ -22,14 +22,14 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, s
   //prettier-ignore
   const { data: attendees} = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => fetchAttendees(selectedTripId),
+    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
 
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-      {(Object.entries(attendees) as Array<[keyof AttendanceList, User[]]>).map(([rsvpStatus, users], index) => (
+      {(Object.entries(attendees) as Array<[keyof AttendanceList, UserPublic[]]>).map(([rsvpStatus, users], index) => (
         <AttendanceTab
           key={index}
           rsvpStatusCount={users.length}

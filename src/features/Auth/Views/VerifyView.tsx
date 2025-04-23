@@ -7,7 +7,6 @@ import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
 import Logo from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
-import { verifyCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
 import TitleText from "@/ui/TitleText";
 import { Card } from "@/ui/Card";

@@ -11,7 +11,6 @@ import { ExternalPathString, router } from "expo-router";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/types";
 import { supabase } from "@/utils/Supabase";
-import { sendCode } from "@/http/AuthApi";
 import useToast from "@/hooks/useToast";
 import { LinearGradient } from "expo-linear-gradient";
 import AvatarGlowImage from "@/ui/AvatarGlowImage";

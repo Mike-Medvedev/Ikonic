@@ -1,5 +1,5 @@
-import { addPassenger } from "@/http/CarApi";
-import { fetchAttendees } from "@/http/TripApi";
+import { CarService } from "@/features/Carpool/Services/carService";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 import { UserPublic } from "@/types/domain";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -20,12 +20,13 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
   //prettier-ignore
   const { data: attendees } = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => fetchAttendees(selectedTripId),
+    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
   const addPassengerMutation = useMutation<void, Error, any>({
-    mutationFn: ({ carId, userId, seatPosition }) => addPassenger(carId, selectedTripId, seatPosition),
+    mutationFn: ({ carId, userId, seatPosition }) =>
+      CarService.addPassenger(carId, Number(selectedTripId), seatPosition),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 

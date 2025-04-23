@@ -7,9 +7,9 @@ import TextInput from "@/ui/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import { useMemo, useState } from "react";
-import { createTrip } from "@/http/TripApi";
-import { NewTripForm } from "@/types";
-import { ValidateErrors } from "@/utils/FormBuilder";
+import { TripService } from "@/features/Trips/Services/tripService";
+import { NewTripForm, TripCreateParsed } from "@/types";
+import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 
 const TripPlanner = () => {
@@ -42,7 +42,8 @@ const TripPlanner = () => {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
-    const newTripId = (await createTrip(tripForm)).data.id;
+    const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(tripForm);
+    const newTripId = (await TripService.create(createTrip)).id;
     resetForm();
     showSuccess({
       message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,

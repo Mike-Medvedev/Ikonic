@@ -1,8 +1,8 @@
 import useToast from "@/hooks/useToast";
 import useUser from "@/hooks/useUser";
-import { fetchSelectedTrip } from "@/http/TripApi";
-import { handleRSVP } from "@/http/UsersApi";
-import { RSVPStatus } from "@/models/Attendance";
+import { TripService } from "@/features/Trips/Services/tripService";
+import { InviteService } from "@/features/Trips/Services/inviteService";
+import { RSVPStatus } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -24,11 +24,11 @@ export default function RSVP() {
 
   const { data: tripData, isLoading } = useQuery({
     queryKey: ["trip", selectedTripId],
-    queryFn: async () => fetchSelectedTrip(selectedTripId),
+    queryFn: async () => TripService.getOne(Number(selectedTripId)),
   });
   async function rsvpHandler(userResponse: RSVPStatus) {
     try {
-      await handleRSVP(userResponse, userId, selectedTripId);
+      await InviteService.rsvp(Number(selectedTripId), userId, userResponse);
       showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}` });
     } catch (error) {
       showFailure({ message: `Error, ${(error as Error).message}` });

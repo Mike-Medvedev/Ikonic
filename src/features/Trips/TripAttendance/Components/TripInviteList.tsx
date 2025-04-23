@@ -7,14 +7,15 @@ import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUsers, inviteUser } from "@/http/UsersApi";
+import { UserService } from "@/features/Profile/Services/userService";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 export default function TripInviteList() {
   const {
     data: users,
     isLoading,
     isError,
     error,
-  } = useQuery({ queryKey: ["users"], queryFn: fetchUsers, initialData: [] });
+  } = useQuery({ queryKey: ["users"], queryFn: UserService.getAll, initialData: [] });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
@@ -27,7 +28,7 @@ export default function TripInviteList() {
     console.log(user);
     const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
     try {
-      await inviteUser(user, selectedTripId, deepLink);
+      await InviteService.inviteUser(Number(selectedTripId), user.id, { deepLink });
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");

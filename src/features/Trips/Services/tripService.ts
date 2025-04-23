@@ -11,13 +11,20 @@ import {
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import { TripCreateParsed, TripPublicParsed, TripUpdateParsed } from "@/types";
 
-function serializeTrip(trip: TripCreateParsed): TripCreate;
-function serializeTrip(trip: TripUpdateParsed): TripUpdate;
-function serializeTrip(trip: TripCreateParsed | TripUpdateParsed): TripCreate | TripUpdate {
+export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
   return {
     ...trip,
     startDate: trip.startDate.toISOString(),
     endDate: trip.endDate.toISOString(),
+  };
+}
+
+// Conditionally serializes if dates are present
+export function serializeTripUpdate(trip: TripUpdateParsed): TripUpdate {
+  return {
+    ...trip,
+    ...(trip.startDate && { startDate: trip.startDate.toISOString() }),
+    ...(trip.endDate && { endDate: trip.endDate.toISOString() }),
   };
 }
 
@@ -33,6 +40,7 @@ export const TripService = {
   getAll: async (): Promise<TripPublicParsed[]> => {
     const client = await createAuthenticatedClient();
     const res = await getTripsApiV1TripsGet<true>({ client });
+    console.log(res);
     return res.data.data.map(parseTrip);
   },
 
@@ -50,7 +58,7 @@ export const TripService = {
   create: async (trip: TripCreateParsed): Promise<TripPublicParsed> => {
     const client = await createAuthenticatedClient();
     const res = await createTripApiV1TripsPost<true>({
-      body: serializeTrip(trip),
+      body: serializeTripCreate(trip),
       client,
     });
     return parseTrip(res.data.data);
@@ -61,7 +69,7 @@ export const TripService = {
     const client = await createAuthenticatedClient();
     const res = await updateTripApiV1TripsTripIdPatch<true>({
       path: { trip_id: tripId },
-      body: serializeTrip(update),
+      body: serializeTripUpdate(update),
       client,
     });
     return parseTrip(res.data.data);

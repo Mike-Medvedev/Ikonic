@@ -5,7 +5,7 @@ export const createAuthenticatedClient = async () => {
   const token = await getToken();
 
   return createClient({
-    baseUrl: process.env.API_BASE_URL,
+    baseUrl: process.env.EXPO_PUBLIC_API_URL,
     headers: {
       "ngrok-skip-browser-warning": "any",
       Authorization: `Bearer ${token}`,

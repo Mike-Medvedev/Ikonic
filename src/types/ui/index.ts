@@ -2,7 +2,7 @@
  * Exports Frontend specific types
  */
 
-import { TripUpdateParsed } from "../domain";
+import { TripUpdateParsed } from "@/types";
 export type RSVPStatus = "accepted" | "pending" | "uncertain" | "declined";
 export interface AttendanceCount {
   accepted: number;

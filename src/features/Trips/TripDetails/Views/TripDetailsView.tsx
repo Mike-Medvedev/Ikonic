@@ -4,7 +4,7 @@ import { ActivityIndicator, Text } from "react-native-paper";
 import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";
-import { fetchSelectedTrip } from "@/http/TripApi";
+import { TripService } from "@/features/Trips/Services/tripService";
 import TripImage from "@/features/Trips/TripDetails/Components/TripImage";
 import EditButton from "@/ui/EditButton";
 import TripDetailsContent from "@/features/Trips/TripDetails/Components/TripDetailsContent";
@@ -22,7 +22,7 @@ export default function TripDetailsView() {
   // prettier-ignore
   const { data: trip, isLoading, isError } = useQuery({
     queryKey: ["trip", Number(selectedTripID)], queryFn: async () => {
-      return fetchSelectedTrip(selectedTripID as string);
+      return TripService.getOne(Number(selectedTripID as string));
     },
     enabled: !!selectedTripID
   });
