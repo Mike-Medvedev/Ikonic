@@ -1,17 +1,17 @@
 import Trip from "@/features/Trips/TripList/Components/Trip";
 import TripListHeader from "@/features/Trips/TripList/Components/TripListHeader";
 import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
-import { fetchTrips } from "@/http/TripApi";
 import Background from "@/ui/Background";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
 import EmptyTripsFallback from "@/features/Trips/TripDetails/Components/EmptyTripsFallback";
+import { TripService } from "@/features/Trips/TripApi";
 
 export default function TripListView() {
   // prettier-ignore
   const { data: trips, isLoading, refetch } = useQuery({
     queryKey: ["trips"], queryFn: async () => {
-      return fetchTrips();
+      return TripService.getAll();
     },
     initialData: [],
   });

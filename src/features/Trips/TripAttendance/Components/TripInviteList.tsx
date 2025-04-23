@@ -5,7 +5,7 @@ import { Card, TextInput, Button, Avatar, ActivityIndicator, Text } from "react-
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
-import { User } from "@/types";
+import { UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsers, inviteUser } from "@/http/UsersApi";
 export default function TripInviteList() {
@@ -22,7 +22,7 @@ export default function TripInviteList() {
 
   const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  async function handleInvite(user: User) {
+  async function handleInvite(user: UserPublic) {
     setIsInviteSending(true);
     console.log(user);
     const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
@@ -31,7 +31,7 @@ export default function TripInviteList() {
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");
-      throw new Error("Error inviting user: " + user.user_id + String(error));
+      // throw new Error("Error inviting user: " + user.user_id + String(error));
     } finally {
       setIsInviteSending(false);
     }

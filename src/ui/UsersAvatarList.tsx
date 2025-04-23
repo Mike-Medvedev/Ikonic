@@ -1,5 +1,5 @@
-import { fetchAttendees } from "@/http/TripApi";
-import { RSVPStatus } from "@/models/Attendance";
+import { InviteService } from "@/features/Trips/InviteApi";
+import { RSVPStatus } from "@/types";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
@@ -21,7 +21,7 @@ export default function UsersAvatarList({
   //prettier-ignore
   const { data: attendees, isLoading, isError, error } = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => fetchAttendees(selectedTripId),
+    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
@@ -38,12 +38,9 @@ export default function UsersAvatarList({
       {attendees[rsvp] && (
         <>
           {attendees[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
-            <Pressable
-              onPress={() => router.push(`/profile/${user.user_id}?previousTripId=${selectedTripId}`)}
-              key={index}
-            >
+            <Pressable onPress={() => router.push(`/profile/${user.id}?previousTripId=${selectedTripId}`)} key={index}>
               <Avatar.Text
-                key={user.user_id}
+                key={user.id}
                 label={CalculateInitials(user.firstname, user.lastname)}
                 size={size}
                 style={{ backgroundColor: theme.colors.surface }}

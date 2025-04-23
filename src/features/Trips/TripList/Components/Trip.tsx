@@ -5,7 +5,7 @@ import { Avatar, useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TripPublicParsed } from "@/types";
-import { deleteTrip } from "@/http/TripApi";
+import { TripService } from "../../TripApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import { Card } from "@/ui/Card";
@@ -19,7 +19,7 @@ export interface TripProps {
 const Trip = ({ trip }: TripProps) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<void, unknown, number>({
-    mutationFn: (trip_id) => deleteTrip(trip_id),
+    mutationFn: (trip_id) => TripService.delete(trip_id),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
   });
   const theme = useTheme();
