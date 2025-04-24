@@ -6,17 +6,19 @@ import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
 import EmptyTripsFallback from "@/features/Trips/TripDetails/Components/EmptyTripsFallback";
 import { TripService } from "@/features/Trips/Services/tripService";
-
+import { ActivityIndicator, Text } from "react-native-paper";
 export default function TripListView() {
   // prettier-ignore
-  const { data: trips, isLoading, refetch } = useQuery({
+  const { data: trips, isLoading, refetch, error } = useQuery({
     queryKey: ["trips"], queryFn: async () => {
       return TripService.getAll();
     },
-    initialData: [],
+    retry: false,
+    throwOnError: true
   });
-
   useRefreshOnFocus(refetch);
+
+  if (isLoading) return <ActivityIndicator />;
 
   return (
     <Background>
@@ -30,6 +32,7 @@ export default function TripListView() {
           refreshing={isLoading}
           ListEmptyComponent={EmptyTripsFallback}
         />
+        {error && <Text style={{ color: "red" }}>{error.message}</Text>}
       </View>
     </Background>
   );
