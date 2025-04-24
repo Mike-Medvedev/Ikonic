@@ -7,6 +7,9 @@ import { FlatList, StyleSheet, View } from "react-native";
 import EmptyTripsFallback from "@/features/Trips/TripDetails/Components/EmptyTripsFallback";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { ActivityIndicator, Text } from "react-native-paper";
+import { ApiError, NetworkError, errors } from "@/lib/errors";
+import { router } from "expo-router";
+import { LOGIN_PATH } from "@/constants/constants";
 export default function TripListView() {
   // prettier-ignore
   const { data: trips, isLoading, refetch, error } = useQuery({
@@ -14,11 +17,23 @@ export default function TripListView() {
       return TripService.getAll();
     },
     retry: false,
-    throwOnError: true
+    initialData: [],
   });
   useRefreshOnFocus(refetch);
 
   if (isLoading) return <ActivityIndicator />;
+
+  if (error) {
+    if (error instanceof ApiError) {
+      if (error.message === errors[401]) {
+        router.replace(LOGIN_PATH);
+      }
+      return <Text style={{ color: "red", fontSize: 50 }}>API Error: {error.message}</Text>;
+    }
+    if (error instanceof NetworkError) {
+      return <Text style={{ color: "red", fontSize: 50 }}>Network Error: {error.message}</Text>;
+    }
+  }
 
   return (
     <Background>
@@ -32,7 +47,6 @@ export default function TripListView() {
           refreshing={isLoading}
           ListEmptyComponent={EmptyTripsFallback}
         />
-        {error && <Text style={{ color: "red" }}>{error.message}</Text>}
       </View>
     </Background>
   );
