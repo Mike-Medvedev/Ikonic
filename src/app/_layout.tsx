@@ -9,12 +9,20 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "@/components/Fallback";
-import { QueryCache, QueryClient, QueryClientProvider, queryOptions } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+  queryOptions,
+  QueryErrorResetBoundary,
+} from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ApiError, NetworkError } from "@/lib/errors";
+import { MAX_NET_RETRIES } from "@/constants/constants";
+import { Alert } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,20 +31,28 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       console.log("PRINTING FROM QUERY CACHE!", error);
-      if (error instanceof ApiError) alert.Alert(error);
+      if (error instanceof ApiError) {
+        Alert.alert(error.name);
+        window.alert(error.name);
+      }
+      if (error instanceof NetworkError) {
+        Alert.alert(error.name);
+        window.alert(error.name);
+      }
     },
   }),
   defaultOptions: {
     queries: {
-      retry: (_, error) => {
-        if (error instanceof NetworkError) return true;
+      refetchOnWindowFocus: false,
+      retry: (failureCount, error) => {
+        if (error instanceof NetworkError && failureCount < MAX_NET_RETRIES) return true;
         if (error instanceof ApiError) return false;
         return false;
       },
     },
     mutations: {
-      retry: (_, error) => {
-        if (error instanceof NetworkError) return true;
+      retry: (failureCount, error) => {
+        if (error instanceof NetworkError && failureCount < MAX_NET_RETRIES) return true;
         if (error instanceof ApiError) return false;
         return false;
       },
@@ -77,27 +93,32 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => (
-        <Fallback error={error} resetErrorBoundary={resetErrorBoundary} />
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          onReset={reset}
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <Fallback error={error} resetErrorBoundary={resetErrorBoundary} />
+          )}
+        >
+          <ThemeProvider>
+            <PaperProvider theme={theme}>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <AutocompleteDropdownContextProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <AuthProvider>
+                      <SafeAreaProvider>
+                        <StatusBar style="dark" />
+                        <Slot />
+                      </SafeAreaProvider>
+                    </AuthProvider>
+                  </QueryClientProvider>
+                </AutocompleteDropdownContextProvider>
+              </GestureHandlerRootView>
+            </PaperProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       )}
-    >
-      <ThemeProvider>
-        <PaperProvider theme={theme}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <AutocompleteDropdownContextProvider>
-              <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                  <SafeAreaProvider>
-                    <StatusBar style="dark" />
-                    <Slot />
-                  </SafeAreaProvider>
-                </AuthProvider>
-              </QueryClientProvider>
-            </AutocompleteDropdownContextProvider>
-          </GestureHandlerRootView>
-        </PaperProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+    </QueryErrorResetBoundary>
   );
 }

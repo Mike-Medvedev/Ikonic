@@ -14,3 +14,5 @@ export const AUTH_GROUP = "(auth)";
 export const APP_GROUP = "(app)";
 export const LOGIN_PATH = `/${AUTH_GROUP}/login`;
 export const DEFAULT_APP_PATH = `/${APP_GROUP}/trips`;
+
+export const MAX_NET_RETRIES = 3;

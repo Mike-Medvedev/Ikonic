@@ -45,7 +45,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
           Your Trips
         </Text>
         <Badge size={30} style={styles.badge}>
-          {tripLength}
+          {tripLength ?? 0}
         </Badge>
       </View>
       <Pressable style={styles.button} onPress={handlePress}>

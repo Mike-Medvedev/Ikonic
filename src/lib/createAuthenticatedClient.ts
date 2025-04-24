@@ -21,7 +21,7 @@ export const createAuthenticatedClient = async () => {
     fetch: fetchWithError,
     headers: {
       "ngrok-skip-browser-warning": "any",
-      Authorization: `Bearer removedtokenfortesting`,
+      Authorization: `Bearer ${token}`,
     },
     throwOnError: true,
   });
