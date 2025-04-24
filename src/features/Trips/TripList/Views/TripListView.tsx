@@ -12,28 +12,15 @@ import { router } from "expo-router";
 import { LOGIN_PATH } from "@/constants/constants";
 export default function TripListView() {
   // prettier-ignore
-  const { data: trips, isLoading, refetch, error } = useQuery({
+  const { data: trips, isLoading, refetch } = useQuery({
     queryKey: ["trips"], queryFn: async () => {
       return TripService.getAll();
     },
-    retry: false,
     initialData: [],
   });
   useRefreshOnFocus(refetch);
 
   if (isLoading) return <ActivityIndicator />;
-
-  if (error) {
-    if (error instanceof ApiError) {
-      if (error.message === errors[401]) {
-        router.replace(LOGIN_PATH);
-      }
-      return <Text style={{ color: "red", fontSize: 50 }}>API Error: {error.message}</Text>;
-    }
-    if (error instanceof NetworkError) {
-      return <Text style={{ color: "red", fontSize: 50 }}>Network Error: {error.message}</Text>;
-    }
-  }
 
   return (
     <Background>

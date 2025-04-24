@@ -9,15 +9,40 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "@/components/Fallback";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider, queryOptions } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { ApiError, NetworkError } from "@/lib/errors";
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  //Query Cache only runs when theres no data in the cache, background update fails. Stale data is prioritized on error
+  queryCache: new QueryCache({
+    onError: (error) => {
+      console.log("PRINTING FROM QUERY CACHE!", error);
+      if (error instanceof ApiError) alert.Alert(error);
+    },
+  }),
+  defaultOptions: {
+    queries: {
+      retry: (_, error) => {
+        if (error instanceof NetworkError) return true;
+        if (error instanceof ApiError) return false;
+        return false;
+      },
+    },
+    mutations: {
+      retry: (_, error) => {
+        if (error instanceof NetworkError) return true;
+        if (error instanceof ApiError) return false;
+        return false;
+      },
+    },
+  },
+});
 
 registerTranslation("en", {
   save: "Save",

@@ -1,20 +1,27 @@
-export class ApiError extends Error {
-  constructor(message: string, opts?: { cause?: unknown }) {
-    super(message, opts);
-    this.name = "ApiError";
-  }
-}
-export class UnknownError extends Error {
-  constructor(message: string, opts?: { cause?: unknown }) {
-    super(message, opts);
-    this.name = "UnknownError";
+abstract class AppError extends Error {
+  readonly status: number | undefined;
+  readonly cause: unknown;
+  protected constructor(name: string, message: string, status?: number, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = name;
+    this.status = status;
+    this.message = message;
+    this.cause = options?.cause;
+
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
-export class NetworkError extends Error {
+export class ApiError extends AppError {
+  constructor(status: number, message: string, opts?: { cause?: unknown }) {
+    super("ApiError", message, status, opts);
+  }
+}
+export class UnknownError extends Error {}
+
+export class NetworkError extends AppError {
   constructor(message: string, opts?: { cause?: unknown }) {
-    super(message, opts);
-    this.name = "NetworkError";
+    super("NetworkError", message, undefined, opts);
   }
 }
 

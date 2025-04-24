@@ -8,9 +8,7 @@ const fetchWithError = async (request: Request): Promise<Response> => {
     return response;
   } catch (error) {
     if (error instanceof Error) {
-      const networkError = new NetworkError(error.message, { cause: error });
-      console.error(networkError);
-      throw networkError;
+      throw new NetworkError(error.message, { cause: error });
     }
     throw new UnknownError(`Unknown error: ${String(error)}`, { cause: error });
   }
@@ -28,14 +26,9 @@ export const createAuthenticatedClient = async () => {
     throwOnError: true,
   });
   client.interceptors.error.use((error, response) => {
-    const errorStatus = errors[response.status];
-    if (errorStatus === undefined) throw new UnknownError(`Unknown error: ${String(error)}`, { cause: error });
-    throw new ApiError(errorStatus, { cause: error });
+    const message = errors[response.status];
+    const knownMessage = message ?? `API Error: Status ${response.status}`;
+    throw new ApiError(response.status, knownMessage, { cause: error });
   });
-  // client.interceptors.request.use((request) => {
-  //   console.log("PRINTING REQUEST!");
-  //   console.log(request);
-  //   return request;
-  // });
   return client;
 };
