@@ -50,3 +50,12 @@
 3. Try to write pure functions as much as possible, easier testing, easier maintainability
 4. Perfer Immutability, returning new objects instead of operating on them in place. Abstract/Isolate Side effects and inject. (DI principle)
 5. Prefer Functinal Composition over inheritance, i.e { key: () => someValue } > class { method() { return someValue } }
+
+## Error Handling
+
+1. Handling Errors are critical business logic, pertinent to UX/UI
+2. Always create custom error classes to define specific errors.
+3. Key to errors is understanding they propogate up the call stack until they hit a catch handler.
+4. Fail Fast! Catch them asap, re raise if the the catch doesnt have the context to handle the error. Use this time to Classidy them with a custom exception
+5. Centralize error handling system and hav a global error boundry to catch errors that slip through
+6. Errors during rendering and component lifecycle are bound to react. Async errors/eventhandler errors are outside react understanding this is crucial
