@@ -1,3 +1,6 @@
+import { HTTPSTATUSCODE } from "@/constants/constants";
+import { AuthService } from "@/features/Auth/Services/authService";
+
 abstract class AppError extends Error {
   readonly status: number | undefined;
   readonly cause: unknown;
@@ -23,6 +26,37 @@ export class NetworkError extends AppError {
   constructor(message: string, opts?: { cause?: unknown }) {
     super("NetworkError", message, undefined, opts);
   }
+}
+
+export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
+  return async () => {
+    try {
+      const result = await fn();
+      return result;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === HTTPSTATUSCODE.UNAUTHENTICATED || error.status === HTTPSTATUSCODE.FORBIDDEN) {
+          //dont hardcode the status code, make it forbidden
+          console.error(`Authentication error (${error.status}), signing out.`);
+          AuthService.signOut();
+        }
+        throw error;
+      }
+      throw error;
+    }
+  };
+  // try {
+  //   fn();
+  // } catch (error) {
+  //   if (error instanceof ApiError) {
+  //     if (error.status === 401 || error.status === 403) {
+  //       AuthService.signOut();
+  //       return [];
+  //     }
+  //     throw error;
+  //   }
+  //   throw error;
+  // }
 }
 
 export const errors: Record<number, string> = {

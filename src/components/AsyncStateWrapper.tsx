@@ -2,6 +2,7 @@ import { LOGIN_PATH } from "@/constants/constants";
 import useToast from "@/hooks/useToast";
 import { ApiError, errors, NetworkError } from "@/lib/errors";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { ActivityIndicator, Text } from "react-native-paper";
 
 interface AsyncStateWrapperProps {
@@ -13,19 +14,14 @@ interface AsyncStateWrapperProps {
 export default function AsyncStateWrapper({ isLoading, error, message, children }: AsyncStateWrapperProps) {
   const { showFailure } = useToast();
 
-  if (isLoading) return <ActivityIndicator />;
-
-  if (error) {
+  useEffect(() => {
+    if (!error) return;
     if (error instanceof ApiError) {
       switch (error.status) {
-        case 401:
-          showFailure({ message: "Error; User not authenticated, navigating back to login", url: LOGIN_PATH });
-          break;
-        case 403:
-          showFailure({ message: "Error; User Forbidden, navigating back to login", url: LOGIN_PATH });
-          break;
+        case 404:
+          showFailure({ message: "Error The Requested data was not found, please try something else" });
         case 422:
-          showFailure({ message: "Error; The Request you made was invalid, please try again" });
+          showFailure({ message: "Error The Request you made was invalid, please try again" });
           break;
         default:
           showFailure({ message: `Error ${error.status}: ${error.message}` });
@@ -33,7 +29,16 @@ export default function AsyncStateWrapper({ isLoading, error, message, children 
     } else if (error instanceof NetworkError) {
       showFailure({ message: `Network Error: Please check your connection and try again${error.message}` });
     } else showFailure({ message: `Error: ${error.message}` });
-    return <Text>{message ?? error.name}</Text>;
+  }, [error]);
+
+  if (isLoading) return <ActivityIndicator />;
+
+  if (error) {
+    return (
+      <Text>
+        Error {error.name}: {error.message}
+      </Text>
+    );
   }
 
   return children;

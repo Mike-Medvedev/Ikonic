@@ -8,16 +8,16 @@ import {
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 import { TripCreateParsed, TripPublicParsed, TripUpdateParsed } from "@/types";
 import { parseTrip } from "@/utils/parseTrip";
-import { ApiError, NetworkError, UnknownError } from "@/lib/errors";
+import { withError } from "@/lib/errors";
 import { serializeTripCreate, serializeTripUpdate } from "@/utils/serializers";
 
 export const TripService = {
   /** Get all trips */
-  getAll: async (): Promise<TripPublicParsed[]> => {
+  getAll: withError<TripPublicParsed[]>(async (): Promise<TripPublicParsed[]> => {
     const client = await createAuthenticatedClient();
     const res = await getTripsApiV1TripsGet<true>({ client });
     return res.data.data.map(parseTrip);
-  },
+  }),
 
   /** Get a single trip by ID */
   getOne: async (tripId: number): Promise<TripPublicParsed> => {

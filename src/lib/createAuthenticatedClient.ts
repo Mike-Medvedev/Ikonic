@@ -28,7 +28,6 @@ export const createAuthenticatedClient = async () => {
   client.interceptors.error.use((error, response) => {
     const message = errors[response.status];
     const knownMessage = message ?? `API Error: Status ${response.status}`;
-    // if(response.status === 401 || response.status === 403) need to make this navigate and cancel propogation of error
     throw new ApiError(response.status, knownMessage, { cause: error });
   });
   return client;

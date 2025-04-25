@@ -16,3 +16,8 @@ export const LOGIN_PATH = `/${AUTH_GROUP}/login`;
 export const DEFAULT_APP_PATH = `/${APP_GROUP}/trips`;
 
 export const MAX_NET_RETRIES = 3;
+
+export enum HTTPSTATUSCODE {
+  UNAUTHENTICATED = 401,
+  FORBIDDEN = 403,
+}

@@ -1,4 +1,4 @@
-import { Slot } from "expo-router";
+import { router, Slot } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider } from "@/context/AuthContext";
@@ -21,7 +21,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { MAX_NET_RETRIES } from "@/constants/constants";
+import { LOGIN_PATH, MAX_NET_RETRIES } from "@/constants/constants";
 import { Alert } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
@@ -29,17 +29,16 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient({
   //Query Cache only runs when theres no data in the cache, background update fails. Stale data is prioritized on error
   queryCache: new QueryCache({
-    // onError: (error) => {
-    //   console.log("PRINTING FROM QUERY CACHE!", error);
-    //   if (error instanceof ApiError) {
-    //     Alert.alert(error.name);
-    //     window.alert(error.name);
-    //   }
-    //   if (error instanceof NetworkError) {
-    //     Alert.alert(error.name);
-    //     window.alert(error.name);
-    //   }
-    // },
+    onError: (error) => {
+      // console.log("PRINTING FROM QUERY CACHE!", error);
+      // if (error instanceof ApiError) {
+      //   if (error.status === 401 || error.status === 403) router.push(LOGIN_PATH);
+      // }
+      // if (error instanceof NetworkError) {
+      //   Alert.alert(error.name);
+      //   window.alert(error.name);
+      // }
+    },
   }),
   defaultOptions: {
     queries: {
