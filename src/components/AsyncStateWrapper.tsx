@@ -12,21 +12,29 @@ interface AsyncStateWrapperProps {
 }
 export default function AsyncStateWrapper({ isLoading, error, message, children }: AsyncStateWrapperProps) {
   const { showFailure } = useToast();
+
   if (isLoading) return <ActivityIndicator />;
+
   if (error) {
     if (error instanceof ApiError) {
-      if (error.status === 401)
-        showFailure({ message: "Error; User not authenticated, navigating back to login", url: LOGIN_PATH });
-      if (error.status === 403)
-        showFailure({ message: "Error; User Forbidden, navigating back to login", url: LOGIN_PATH });
-      if (error.status === 422) showFailure({ message: "Error; The Request you made was invalid, please try again" });
-      showFailure({ message: `Error ${error.status}: ${error.message}` });
-    }
-    if (error instanceof NetworkError) {
+      switch (error.status) {
+        case 401:
+          showFailure({ message: "Error; User not authenticated, navigating back to login", url: LOGIN_PATH });
+          break;
+        case 403:
+          showFailure({ message: "Error; User Forbidden, navigating back to login", url: LOGIN_PATH });
+          break;
+        case 422:
+          showFailure({ message: "Error; The Request you made was invalid, please try again" });
+          break;
+        default:
+          showFailure({ message: `Error ${error.status}: ${error.message}` });
+      }
+    } else if (error instanceof NetworkError) {
       showFailure({ message: `Network Error: Please check your connection and try again${error.message}` });
-    }
-    showFailure({ message: `Error: ${error.message}` });
-    return <Text>Error: {error.message}</Text>;
+    } else showFailure({ message: `Error: ${error.message}` });
+    return <Text>{message ?? error.name}</Text>;
   }
+
   return children;
 }
