@@ -27,19 +27,6 @@ import { Alert } from "react-native";
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient({
-  //Query Cache only runs when theres no data in the cache, background update fails. Stale data is prioritized on error
-  queryCache: new QueryCache({
-    onError: (error) => {
-      // console.log("PRINTING FROM QUERY CACHE!", error);
-      // if (error instanceof ApiError) {
-      //   if (error.status === 401 || error.status === 403) router.push(LOGIN_PATH);
-      // }
-      // if (error instanceof NetworkError) {
-      //   Alert.alert(error.name);
-      //   window.alert(error.name);
-      // }
-    },
-  }),
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,

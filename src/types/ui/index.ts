@@ -28,6 +28,6 @@ export interface NewTripForm {
 }
 
 export type UpdateTripMutation = {
-  currentTripId: number;
+  currentTripId: string;
   form: TripUpdateParsed;
 };

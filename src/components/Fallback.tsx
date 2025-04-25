@@ -1,4 +1,4 @@
-import { LOGIN_PATH } from "@/constants/constants";
+import { HTTPSTATUSCODE, LOGIN_PATH } from "@/constants/constants";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { router } from "expo-router";
 import { FallbackProps } from "react-error-boundary";
@@ -7,7 +7,7 @@ import { Button, Text } from "react-native-paper";
 
 export default function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   if (error instanceof ApiError) {
-    if (error.status === 403)
+    if (error.status === HTTPSTATUSCODE.FORBIDDEN || error.status === HTTPSTATUSCODE.UNAUTHENTICATED)
       return (
         <View style={styles.container}>
           <Text variant="displaySmall">Forbidden Page: {error.message}!</Text>

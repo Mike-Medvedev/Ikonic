@@ -5,12 +5,12 @@ import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
 export const UserService = {
   getAll: async () => {
     const client = await createAuthenticatedClient();
-    const res = await getUsersApiV1UsersGet({ client });
+    const res = await getUsersApiV1UsersGet<true>({ client });
     return res.data.data;
   },
   getOne: async (user_id: string) => {
     const client = await createAuthenticatedClient();
-    const res = await getUserByIdApiV1UsersUserIdGet({
+    const res = await getUserByIdApiV1UsersUserIdGet<true>({
       path: { user_id },
       client,
     });

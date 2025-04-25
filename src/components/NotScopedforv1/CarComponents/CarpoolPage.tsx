@@ -16,13 +16,13 @@ export default function CarpoolView() {
   //prettier-ignore
   const { data: cars, isLoading, isError, error } = useQuery({
     queryKey: ["cars", selectedTripId], 
-    queryFn: async () => CarService.getAll(Number(selectedTripId as string)),
+    queryFn: async () => CarService.getAll(selectedTripId as string),
     initialData: []
   })
 
   const createCarMutation = useMutation<void, Error, { selectedTripId: string; newCar: CarCreate }>({
     mutationFn: async ({ selectedTripId, newCar }) => {
-      await CarService.create(Number(selectedTripId), newCar);
+      await CarService.create(selectedTripId, newCar);
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });

@@ -6,7 +6,7 @@ import { View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 
 interface ButtonGroupProps {
-  currentTripId: number;
+  currentTripId: string;
   form: TripUpdateParsed;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -8,7 +8,7 @@ import { Button } from "react-native-paper";
 
 interface TripImageProps {
   tripImage: string | undefined;
-  currentTripId: number;
+  currentTripId: string;
 }
 
 export default function TripImage({ tripImage, currentTripId }: TripImageProps) {

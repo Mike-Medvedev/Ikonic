@@ -36,7 +36,6 @@ export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
     } catch (error) {
       if (error instanceof ApiError) {
         if (error.status === HTTPSTATUSCODE.UNAUTHENTICATED || error.status === HTTPSTATUSCODE.FORBIDDEN) {
-          //dont hardcode the status code, make it forbidden
           console.error(`Authentication error (${error.status}), signing out.`);
           AuthService.signOut();
         }
@@ -45,18 +44,6 @@ export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
       throw error;
     }
   };
-  // try {
-  //   fn();
-  // } catch (error) {
-  //   if (error instanceof ApiError) {
-  //     if (error.status === 401 || error.status === 403) {
-  //       AuthService.signOut();
-  //       return [];
-  //     }
-  //     throw error;
-  //   }
-  //   throw error;
-  // }
 }
 
 export const errors: Record<number, string> = {

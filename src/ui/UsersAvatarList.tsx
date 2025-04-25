@@ -21,7 +21,7 @@ export default function UsersAvatarList({
   //prettier-ignore
   const { data: attendees, isLoading, isError, error } = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
+    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });

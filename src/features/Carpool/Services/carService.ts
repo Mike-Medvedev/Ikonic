@@ -11,9 +11,9 @@ import type { CarCreate, CarPublic, PassengerPublic } from "@/types";
 
 export const CarService = {
   /** Get all cars for a trip */
-  getAll: async (tripId: number): Promise<CarPublic[]> => {
+  getAll: async (tripId: string): Promise<CarPublic[]> => {
     const client = await createAuthenticatedClient();
-    const res = await getCarsForTripApiV1TripsTripIdCarsGet({
+    const res = await getCarsForTripApiV1TripsTripIdCarsGet<true>({
       path: { trip_id: tripId },
       client,
     });
@@ -21,9 +21,9 @@ export const CarService = {
   },
 
   /** Get a specific car by ID */
-  getOne: async (tripId: number, carId: number): Promise<CarPublic> => {
+  getOne: async (tripId: string, carId: string): Promise<CarPublic> => {
     const client = await createAuthenticatedClient();
-    const res = await getCarByIdApiV1TripsTripIdCarsCarIdGet({
+    const res = await getCarByIdApiV1TripsTripIdCarsCarIdGet<true>({
       path: { trip_id: tripId, car_id: carId },
       client,
     });
@@ -31,9 +31,9 @@ export const CarService = {
   },
 
   /** Get all passengers for a car */
-  getPassengers: async (tripId: number, carId: number): Promise<PassengerPublic[]> => {
+  getPassengers: async (tripId: string, carId: string): Promise<PassengerPublic[]> => {
     const client = await createAuthenticatedClient();
-    const res = await getPassengersApiV1TripsTripIdCarsCarIdPassengersGet({
+    const res = await getPassengersApiV1TripsTripIdCarsCarIdPassengersGet<true>({
       path: { trip_id: tripId, car_id: carId },
       client,
     });
@@ -41,9 +41,9 @@ export const CarService = {
   },
 
   /** Create a car for a trip */
-  create: async (tripId: number, car: CarCreate): Promise<CarPublic> => {
+  create: async (tripId: string, car: CarCreate): Promise<CarPublic> => {
     const client = await createAuthenticatedClient();
-    const res = await createCarApiV1TripsTripIdCarsPost({
+    const res = await createCarApiV1TripsTripIdCarsPost<true>({
       path: { trip_id: tripId },
       body: car,
       client,
@@ -52,18 +52,18 @@ export const CarService = {
   },
 
   /** Delete a car from a trip */
-  delete: async (tripId: number, carId: number): Promise<void> => {
+  delete: async (tripId: string, carId: string): Promise<void> => {
     const client = await createAuthenticatedClient();
-    await deleteCarApiV1TripsTripIdCarsCarIdDelete({
+    await deleteCarApiV1TripsTripIdCarsCarIdDelete<true>({
       path: { trip_id: tripId, car_id: carId },
       client,
     });
   },
 
   /** Add a passenger to a car */
-  addPassenger: async (tripId: number, carId: number, seatPosition: number): Promise<void> => {
+  addPassenger: async (tripId: string, carId: string, seatPosition: number): Promise<void> => {
     const client = await createAuthenticatedClient();
-    await addPassengerApiV1TripsTripIdCarsCarIdPassengersPost({
+    await addPassengerApiV1TripsTripIdCarsCarIdPassengersPost<true>({
       path: { trip_id: tripId, car_id: carId },
       body: { seatPosition },
       client,

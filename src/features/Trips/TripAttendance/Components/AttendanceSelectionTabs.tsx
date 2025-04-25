@@ -22,7 +22,7 @@ export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, s
   //prettier-ignore
   const { data: attendees} = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
+    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });

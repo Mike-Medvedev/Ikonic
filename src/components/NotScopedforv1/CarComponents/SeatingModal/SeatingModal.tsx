@@ -20,13 +20,12 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
   //prettier-ignore
   const { data: attendees } = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(Number(selectedTripId)),
+    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
   const addPassengerMutation = useMutation<void, Error, any>({
-    mutationFn: ({ carId, userId, seatPosition }) =>
-      CarService.addPassenger(carId, Number(selectedTripId), seatPosition),
+    mutationFn: ({ carId, userId, seatPosition }) => CarService.addPassenger(carId, selectedTripId, seatPosition),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 

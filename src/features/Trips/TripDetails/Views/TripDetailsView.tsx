@@ -22,15 +22,13 @@ export default function TripDetailsView() {
 
   // prettier-ignore
   const { data: trip, isLoading, isFetching, isError, error } = useQuery({
-    queryKey: ["trip", Number(selectedTripID)], queryFn: async () => {
-      return TripService.getOne(Number(selectedTripID as string));
+    queryKey: ["trip", selectedTripID], queryFn: async () => {
+      return TripService.getOne(selectedTripID as string);
     },
     enabled: !!selectedTripID
   });
 
   useEffect(() => {
-    console.log("hoit trip details");
-    console.log(selectedTripID);
     (async () => {
       if (!trip) return;
       // setOwner(trip.owner.user_id === (await getUserId()));
@@ -50,7 +48,7 @@ export default function TripDetailsView() {
           <AsyncStateWrapper isLoading={isFetching} error={error}>
             {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
             <Text style={styles.tripTitle}>{trip?.title}</Text>
-            <TripImage tripImage={trip?.image} currentTripId={Number(selectedTripID)} />
+            <TripImage tripImage={trip?.image} currentTripId={selectedTripID} />
             <TripDetailsContent trip={trip} />
             <TripAttendeesView selectedTripID={selectedTripID as string} />
             <TripDescription tripDesc={trip?.desc} />

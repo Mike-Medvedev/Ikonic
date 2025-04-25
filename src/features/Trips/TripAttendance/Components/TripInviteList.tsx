@@ -28,7 +28,7 @@ export default function TripInviteList() {
     console.log(user);
     const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
     try {
-      await InviteService.inviteUser(Number(selectedTripId), user.id, { deepLink });
+      await InviteService.inviteUser(selectedTripId, user.id, { deepLink });
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");

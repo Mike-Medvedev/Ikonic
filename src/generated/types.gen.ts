@@ -15,8 +15,8 @@ export type CarCreate = {
 export type CarPublic = {
     seatCount?: number;
     passengers?: Array<UserPublic>;
-    id: number;
-    tripId: number;
+    id: string;
+    tripId: string;
     owner: UserPublic;
 };
 
@@ -70,7 +70,7 @@ export type HttpValidationError = {
 
 export type Passenger = {
     user_id: string;
-    car_id: number;
+    car_id: string;
     seat_position: number;
 };
 
@@ -81,7 +81,7 @@ export type PassengerCreate = {
 export type PassengerPublic = {
     seatPosition: number;
     userId: string;
-    carId: number;
+    carId: string;
 };
 
 export type TripCreate = {
@@ -103,7 +103,7 @@ export type TripPublic = {
     endDate: string;
     mountain: string;
     desc?: string | null;
-    id: number;
+    id: string;
     owner: UserPublic;
 };
 
@@ -231,7 +231,7 @@ export type CreateTripApiV1TripsPostResponse = CreateTripApiV1TripsPostResponses
 export type DeleteTripApiV1TripsTripIdDeleteData = {
     body?: never;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}';
@@ -260,7 +260,7 @@ export type DeleteTripApiV1TripsTripIdDeleteResponse = DeleteTripApiV1TripsTripI
 export type GetTripApiV1TripsTripIdGetData = {
     body?: never;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}';
@@ -287,7 +287,7 @@ export type GetTripApiV1TripsTripIdGetResponse = GetTripApiV1TripsTripIdGetRespo
 export type UpdateTripApiV1TripsTripIdPatchData = {
     body: TripUpdate;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}';
@@ -314,7 +314,7 @@ export type UpdateTripApiV1TripsTripIdPatchResponse = UpdateTripApiV1TripsTripId
 export type GetCarsForTripApiV1TripsTripIdCarsGetData = {
     body?: never;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/';
@@ -341,7 +341,7 @@ export type GetCarsForTripApiV1TripsTripIdCarsGetResponse = GetCarsForTripApiV1T
 export type CreateCarApiV1TripsTripIdCarsPostData = {
     body: CarCreate;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/';
@@ -368,8 +368,8 @@ export type CreateCarApiV1TripsTripIdCarsPostResponse = CreateCarApiV1TripsTripI
 export type DeleteCarApiV1TripsTripIdCarsCarIdDeleteData = {
     body?: never;
     path: {
-        trip_id: number;
-        car_id: number;
+        trip_id: string;
+        car_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/{car_id}';
@@ -398,8 +398,8 @@ export type DeleteCarApiV1TripsTripIdCarsCarIdDeleteResponse = DeleteCarApiV1Tri
 export type GetCarByIdApiV1TripsTripIdCarsCarIdGetData = {
     body?: never;
     path: {
-        trip_id: number;
-        car_id: number;
+        trip_id: string;
+        car_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/{car_id}';
@@ -428,8 +428,8 @@ export type GetCarByIdApiV1TripsTripIdCarsCarIdGetResponse = GetCarByIdApiV1Trip
 export type GetPassengersApiV1TripsTripIdCarsCarIdPassengersGetData = {
     body?: never;
     path: {
-        trip_id: number;
-        car_id: number;
+        trip_id: string;
+        car_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/{car_id}/passengers';
@@ -456,8 +456,8 @@ export type GetPassengersApiV1TripsTripIdCarsCarIdPassengersGetResponse = GetPas
 export type AddPassengerApiV1TripsTripIdCarsCarIdPassengersPostData = {
     body: PassengerCreate;
     path: {
-        trip_id: number;
-        car_id: number;
+        trip_id: string;
+        car_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/cars/{car_id}/passengers';
@@ -484,7 +484,7 @@ export type AddPassengerApiV1TripsTripIdCarsCarIdPassengersPostResponse = AddPas
 export type GetInvitedUsersApiV1TripsTripIdInvitesGetData = {
     body?: never;
     path: {
-        trip_id: number;
+        trip_id: string;
     };
     query?: never;
     url: '/api/v1/trips/{trip_id}/invites';
@@ -511,7 +511,7 @@ export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponse = GetInvitedUsersA
 export type RsvpApiV1TripsTripIdInvitesUserIdPatchData = {
     body: TripParticipationRsvp;
     path: {
-        trip_id: number;
+        trip_id: string;
         user_id: string;
     };
     query?: never;
@@ -539,7 +539,7 @@ export type RsvpApiV1TripsTripIdInvitesUserIdPatchResponse = RsvpApiV1TripsTripI
 export type InviteUserApiV1TripsTripIdInvitesUserIdPostData = {
     body: DeepLink;
     path: {
-        trip_id: number;
+        trip_id: string;
         user_id: string;
     };
     query?: never;

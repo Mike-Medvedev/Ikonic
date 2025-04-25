@@ -20,7 +20,7 @@ export const TripService = {
   }),
 
   /** Get a single trip by ID */
-  getOne: async (tripId: number): Promise<TripPublicParsed> => {
+  getOne: async (tripId: string): Promise<TripPublicParsed> => {
     const client = await createAuthenticatedClient();
     const res = await getTripApiV1TripsTripIdGet<true>({
       path: { trip_id: tripId },
@@ -40,7 +40,7 @@ export const TripService = {
   },
 
   /** Update a trip by ID */
-  update: async (tripId: number, update: TripUpdateParsed): Promise<TripPublicParsed> => {
+  update: async (tripId: string, update: TripUpdateParsed): Promise<TripPublicParsed> => {
     const client = await createAuthenticatedClient();
     const res = await updateTripApiV1TripsTripIdPatch<true>({
       path: { trip_id: tripId },
@@ -51,7 +51,7 @@ export const TripService = {
   },
 
   /** Delete a trip by ID */
-  delete: async (tripId: number): Promise<void> => {
+  delete: async (tripId: string): Promise<void> => {
     const client = await createAuthenticatedClient();
     await deleteTripApiV1TripsTripIdDelete<true>({
       path: { trip_id: tripId },

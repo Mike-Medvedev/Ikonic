@@ -24,11 +24,11 @@ export default function RSVP() {
 
   const { data: tripData, isLoading } = useQuery({
     queryKey: ["trip", selectedTripId],
-    queryFn: async () => TripService.getOne(Number(selectedTripId)),
+    queryFn: async () => TripService.getOne(selectedTripId),
   });
   async function rsvpHandler(userResponse: RSVPStatus) {
     try {
-      await InviteService.rsvp(Number(selectedTripId), userId, userResponse);
+      await InviteService.rsvp(selectedTripId, userId, userResponse);
       showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}` });
     } catch (error) {
       showFailure({ message: `Error, ${(error as Error).message}` });

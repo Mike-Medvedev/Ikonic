@@ -8,11 +8,34 @@ import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import { useMemo, useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
-import { NewTripForm, TripCreateParsed } from "@/types";
+import { NewTripForm, TripCreate, TripCreateParsed, TripPublicParsed } from "@/types";
 import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApiError, NetworkError } from "@/lib/errors";
 
 export default function TripPlannerView() {
+  const queryClient = useQueryClient();
+  const createTripMutation = useMutation<TripPublicParsed, Error, TripCreateParsed>({
+    mutationFn: (trip: TripCreateParsed) => TripService.create(trip),
+    onSuccess: (data) => {
+      resetForm();
+      showSuccess({
+        message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
+        url: `/trips/${data.id}`,
+      });
+    },
+    onError: (error) => {
+      if (error instanceof ApiError)
+        showFailure({ message: `${error.name} ${error.status} ${error.message} Please Try again` });
+      else if (error instanceof NetworkError)
+        showFailure({ message: `${error.name} ${error.message} Please Test your connection and try again` });
+      else showFailure({ message: `${error.name} ${error.message} Please try again` });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+    },
+  });
   const initialTripForm = {
     mountain: { value: "", error: "" },
     startDate: { value: undefined, error: "" },
@@ -43,12 +66,7 @@ export default function TripPlannerView() {
       return;
     }
     const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(tripForm);
-    const newTripId = (await TripService.create(createTrip)).id;
-    resetForm();
-    showSuccess({
-      message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
-      url: `/trips/${newTripId}`,
-    });
+    const newTrip = createTripMutation.mutate(createTrip);
   };
   const styles = useMemo(() => {
     return StyleSheet.create({

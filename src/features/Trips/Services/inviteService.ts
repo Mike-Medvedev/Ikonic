@@ -8,9 +8,9 @@ import type { AttendanceList, TripParticipationRsvp, DeepLink } from "@/types";
 
 export const InviteService = {
   /** Get invited users for a trip */
-  getInvitedUsers: async (tripId: number): Promise<AttendanceList> => {
+  getInvitedUsers: async (tripId: string): Promise<AttendanceList> => {
     const client = await createAuthenticatedClient();
-    const res = await getInvitedUsersApiV1TripsTripIdInvitesGet({
+    const res = await getInvitedUsersApiV1TripsTripIdInvitesGet<true>({
       path: { trip_id: tripId },
       client,
     });
@@ -18,9 +18,9 @@ export const InviteService = {
   },
 
   /** RSVP to an invite */
-  rsvp: async (tripId: number, userId: string, payload: TripParticipationRsvp): Promise<boolean> => {
+  rsvp: async (tripId: string, userId: string, payload: TripParticipationRsvp): Promise<boolean> => {
     const client = await createAuthenticatedClient();
-    const res = await rsvpApiV1TripsTripIdInvitesUserIdPatch({
+    const res = await rsvpApiV1TripsTripIdInvitesUserIdPatch<true>({
       path: { trip_id: tripId, user_id: userId },
       body: payload,
       client,
@@ -29,9 +29,9 @@ export const InviteService = {
   },
 
   /** Invite a user to a trip */
-  inviteUser: async (tripId: number, userId: string, payload: DeepLink): Promise<boolean> => {
+  inviteUser: async (tripId: string, userId: string, payload: DeepLink): Promise<boolean> => {
     const client = await createAuthenticatedClient();
-    const res = await inviteUserApiV1TripsTripIdInvitesUserIdPost({
+    const res = await inviteUserApiV1TripsTripIdInvitesUserIdPost<true>({
       path: { trip_id: tripId, user_id: userId },
       body: payload,
       client,
