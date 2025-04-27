@@ -4,9 +4,11 @@ import {
   deleteTripApiV1TripsTripIdDelete,
   getTripApiV1TripsTripIdGet,
   updateTripApiV1TripsTripIdPatch,
+  TripCreateParsed,
+  TripPublicParsed,
+  TripUpdateParsed,
 } from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
-import { TripCreateParsed, TripPublicParsed, TripUpdateParsed } from "@/types";
 import { parseTrip } from "@/utils/parseTrip";
 import { withError } from "@/lib/errors";
 import { serializeTripCreate, serializeTripUpdate } from "@/utils/serializers";

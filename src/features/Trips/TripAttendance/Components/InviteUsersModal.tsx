@@ -6,7 +6,7 @@ interface InviteUsersModalProps {
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 /**
- *
+ * Renders the UI for a modal that contains a list of users to invite to a trip
  */
 export default function InviteUsersModal({ visible, setModalVisible }: InviteUsersModalProps) {
   return (

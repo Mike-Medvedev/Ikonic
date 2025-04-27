@@ -13,7 +13,6 @@ import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tans
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { ThemeProvider } from "@/context/ThemeContext";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES } from "@/constants/constants";
 
@@ -59,7 +58,8 @@ registerTranslation("en", {
 });
 
 /**
- *
+ * Top level layout and applications entry point, contains global providers, contexts, and configs.
+ * <Slot /> is like <router-outlet> and "passes-through" and renders the request page
  */
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -83,22 +83,20 @@ export default function RootLayout() {
             <Fallback error={error} resetErrorBoundary={resetErrorBoundary} />
           )}
         >
-          <ThemeProvider>
-            <PaperProvider theme={theme}>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <AutocompleteDropdownContextProvider>
-                  <QueryClientProvider client={queryClient}>
-                    <AuthProvider>
-                      <SafeAreaProvider>
-                        <StatusBar style="dark" />
-                        <Slot />
-                      </SafeAreaProvider>
-                    </AuthProvider>
-                  </QueryClientProvider>
-                </AutocompleteDropdownContextProvider>
-              </GestureHandlerRootView>
-            </PaperProvider>
-          </ThemeProvider>
+          <PaperProvider theme={theme}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <AutocompleteDropdownContextProvider>
+                <QueryClientProvider client={queryClient}>
+                  <AuthProvider>
+                    <SafeAreaProvider>
+                      <StatusBar style="dark" />
+                      <Slot />
+                    </SafeAreaProvider>
+                  </AuthProvider>
+                </QueryClientProvider>
+              </AutocompleteDropdownContextProvider>
+            </GestureHandlerRootView>
+          </PaperProvider>
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>

@@ -17,9 +17,8 @@ type AuthContextType = {
 
 // Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-// Custom hook to use auth context
 /**
- *
+ * Custom hook to use auth context
  */
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -29,9 +28,8 @@ export function useAuth() {
   return context;
 }
 
-// Provider component that wraps your app and makes auth object available to any child component
 /**
- *
+ * Provider component that wraps the app and makes auth object available to any child component
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);

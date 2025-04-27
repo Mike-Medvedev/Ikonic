@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
 
 /**
- *
+ * Renders the UI for the trip planning page
  */
 export default function TripPlannerView() {
   const queryClient = useQueryClient();
@@ -55,7 +55,7 @@ export default function TripPlannerView() {
   };
 
   /**
-   *
+   * Helper Function to check whether the trip planning form has valid input
    */
   function isFormValid(): boolean {
     const errors = {
@@ -67,15 +67,17 @@ export default function TripPlannerView() {
 
     return ValidateErrors<NewTripForm>(errors, setTripForm);
   }
-
-  const handleSubmit = async () => {
+  /**
+   * Event Handler for submitting trip planning form and creating a new trip
+   */
+  function handleSubmit() {
     if (!isFormValid()) {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
     const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(tripForm);
-    const newTrip = createTripMutation.mutate(createTrip);
-  };
+    createTripMutation.mutate(createTrip);
+  }
   const styles = useMemo(() => {
     return StyleSheet.create({
       tripPlannerContainer: {

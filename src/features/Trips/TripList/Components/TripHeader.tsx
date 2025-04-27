@@ -1,7 +1,6 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 import SelectionTabs from "@/ui/SelectionTabs";
-import { SafeAreaView } from "react-native";
 import BackButton from "@/ui/BackButton";
 const TripHeader = () => {
   const theme = useTheme();

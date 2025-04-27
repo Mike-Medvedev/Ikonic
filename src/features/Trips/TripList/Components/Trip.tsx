@@ -15,10 +15,12 @@ import Entypo from "@expo/vector-icons/Entypo";
 export interface TripProps {
   trip: TripPublicParsed;
 }
-
-const Trip = ({ trip }: TripProps) => {
+/**
+ * Renders the UI for a Trip in a Trip List which is selectable and navigates to a specific trips details
+ */
+export default function Trip({ trip }: TripProps) {
   const queryClient = useQueryClient();
-  const mutation = useMutation<void, unknown, number>({
+  const mutation = useMutation<void, unknown, string>({
     mutationFn: (trip_id) => TripService.delete(trip_id),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
   });
@@ -28,10 +30,9 @@ const Trip = ({ trip }: TripProps) => {
     router.push(`/trips/${trip.id}`);
   };
   /**
-   *
+   * Event Handler for deleting a trip and prompts the user for confirmation
    */
-  async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
-    event.stopPropagation();
+  async function handleTripDelete(trip_id: string) {
     DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });
   }
 
@@ -46,22 +47,8 @@ const Trip = ({ trip }: TripProps) => {
     cardTitleStyle: { fontSize: 20, marginVertical: 5 },
   });
 
-  const CardSubTitle = ({ trip }: { trip: TripPublicParsed }) => {
-    return (
-      <View style={styles.subtitleContainer}>
-        <View style={styles.subtitleLabel}>
-          <Ionicons name="location" size={12} color="black" />
-          <Text>{`${trip.mountain}\n`}</Text>
-        </View>
-        <View style={styles.subtitleLabel}>
-          <AntDesign name="calendar" size={12} color="black" />
-          <Text>{`${trip.startDate.toDateString()} - ${trip.endDate.toDateString()}`}</Text>
-        </View>
-      </View>
-    );
-  };
   return (
-    <Pressable onPress={onTripSelect} style={styles.tripContainer}>
+    <View style={styles.tripContainer}>
       <Card
         coverSource={require("@/assets/images/react-logo.png")}
         overlayContent={
@@ -69,7 +56,7 @@ const Trip = ({ trip }: TripProps) => {
             <View style={{ alignItems: "flex-end", marginHorizontal: 20 }}>
               <AntDesign
                 name="closecircleo"
-                onPress={(event) => handleTripDelete(event, trip.id)}
+                onPress={() => handleTripDelete(trip.id)}
                 size={20}
                 color={theme.colors.error}
               />
@@ -112,10 +99,11 @@ const Trip = ({ trip }: TripProps) => {
         {/* Overlay content goes here */}
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <UsersAvatarList selectedTripId={trip.id as string} rsvp="accepted" size={24} />
+            <UsersAvatarList rsvp="accepted" size={24} />
             <Text style={{ color: "rgba(255, 255, 255, 0.50)" }}>2 Friends Joined</Text>
           </View>
           <Pressable
+            onPress={onTripSelect}
             style={{
               alignSelf: "center",
               borderWidth: 1,
@@ -151,8 +139,6 @@ const Trip = ({ trip }: TripProps) => {
           )}
         />
       </Card> */}
-    </Pressable>
+    </View>
   );
-};
-
-export default Trip;
+}

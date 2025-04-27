@@ -2,14 +2,12 @@ import { HTTPSTATUSCODE } from "@/constants/constants";
 import { AuthService } from "@/features/Auth/Services/authService";
 
 /**
- *
+ * Abstract Class that defines an App error which adds a status field to a regular JS Error
  */
 abstract class AppError extends Error {
   readonly status: number | undefined;
   readonly cause: unknown;
-  /**
-   *
-   */
+
   protected constructor(name: string, message: string, status?: number, options?: { cause?: unknown }) {
     super(message, options);
     this.name = name;
@@ -22,35 +20,29 @@ abstract class AppError extends Error {
 }
 
 /**
- *
+ * Defines ApiError which has a status field for HTTP Status codes
  */
 export class ApiError extends AppError {
-  /**
-   *
-   */
   constructor(status: number, message: string, opts?: { cause?: unknown }) {
     super("ApiError", message, status, opts);
   }
 }
 /**
- *
+ * Unknown Error for any uncaught errors
  */
 export class UnknownError extends Error {}
 
 /**
- *
+ * Network error for resource fetching such as Fetch Api
  */
 export class NetworkError extends AppError {
-  /**
-   *
-   */
   constructor(message: string, opts?: { cause?: unknown }) {
     super("NetworkError", message, undefined, opts);
   }
 }
 
 /**
- *
+ * Custom Error Wrapper that wraps a try catch around an async function an handles the errors according
  */
 export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
   return async () => {

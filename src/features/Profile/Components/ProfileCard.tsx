@@ -3,7 +3,7 @@ import { Avatar, Card, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
 
 /**
- *
+ * Render the UI for Profile Information on the Profile Page
  */
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const theme = useTheme();

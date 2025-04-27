@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
 /**
- *
+ * Render Fallback UI for any uncaught errors that propogate to top level error handlers
  */
 export default function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   if (error instanceof ApiError) {

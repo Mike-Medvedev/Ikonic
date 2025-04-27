@@ -9,7 +9,7 @@ interface UserAvatarProps {
 }
 
 /**
- *
+ * Reusable UI component for User Inital Avatars
  */
 export default function UserAvatar({ user, styles }: UserAvatarProps) {
   return (

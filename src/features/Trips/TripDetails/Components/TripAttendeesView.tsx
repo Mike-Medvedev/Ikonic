@@ -4,7 +4,8 @@ import { Text } from "react-native-paper";
 import UsersAvatarList from "@/ui/UsersAvatarList";
 import { router } from "expo-router";
 /**
- *
+ * Renders the UI for the Trip details section that displays a quick view of Who is attending the trip
+ * Also allows redirects user to detail attendance page on click or a user profiles page
  */
 export default function TripAttendeesView({ selectedTripID }: { selectedTripID: string }) {
   return (

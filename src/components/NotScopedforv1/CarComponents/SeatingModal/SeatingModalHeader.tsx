@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 /**
- *
+ * Render the UI for the Seading Modal Header
  */
 export default function SeatingModalHeader() {
   return (

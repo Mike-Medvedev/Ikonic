@@ -10,7 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 /**
- *
+ * Renders the UI for a list of users that can be invited to a trip
+ * @todo wrap this component in an async state wrapper
  */
 export default function TripInviteList() {
   const {
@@ -27,7 +28,7 @@ export default function TripInviteList() {
   const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
 
   /**
-   *
+   * Event Handler for inviting a user to a trip
    */
   async function handleInvite(user: UserPublic) {
     setIsInviteSending(true);
@@ -38,6 +39,7 @@ export default function TripInviteList() {
       Alert.alert("Invite Sent Successfully!");
     } catch (error) {
       Alert.alert("Error: Invite Failed");
+      console.error(error);
       // throw new Error("Error inviting user: " + user.user_id + String(error));
     } finally {
       setIsInviteSending(false);

@@ -4,7 +4,7 @@ import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
 /**
- *
+ * Shareable UI component that renders a back button and goes back in navigation history
  */
 export default function BackButton({ style }: { style?: StyleProp<ViewStyle> }) {
   const theme = useTheme();

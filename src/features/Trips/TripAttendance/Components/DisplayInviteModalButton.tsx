@@ -2,13 +2,13 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { GestureResponderEvent, Pressable, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
-interface InviteUsersButtonProps {
+interface DisplayInviteModalButtonProps {
   onPress: (event: GestureResponderEvent) => void;
 }
 /**
- *
+ * Render the UI for Button that Toggles InviteUserModal visibility
  */
-export default function InviteUsersButton({ onPress }: InviteUsersButtonProps) {
+export default function DisplayInviteModalButton({ onPress }: DisplayInviteModalButtonProps) {
   return (
     <Pressable onPress={onPress} style={styles.invitedUsersButton}>
       <View style={{ flexDirection: "row", gap: 10 }}>

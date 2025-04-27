@@ -1,14 +1,14 @@
-import React from "react";
+import { useRef, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 /**
- *
+ * Custom Hook for refetching data in a component when that components screen gains focus
  */
 export function useRefreshOnFocus<T>(refetch: () => Promise<T>) {
-  const firstTimeRef = React.useRef(true);
+  const firstTimeRef = useRef(true);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       if (firstTimeRef.current) {
         firstTimeRef.current = false;
         return;

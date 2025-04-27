@@ -260,7 +260,7 @@ const CountryCodeEmojiMap: Record<string, string> = {
 };
 
 /**
- *
+ * THIS WILL BE REMOVED
  */
 export default function CountryCodePicker({ countryCode }: CountryCodeProps) {
   const [isDropDownDisplayed, setIsDropDownDisplayed] = useState<boolean>(false);

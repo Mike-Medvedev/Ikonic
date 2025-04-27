@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { Paragraph, Text } from "react-native-paper";
 
 /**
- *
+ * Renders the UI for an optional Trip description that provides written trip information
  */
 export default function TripDescription({ tripDesc }: { tripDesc: string | undefined }) {
   return (

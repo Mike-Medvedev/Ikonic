@@ -2,24 +2,25 @@ import Background from "@/ui/Background";
 import { View, StyleSheet } from "react-native";
 import { Divider } from "react-native-paper";
 import { useState } from "react";
-import AttendanceSelectionTabs from "@/features/Trips/TripAttendance/Components/AttendanceSelectionTabs";
-import AttendanceContent from "@/features/Trips/TripAttendance/Components/AttendanceContent";
+import AttendanceTabList from "@/features/Trips/TripAttendance/Components/AttendanceTabList";
 import { useLocalSearchParams } from "expo-router";
-import InviteUsersButton from "@/features/Trips/TripAttendance/Components/InviteUsersButton";
+import DisplayInviteModalButton from "@/features/Trips/TripAttendance/Components/DisplayInviteModalButton";
 import InviteUsersModal from "@/features/Trips/TripAttendance/Components/InviteUsersModal";
+import { AttendanceList } from "@/types";
+import UsersAvatarList from "@/ui/UsersAvatarList";
 
 /**
- *
+ * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
  */
 export default function TripAttendanceView() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
-  const [selectedTab, setSelectedTab] = useState<number>(0);
+  const [selectedTab, setSelectedTab] = useState<keyof AttendanceList>("accepted");
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <Background>
       <View style={styles.container}>
         <View style={{ height: "10%" }}>
-          <AttendanceSelectionTabs
+          <AttendanceTabList
             selectedTab={selectedTab}
             setSelectedTab={setSelectedTab}
             selectedTripId={selectedTripId as string}
@@ -27,9 +28,9 @@ export default function TripAttendanceView() {
           <Divider />
         </View>
         <View style={{ height: "30%" }}>
-          <AttendanceContent selectedTab={selectedTab} selectedTripId={selectedTripId as string} />
+          <UsersAvatarList rsvp={selectedTab} />
         </View>
-        <InviteUsersButton onPress={() => setModalVisible(true)} />
+        <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
         <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
       </View>
     </Background>

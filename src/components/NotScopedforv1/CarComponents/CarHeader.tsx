@@ -7,7 +7,7 @@ import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 /**
- *
+ * Render the UI for the title and deletion of a Car
  */
 export default function CarHeader({ currentCar }: { currentCar: CarPublic }) {
   const theme = useTheme();

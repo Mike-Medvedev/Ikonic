@@ -2,31 +2,17 @@ import { useMemo } from "react";
 import { View, StyleSheet } from "react-native";
 import { Avatar, Text, useTheme } from "react-native-paper";
 
-/**
- *
- */
-export default function TitleText({ welcomeText, headline1, headline2 }) {
-  const theme = useTheme();
-  const styles = useMemo(() => {
-    return StyleSheet.create({
-      container: {
-        flex: 1,
-      },
+interface TitleTextProps {
+  welcomeText: string;
+  headline1: string;
+  headline2: string;
+}
 
-      center: {
-        justifyContent: "center",
-        alignItems: "center",
-      },
-      phoneInput: {
-        borderColor: theme.colors.onSurface,
-        backgroundColor: theme.colors.surface,
-      },
-      sendButton: { flex: 1, justifyContent: "center", alignItems: "center" },
-      header: { textTransform: "capitalize", color: theme.colors.primary, paddingVertical: 14 },
-      header2: { textTransform: "capitalize", color: theme.colors.tertiary, paddingVertical: 14 },
-      label: { color: theme.colors.secondaryText },
-    });
-  }, [theme]);
+/**
+ * Reusable UI Component for title
+ */
+export default function TitleText({ welcomeText, headline1, headline2 }: TitleTextProps) {
+  const theme = useTheme();
   return (
     <View>
       <View style={{ flexDirection: "row", gap: 20, alignItems: "center", marginBottom: 15 }}>

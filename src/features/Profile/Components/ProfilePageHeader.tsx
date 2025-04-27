@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
 
 /**
- *
+ * Render UI for Profile Page Header
  */
 export default function ProfilePageHeader() {
   return (

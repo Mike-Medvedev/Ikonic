@@ -5,7 +5,7 @@ import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
 /**
- *
+ * Renders the UI that contain trip title and date, the main details a user should see
  */
 export default function TripDetailsContent({ trip }: { trip: TripPublicParsed }) {
   return (

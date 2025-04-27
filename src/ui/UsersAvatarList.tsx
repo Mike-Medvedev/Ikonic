@@ -2,29 +2,23 @@ import { InviteService } from "@/features/Trips/Services/inviteService";
 import { RSVPStatus } from "@/types";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { Avatar, Text, useTheme } from "react-native-paper";
 
 const MAX_AVATARS = 5;
 
 /**
- *
+ * Renders a List of User Initial Avatars given an attendance list, if more than max avatars, render an avatar showing surplus users
+ * @todo wrap in async state wrapper
  */
-export default function UsersAvatarList({
-  rsvp,
-  selectedTripId,
-  size = 50,
-}: {
-  rsvp: RSVPStatus;
-  selectedTripId: string;
-  size?: number;
-}) {
+export default function UsersAvatarList({ rsvp, size = 50 }: { rsvp: RSVPStatus; size?: number }) {
+  const { selectedTrip: selectedTripId } = useLocalSearchParams();
   const theme = useTheme();
   //prettier-ignore
   const { data: attendees, isLoading, isError, error } = useQuery({
     queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
+    queryFn: async () => InviteService.getInvitedUsers(selectedTripId as string),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });

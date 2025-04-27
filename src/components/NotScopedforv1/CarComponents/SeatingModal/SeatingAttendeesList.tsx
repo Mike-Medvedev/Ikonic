@@ -8,7 +8,8 @@ interface SeatingAttendeesListProps {
 }
 
 /**
- *
+ * Render the UI for a list of passengers in the Seating Modal that can be added as a passenger to a car
+ * @todo add callback type to add Passenger Handler
  */
 export default function SeatingAttendeesList({ attendees, addPassengerHandler }: SeatingAttendeesListProps) {
   return (

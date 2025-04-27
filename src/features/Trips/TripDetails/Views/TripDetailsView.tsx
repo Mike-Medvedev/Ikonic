@@ -11,20 +11,19 @@ import TripDetailsContent from "@/features/Trips/TripDetails/Components/TripDeta
 import TripAttendeesView from "@/features/Trips/TripDetails/Components/TripAttendeesView";
 import TripDescription from "@/features/Trips/TripDetails/Components/TripDescription";
 import EditTripModal from "@/features/Trips/TripDetails/Components/EditTripModal";
-import useUser from "@/hooks/useUser";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 
 /**
- *
+ * Renders the UI for the trip details page
+ * @todo handle getting a user and handling if a user is an owner
  */
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
-  const { getUserId } = useUser();
   const [isOwner, setOwner] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   // prettier-ignore
-  const { data: trip, isLoading, isFetching, isError, error } = useQuery({
+  const { data: trip, isFetching, error } = useQuery({
     queryKey: ["trip", selectedTripID], queryFn: async () => {
       return TripService.getOne(selectedTripID as string);
     },
@@ -39,11 +38,6 @@ export default function TripDetailsView() {
     })();
   }, [trip]);
 
-  // if (isLoading) return <ActivityIndicator />;
-
-  // if (isError || !trip) {
-  //   return <Text>Trip not found.</Text>;
-  // }
   return (
     <Background>
       <View style={styles.container}>

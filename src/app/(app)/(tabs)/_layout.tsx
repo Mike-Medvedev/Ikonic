@@ -13,7 +13,7 @@ const HeaderTitle = () => {
 };
 
 /**
- *
+ * Layout for Expo (tabs) which represent selectable tabs in a mobile app
  */
 export default function TabLayout() {
   const theme = useTheme();

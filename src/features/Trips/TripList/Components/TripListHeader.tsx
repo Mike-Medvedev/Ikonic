@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable } from "react-native";
 import { Badge, Text, useTheme } from "react-native-paper";
 
 /**
- *
+ * Renders the UI for the header of TripList page
  */
 export default function TripListHeader({ tripLength }: { tripLength: number }) {
   const theme = useTheme();
@@ -36,12 +36,6 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
     },
   });
 
-  /**
-   *
-   */
-  function handlePress() {
-    router.navigate("/plan");
-  }
   return (
     <View style={styles.headerContainer}>
       {/* <TitleText welcomeText="Snow Trip Planner" headline1="Plan Your" headline2="Escape" /> */}
@@ -53,7 +47,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
           {tripLength ?? 0}
         </Badge>
       </View>
-      <Pressable style={styles.button} onPress={handlePress}>
+      <Pressable style={styles.button} onPress={() => router.navigate("/plan")}>
         <Text variant="labelLarge" style={{ color: "#000000" }}>
           + New Trip
         </Text>

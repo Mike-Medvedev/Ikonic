@@ -1,23 +1,32 @@
 import js from "@eslint/js";
 import globals from "globals";
-import tseslint from "typescript-eslint";
+import { configs as tseslintConfigs } from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import unusedImports from "eslint-plugin-unused-imports";
 import jsdoc from "eslint-plugin-jsdoc";
+import * as pluginImportX from "eslint-plugin-import-x";
 
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
-  globalIgnores([".expo", ".vscode", "dist"]),
-  tseslint.configs.recommended,
+  globalIgnores(["**/node_modules/**", ".expo", ".vscode", "dist", "build"]),
+  tseslintConfigs.recommended,
   pluginReact.configs.flat.recommended,
   jsdoc.configs["flat/recommended-typescript"],
+  pluginImportX.flatConfigs.recommended,
+  pluginImportX.flatConfigs.typescript,
   {
     plugins: {
       eslintConfigPrettier,
       "unused-imports": unusedImports,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+      "import/ignore": ["react-native"],
     },
     rules: {
       "react/react-in-jsx-scope": "off",
@@ -36,6 +45,7 @@ export default defineConfig([
       "jsdoc/require-jsdoc": [
         "warn",
         {
+          checkConstructors: false,
           require: {
             FunctionDeclaration: true,
             ClassDeclaration: true,

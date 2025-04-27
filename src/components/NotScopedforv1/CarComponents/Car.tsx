@@ -1,13 +1,13 @@
 import { View, StyleSheet } from "react-native";
-import { Car as CarType } from "@/models/Car";
+import { CarPublic } from "@/types";
 import CarHeader from "./CarHeader";
 import CarSeatingLayout from "./CarSeatingLayout";
 
 interface CarProps {
-  car: CarType;
+  car: CarPublic;
 }
 /**
- *
+ * Render the UI for a "Car" which resembles a vehicle registered for a trip and is assigned passengers
  */
 export default function Car({ car: currentCar }: CarProps) {
   return (

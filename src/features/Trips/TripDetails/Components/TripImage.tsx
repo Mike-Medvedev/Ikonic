@@ -1,6 +1,5 @@
 import { TripService } from "@/features/Trips/Services/tripService";
-import { UpdateTripMutation } from "@/types";
-import { TripUpdateParsed } from "@/types";
+import { UpdateTripMutation, TripUpdateParsed } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { Pressable, View, StyleSheet, Image } from "react-native";
@@ -12,7 +11,8 @@ interface TripImageProps {
 }
 
 /**
- *
+ * Renders the UI for an optional Image for the planned trip
+ * @todo make the Image not take up space when no image is provided or some filler image?
  */
 export default function TripImage({ tripImage, currentTripId }: TripImageProps) {
   const queryClient = useQueryClient();

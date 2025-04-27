@@ -1,38 +1,37 @@
 import useToast from "@/hooks/useToast";
-import useUser from "@/hooks/useUser";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import { RSVPStatus } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
+import { useAuth } from "@/context/AuthContext";
 
 /**
- *
+ * route for displaying rsvp page for invited users at /trips/<trip-id>/rsvp
+ * @todo move code into an RSVP view in a feature
+ * @todo wrap in ASyncStateWrapper
  */
 export default function RSVP() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const { getUserId } = useUser();
+  const { session } = useAuth();
+  const userId = session?.user.id;
   const { showSuccess, showFailure } = useToast();
-  const [userId, setUserId] = useState<string>("");
-
-  useEffect(() => {
-    (async () => {
-      const newId = await getUserId();
-      setUserId(newId ?? "");
-    })();
-  }, []);
 
   const { data: tripData, isLoading } = useQuery({
     queryKey: ["trip", selectedTripId],
     queryFn: async () => TripService.getOne(selectedTripId),
   });
+
   /**
-   *
+   * Event handler for rsvp selection and redirects user upon rsvp
    */
   async function rsvpHandler(userResponse: RSVPStatus) {
+    if (!userId) {
+      showFailure({ message: "Invalid User Id please sign in again" });
+      return;
+    }
     try {
       await InviteService.rsvp(selectedTripId, userId, userResponse);
       showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}` });

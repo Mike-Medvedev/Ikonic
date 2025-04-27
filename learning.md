@@ -59,3 +59,13 @@
 4. Fail Fast! Catch them asap, re raise if the the catch doesnt have the context to handle the error. Use this time to Classidy them with a custom exception
 5. Centralize error handling system and hav a global error boundry to catch errors that slip through
 6. Errors during rendering and component lifecycle are bound to react. Async errors/eventhandler errors are outside react understanding this is crucial
+
+## Code Quality
+
+1. Setup Linting Formating and TypeChecking to project to ensure clean and consisten codebase
+2. Eslint is a popular js linter with lots of rules and custom plugins, import eslint plugins and specify what rules to use, and ad custom configs for them
+3. Prettier is a popular formatter that uses a config file to format all files (configure format on save in settings.json)
+4. husky is a git hook util that hooks into git lifecycle like pre-commit and runs scripts
+5. use husky to run linting, formatting, and typechecking on every commit to ensure code base stays pristine
+6. use typescript tsc --noEmit to check types before commit
+7. Add Jsdoc to all classes and functions to completely document codebase, prefer describing WHY not WHAT a piece of code does. (use jsdoc linting tool)

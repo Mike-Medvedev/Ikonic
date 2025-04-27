@@ -5,7 +5,8 @@ import { View, StyleSheet, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 
 /**
- *
+ * Supposed to display the layout for a selected profile based on /profile/<user-id>
+ * @todo fix this layout to properly setup layout for selected profile
  */
 export default function SelectedProfile() {
   const theme = useTheme();

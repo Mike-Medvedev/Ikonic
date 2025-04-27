@@ -13,16 +13,7 @@ type CardProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const CardComponent = ({
-  children,
-  coverSource,
-  overlayContent,
-  headline1 = "",
-  headline2 = "",
-  date,
-  style,
-}: CardProps) => {
-  const theme = useTheme();
+const CardComponent = ({ children, coverSource, overlayContent, style }: CardProps) => {
   return (
     <View style={[styles.card, style]}>
       {coverSource && (

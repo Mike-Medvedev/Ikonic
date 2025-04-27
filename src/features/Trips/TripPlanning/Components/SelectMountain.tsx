@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { HelperText, Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import React from "react";
 import { NewTripForm } from "@/types";
 import CustomAutoCompleteInput from "@/ui/CustomAutoCompleteInput";
 interface SelectMountainProps {

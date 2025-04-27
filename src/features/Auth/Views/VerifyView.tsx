@@ -6,18 +6,16 @@ import OTPForm from "@/ui/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import useToast from "@/hooks/useToast";
 import TitleText from "@/ui/TitleText";
 import { Card } from "@/ui/Card";
 
 /**
- *
+ * Render the UI for the verify page
  */
 export default function VerifyView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const { verifyOTP } = useAuth();
-  const { showSuccess, showFailure } = useToast();
   const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string };
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
 
@@ -38,17 +36,16 @@ export default function VerifyView() {
   }, [theme]);
 
   /**
-   *
+   * Event Handler for verifying a SMS otp input by the user
+   * @todo fix phone verification, since we will support us numbers only
    */
   async function handleVerify() {
     setIsLoading(true);
     const phone = `1${phoneNumber}`;
     const otp = code.join("");
-    const { error } = await verifyOTP(phone, otp);
+    await verifyOTP(phone, otp);
 
     setIsLoading(false);
-
-    if (error) showFailure({ message: error.message });
   }
 
   const handleResendCode = async () => {
@@ -87,7 +84,7 @@ export default function VerifyView() {
                 )}
               </Pressable>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={{ color: theme.colors.secondary }}>Didn't recieve code?</Text>
+                <Text style={{ color: theme.colors.secondary }}>Didn&apos;t recieve code?</Text>
                 <Text style={{ color: theme.colors.primary }}>Resend Code</Text>
               </View>
             </Card>

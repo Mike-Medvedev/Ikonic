@@ -5,15 +5,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { CarService } from "@/features/Carpool/Services/carService";
 import { CarCreate } from "@/types";
-import useUser from "@/hooks/useUser";
 import CreateCarButton from "@/components/NotScopedforv1/CarComponents/CreateCarButton";
 import CarList from "@/components/NotScopedforv1/CarComponents/CarList";
 /**
- *
+ * Render the UI for Carpool page
+ * Fetches list of cars for a trip and contains car creation mutation
+ * @todo wrap this componnet in async state wrapper
  */
 export default function CarpoolView() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
-  const { getUserId } = useUser();
   const queryClient = useQueryClient();
 
   //prettier-ignore
@@ -35,7 +35,8 @@ export default function CarpoolView() {
   if (isError || !cars) return <Text>Error: {error?.message ?? "No cars"}</Text>;
 
   /**
-   *
+   * Helper function to check whether a User is already a car owner
+   * @todo api endpoint should also enforce user cannot creat car if he is an owner
    */
   function userHasCar(): boolean {
     // return !!cars.find((car) => car.owner.user_id === await getUserId());
@@ -43,7 +44,8 @@ export default function CarpoolView() {
   }
 
   /**
-   *
+   * Event handler which executes a car creation mutation
+   * @todo encapuslate car creation mutation within car create button
    */
   function createCarHandler() {
     if (userHasCar()) return;

@@ -2,23 +2,23 @@ import UserAvatar from "@/ui/UserAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
-import SeatingSelectionPopup from "@/components/NotScopedforv1/CarComponents/SeatingModal/SeatingModal";
-import { Car } from "@/models/Car";
+import SeatingModal from "@/components/NotScopedforv1/CarComponents/SeatingModal/SeatingModal";
+import { CarPublic } from "@/types";
 
 interface CarPositionSelectProps {
-  currentCar: Car;
+  currentCar: CarPublic;
   styles: StyleProp<ViewStyle>;
   position: number;
 }
 /**
- *
+ * Render seat selection buttons to handle passenger selection for a car
  */
 export default function CarPositionSelect({ currentCar, styles, position }: CarPositionSelectProps) {
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
   /**
-   *
+   * Event handler for displaying passenger seelction and assigning seat position
    */
   function seatSelectionHandler() {
     setVisible(true);
@@ -34,12 +34,7 @@ export default function CarPositionSelect({ currentCar, styles, position }: CarP
         )}
       </Pressable>
 
-      <SeatingSelectionPopup
-        visible={visible}
-        setVisible={setVisible}
-        seatPosition={selectedSeat!}
-        carId={currentCar.id}
-      />
+      <SeatingModal visible={visible} setVisible={setVisible} seatPosition={selectedSeat!} carId={currentCar.id} />
     </>
   );
 }

@@ -5,7 +5,6 @@ import { phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import TextInput from "@/ui/TextInput";
 import Background from "@/ui/Background";
-import { useLocalSearchParams } from "expo-router/build/hooks";
 import { SimpleForm } from "@/types";
 import useToast from "@/hooks/useToast";
 import AvatarGlowImage from "@/ui/AvatarGlowImage";
@@ -19,14 +18,14 @@ export interface LoginForm {
 }
 
 /**
- *
+ * Render the UI for the login page
  */
 export default function LoginView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
-  const { showSuccess, showFailure } = useToast();
+  const { showSuccess } = useToast();
   const { signIn } = useAuth();
-  const { callback: rsvpPathCallback } = useLocalSearchParams();
+  // const { callback: rsvpPathCallback } = useLocalSearchParams();
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
     countryCode: { value: "1", error: "" },
@@ -34,7 +33,7 @@ export default function LoginView() {
   });
 
   /**
-   *
+   * Helper Function that validates whether a phone number is a valid number
    */
   function validateLogin() {
     const phoneError = phoneValidator(loginForm.phoneNumber.value);
@@ -56,7 +55,7 @@ export default function LoginView() {
     if (!validateLogin()) return;
     const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
 
-    const { error } = await signIn(phoneNumber);
+    await signIn(phoneNumber);
 
     setIsLoading(false);
 

@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Image, StyleSheet } from "react-native";
 
-const AvatarGlowImage = ({ imageUri, size = 400, glowColor = "#00e5ff", glowIntensity = 15 }) => {
+/**
+ * UI Component that accepts an Image and adds a glow affect around it
+ * @todo fix this and probobly delete it?
+ */
+export default function AvatarGlowImage({ imageUri, size = 400, glowColor = "#00e5ff", glowIntensity = 15 }) {
   return (
     <View style={styles.container}>
       {/* Glow effect layer */}
@@ -31,7 +35,7 @@ const AvatarGlowImage = ({ imageUri, size = 400, glowColor = "#00e5ff", glowInte
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -55,5 +59,3 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-
-export default AvatarGlowImage;

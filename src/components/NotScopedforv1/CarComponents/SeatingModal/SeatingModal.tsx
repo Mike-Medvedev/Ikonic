@@ -15,7 +15,7 @@ interface SeatingModalProps {
 }
 
 /**
- *
+ * Render a Modal containing a list of passengers to select and assign to a carseat
  */
 export default function SeatingModal({ visible, setVisible, seatPosition, carId }: SeatingModalProps) {
   const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
   });
 
   /**
-   *
+   * Event handler for adding passenger mutation
    */
   function addPassengerHandler(user: UserPublic) {
     addPassengerMutation.mutate({ carId, user, seatPosition });

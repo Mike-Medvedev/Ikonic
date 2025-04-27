@@ -4,7 +4,7 @@ import { AUTH_GROUP, APP_GROUP, DEFAULT_APP_PATH, LOGIN_PATH } from "@/constants
 import { Session } from "@supabase/supabase-js";
 
 /**
- *
+ * Custom Hook redirects users based on current auth permissions and url restrictions
  */
 export function useAuthRedirect(session: Session | null, isLoading: boolean) {
   const router = useRouter();

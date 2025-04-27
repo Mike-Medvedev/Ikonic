@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
-import { NativeSyntheticEvent, TextInputKeyPressEventData } from "react-native";
-import { View, StyleSheet, TextInput as NativeTextInput } from "react-native";
+import {
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+  View,
+  StyleSheet,
+  TextInput as NativeTextInput,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 
 interface OTPFormProps {
@@ -10,16 +15,12 @@ interface OTPFormProps {
 
 const OTP_LENGTH = 6;
 
-/**
- *
- */
+/** Renders a SMS One Time Passcode form which accepts a code for user verification */
 export default function OTPForm({ code, setCode }: OTPFormProps) {
   const inputRef = useRef<NativeTextInput[]>([]);
   const [hiddenInputCode, setHiddenInputCode] = useState<string>("");
 
-  /**
-   *
-   */
+  /** Event Handler handling sms otp input, uses setTimout as a hack to delay focus */
   function handleKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) {
     if (event.nativeEvent.key === "Backspace") {
       if (index === 0) return;
@@ -34,9 +35,7 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
     }
   }
 
-  /**
-   *
-   */
+  /** Event Handler for text change, sets a string[] index to the current input */
   function handleTextChange(text: string, index: number) {
     setCode((prev) => {
       const newCode = [...prev];
@@ -45,9 +44,7 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
     });
   }
 
-  /**
-   *
-   */
+  /** Hidden input to handle autoFilled code from sms, spreads the text across the real inputs string[] */
   function handleHiddenInputCode(text: string) {
     const otp = text.slice(0, 6);
     setHiddenInputCode(text);

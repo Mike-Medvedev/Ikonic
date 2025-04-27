@@ -1,7 +1,8 @@
 import { View, StyleSheet } from "react-native";
 import { Text, Divider } from "react-native-paper";
 /**
- *
+ * Renders the Title for Editing Trip details page
+ * @todo maybe Titles should all be unified and consistent? theres alot of header components like this taht are all similiar
  */
 export default function EditTripModalTitle() {
   return (

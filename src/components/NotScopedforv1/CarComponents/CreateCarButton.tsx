@@ -8,7 +8,8 @@ interface CreateCarButtonProps {
 }
 
 /**
- *
+ * Render the UI for Add Car button which creates a car in a trip
+ * @todo refactor component to directly invoke create car mutation
  */
 export default function CreateCarButton({ onPress, disabled }: CreateCarButtonProps) {
   return (

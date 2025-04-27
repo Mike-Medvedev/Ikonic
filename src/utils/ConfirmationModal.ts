@@ -1,6 +1,6 @@
 import { Alert, Platform } from "react-native";
 /**
- *
+ * Renders a Pop up to confirm that a resource is about to be deleted
  */
 export function DeleteConfirmation({ deleteFn }: { deleteFn: () => void }) {
   if (Platform.OS !== "web") {

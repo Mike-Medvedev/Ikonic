@@ -9,7 +9,8 @@ interface EditTripFormProps {
 }
 
 /**
- *
+ * Renders the UI for the Edit Trip page and updates user form submission
+ * @todo figure out what to do with images need to store in them in a storage
  */
 export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: EditTripFormProps) {
   const pickImage = async () => {

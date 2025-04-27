@@ -7,12 +7,12 @@ import { TripService } from "@/features/Trips/Services/tripService";
 import { Text, useTheme } from "react-native-paper";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 /**
- *
+ * Render the UI for the page that displays List of selectable Trips and their quick information
  */
 export default function TripListView() {
   const theme = useTheme();
   // prettier-ignore
-  const { data: trips, isLoading, isFetching, isError, error, refetch} = useQuery({
+  const { data: trips, isFetching, error, refetch} = useQuery({
     queryKey: ["trips"], queryFn: async () => {
       return TripService.getAll();
     },

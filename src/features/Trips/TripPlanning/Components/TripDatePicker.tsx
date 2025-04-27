@@ -1,10 +1,10 @@
-import React from "react";
 import { View } from "react-native";
 import { useTheme, TextInput, HelperText } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { NewTripForm } from "@/types";
+import { useState, useCallback } from "react";
 
 interface TripDatePickerProps {
   tripForm: NewTripForm;
@@ -12,10 +12,11 @@ interface TripDatePickerProps {
 }
 
 /**
- *
+ * Renders a date selection component that allows users to choose a date for a trip during planning
+ * @todo review the date transformations in the confirmation handler and any data type
  */
 export default function TripDatePicker({ tripForm, setTripForm }: TripDatePickerProps) {
-  const [range, setRange] = React.useState<{
+  const [range, setRange] = useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
   }>({
@@ -23,13 +24,13 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
     endDate: undefined,
   });
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-  const onDismiss = React.useCallback(() => {
+  const onDismiss = useCallback(() => {
     setOpen(false);
   }, []);
 
-  const onConfirm = React.useCallback(({ startDate, endDate }: { startDate: any; endDate: any }) => {
+  const onConfirm = useCallback(({ startDate, endDate }: { startDate: any; endDate: any }) => {
     setOpen(false);
     setRange({ startDate, endDate });
     setTripForm((prev) => ({

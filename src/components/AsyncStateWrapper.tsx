@@ -10,7 +10,9 @@ interface AsyncStateWrapperProps {
   children: React.ReactNode;
 }
 /**
- *
+ * Custom Wrapper component that conitionally renders loading and error UI instead of children
+ * Centralizes error and loading states for react components and integrates well with tanstack
+ * @todo use the message prop passed to async state wrapper
  */
 export default function AsyncStateWrapper({ isLoading, error, message, children }: AsyncStateWrapperProps) {
   const { showFailure } = useToast();
@@ -23,6 +25,7 @@ export default function AsyncStateWrapper({ isLoading, error, message, children 
           showFailure({
             message: "Error The Requested data was not found, please try something else",
           });
+          break;
         case 422:
           showFailure({ message: "Error The Request you made was invalid, please try again" });
           break;

@@ -13,7 +13,7 @@ interface EditTripModalProps {
 }
 
 /**
- *
+ * Renders the Main Layout for the Edit Trip Form which modfies the detals of a planned trip
  */
 export default function EditTripModal({ currentTrip, visible, setVisible }: EditTripModalProps) {
   const [tripUpdateForm, setTripUpdateForm] = useState<TripUpdateParsed>({
