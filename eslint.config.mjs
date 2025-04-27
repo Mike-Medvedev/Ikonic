@@ -5,6 +5,7 @@ import pluginReact from "eslint-plugin-react";
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import unusedImports from "eslint-plugin-unused-imports";
+import jsdoc from "eslint-plugin-jsdoc";
 
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
@@ -12,6 +13,7 @@ export default defineConfig([
   globalIgnores([".expo", ".vscode", "dist"]),
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  jsdoc.configs["flat/recommended-typescript"],
   {
     plugins: {
       eslintConfigPrettier,
@@ -23,14 +25,29 @@ export default defineConfig([
       "@typescript-eslint/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
-          "warn",
-          {
-              "vars": "all",
-              "varsIgnorePattern": "^_",
-              "args": "after-used",
-              "argsIgnorePattern": "^_",
+        "warn",
+        {
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+        },
+      ],
+      "jsdoc/require-jsdoc": [
+        "warn",
+        {
+          require: {
+            FunctionDeclaration: true,
+            ClassDeclaration: true,
+            MethodDefinition: true,
+            ArrowFunctionExpression: false,
+            FunctionExpression: false,
           },
-      ]
+        },
+      ],
+      "jsdoc/require-description": "warn",
+      "jsdoc/require-param": "warn",
+      "jsdoc/require-returns": "warn",
     },
   },
 ]);

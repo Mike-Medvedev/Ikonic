@@ -9,11 +9,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "@/components/Fallback";
-import {
-  QueryClient,
-  QueryClientProvider,
-  QueryErrorResetBoundary,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";

@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 // Your Supabase client
-import { useSegments, useRouter } from "expo-router";
 import { AuthService } from "@/features/Auth/Services/authService";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 

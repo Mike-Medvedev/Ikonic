@@ -26,7 +26,7 @@ export default function TabLayout() {
         backgroundColor: theme.colors.surface,
       },
     }),
-    [theme]
+    [theme],
   );
   return (
     <Tabs initialRouteName="plan" screenOptions={tabScreenOptions}>

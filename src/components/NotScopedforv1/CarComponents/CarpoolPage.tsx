@@ -38,7 +38,10 @@ export default function CarpoolView() {
 
   function createCarHandler() {
     if (userHasCar()) return;
-    createCarMutation.mutate({ selectedTripId: selectedTripId as string, newCar: { seatCount: 4 } });
+    createCarMutation.mutate({
+      selectedTripId: selectedTripId as string,
+      newCar: { seatCount: 4 },
+    });
   }
 
   return (

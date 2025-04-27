@@ -16,7 +16,14 @@ export default function CarSeatingLayout({ currentCar }: { currentCar: Car }) {
 }
 const styles = StyleSheet.create({
   container: { position: "relative" },
-  driverPosition: { width: 44, height: 44, position: "absolute", top: 80, left: 2, borderRadius: 60 },
+  driverPosition: {
+    width: 44,
+    height: 44,
+    position: "absolute",
+    top: 80,
+    left: 2,
+    borderRadius: 60,
+  },
   shotgunPosition: { position: "absolute", top: 80, right: 2 },
   backSeatLeft: { position: "absolute", bottom: 30, right: 2 },
   backSeatRight: { position: "absolute", bottom: 30, left: 2 },

@@ -17,7 +17,9 @@ export default function AsyncStateWrapper({ isLoading, error, message, children 
     if (error instanceof ApiError) {
       switch (error.status) {
         case 404:
-          showFailure({ message: "Error The Requested data was not found, please try something else" });
+          showFailure({
+            message: "Error The Requested data was not found, please try something else",
+          });
         case 422:
           showFailure({ message: "Error The Request you made was invalid, please try again" });
           break;
@@ -25,7 +27,9 @@ export default function AsyncStateWrapper({ isLoading, error, message, children 
           showFailure({ message: `Error ${error.status}: ${error.message}` });
       }
     } else if (error instanceof NetworkError) {
-      showFailure({ message: `Network Error: Please check your connection and try again${error.message}` });
+      showFailure({
+        message: `Network Error: Please check your connection and try again${error.message}`,
+      });
     } else showFailure({ message: `Error: ${error.message}` });
   }, [error]);
 

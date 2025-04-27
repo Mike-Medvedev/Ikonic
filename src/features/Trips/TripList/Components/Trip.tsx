@@ -71,7 +71,14 @@ const Trip = ({ trip }: TripProps) => {
                 color={theme.colors.error}
               />
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", margin: 8, alignItems: "flex-end" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                margin: 8,
+                alignItems: "flex-end",
+              }}
+            >
               <View style={{ alignItems: "center" }}>
                 <Text variant="headlineMedium" style={{ color: "#fff", margin: 8 }}>
                   {trip.title}

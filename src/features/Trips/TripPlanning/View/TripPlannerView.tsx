@@ -29,7 +29,9 @@ export default function TripPlannerView() {
       if (error instanceof ApiError)
         showFailure({ message: `${error.name} ${error.status} ${error.message} Please Try again` });
       else if (error instanceof NetworkError)
-        showFailure({ message: `${error.name} ${error.message} Please Test your connection and try again` });
+        showFailure({
+          message: `${error.name} ${error.message} Please Test your connection and try again`,
+        });
       else showFailure({ message: `${error.name} ${error.message} Please try again` });
     },
     onSettled: () => {
@@ -74,7 +76,12 @@ export default function TripPlannerView() {
         flex: 1,
         width: 350,
       },
-      header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
+      header: {
+        fontSize: 26,
+        color: theme.colors.primary,
+        fontWeight: "bold",
+        paddingVertical: 14,
+      },
     });
   }, [theme]);
   return (

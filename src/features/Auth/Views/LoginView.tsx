@@ -35,7 +35,10 @@ export default function LoginView() {
     // const passwordError = passwordValidator(loginForm.password.value);
 
     if (phoneError) {
-      setLoginForm((prev) => ({ ...prev, phoneNumber: { value: prev.phoneNumber.value, error: phoneError } }));
+      setLoginForm((prev) => ({
+        ...prev,
+        phoneNumber: { value: prev.phoneNumber.value, error: phoneError },
+      }));
       // setLoginForm((prev) => ({ ...prev, password: { value: prev.password.value, error: passwordError } }));
       return false;
     }
@@ -65,7 +68,7 @@ export default function LoginView() {
         phoneNumber: { value: text, error: "" },
       }));
     },
-    [setLoginForm]
+    [setLoginForm],
   );
 
   const styles = useMemo(() => {

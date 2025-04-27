@@ -12,7 +12,7 @@ export function DeleteConfirmation({ deleteFn }: { deleteFn: () => void }) {
         },
         { text: "OK", onPress: () => deleteFn() },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   } else {
     if (window.confirm("Are you sure you want to delete this?")) {

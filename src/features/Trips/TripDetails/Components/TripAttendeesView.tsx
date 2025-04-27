@@ -19,5 +19,10 @@ export default function TripAttendeesView({ selectedTripID }: { selectedTripID: 
 }
 const styles = StyleSheet.create({
   attendingUsersContainer: { marginTop: 20, gap: 15, alignItems: "center" },
-  attendingUsersLabel: { flexDirection: "row", gap: 10, justifyContent: "space-between", alignItems: "center" },
+  attendingUsersLabel: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });

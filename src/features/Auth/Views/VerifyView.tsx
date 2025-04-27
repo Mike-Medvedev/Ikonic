@@ -24,7 +24,12 @@ export default function VerifyView() {
         flex: 1,
       },
       center: { alignItems: "center", justifyContent: "center" },
-      header: { fontSize: 26, color: theme.colors.primary, fontWeight: "bold", paddingVertical: 14 },
+      header: {
+        fontSize: 26,
+        color: theme.colors.primary,
+        fontWeight: "bold",
+        paddingVertical: 14,
+      },
       backButtonContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
     });
   }, [theme]);
