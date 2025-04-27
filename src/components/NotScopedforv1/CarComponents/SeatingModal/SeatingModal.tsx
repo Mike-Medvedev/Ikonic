@@ -28,7 +28,8 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
     enabled: !!selectedTripId,
   });
   const addPassengerMutation = useMutation<void, Error, any>({
-    mutationFn: ({ carId, userId, seatPosition }) => CarService.addPassenger(carId, selectedTripId, seatPosition),
+    mutationFn: ({ carId, userId, seatPosition }) =>
+      CarService.addPassenger(selectedTripId, carId, seatPosition, userId),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 
@@ -36,7 +37,7 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
    * Event handler for adding passenger mutation
    */
   function addPassengerHandler(user: UserPublic) {
-    addPassengerMutation.mutate({ carId, user, seatPosition });
+    addPassengerMutation.mutate({ carId, user: user.id, seatPosition });
     setVisible(false);
   }
   return (

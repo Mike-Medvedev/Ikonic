@@ -61,11 +61,11 @@ export const CarService = {
   },
 
   /** Add a passenger to a car */
-  addPassenger: async (tripId: string, carId: string, seatPosition: number): Promise<void> => {
+  addPassenger: async (tripId: string, carId: string, seatPosition: number, userId: string): Promise<void> => {
     const client = await createAuthenticatedClient();
     await addPassengerApiV1TripsTripIdCarsCarIdPassengersPost<true>({
       path: { trip_id: tripId, car_id: carId },
-      body: { seatPosition },
+      body: { seatPosition, userId },
       client,
     });
   },
