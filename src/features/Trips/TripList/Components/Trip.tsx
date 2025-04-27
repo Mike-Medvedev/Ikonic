@@ -1,7 +1,7 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, View, GestureResponderEvent, StyleSheet } from "react-native";
-import { Avatar, useTheme, Text } from "react-native-paper";
+import { useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TripPublicParsed } from "@/types";

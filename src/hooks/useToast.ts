@@ -1,5 +1,4 @@
 import { router, UnknownInputParams } from "expo-router";
-import { NavigationOptions } from "expo-router/build/global-state/routing";
 import { Alert, Platform } from "react-native";
 
 const useToast = () => {

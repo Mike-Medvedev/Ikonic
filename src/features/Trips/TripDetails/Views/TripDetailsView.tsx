@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { ActivityIndicator, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";

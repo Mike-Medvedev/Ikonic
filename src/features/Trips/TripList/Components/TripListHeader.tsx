@@ -1,4 +1,3 @@
-import TitleText from "@/ui/TitleText";
 import { router } from "expo-router";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Badge, Text, useTheme } from "react-native-paper";

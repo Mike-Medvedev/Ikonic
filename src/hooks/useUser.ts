@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/utils/Supabase";
-import { User as SupabaseUser, Session } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 
 export default function useUser() {
   const [userId, setUserId] = useState<string>("");

@@ -1,11 +1,10 @@
 import Background from "@/ui/Background";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { View, StyleSheet, Pressable } from "react-native";
-import { Button, useTheme, Text, ActivityIndicator } from "react-native-paper";
+import { useTheme, Text, ActivityIndicator } from "react-native-paper";
 import OTPForm from "@/ui/OTPForm";
 import BackButton from "@/ui/BackButton";
 import { router, useLocalSearchParams } from "expo-router";
-import Logo from "@/ui/Logo";
 import { useAuth } from "@/context/AuthContext";
 import useToast from "@/hooks/useToast";
 import TitleText from "@/ui/TitleText";

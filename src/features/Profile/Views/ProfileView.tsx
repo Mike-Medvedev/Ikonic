@@ -1,5 +1,5 @@
 import Background from "@/ui/Background";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ProfilePageHeader from "@/features/Profile/Components/ProfilePageHeader";
 import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";

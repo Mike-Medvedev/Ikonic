@@ -1,8 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
 import { Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
-import { LOGIN_PATH } from "@/constants/constants";
 import { useAuth } from "@/context/AuthContext";
 
 export default function SignOutButton() {

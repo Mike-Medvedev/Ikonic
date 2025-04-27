@@ -1,7 +1,5 @@
-import { LOGIN_PATH } from "@/constants/constants";
 import useToast from "@/hooks/useToast";
-import { ApiError, errors, NetworkError } from "@/lib/errors";
-import { router } from "expo-router";
+import { ApiError, NetworkError } from "@/lib/errors";
 import { useEffect } from "react";
 import { ActivityIndicator, Text } from "react-native-paper";
 

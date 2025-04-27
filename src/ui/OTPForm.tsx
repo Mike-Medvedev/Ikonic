@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { NativeSyntheticEvent, TextInputKeyPressEventData } from "react-native";
 import { View, StyleSheet, TextInput as NativeTextInput } from "react-native";
 import { TextInput } from "react-native-paper";

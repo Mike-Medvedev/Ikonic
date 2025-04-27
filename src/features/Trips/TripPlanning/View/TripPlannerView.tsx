@@ -8,7 +8,7 @@ import { dateValidator, nameValidator } from "@/utils/validators";
 import Background from "@/ui/Background";
 import { useMemo, useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
-import { NewTripForm, TripCreate, TripCreateParsed, TripPublicParsed } from "@/types";
+import { NewTripForm, TripCreateParsed, TripPublicParsed } from "@/types";
 import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

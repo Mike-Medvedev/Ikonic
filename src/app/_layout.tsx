@@ -1,4 +1,4 @@
-import { router, Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider } from "@/context/AuthContext";
@@ -10,10 +10,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
 import Fallback from "@/components/Fallback";
 import {
-  QueryCache,
   QueryClient,
   QueryClientProvider,
-  queryOptions,
   QueryErrorResetBoundary,
 } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
@@ -21,8 +19,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { LOGIN_PATH, MAX_NET_RETRIES } from "@/constants/constants";
-import { Alert } from "react-native";
+import { MAX_NET_RETRIES } from "@/constants/constants";
 
 SplashScreen.preventAutoHideAsync();
 

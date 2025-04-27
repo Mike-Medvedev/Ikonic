@@ -1,14 +1,10 @@
 import Trip from "@/features/Trips/TripList/Components/Trip";
 import TripListHeader from "@/features/Trips/TripList/Components/TripListHeader";
-import { useRefreshOnFocus } from "@/hooks/useRefreshOnFocus";
 import Background from "@/ui/Background";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList, StyleSheet, View } from "react-native";
 import { TripService } from "@/features/Trips/Services/tripService";
-import { ActivityIndicator, Text, useTheme } from "react-native-paper";
-import { ApiError, NetworkError, errors } from "@/lib/errors";
-import { router } from "expo-router";
-import { LOGIN_PATH } from "@/constants/constants";
+import { Text, useTheme } from "react-native-paper";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 export default function TripListView() {
   const theme = useTheme();

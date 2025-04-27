@@ -1,6 +1,5 @@
-import { HTTPSTATUSCODE, LOGIN_PATH } from "@/constants/constants";
-import { ApiError, NetworkError } from "@/lib/errors";
-import { router } from "expo-router";
+import { HTTPSTATUSCODE } from "@/constants/constants";
+import { ApiError } from "@/lib/errors";
 import { FallbackProps } from "react-error-boundary";
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";

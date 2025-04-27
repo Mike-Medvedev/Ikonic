@@ -1,8 +1,7 @@
 import BackButton from "@/ui/BackButton";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { useMemo } from "react";
-import { View, Pressable, StyleSheet, SafeAreaView } from "react-native";
+import { View, StyleSheet, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 
 export default function SelectedProfile() {

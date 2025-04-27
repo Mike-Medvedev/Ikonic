@@ -1,9 +1,8 @@
 // context/AuthProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/utils/Supabase"; // Your Supabase client
+// Your Supabase client
 import { useSegments, useRouter } from "expo-router";
-import { AUTH_GROUP, APP_GROUP, LOGIN_PATH, DEFAULT_APP_PATH } from "@/constants/constants";
 import { AuthService } from "@/features/Auth/Services/authService";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
@@ -33,9 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
-
-  const router = useRouter();
-  const segments = useSegments();
 
   // Inside your AuthProvider component...
   useAuthRedirect(session, isLoading);
