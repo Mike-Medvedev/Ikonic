@@ -30,7 +30,7 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
     setOpen(false);
   }, []);
 
-  const onConfirm = useCallback(({ startDate, endDate }: { startDate: any; endDate: any }) => {
+  const onConfirm = useCallback(({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
     setOpen(false);
     setRange({ startDate, endDate });
     setTripForm((prev) => ({

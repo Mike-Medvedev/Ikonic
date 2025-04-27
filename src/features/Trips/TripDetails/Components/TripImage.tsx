@@ -16,7 +16,7 @@ interface TripImageProps {
  */
 export default function TripImage({ tripImage, currentTripId }: TripImageProps) {
   const queryClient = useQueryClient();
-  const mutation = useMutation<void, any, UpdateTripMutation>({
+  const mutation = useMutation<void, Error, UpdateTripMutation>({
     mutationFn: async ({ currentTripId, form }) => {
       TripService.update(currentTripId, form);
     },

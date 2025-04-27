@@ -1,10 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { memo } from "react";
-import { View, StyleSheet, ImageBackground, ViewStyle, StyleProp } from "react-native";
+import { View, StyleSheet, ImageBackground, ViewStyle, StyleProp, ImageSourcePropType } from "react-native";
 
 type CardProps = {
   children: React.ReactNode;
-  coverSource?: any;
+  coverSource?: ImageSourcePropType;
   overlayContent?: React.ReactNode;
   headline1?: string;
   headline2?: string;

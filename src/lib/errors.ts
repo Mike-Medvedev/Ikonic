@@ -42,12 +42,16 @@ export class NetworkError extends AppError {
 }
 
 /**
- * Custom Error Wrapper that wraps a try catch around an async function an handles the errors according
+ * Generic Error Wrapper that wraps a try catch around an async function and handles accordingly
+ * @param fn original function with original parameters ...args
+ * @returns the same function with error handling
  */
-export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
-  return async () => {
+export function withError<TArgs extends unknown[], T>(
+  fn: (...args: TArgs) => Promise<T>,
+): (...args: TArgs) => Promise<T> {
+  return async (...args: TArgs) => {
     try {
-      const result = await fn();
+      const result = await fn(...args);
       return result;
     } catch (error) {
       if (error instanceof ApiError) {

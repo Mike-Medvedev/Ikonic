@@ -15,7 +15,7 @@ interface ButtonGroupProps {
  */
 export default function EditTripButtonGroup({ currentTripId, form, setVisible }: ButtonGroupProps) {
   const queryClient = useQueryClient();
-  const mutation = useMutation<void, any, UpdateTripMutation>({
+  const mutation = useMutation<void, Error, UpdateTripMutation>({
     mutationFn: async ({ currentTripId, form }) => {
       await TripService.update(currentTripId, form);
     },

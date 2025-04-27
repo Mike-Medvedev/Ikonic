@@ -11,7 +11,13 @@ interface SeatingModalProps {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   seatPosition: number;
-  carId: number;
+  carId: string;
+}
+
+interface AddPassengerMutation {
+  carId: string;
+  userId: string;
+  seatPosition: number;
 }
 
 /**
@@ -27,7 +33,7 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
-  const addPassengerMutation = useMutation<void, Error, any>({
+  const addPassengerMutation = useMutation<void, Error, AddPassengerMutation>({
     mutationFn: ({ carId, userId, seatPosition }) =>
       CarService.addPassenger(selectedTripId, carId, seatPosition, userId),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
@@ -37,7 +43,7 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
    * Event handler for adding passenger mutation
    */
   function addPassengerHandler(user: UserPublic) {
-    addPassengerMutation.mutate({ carId, user: user.id, seatPosition });
+    addPassengerMutation.mutate({ carId, userId: user.id, seatPosition });
     setVisible(false);
   }
   return (

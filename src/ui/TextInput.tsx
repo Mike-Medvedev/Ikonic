@@ -1,10 +1,10 @@
 import React, { memo, forwardRef, useMemo, Ref } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TextInput as NativeTextInput } from "react-native";
 import { HelperText, TextInput as Input, useTheme } from "react-native-paper";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };
 
-const TextInputComponent = (props: Props, ref: Ref<any>) => {
+const TextInputComponent = (props: Props, ref: Ref<NativeTextInput>) => {
   const { errorText, ...rest } = props;
   const theme = useTheme();
   const styles = useMemo(() => {

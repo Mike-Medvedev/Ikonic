@@ -1,11 +1,20 @@
 import React from "react";
 import { View, Image, StyleSheet } from "react-native";
 
+interface AvatarGlowImageProps {
+  size?: number;
+  glowColor?: string;
+  glowIntensity: number;
+}
+
 /**
  * UI Component that accepts an Image and adds a glow affect around it
- * @todo fix this and probobly delete it?
  */
-export default function AvatarGlowImage({ imageUri, size = 400, glowColor = "#00e5ff", glowIntensity = 15 }) {
+export default function AvatarGlowImage({
+  size = 400,
+  glowColor = "#00e5ff",
+  glowIntensity = 15,
+}: AvatarGlowImageProps) {
   return (
     <View style={styles.container}>
       {/* Glow effect layer */}

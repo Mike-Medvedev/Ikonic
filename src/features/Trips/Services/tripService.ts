@@ -15,7 +15,7 @@ import { serializeTripCreate, serializeTripUpdate } from "@/utils/serializers";
 
 export const TripService = {
   /** Get all trips */
-  getAll: withError<TripPublicParsed[]>(async (): Promise<TripPublicParsed[]> => {
+  getAll: withError(async (): Promise<TripPublicParsed[]> => {
     const client = await createAuthenticatedClient();
     const res = await getTripsApiV1TripsGet<true>({ client });
     return res.data.data.map(parseTrip);

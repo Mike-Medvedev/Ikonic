@@ -8,17 +8,17 @@ import { useAuth } from "@/context/AuthContext";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 /**
  * Render UI for Profile Page Route
- * @todo Handle undefined profile data
  */
 export default function ProfileView() {
   const { session } = useAuth();
-  if (!session?.user.id) return;
+  if (!session) return null;
   //prettier-ignore
   const { data: profile, isLoading, error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      return UserService.getOne(session?.user.id);
+      return UserService.getOne(session.user.id);
     },
+    enabled: !!session
   });
 
   return (
@@ -26,7 +26,7 @@ export default function ProfileView() {
       <View style={{ flex: 1, width: "100%", height: "100%" }}>
         <ProfilePageHeader />
         <AsyncStateWrapper loading={isLoading} error={error}>
-          <ProfileCard profile={profile} />
+          {profile ? <ProfileCard profile={profile} /> : null}
         </AsyncStateWrapper>
       </View>
     </Background>
