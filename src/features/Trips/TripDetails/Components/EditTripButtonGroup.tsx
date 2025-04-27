@@ -11,6 +11,9 @@ interface ButtonGroupProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ *
+ */
 export default function EditTripButtonGroup({ currentTripId, form, setVisible }: ButtonGroupProps) {
   const queryClient = useQueryClient();
   const mutation = useMutation<void, any, UpdateTripMutation>({
@@ -23,6 +26,9 @@ export default function EditTripButtonGroup({ currentTripId, form, setVisible }:
     },
   });
 
+  /**
+   *
+   */
   async function handleSubmit() {
     mutation.mutate({ currentTripId, form });
   }

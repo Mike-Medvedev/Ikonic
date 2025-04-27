@@ -6,6 +6,9 @@ interface AttendanceContentProps {
   selectedTripId: string;
 }
 
+/**
+ *
+ */
 export default function AttendanceContent({ selectedTab, selectedTripId }: AttendanceContentProps) {
   const Switch = () => {
     switch (selectedTab) {

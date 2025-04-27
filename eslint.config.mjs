@@ -46,8 +46,8 @@ export default defineConfig([
         },
       ],
       "jsdoc/require-description": "warn",
-      "jsdoc/require-param": "warn",
-      "jsdoc/require-returns": "warn",
+      "jsdoc/require-param": "off",
+      "jsdoc/require-returns": "off",
     },
   },
 ]);

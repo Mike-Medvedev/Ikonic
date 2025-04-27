@@ -6,6 +6,9 @@ import CarSeatingLayout from "./CarSeatingLayout";
 interface CarProps {
   car: CarType;
 }
+/**
+ *
+ */
 export default function Car({ car: currentCar }: CarProps) {
   return (
     <View style={styles.carContainer}>

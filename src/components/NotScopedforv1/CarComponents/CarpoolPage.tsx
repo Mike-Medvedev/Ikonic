@@ -8,6 +8,9 @@ import { CarCreate } from "@/types";
 import useUser from "@/hooks/useUser";
 import CreateCarButton from "@/components/NotScopedforv1/CarComponents/CreateCarButton";
 import CarList from "@/components/NotScopedforv1/CarComponents/CarList";
+/**
+ *
+ */
 export default function CarpoolView() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
   const { getUserId } = useUser();
@@ -31,11 +34,17 @@ export default function CarpoolView() {
 
   if (isError || !cars) return <Text>Error: {error?.message ?? "No cars"}</Text>;
 
+  /**
+   *
+   */
   function userHasCar(): boolean {
     // return !!cars.find((car) => car.owner.user_id === await getUserId());
     return false;
   }
 
+  /**
+   *
+   */
   function createCarHandler() {
     if (userHasCar()) return;
     createCarMutation.mutate({

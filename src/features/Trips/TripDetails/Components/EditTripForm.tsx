@@ -8,6 +8,9 @@ interface EditTripFormProps {
   setTripUpdateForm: React.Dispatch<React.SetStateAction<TripUpdateParsed>>;
 }
 
+/**
+ *
+ */
 export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: EditTripFormProps) {
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library

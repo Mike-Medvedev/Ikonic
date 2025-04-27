@@ -7,6 +7,9 @@ interface CreateCarButtonProps {
   disabled: boolean;
 }
 
+/**
+ *
+ */
 export default function CreateCarButton({ onPress, disabled }: CreateCarButtonProps) {
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-around" }}>

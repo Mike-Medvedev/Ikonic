@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/utils/Supabase";
 import { Session } from "@supabase/supabase-js";
 
+/**
+ *
+ */
 export default function useUser() {
   const [userId, setUserId] = useState<string>("");
+  /**
+   *
+   */
   async function getUserId(): Promise<string | undefined> {
     //prettier-ignore
     const { data, error } = await supabase.auth.getSession()
@@ -24,6 +30,9 @@ export default function useUser() {
     })();
   }, []);
 
+  /**
+   *
+   */
   async function getSession(): Promise<Session | null> {
     //prettier-ignore
     const { data: { session }, error } = await supabase.auth.getSession();

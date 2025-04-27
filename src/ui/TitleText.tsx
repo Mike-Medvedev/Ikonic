@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import { View, StyleSheet } from "react-native";
 import { Avatar, Text, useTheme } from "react-native-paper";
 
+/**
+ *
+ */
 export default function TitleText({ welcomeText, headline1, headline2 }) {
   const theme = useTheme();
   const styles = useMemo(() => {

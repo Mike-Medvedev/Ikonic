@@ -8,6 +8,9 @@ import { useLocalSearchParams } from "expo-router";
 import InviteUsersButton from "@/features/Trips/TripAttendance/Components/InviteUsersButton";
 import InviteUsersModal from "@/features/Trips/TripAttendance/Components/InviteUsersModal";
 
+/**
+ *
+ */
 export default function TripAttendanceView() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
   const [selectedTab, setSelectedTab] = useState<number>(0);

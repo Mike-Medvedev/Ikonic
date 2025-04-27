@@ -9,6 +9,9 @@ import { UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
+/**
+ *
+ */
 export default function TripInviteList() {
   const {
     data: users,
@@ -23,6 +26,9 @@ export default function TripInviteList() {
 
   const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
 
+  /**
+   *
+   */
   async function handleInvite(user: UserPublic) {
     setIsInviteSending(true);
     console.log(user);

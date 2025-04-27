@@ -5,6 +5,9 @@ import { Text } from "react-native-paper";
 interface InviteUsersButtonProps {
   onPress: (event: GestureResponderEvent) => void;
 }
+/**
+ *
+ */
 export default function InviteUsersButton({ onPress }: InviteUsersButtonProps) {
   return (
     <Pressable onPress={onPress} style={styles.invitedUsersButton}>

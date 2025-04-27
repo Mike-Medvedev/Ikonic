@@ -1,6 +1,9 @@
 import { View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
 
+/**
+ *
+ */
 export default function ProfilePageHeader() {
   return (
     <View style={styles.container}>

@@ -9,6 +9,9 @@ interface AsyncStateWrapperProps {
   message?: string;
   children: React.ReactNode;
 }
+/**
+ *
+ */
 export default function AsyncStateWrapper({ isLoading, error, message, children }: AsyncStateWrapperProps) {
   const { showFailure } = useToast();
 

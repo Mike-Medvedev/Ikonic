@@ -18,6 +18,9 @@ const rsvpStatusMap: Record<keyof AttendanceList, number> = {
   declined: 3,
 };
 
+/**
+ *
+ */
 export default function AttendanceSelectionTabs({ selectedTab, setSelectedTab, selectedTripId }: TabProps) {
   //prettier-ignore
   const { data: attendees} = useQuery({

@@ -3,6 +3,9 @@ import UserAvatar from "@/ui/UserAvatar";
 import { View, Image, StyleSheet } from "react-native";
 import CarPositionSelect from "@/components/NotScopedforv1/CarComponents/CarPositionSelect";
 
+/**
+ *
+ */
 export default function CarSeatingLayout({ currentCar }: { currentCar: Car }) {
   return (
     <View style={styles.container}>

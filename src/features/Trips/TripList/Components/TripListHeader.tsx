@@ -2,6 +2,9 @@ import { router } from "expo-router";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Badge, Text, useTheme } from "react-native-paper";
 
+/**
+ *
+ */
 export default function TripListHeader({ tripLength }: { tripLength: number }) {
   const theme = useTheme();
 
@@ -33,6 +36,9 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
     },
   });
 
+  /**
+   *
+   */
   function handlePress() {
     router.navigate("/plan");
   }

@@ -18,6 +18,9 @@ export interface LoginForm {
   password: SimpleForm<string>;
 }
 
+/**
+ *
+ */
 export default function LoginView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +33,9 @@ export default function LoginView() {
     password: { value: "", error: "" },
   });
 
+  /**
+   *
+   */
   function validateLogin() {
     const phoneError = phoneValidator(loginForm.phoneNumber.value);
     // const passwordError = passwordValidator(loginForm.password.value);

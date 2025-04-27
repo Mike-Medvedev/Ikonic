@@ -6,6 +6,9 @@ import { useLocalSearchParams } from "expo-router";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
+/**
+ *
+ */
 export default function CarHeader({ currentCar }: { currentCar: CarPublic }) {
   const theme = useTheme();
   const queryClient = useQueryClient();

@@ -14,6 +14,9 @@ import EditTripModal from "@/features/Trips/TripDetails/Components/EditTripModal
 import useUser from "@/hooks/useUser";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 
+/**
+ *
+ */
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
   const { getUserId } = useUser();

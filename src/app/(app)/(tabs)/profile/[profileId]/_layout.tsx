@@ -4,6 +4,9 @@ import { useMemo } from "react";
 import { View, StyleSheet, SafeAreaView } from "react-native";
 import { useTheme } from "react-native-paper";
 
+/**
+ *
+ */
 export default function SelectedProfile() {
   const theme = useTheme();
   const styles = useMemo(() => {

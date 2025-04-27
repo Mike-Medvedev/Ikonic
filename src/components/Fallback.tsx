@@ -4,6 +4,9 @@ import { FallbackProps } from "react-error-boundary";
 import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
+/**
+ *
+ */
 export default function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   if (error instanceof ApiError) {
     if (error.status === HTTPSTATUSCODE.FORBIDDEN || error.status === HTTPSTATUSCODE.UNAUTHENTICATED)

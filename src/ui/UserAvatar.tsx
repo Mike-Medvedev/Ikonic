@@ -8,6 +8,9 @@ interface UserAvatarProps {
   styles?: StyleProp<ViewStyle>;
 }
 
+/**
+ *
+ */
 export default function UserAvatar({ user, styles }: UserAvatarProps) {
   return (
     <Avatar.Text

@@ -2,6 +2,9 @@ import { View } from "react-native";
 import { Avatar, Card, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
 
+/**
+ *
+ */
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const theme = useTheme();
   return (

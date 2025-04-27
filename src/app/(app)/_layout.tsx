@@ -3,6 +3,9 @@ import { Redirect, Slot, usePathname } from "expo-router";
 import { ActivityIndicator } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";
 
+/**
+ *
+ */
 export default function AuthGuard() {
   const { session, isLoading } = useAuth();
   const pathname = usePathname();

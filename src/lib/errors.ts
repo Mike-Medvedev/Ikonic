@@ -1,9 +1,15 @@
 import { HTTPSTATUSCODE } from "@/constants/constants";
 import { AuthService } from "@/features/Auth/Services/authService";
 
+/**
+ *
+ */
 abstract class AppError extends Error {
   readonly status: number | undefined;
   readonly cause: unknown;
+  /**
+   *
+   */
   protected constructor(name: string, message: string, status?: number, options?: { cause?: unknown }) {
     super(message, options);
     this.name = name;
@@ -15,19 +21,37 @@ abstract class AppError extends Error {
   }
 }
 
+/**
+ *
+ */
 export class ApiError extends AppError {
+  /**
+   *
+   */
   constructor(status: number, message: string, opts?: { cause?: unknown }) {
     super("ApiError", message, status, opts);
   }
 }
+/**
+ *
+ */
 export class UnknownError extends Error {}
 
+/**
+ *
+ */
 export class NetworkError extends AppError {
+  /**
+   *
+   */
   constructor(message: string, opts?: { cause?: unknown }) {
     super("NetworkError", message, undefined, opts);
   }
 }
 
+/**
+ *
+ */
 export function withError<T>(fn: () => Promise<T>): () => Promise<T> {
   return async () => {
     try {

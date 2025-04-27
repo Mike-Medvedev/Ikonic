@@ -14,6 +14,9 @@ import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
 
+/**
+ *
+ */
 export default function TripPlannerView() {
   const queryClient = useQueryClient();
   const createTripMutation = useMutation<TripPublicParsed, Error, TripCreateParsed>({
@@ -51,6 +54,9 @@ export default function TripPlannerView() {
     setTripForm(initialTripForm);
   };
 
+  /**
+   *
+   */
   function isFormValid(): boolean {
     const errors = {
       mountain: nameValidator(tripForm.mountain.value),

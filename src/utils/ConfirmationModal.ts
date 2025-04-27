@@ -1,4 +1,7 @@
 import { Alert, Platform } from "react-native";
+/**
+ *
+ */
 export function DeleteConfirmation({ deleteFn }: { deleteFn: () => void }) {
   if (Platform.OS !== "web") {
     Alert.alert(

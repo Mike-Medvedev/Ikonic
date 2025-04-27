@@ -4,6 +4,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
+/**
+ *
+ */
 export default function TripDetailsContent({ trip }: { trip: TripPublicParsed }) {
   return (
     <View style={styles.detailsContainer}>

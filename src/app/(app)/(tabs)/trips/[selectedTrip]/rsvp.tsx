@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { ActivityIndicator, Button, Text } from "react-native-paper";
 
+/**
+ *
+ */
 export default function RSVP() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const { getUserId } = useUser();
@@ -26,6 +29,9 @@ export default function RSVP() {
     queryKey: ["trip", selectedTripId],
     queryFn: async () => TripService.getOne(selectedTripId),
   });
+  /**
+   *
+   */
   async function rsvpHandler(userResponse: RSVPStatus) {
     try {
       await InviteService.rsvp(selectedTripId, userId, userResponse);

@@ -8,6 +8,9 @@ import { Avatar, Text, useTheme } from "react-native-paper";
 
 const MAX_AVATARS = 5;
 
+/**
+ *
+ */
 export default function UsersAvatarList({
   rsvp,
   selectedTripId,

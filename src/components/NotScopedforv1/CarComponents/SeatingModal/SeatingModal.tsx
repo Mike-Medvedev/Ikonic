@@ -14,6 +14,9 @@ interface SeatingModalProps {
   carId: number;
 }
 
+/**
+ *
+ */
 export default function SeatingModal({ visible, setVisible, seatPosition, carId }: SeatingModalProps) {
   const queryClient = useQueryClient();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
@@ -29,6 +32,9 @@ export default function SeatingModal({ visible, setVisible, seatPosition, carId 
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars", selectedTripId] }),
   });
 
+  /**
+   *
+   */
   function addPassengerHandler(user: UserPublic) {
     addPassengerMutation.mutate({ carId, user, seatPosition });
     setVisible(false);

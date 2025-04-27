@@ -7,6 +7,9 @@ interface AttendanceTabProps {
   isSelected: boolean;
   onPress: (event: GestureResponderEvent) => void;
 }
+/**
+ *
+ */
 export default function AttendanceTab({ rsvpStatusCount, rsvpStatus, isSelected, onPress }: AttendanceTabProps) {
   return (
     <Text onPress={onPress} style={[styles.tab, isSelected && styles.selectedTab]}>

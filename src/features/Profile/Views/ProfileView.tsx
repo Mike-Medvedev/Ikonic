@@ -6,6 +6,9 @@ import { UserService } from "@/features/Profile/Services/userService";
 import ProfileCard from "@/features/Profile/Components/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+/**
+ *
+ */
 export default function ProfileView() {
   const { session } = useAuth();
   if (!session?.user.id) return;

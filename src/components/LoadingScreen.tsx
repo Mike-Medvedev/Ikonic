@@ -1,5 +1,8 @@
 import { View, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+/**
+ *
+ */
 export default function LoadingScreen() {
   return (
     <View style={styles.container}>

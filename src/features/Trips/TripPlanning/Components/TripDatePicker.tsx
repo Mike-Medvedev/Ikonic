@@ -11,6 +11,9 @@ interface TripDatePickerProps {
   setTripForm: React.Dispatch<React.SetStateAction<NewTripForm>>;
 }
 
+/**
+ *
+ */
 export default function TripDatePicker({ tripForm, setTripForm }: TripDatePickerProps) {
   const [range, setRange] = React.useState<{
     startDate: Date | undefined;

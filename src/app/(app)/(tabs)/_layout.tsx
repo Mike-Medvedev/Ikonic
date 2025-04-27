@@ -12,6 +12,9 @@ const HeaderTitle = () => {
   return <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Ikonic</Text>;
 };
 
+/**
+ *
+ */
 export default function TabLayout() {
   const theme = useTheme();
   const tabScreenOptions = useMemo(

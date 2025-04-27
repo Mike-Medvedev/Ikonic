@@ -6,6 +6,9 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { Text, useTheme } from "react-native-paper";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+/**
+ *
+ */
 export default function TripListView() {
   const theme = useTheme();
   // prettier-ignore

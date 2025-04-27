@@ -27,6 +27,9 @@ const Trip = ({ trip }: TripProps) => {
   const onTripSelect = () => {
     router.push(`/trips/${trip.id}`);
   };
+  /**
+   *
+   */
   async function handleTripDelete(event: GestureResponderEvent, trip_id: number) {
     event.stopPropagation();
     DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });

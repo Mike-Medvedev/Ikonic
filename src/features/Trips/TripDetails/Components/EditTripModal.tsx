@@ -12,6 +12,9 @@ interface EditTripModalProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+/**
+ *
+ */
 export default function EditTripModal({ currentTrip, visible, setVisible }: EditTripModalProps) {
   const [tripUpdateForm, setTripUpdateForm] = useState<TripUpdateParsed>({
     title: "",

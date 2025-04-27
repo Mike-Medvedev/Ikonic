@@ -3,6 +3,9 @@ import { useRouter, useSegments } from "expo-router";
 import { AUTH_GROUP, APP_GROUP, DEFAULT_APP_PATH, LOGIN_PATH } from "@/constants/constants";
 import { Session } from "@supabase/supabase-js";
 
+/**
+ *
+ */
 export function useAuthRedirect(session: Session | null, isLoading: boolean) {
   const router = useRouter();
   const segments = useSegments();

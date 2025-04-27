@@ -3,6 +3,9 @@ import { router } from "expo-router";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 
+/**
+ *
+ */
 export default function BackButton({ style }: { style?: StyleProp<ViewStyle> }) {
   const theme = useTheme();
   return (

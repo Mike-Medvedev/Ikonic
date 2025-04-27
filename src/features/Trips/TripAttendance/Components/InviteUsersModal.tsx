@@ -5,6 +5,9 @@ interface InviteUsersModalProps {
   visible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
+/**
+ *
+ */
 export default function InviteUsersModal({ visible, setModalVisible }: InviteUsersModalProps) {
   return (
     <Modal animationType="slide" transparent={false} visible={visible} onRequestClose={() => setModalVisible(false)}>

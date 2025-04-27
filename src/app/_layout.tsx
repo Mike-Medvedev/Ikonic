@@ -58,6 +58,9 @@ registerTranslation("en", {
   minute: "Minute",
 });
 
+/**
+ *
+ */
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     Poppins: require("@/assets/fonts/Poppins-Regular.ttf"),

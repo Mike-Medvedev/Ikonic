@@ -259,6 +259,9 @@ const CountryCodeEmojiMap: Record<string, string> = {
   ZW: "🇿🇼",
 };
 
+/**
+ *
+ */
 export default function CountryCodePicker({ countryCode }: CountryCodeProps) {
   const [isDropDownDisplayed, setIsDropDownDisplayed] = useState<boolean>(false);
   const handleOnPress = () => {

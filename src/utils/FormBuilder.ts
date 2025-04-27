@@ -1,5 +1,8 @@
 import { SimpleForm } from "@/types";
 
+/**
+ *
+ */
 export function FormPayloadFactory<T>(form: Record<keyof T, SimpleForm<any>>): Record<keyof T, any> {
   return (Object.entries(form) as Array<[keyof T, SimpleForm<any>]>).reduce(
     (acc, [key, value]) => {
@@ -10,6 +13,9 @@ export function FormPayloadFactory<T>(form: Record<keyof T, SimpleForm<any>>): R
   );
 }
 
+/**
+ *
+ */
 export function ValidateErrors<T extends Record<keyof T, SimpleForm<any>>>(
   errors: Record<keyof T, string>,
   setter: React.Dispatch<React.SetStateAction<T>>,

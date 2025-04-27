@@ -10,10 +10,16 @@ interface OTPFormProps {
 
 const OTP_LENGTH = 6;
 
+/**
+ *
+ */
 export default function OTPForm({ code, setCode }: OTPFormProps) {
   const inputRef = useRef<NativeTextInput[]>([]);
   const [hiddenInputCode, setHiddenInputCode] = useState<string>("");
 
+  /**
+   *
+   */
   function handleKeyPress(event: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) {
     if (event.nativeEvent.key === "Backspace") {
       if (index === 0) return;
@@ -28,6 +34,9 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
     }
   }
 
+  /**
+   *
+   */
   function handleTextChange(text: string, index: number) {
     setCode((prev) => {
       const newCode = [...prev];
@@ -36,6 +45,9 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
     });
   }
 
+  /**
+   *
+   */
   function handleHiddenInputCode(text: string) {
     const otp = text.slice(0, 6);
     setHiddenInputCode(text);

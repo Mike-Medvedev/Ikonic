@@ -7,6 +7,9 @@ interface TextProps {
   children: string;
 }
 
+/**
+ *
+ */
 export default function Text({ color, size, weight, children }: TextProps) {
   const theme = useCustomTheme();
 

@@ -1,6 +1,9 @@
 import { View, StyleSheet } from "react-native";
 import { Paragraph, Text } from "react-native-paper";
 
+/**
+ *
+ */
 export default function TripDescription({ tripDesc }: { tripDesc: string | undefined }) {
   return (
     <View style={styles.tripDescriptionContainer}>

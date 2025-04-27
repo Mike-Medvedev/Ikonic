@@ -7,6 +7,9 @@ interface SeatingAttendeesListProps {
   addPassengerHandler: any;
 }
 
+/**
+ *
+ */
 export default function SeatingAttendeesList({ attendees, addPassengerHandler }: SeatingAttendeesListProps) {
   return (
     <ScrollView horizontal contentContainerStyle={styles.avatarScrollContainer}>

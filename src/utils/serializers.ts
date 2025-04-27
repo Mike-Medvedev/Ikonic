@@ -1,5 +1,8 @@
 import { TripCreate, TripCreateParsed, TripUpdate, TripUpdateParsed } from "@/types";
 
+/**
+ *
+ */
 export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
   return {
     ...trip,
@@ -9,6 +12,9 @@ export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
 }
 
 // Conditionally serializes if dates are present
+/**
+ *
+ */
 export function serializeTripUpdate(trip: TripUpdateParsed): TripUpdate {
   return {
     ...trip,

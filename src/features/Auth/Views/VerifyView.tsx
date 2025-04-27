@@ -10,6 +10,9 @@ import useToast from "@/hooks/useToast";
 import TitleText from "@/ui/TitleText";
 import { Card } from "@/ui/Card";
 
+/**
+ *
+ */
 export default function VerifyView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +37,9 @@ export default function VerifyView() {
     });
   }, [theme]);
 
+  /**
+   *
+   */
   async function handleVerify() {
     setIsLoading(true);
     const phone = `1${phoneNumber}`;

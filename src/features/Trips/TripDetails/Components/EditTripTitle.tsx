@@ -1,5 +1,8 @@
 import { View, StyleSheet } from "react-native";
 import { Text, Divider } from "react-native-paper";
+/**
+ *
+ */
 export default function EditTripModalTitle() {
   return (
     <View style={styles.title}>

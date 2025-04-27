@@ -2,9 +2,15 @@ import { Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";
 
+/**
+ *
+ */
 export default function SignOutButton() {
   const theme = useTheme();
   const { signOut } = useAuth();
+  /**
+   *
+   */
   async function logout() {
     await signOut();
   }
