@@ -1,12 +1,10 @@
-import { InviteService } from "@/features/Trips/Services/inviteService";
 import { AttendanceList, UserPublic } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { Text } from "react-native-paper";
 interface AttendanceTabListProps {
   selectedTab: keyof AttendanceList;
   setSelectedTab: React.Dispatch<React.SetStateAction<keyof AttendanceList>>;
-  selectedTripId: string;
+  attendees: AttendanceList;
 }
 
 /**
@@ -16,26 +14,22 @@ interface AttendanceTabListProps {
  * AttendanceList: {"accepted": UserPublic[], "pending": UserPublic[], "uncertain": UserPublic[], "declined": UserPublic[]}
  * @todo wrap useQuery in asyncStatewrapper
  */
-export default function AttendanceTabList({ selectedTab, setSelectedTab, selectedTripId }: AttendanceTabListProps) {
-  //prettier-ignore
-  const { data: attendees} = useQuery({
-    queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
-    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
-    enabled: !!selectedTripId,
-  });
+export default function AttendanceTabList({ selectedTab, setSelectedTab, attendees }: AttendanceTabListProps) {
+  function handleTabSelect(attendanceTab: keyof AttendanceList) {
+    setSelectedTab(attendanceTab);
+  }
 
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-      {(Object.entries(attendees) as Array<[keyof AttendanceList, UserPublic[]]>).map(([rsvpStatus, users], index) => (
-        <Text
-          onPress={() => setSelectedTab(selectedTab)}
-          style={[styles.tab, selectedTab === rsvpStatus && styles.selectedTab]}
-          key={index}
-        >
-          {`${rsvpStatus} (${users.length})`}
-        </Text>
-      ))}
+      {(Object.entries(attendees) as Array<[keyof AttendanceList, UserPublic[]]>).map(
+        ([attendanceTab, users], index) => (
+          <Pressable key={index} onPress={() => handleTabSelect(attendanceTab)}>
+            <Text style={[styles.tab, selectedTab === attendanceTab ? styles.selectedTab : ""]}>
+              {`${attendanceTab} (${users.length})`}
+            </Text>
+          </Pressable>
+        ),
+      )}
     </View>
   );
 }

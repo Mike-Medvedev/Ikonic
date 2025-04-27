@@ -45,11 +45,17 @@ export default defineConfig([
       "jsdoc/require-jsdoc": [
         "warn",
         {
+          contexts: [
+            "ExportNamedDeclaration > FunctionDeclaration",
+            "ExportDefaultDeclaration > FunctionDeclaration",
+            "ExportNamedDeclaration > ClassDeclaration",
+            "ExportDefaultDeclaration > ClassDeclaration",
+          ],
           checkConstructors: false,
           require: {
-            FunctionDeclaration: true,
-            ClassDeclaration: true,
-            MethodDefinition: true,
+            FunctionDeclaration: false,
+            ClassDeclaration: false,
+            MethodDefinition: false,
             ArrowFunctionExpression: false,
             FunctionExpression: false,
           },

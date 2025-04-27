@@ -1,7 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { memo } from "react";
 import { View, StyleSheet, ImageBackground, ViewStyle, StyleProp } from "react-native";
-import { useTheme } from "react-native-paper";
 
 type CardProps = {
   children: React.ReactNode;

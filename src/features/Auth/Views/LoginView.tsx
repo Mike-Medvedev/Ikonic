@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, View, Pressable } from "react-native";
 import { useTheme, TextInput as PaperInput, Avatar, Text, ActivityIndicator } from "react-native-paper";
 import { phoneValidator } from "@/utils/validators";
@@ -50,7 +50,7 @@ export default function LoginView() {
     return true;
   }
 
-  const handleLogin = async () => {
+  async function handleLogin() {
     setIsLoading(true);
     if (!validateLogin()) return;
     const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
@@ -64,17 +64,14 @@ export default function LoginView() {
       url: "/(auth)/verify",
       params: { phoneNumber: loginForm.phoneNumber.value },
     });
-  };
+  }
 
-  const handlePhoneChange = useCallback(
-    (text) => {
-      setLoginForm((prev) => ({
-        ...prev,
-        phoneNumber: { value: text, error: "" },
-      }));
-    },
-    [setLoginForm],
-  );
+  function handlePhoneChange(text: string) {
+    setLoginForm((prev) => ({
+      ...prev,
+      phoneNumber: { value: text, error: "" },
+    }));
+  }
 
   const styles = useMemo(() => {
     return StyleSheet.create({

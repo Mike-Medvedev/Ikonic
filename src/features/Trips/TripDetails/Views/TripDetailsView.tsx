@@ -42,7 +42,7 @@ export default function TripDetailsView() {
     <Background>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <AsyncStateWrapper isLoading={isFetching} error={error}>
+          <AsyncStateWrapper loading={isFetching} error={error}>
             {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
             <Text style={styles.tripTitle}>{trip?.title}</Text>
             <TripImage tripImage={trip?.image} currentTripId={selectedTripID} />

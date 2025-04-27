@@ -26,7 +26,7 @@ export default function TripListView() {
     <Background>
       <View style={styles.container}>
         <TripListHeader tripLength={trips?.length ?? 0} />
-        <AsyncStateWrapper isLoading={isFetching} error={error}>
+        <AsyncStateWrapper loading={isFetching} error={error}>
           <FlatList
             data={trips}
             keyExtractor={(item) => item?.id?.toString()}

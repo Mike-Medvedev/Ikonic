@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
-import { Card, TextInput, Button, Avatar, ActivityIndicator, Text } from "react-native-paper";
+import { Card, TextInput, Button, Avatar } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
@@ -9,17 +9,13 @@ import { UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
+import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 /**
  * Renders the UI for a list of users that can be invited to a trip
- * @todo wrap this component in an async state wrapper
  */
 export default function TripInviteList() {
-  const {
-    data: users,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({ queryKey: ["users"], queryFn: UserService.getAll, initialData: [] });
+  //prettier-ignore
+  const { data: users, isFetching, error} = useQuery({ queryKey: ["users"], queryFn: UserService.getAll, initialData: [] });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
@@ -45,10 +41,6 @@ export default function TripInviteList() {
       setIsInviteSending(false);
     }
   }
-
-  if (isLoading) return <ActivityIndicator />;
-
-  if (isError) return <Text>Error: {error.message}</Text>;
   return (
     <View style={styles.container}>
       <TextInput
@@ -59,29 +51,31 @@ export default function TripInviteList() {
         label={"Search Friends"}
         right={<TextInput.Icon icon={() => <AntDesign name="search1" size={24} color="black" />} />}
       />
-      <ScrollView style={{ padding: 10 }}>
-        {filteredUsers.map((user, index) => (
-          <Card key={index} style={{ marginVertical: 10 }}>
-            <Card.Title
-              title={`${user.firstname} ${user.lastname}`}
-              titleStyle={{ textTransform: "capitalize" }}
-              left={() => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
-              right={() => (
-                <Button
-                  mode="contained"
-                  onPress={() => {
-                    setSelectedButtonIndex(index);
-                    handleInvite(user);
-                  }}
-                  loading={isInviteSending && index === selectedButtonIndex}
-                >
-                  Add
-                </Button>
-              )}
-            />
-          </Card>
-        ))}
-      </ScrollView>
+      <AsyncStateWrapper loading={isFetching} error={error}>
+        <ScrollView style={{ padding: 10 }}>
+          {filteredUsers.map((user, index) => (
+            <Card key={index} style={{ marginVertical: 10 }}>
+              <Card.Title
+                title={`${user.firstname} ${user.lastname}`}
+                titleStyle={{ textTransform: "capitalize" }}
+                left={() => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
+                right={() => (
+                  <Button
+                    mode="contained"
+                    onPress={() => {
+                      setSelectedButtonIndex(index);
+                      handleInvite(user);
+                    }}
+                    loading={isInviteSending && index === selectedButtonIndex}
+                  >
+                    Add
+                  </Button>
+                )}
+              />
+            </Card>
+          ))}
+        </ScrollView>
+      </AsyncStateWrapper>
     </View>
   );
 }

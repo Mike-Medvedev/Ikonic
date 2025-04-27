@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { ActivityIndicator, Text } from "react-native-paper";
 
 interface AsyncStateWrapperProps {
-  isLoading: boolean;
+  loading: boolean;
   error: Error | null;
   message?: string;
   children: React.ReactNode;
@@ -14,7 +14,7 @@ interface AsyncStateWrapperProps {
  * Centralizes error and loading states for react components and integrates well with tanstack
  * @todo use the message prop passed to async state wrapper
  */
-export default function AsyncStateWrapper({ isLoading, error, message, children }: AsyncStateWrapperProps) {
+export default function AsyncStateWrapper({ loading, error, message, children }: AsyncStateWrapperProps) {
   const { showFailure } = useToast();
 
   useEffect(() => {
@@ -39,14 +39,10 @@ export default function AsyncStateWrapper({ isLoading, error, message, children 
     } else showFailure({ message: `Error: ${error.message}` });
   }, [error]);
 
-  if (isLoading) return <ActivityIndicator />;
+  if (loading) return <ActivityIndicator />;
 
   if (error) {
-    return (
-      <Text>
-        Error {error.name}: {error.message}
-      </Text>
-    );
+    return <Text>{message ? message : `Error ${error.name}: ${error.message}`}</Text>;
   }
 
   return children;

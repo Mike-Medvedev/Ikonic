@@ -13,11 +13,8 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 export default function ProfileView() {
   const { session } = useAuth();
   if (!session?.user.id) return;
-  const {
-    data: profile,
-    isLoading,
-    error,
-  } = useQuery({
+  //prettier-ignore
+  const { data: profile, isLoading, error } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
       return UserService.getOne(session?.user.id);
@@ -28,7 +25,7 @@ export default function ProfileView() {
     <Background>
       <View style={{ flex: 1, width: "100%", height: "100%" }}>
         <ProfilePageHeader />
-        <AsyncStateWrapper isLoading={isLoading} error={error}>
+        <AsyncStateWrapper loading={isLoading} error={error}>
           <ProfileCard profile={profile} />
         </AsyncStateWrapper>
       </View>

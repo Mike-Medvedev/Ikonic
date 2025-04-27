@@ -1,16 +1,17 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { Pressable, View, GestureResponderEvent, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { TripPublicParsed } from "@/types";
 import { TripService } from "../../Services/tripService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import { Card } from "@/ui/Card";
 import UsersAvatarList from "@/ui/UsersAvatarList";
 import Entypo from "@expo/vector-icons/Entypo";
+import { InviteService } from "@/features/Trips/Services/inviteService";
+import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -20,6 +21,14 @@ export interface TripProps {
  */
 export default function Trip({ trip }: TripProps) {
   const queryClient = useQueryClient();
+  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  //prettier-ignore
+  const { data: attendees, isFetching, error } = useQuery({
+    queryKey: ["attendees", selectedTripId],
+    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
+    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
+    enabled: !!selectedTripId,
+  });
   const mutation = useMutation<void, unknown, string>({
     mutationFn: (trip_id) => TripService.delete(trip_id),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
@@ -99,8 +108,10 @@ export default function Trip({ trip }: TripProps) {
         {/* Overlay content goes here */}
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <UsersAvatarList rsvp="accepted" size={24} />
-            <Text style={{ color: "rgba(255, 255, 255, 0.50)" }}>2 Friends Joined</Text>
+            <AsyncStateWrapper loading={isFetching} error={error}>
+              <UsersAvatarList rsvp="accepted" size={24} attendees={attendees} />
+              <Text style={{ color: "rgba(255, 255, 255, 0.50)" }}>2 Friends Joined</Text>
+            </AsyncStateWrapper>
           </View>
           <Pressable
             onPress={onTripSelect}
