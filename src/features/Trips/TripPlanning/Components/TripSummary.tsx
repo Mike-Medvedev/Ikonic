@@ -1,13 +1,14 @@
 import React from "react";
 import { View } from "react-native";
-import { Card, Text, Avatar } from "react-native-paper";
+import { Card, Text, Avatar, useTheme } from "react-native-paper";
 import { NewTripForm } from "@/types";
 
 const TripSummary = ({ tripForm }: { tripForm: NewTripForm }) => {
+  const theme = useTheme();
   return (
     <>
       {tripForm.startDate.value && tripForm.endDate.value && tripForm.mountain.value ? (
-        <Card>
+        <Card style={{ backgroundColor: theme.colors.onBackground }}>
           <Card.Title
             title={<Text variant="titleLarge">{tripForm.mountain.value}</Text>}
             subtitle={

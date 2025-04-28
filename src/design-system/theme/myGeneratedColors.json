@@ -2,7 +2,7 @@
   "colors": {
     "primary": "#00C7E6",
     "onPrimary": "rgb(255, 255, 255)",
-    "primaryContainer": "rgb(223, 224, 255)",
+    "primaryContainer": "rgba(223, 224, 255, 0.4)",
     "onPrimaryContainer": "rgb(0, 13, 95)",
     "secondary": "rgba(255, 255, 255, 0.5)",
     "onSecondary": "rgb(255, 255, 255)",
@@ -18,7 +18,7 @@
     "onErrorContainer": "rgb(65, 0, 2)",
     "background": "rgb(10 10 15)",
     "onBackground": "rgb(27, 27, 31)",
-    "surface": "rgba(255, 255, 255, 0.03)",
+    "surface": "rgb(10 10 15)",
     "onSurface": "rgba(255, 255, 255, 1)",
     "surfaceVariant": "rgb(227, 225, 236)",
     "onSurfaceVariant": "rgb(70, 70, 79)",

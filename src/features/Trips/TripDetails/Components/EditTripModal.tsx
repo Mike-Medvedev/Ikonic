@@ -4,6 +4,7 @@ import { useState } from "react";
 import EditTripButtonGroup from "./EditTripButtonGroup";
 import EditTripTitle from "@/features/Trips/TripDetails/Components/EditTripTitle";
 import { TripPublicParsed, TripUpdateParsed } from "@/types";
+import Background from "@/design-system/components/Background";
 
 interface EditTripModalProps {
   currentTrip: TripPublicParsed;
@@ -22,11 +23,13 @@ export default function EditTripModal({ currentTrip, visible, setVisible }: Edit
 
   return (
     <Modal animationType="slide" transparent={false} visible={visible} onRequestClose={() => setVisible(false)}>
-      <View style={styles.container}>
-        <EditTripTitle />
-        <EditTripForm tripUpdateForm={tripUpdateForm} setTripUpdateForm={setTripUpdateForm} />
-        <EditTripButtonGroup setVisible={setVisible} currentTripId={currentTrip.id} form={tripUpdateForm} />
-      </View>
+      <Background>
+        <View style={styles.container}>
+          <EditTripTitle />
+          <EditTripForm tripUpdateForm={tripUpdateForm} setTripUpdateForm={setTripUpdateForm} />
+          <EditTripButtonGroup setVisible={setVisible} currentTripId={currentTrip.id} form={tripUpdateForm} />
+        </View>
+      </Background>
     </Modal>
   );
 }

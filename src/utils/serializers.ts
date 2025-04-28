@@ -6,8 +6,8 @@ import { TripCreate, TripCreateParsed, TripUpdate, TripUpdateParsed } from "@/ty
 export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
   return {
     ...trip,
-    startDate: trip.startDate.toISOString(),
-    endDate: trip.endDate.toISOString(),
+    startDate: trip?.startDate?.toISOString()?.split("T")[0] || "",
+    endDate: trip?.endDate?.toISOString()?.split("T")[0] || "",
   };
 }
 

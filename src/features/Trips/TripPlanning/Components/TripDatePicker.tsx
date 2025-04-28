@@ -35,11 +35,11 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
       setOpen(false);
       setRange({ startDate, endDate });
 
-      const finalStartDate = startDate ? new Date(startDate) : undefined;
-      finalStartDate?.setHours(0, 0, 0, 0);
+      const finalStartDate = startDate
+        ? new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
+        : undefined;
 
-      const finalEndDate = endDate ? new Date(endDate) : undefined;
-      finalEndDate?.setHours(0, 0, 0, 0);
+      const finalEndDate = endDate ? new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()) : undefined;
 
       setTripForm((prev) => ({
         ...prev,

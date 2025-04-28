@@ -1,7 +1,6 @@
 import React, { memo } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, View } from "react-native";
 import { useTheme } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { RadialGradient, Stop, Ellipse } from "react-native-svg";
 
 type Props = {
@@ -12,7 +11,7 @@ type Props = {
 function Background({ children }: Props) {
   const theme = useTheme();
   return (
-    <SafeAreaView style={[{ backgroundColor: theme.colors.background }, styles.background]}>
+    <View style={[{ backgroundColor: theme.colors.background }, styles.background]}>
       <KeyboardAvoidingView style={styles.background} behavior="padding">
         <Svg height="100%" width="100%" style={styles.svg}>
           <RadialGradient id="grad1" cx="70%" cy="78%" rx="140%" ry="100%" gradientUnits="userSpaceOnUse">
@@ -39,7 +38,7 @@ function Background({ children }: Props) {
         </Svg>
         {children}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 

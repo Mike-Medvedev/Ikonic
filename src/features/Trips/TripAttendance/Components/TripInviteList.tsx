@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { View, StyleSheet, ScrollView, Alert } from "react-native";
-import { Card, TextInput, Button, Avatar } from "react-native-paper";
+import { Card, TextInput, Button, Avatar, useTheme } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams } from "expo-router";
 import CalculateInitials from "@/utils/CalculateInitials";
@@ -14,6 +14,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
  * Renders the UI for a list of users that can be invited to a trip
  */
 export default function TripInviteList() {
+  const theme = useTheme();
   //prettier-ignore
   const { data: users, isFetching, error} = useQuery({ 
     queryKey: ["users"],
@@ -51,6 +52,9 @@ export default function TripInviteList() {
       setSelectedButtonIndex(undefined);
     }
   }
+  const styles = StyleSheet.create({
+    container: { flex: 1, padding: 15 },
+  });
   return (
     <View style={styles.container}>
       <TextInput
@@ -64,7 +68,11 @@ export default function TripInviteList() {
       <AsyncStateWrapper loading={isFetching} error={error}>
         <ScrollView style={{ padding: 10 }}>
           {filteredUsers.map((user, index) => (
-            <Card key={index} style={{ marginVertical: 10 }}>
+            <Card
+              key={index}
+              style={{ marginVertical: 10, backgroundColor: theme.colors.backdrop }}
+              contentStyle={{ paddingHorizontal: 15 }}
+            >
               <Card.Title
                 title={`${user.firstname ?? "?"} ${user.lastname ?? "?"}`}
                 titleStyle={{ textTransform: "capitalize" }}
@@ -98,6 +106,3 @@ export default function TripInviteList() {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15 },
-});

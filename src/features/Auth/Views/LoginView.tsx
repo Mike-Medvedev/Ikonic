@@ -13,7 +13,6 @@ import TitleText from "@/design-system/components/TitleText";
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
   countryCode: SimpleForm<string>;
-  password: SimpleForm<string>;
 }
 
 /**
@@ -22,47 +21,54 @@ export interface LoginForm {
 export default function LoginView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
-  const { showSuccess } = useToast();
+  const { showSuccess, showFailure } = useToast();
   const { signIn } = useAuth();
-  // const { callback: rsvpPathCallback } = useLocalSearchParams();
+  // const { callback: rsvpPathCallback } = useLocalSearchParams(); // Example usage if needed
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
     countryCode: { value: "1", error: "" },
-    password: { value: "", error: "" },
   });
 
   /**
    * Helper Function that validates whether a phone number is a valid number
    */
-  function validateLogin() {
+  function validateLogin(): boolean {
     const phoneError = phoneValidator(loginForm.phoneNumber.value);
-    // const passwordError = passwordValidator(loginForm.password.value);
-
     if (phoneError) {
       setLoginForm((prev) => ({
         ...prev,
         phoneNumber: { value: prev.phoneNumber.value, error: phoneError },
       }));
-      // setLoginForm((prev) => ({ ...prev, password: { value: prev.password.value, error: passwordError } }));
       return false;
     }
     return true;
   }
 
   async function handleLogin() {
+    if (!validateLogin()) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
-    if (!validateLogin()) return;
-    const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
+    try {
+      const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
 
-    await signIn(phoneNumber);
-
-    setIsLoading(false);
-
-    showSuccess({
-      message: "We sent you a OTP",
-      url: "/(auth)/verify",
-      params: { phoneNumber: loginForm.phoneNumber.value },
-    });
+      const { error } = await signIn(phoneNumber);
+      if (error) {
+        showFailure({ message: `Error We could not send you a text! Details: ${error.message}` });
+      } else {
+        showSuccess({
+          message: "We sent you a OTP",
+          url: "/(auth)/verify",
+          params: { phoneNumber: loginForm.phoneNumber.value },
+        });
+      }
+    } catch (unexpectedError) {
+      console.error("Unexpected login error:", unexpectedError);
+      showFailure({ message: "An unexpected error occurred during login." });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   function handlePhoneChange(text: string) {
@@ -79,49 +85,72 @@ export default function LoginView() {
         alignItems: "center",
         justifyContent: "center",
       },
-
-      center: {
-        justifyContent: "center",
+      headerGroup: {
+        flexDirection: "row",
+        position: "relative",
         alignItems: "center",
+      },
+      cardContainer: {
+        width: "90%",
+        maxWidth: 400,
+        marginTop: 50,
+      },
+      cardContentContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 20,
+        marginBottom: 20,
+      },
+      avatarIcon: {
+        backgroundColor: "rgba(255, 255, 255, 0.03)",
+        borderWidth: 1,
+        borderColor: theme.colors.onSurface,
+      },
+      welcomeText: {
+        color: theme.colors.primary,
+        fontFamily: "Poppins",
       },
       phoneInput: {
         borderColor: theme.colors.onSurface,
         backgroundColor: theme.colors.surface,
+        marginBottom: 8,
       },
-      sendButton: { flex: 1, justifyContent: "center", alignItems: "center" },
-      header: { textTransform: "capitalize", color: theme.colors.primary, paddingVertical: 14 },
-      header2: { textTransform: "capitalize", color: theme.colors.tertiary, paddingVertical: 14 },
-      label: { color: theme.colors.secondary },
+      affixText: {
+        color: theme.colors.secondary,
+      },
+      label: {
+        color: theme.colors.secondary,
+        marginVertical: 8,
+        textAlign: "center",
+        marginBottom: 16,
+      },
+      loginButton: {
+        width: "100%",
+        padding: 15,
+        borderRadius: 12,
+        backgroundColor: theme.colors.primary,
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: 50,
+      },
+      loginButtonText: {
+        color: theme.colors.onPrimary,
+      },
     });
   }, [theme]);
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", position: "relative" }}>
+      <View style={styles.headerGroup}>
         <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
         <AvatarGlowImage size={100} glowColor="#00e5ff" glowIntensity={15} />
       </View>
 
-      <View style={{ marginTop: 50 }}>
-        {/* <Text variant="headlineMedium" style={styles.header}>
-              Enter Your Phone Number
-            </Text>
-            <Text variant="labelLarge" style={styles.label}>
-              We will send you a 6 digit verification code
-            </Text> */}
+      <View style={styles.cardContainer}>
         <Card>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-            <Avatar.Icon
-              icon="cellphone"
-              size={48}
-              color={theme.colors.primary}
-              style={{
-                backgroundColor: "rgba(255, 255, 255, 0.03)",
-                borderWidth: 1,
-                borderColor: theme.colors.onSurface,
-              }}
-            />
-            <Text variant="titleMedium" style={{ color: theme.colors.primary, fontFamily: "Poppins" }}>
+          <View style={styles.cardContentContainer}>
+            <Avatar.Icon icon="cellphone" size={48} color={theme.colors.primary} style={styles.avatarIcon} />
+            <Text variant="titleMedium" style={styles.welcomeText}>
               Welcome
             </Text>
           </View>
@@ -138,23 +167,14 @@ export default function LoginView() {
             textContentType="telephoneNumber"
             keyboardType="phone-pad"
             maxLength={10}
-            left={<PaperInput.Affix text="+1" textStyle={{ color: theme.colors.secondary }} />}
+            left={<PaperInput.Affix text="+1 " textStyle={styles.affixText} />}
           />
-          <Text style={{ color: theme.colors.secondary, marginVertical: 8 }}>We will send you a one time code</Text>
-          <Pressable
-            style={{
-              width: "100%",
-              padding: 15,
-              borderRadius: 12,
-              backgroundColor: theme.colors.surface,
-              alignItems: "center",
-            }}
-            onPress={handleLogin}
-          >
+          <Text style={styles.label}>We will send you a one time code</Text>
+          <Pressable style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
             {isLoading ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator animating={true} color={theme.colors.onPrimary} />
             ) : (
-              <Text variant="headlineSmall" style={{ color: theme.colors.onError }}>
+              <Text variant="headlineSmall" style={styles.loginButtonText}>
                 Continue
               </Text>
             )}

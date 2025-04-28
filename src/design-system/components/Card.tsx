@@ -65,5 +65,6 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+    borderTopLeftRadius: 25,
   },
 });
