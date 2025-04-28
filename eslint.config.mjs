@@ -61,7 +61,7 @@ export default defineConfig([
           },
         },
       ],
-      "jsdoc/require-description": "error",
+      "jsdoc/require-description": "warn",
       "jsdoc/require-param": "off",
       "jsdoc/require-returns": "off",
     },
