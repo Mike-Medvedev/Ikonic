@@ -2,7 +2,7 @@ import { Slot } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider } from "@/context/AuthContext";
-import { theme } from "@/theme/NativePaperTheme";
+import { theme } from "@/design-system/theme/NativePaperTheme";
 import { registerTranslation } from "react-native-paper-dates";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -15,6 +15,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES } from "@/constants/constants";
+import Background from "@/design-system/components/Background";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -90,7 +91,9 @@ export default function RootLayout() {
                   <AuthProvider>
                     <SafeAreaProvider>
                       <StatusBar style="dark" />
-                      <Slot />
+                      <Background>
+                        <Slot />
+                      </Background>
                     </SafeAreaProvider>
                   </AuthProvider>
                 </QueryClientProvider>

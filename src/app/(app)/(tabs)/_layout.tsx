@@ -5,7 +5,7 @@ import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import SignOutButton from "@/ui/SignOutButton";
+import SignOutButton from "@/design-system/components/SignOutButton";
 
 const HeaderTitle = () => {
   const theme = useTheme();

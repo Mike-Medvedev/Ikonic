@@ -2,7 +2,11 @@ import { createClient } from "@hey-api/client-fetch";
 import { getToken } from "@/utils/Supabase";
 import { ApiError, NetworkError, UnknownError, errors } from "@/lib/errors";
 
-const fetchWithError = async (request: Request): Promise<Response> => {
+/**
+ * Custom Fetch Wrapper that adds a try catch around fetch api
+ * Catches and classifies Network Errors
+ */
+export async function fetchWithError(request: Request): Promise<Response> {
   try {
     const response = await fetch(request);
     return response;
@@ -12,9 +16,14 @@ const fetchWithError = async (request: Request): Promise<Response> => {
     }
     throw new UnknownError(`Unknown error: ${String(error)}`, { cause: error });
   }
-};
+}
 
-export const createAuthenticatedClient = async () => {
+/**
+ * Creates an http client to facilitate http calls
+ * Configures global http configs like tokens and headers
+ * Error interceptor classifes and rethrows Api Errors
+ */
+export async function createAuthenticatedClient() {
   const token = await getToken();
   const client = createClient({
     baseUrl: process.env.EXPO_PUBLIC_API_URL,
@@ -31,4 +40,4 @@ export const createAuthenticatedClient = async () => {
     throw new ApiError(response.status, knownMessage, { cause: error });
   });
   return client;
-};
+}

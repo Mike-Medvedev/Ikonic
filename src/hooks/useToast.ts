@@ -14,7 +14,7 @@ const useToast = () => {
     if (Platform.OS === "web") {
       window.alert(message);
     } else {
-      // Alert.alert(message);
+      Alert.alert(message);
     }
     if (url) router.push({ pathname: url as `/`, params });
   };

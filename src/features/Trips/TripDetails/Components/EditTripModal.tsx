@@ -1,7 +1,6 @@
 import { Modal, StyleSheet, View } from "react-native";
 import EditTripForm from "./EditTripForm";
 import { useState } from "react";
-import Background from "@/ui/Background";
 import EditTripButtonGroup from "./EditTripButtonGroup";
 import EditTripTitle from "@/features/Trips/TripDetails/Components/EditTripTitle";
 import { TripPublicParsed, TripUpdateParsed } from "@/types";
@@ -23,13 +22,11 @@ export default function EditTripModal({ currentTrip, visible, setVisible }: Edit
 
   return (
     <Modal animationType="slide" transparent={false} visible={visible} onRequestClose={() => setVisible(false)}>
-      <Background>
-        <View style={styles.container}>
-          <EditTripTitle />
-          <EditTripForm tripUpdateForm={tripUpdateForm} setTripUpdateForm={setTripUpdateForm} />
-          <EditTripButtonGroup setVisible={setVisible} currentTripId={currentTrip.id} form={tripUpdateForm} />
-        </View>
-      </Background>
+      <View style={styles.container}>
+        <EditTripTitle />
+        <EditTripForm tripUpdateForm={tripUpdateForm} setTripUpdateForm={setTripUpdateForm} />
+        <EditTripButtonGroup setVisible={setVisible} currentTripId={currentTrip.id} form={tripUpdateForm} />
+      </View>
     </Modal>
   );
 }

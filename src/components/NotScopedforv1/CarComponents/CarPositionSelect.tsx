@@ -1,4 +1,4 @@
-import UserAvatar from "@/ui/UserAvatar";
+import UserAvatar from "@/design-system/components/UserAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Pressable, StyleProp, ViewStyle } from "react-native";

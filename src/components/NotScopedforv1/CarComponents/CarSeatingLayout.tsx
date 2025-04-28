@@ -1,5 +1,5 @@
 import { CarPublic } from "@/types";
-import UserAvatar from "@/ui/UserAvatar";
+import UserAvatar from "@/design-system/components/UserAvatar";
 import { View, Image, StyleSheet } from "react-native";
 import CarPositionSelect from "@/components/NotScopedforv1/CarComponents/CarPositionSelect";
 

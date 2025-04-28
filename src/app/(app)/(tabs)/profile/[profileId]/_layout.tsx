@@ -1,4 +1,4 @@
-import BackButton from "@/ui/BackButton";
+import BackButton from "@/design-system/components/BackButton";
 import { Stack } from "expo-router";
 import { useMemo } from "react";
 import { View, StyleSheet, SafeAreaView } from "react-native";

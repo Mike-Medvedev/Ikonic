@@ -3,9 +3,8 @@ import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePic
 import { Button, Text, useTheme } from "react-native-paper";
 import TripSummary from "@/features/Trips/TripPlanning/Components/TripSummary";
 import { View, StyleSheet } from "react-native";
-import TextInput from "@/ui/TextInput";
+import TextInput from "@/design-system/components/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";
-import Background from "@/ui/Background";
 import { useMemo, useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { NewTripForm, TripCreateParsed, TripPublicParsed } from "@/types";
@@ -100,34 +99,32 @@ export default function TripPlannerView() {
     });
   }, [theme]);
   return (
-    <Background>
-      <View style={styles.tripPlannerContainer}>
-        <Text style={styles.header}>Plan your trip</Text>
-        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
-        <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
-        <TextInput
-          label="Name Your Trip"
-          returnKeyType="next"
-          value={tripForm.title.value}
-          onChangeText={(text) => setTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
-          error={!!tripForm.title.error}
-          errorText={tripForm.title.error}
-          autoCapitalize="words"
-          keyboardType="default"
-        />
-        <View style={{ marginVertical: 20 }}>
-          <TripSummary tripForm={tripForm} />
-        </View>
-
-        <View style={{ gap: 20 }}>
-          <Button onPress={handleSubmit} mode="contained">
-            Create Trip
-          </Button>
-          <Button onPress={resetForm} mode="outlined">
-            Clear
-          </Button>
-        </View>
+    <View style={styles.tripPlannerContainer}>
+      <Text style={styles.header}>Plan your trip</Text>
+      <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
+      <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
+      <TextInput
+        label="Name Your Trip"
+        returnKeyType="next"
+        value={tripForm.title.value}
+        onChangeText={(text) => setTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
+        error={!!tripForm.title.error}
+        errorText={tripForm.title.error}
+        autoCapitalize="words"
+        keyboardType="default"
+      />
+      <View style={{ marginVertical: 20 }}>
+        <TripSummary tripForm={tripForm} />
       </View>
-    </Background>
+
+      <View style={{ gap: 20 }}>
+        <Button onPress={handleSubmit} mode="contained">
+          Create Trip
+        </Button>
+        <Button onPress={resetForm} mode="outlined">
+          Clear
+        </Button>
+      </View>
+    </View>
   );
 }

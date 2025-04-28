@@ -1,5 +1,5 @@
 import { AttendanceList, UserPublic } from "@/types/domain";
-import UserAvatar from "@/ui/UserAvatar";
+import UserAvatar from "@/design-system/components/UserAvatar";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 
 interface SeatingAttendeesListProps {

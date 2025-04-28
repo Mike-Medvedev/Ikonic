@@ -1,4 +1,3 @@
-import Background from "@/ui/Background";
 import { View, StyleSheet } from "react-native";
 import { Divider } from "react-native-paper";
 import { useEffect, useState } from "react";
@@ -7,7 +6,7 @@ import { useLocalSearchParams } from "expo-router";
 import DisplayInviteModalButton from "@/features/Trips/TripAttendance/Components/DisplayInviteModalButton";
 import InviteUsersModal from "@/features/Trips/TripAttendance/Components/InviteUsersModal";
 import { AttendanceList } from "@/types";
-import UsersAvatarList from "@/ui/UsersAvatarList";
+import UsersAvatarList from "@/components/UsersAvatarList";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "../../Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
@@ -30,21 +29,19 @@ export default function TripAttendanceView() {
     console.log("changing selected tab", selectedTab);
   }, [selectedTab]);
   return (
-    <Background>
-      <View style={styles.container}>
-        <AsyncStateWrapper loading={isFetching} error={error}>
-          <View style={{ height: "10%" }}>
-            <AttendanceTabList selectedTab={selectedTab} setSelectedTab={setSelectedTab} attendees={attendees} />
-            <Divider />
-          </View>
-          <View style={{ height: "30%" }}>
-            <UsersAvatarList attendees={attendees} rsvp={selectedTab} />
-          </View>
-          <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
-          <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
-        </AsyncStateWrapper>
-      </View>
-    </Background>
+    <View style={styles.container}>
+      <AsyncStateWrapper loading={isFetching} error={error}>
+        <View style={{ height: "10%" }}>
+          <AttendanceTabList selectedTab={selectedTab} setSelectedTab={setSelectedTab} attendees={attendees} />
+          <Divider />
+        </View>
+        <View style={{ height: "30%" }}>
+          <UsersAvatarList attendees={attendees} rsvp={selectedTab} />
+        </View>
+        <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
+        <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
+      </AsyncStateWrapper>
+    </View>
   );
 }
 const styles = StyleSheet.create({

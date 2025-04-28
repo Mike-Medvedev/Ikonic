@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { HelperText, Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { NewTripForm } from "@/types";
-import CustomAutoCompleteInput from "@/ui/CustomAutoCompleteInput";
+import CustomAutoCompleteInput from "@/features/Trips/TripPlanning/Components/CustomAutoCompleteInput";
 interface SelectMountainProps {
   tripForm: NewTripForm;
   setTripForm: React.Dispatch<React.SetStateAction<NewTripForm>>;

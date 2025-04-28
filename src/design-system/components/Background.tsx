@@ -1,16 +1,18 @@
 import React, { memo } from "react";
-import { StyleSheet, KeyboardAvoidingView, View } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { RadialGradient, Stop, Ellipse } from "react-native-svg";
 
 type Props = {
   children: React.ReactNode;
 };
 
-const Background = ({ children }: Props) => {
+/** Renders the Main Background for the application */
+function Background({ children }: Props) {
   const theme = useTheme();
   return (
-    <View style={[{ backgroundColor: theme.colors.background }, styles.background]}>
+    <SafeAreaView style={[{ backgroundColor: theme.colors.background }, styles.background]}>
       <KeyboardAvoidingView style={styles.background} behavior="padding">
         <Svg height="100%" width="100%" style={styles.svg}>
           <RadialGradient id="grad1" cx="70%" cy="78%" rx="140%" ry="100%" gradientUnits="userSpaceOnUse">
@@ -37,31 +39,14 @@ const Background = ({ children }: Props) => {
         </Svg>
         {children}
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: "100%",
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  container: {
-    flex: 1,
-    padding: 20,
-    width: "100%",
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  glowContainer: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    flex: 1,
   },
   svg: {
     position: "absolute",

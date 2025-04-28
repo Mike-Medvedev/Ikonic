@@ -1,4 +1,3 @@
-import Background from "@/ui/Background";
 import { View } from "react-native";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -50,13 +49,11 @@ export default function CarpoolView() {
   }
 
   return (
-    <Background>
-      <View style={{ flex: 1, width: "100%", height: "100%" }}>
-        <AsyncStateWrapper loading={isFetching} error={error}>
-          <CreateCarButton onPress={createCarHandler} disabled={userHasCar()} />
-          <CarList cars={cars} />
-        </AsyncStateWrapper>
-      </View>
-    </Background>
+    <View style={{ flex: 1, width: "100%", height: "100%" }}>
+      <AsyncStateWrapper loading={isFetching} error={error}>
+        <CreateCarButton onPress={createCarHandler} disabled={userHasCar()} />
+        <CarList cars={cars} />
+      </AsyncStateWrapper>
+    </View>
   );
 }

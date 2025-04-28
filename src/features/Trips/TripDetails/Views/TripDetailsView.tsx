@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
-import Background from "@/ui/Background";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
-import EditButton from "@/ui/EditButton";
+import EditButton from "@/design-system/components/EditButton";
 import TripDetailsContent from "@/features/Trips/TripDetails/Components/TripDetailsContent";
 import TripAttendeesView from "@/features/Trips/TripDetails/Components/TripAttendeesView";
 import TripDescription from "@/features/Trips/TripDetails/Components/TripDescription";
@@ -38,21 +37,19 @@ export default function TripDetailsView() {
   }, [trip]);
 
   return (
-    <Background>
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <AsyncStateWrapper loading={isFetching} error={error}>
-            {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
-            <Text style={styles.tripTitle}>{trip?.title}</Text>
-            {/* <TripImage tripImage={trip?.image} currentTripId={selectedTripID} /> */}
-            {trip && <TripDetailsContent trip={trip} />}
-            <TripAttendeesView selectedTripID={selectedTripID as string} />
-            <TripDescription tripDesc={trip?.desc ?? ""} />
-            {trip && <EditTripModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} />}
-          </AsyncStateWrapper>
-        </ScrollView>
-      </View>
-    </Background>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <AsyncStateWrapper loading={isFetching} error={error}>
+          {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
+          <Text style={styles.tripTitle}>{trip?.title}</Text>
+          {/* <TripImage tripImage={trip?.image} currentTripId={selectedTripID} /> */}
+          {trip && <TripDetailsContent trip={trip} />}
+          <TripAttendeesView selectedTripID={selectedTripID as string} />
+          <TripDescription tripDesc={trip?.desc ?? ""} />
+          {trip && <EditTripModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} />}
+        </AsyncStateWrapper>
+      </ScrollView>
+    </View>
   );
 }
 const styles = StyleSheet.create({

@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Pressable, View, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
-import UsersAvatarList from "@/ui/UsersAvatarList";
+import UsersAvatarList from "@/components/UsersAvatarList";
 import { router, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "@/features/Trips/Services/inviteService";
