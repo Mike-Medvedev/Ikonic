@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 /**
- * Render a basic loading spinner
+ * Render a Large Loading Spinner that takes up its entire space
  */
 export default function LoadingScreen() {
   return (
