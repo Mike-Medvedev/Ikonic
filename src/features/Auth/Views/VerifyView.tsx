@@ -25,6 +25,7 @@ export default function VerifyView() {
       container: {
         flex: 1,
         justifyContent: "center",
+        alignItems: "center",
       },
       center: { alignItems: "center", justifyContent: "center" },
       header: {

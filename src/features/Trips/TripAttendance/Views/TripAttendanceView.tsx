@@ -10,6 +10,7 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "../../Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import Background from "@/design-system/components/Background";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
@@ -29,19 +30,21 @@ export default function TripAttendanceView() {
     console.log("changing selected tab", selectedTab);
   }, [selectedTab]);
   return (
-    <View style={styles.container}>
-      <AsyncStateWrapper loading={isFetching} error={error}>
-        <View style={{ height: "10%" }}>
-          <AttendanceTabList selectedTab={selectedTab} setSelectedTab={setSelectedTab} attendees={attendees} />
-          <Divider />
-        </View>
-        <View style={{ height: "30%" }}>
-          <UsersAvatarList attendees={attendees} rsvp={selectedTab} />
-        </View>
-        <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
-        <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
-      </AsyncStateWrapper>
-    </View>
+    <Background>
+      <View style={styles.container}>
+        <AsyncStateWrapper loading={isFetching} error={error}>
+          <View style={{ height: "10%" }}>
+            <AttendanceTabList selectedTab={selectedTab} setSelectedTab={setSelectedTab} attendees={attendees} />
+            <Divider />
+          </View>
+          <View style={{ height: "30%" }}>
+            <UsersAvatarList attendees={attendees} rsvp={selectedTab} />
+          </View>
+          <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
+          <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
+        </AsyncStateWrapper>
+      </View>
+    </Background>
   );
 }
 const styles = StyleSheet.create({

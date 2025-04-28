@@ -12,6 +12,7 @@ import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
+import Background from "@/design-system/components/Background";
 
 /**
  * Renders the UI for the trip planning page
@@ -88,43 +89,45 @@ export default function TripPlannerView() {
     return StyleSheet.create({
       tripPlannerContainer: {
         flex: 1,
-        width: 350,
+        padding: 20,
       },
       header: {
         fontSize: 26,
         color: theme.colors.primary,
         fontWeight: "bold",
-        paddingVertical: 14,
+        paddingVertical: 10,
       },
     });
   }, [theme]);
   return (
-    <View style={styles.tripPlannerContainer}>
-      <Text style={styles.header}>Plan your trip</Text>
-      <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
-      <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
-      <TextInput
-        label="Name Your Trip"
-        returnKeyType="next"
-        value={tripForm.title.value}
-        onChangeText={(text) => setTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
-        error={!!tripForm.title.error}
-        errorText={tripForm.title.error}
-        autoCapitalize="words"
-        keyboardType="default"
-      />
-      <View style={{ marginVertical: 20 }}>
-        <TripSummary tripForm={tripForm} />
-      </View>
+    <Background>
+      <View style={styles.tripPlannerContainer}>
+        <Text style={styles.header}>Plan your trip</Text>
+        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
+        <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
+        <TextInput
+          label="Name Your Trip"
+          returnKeyType="next"
+          value={tripForm.title.value}
+          onChangeText={(text) => setTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
+          error={!!tripForm.title.error}
+          errorText={tripForm.title.error}
+          autoCapitalize="words"
+          keyboardType="default"
+        />
+        <View style={{ marginVertical: 20 }}>
+          <TripSummary tripForm={tripForm} />
+        </View>
 
-      <View style={{ gap: 20 }}>
-        <Button onPress={handleSubmit} mode="contained">
-          Create Trip
-        </Button>
-        <Button onPress={resetForm} mode="outlined">
-          Clear
-        </Button>
+        <View style={{ gap: 20 }}>
+          <Button onPress={handleSubmit} mode="contained">
+            Create Trip
+          </Button>
+          <Button onPress={resetForm} mode="outlined">
+            Clear
+          </Button>
+        </View>
       </View>
-    </View>
+    </Background>
   );
 }

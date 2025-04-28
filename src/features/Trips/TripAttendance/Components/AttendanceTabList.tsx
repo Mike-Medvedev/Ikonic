@@ -20,20 +20,24 @@ export default function AttendanceTabList({ selectedTab, setSelectedTab, attende
   }
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-      {(Object.entries(attendees) as Array<[keyof AttendanceList, UserPublic[]]>).map(
-        ([attendanceTab, users], index) => (
-          <Pressable key={index} onPress={() => handleTabSelect(attendanceTab)}>
-            <Text style={[styles.tab, selectedTab === attendanceTab ? styles.selectedTab : ""]}>
-              {`${attendanceTab} (${users.length})`}
-            </Text>
-          </Pressable>
-        ),
-      )}
+    <View style={styles.container}>
+      <View style={styles.tabList}>
+        {(Object.entries(attendees) as Array<[keyof AttendanceList, UserPublic[]]>).map(
+          ([attendanceTab, users], index) => (
+            <Pressable key={index} onPress={() => handleTabSelect(attendanceTab)}>
+              <Text style={[styles.tab, selectedTab === attendanceTab ? styles.selectedTab : ""]}>
+                {`${attendanceTab} (${users.length})`}
+              </Text>
+            </Pressable>
+          ),
+        )}
+      </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  container: { margin: 20 },
+  tabList: { flexDirection: "row", justifyContent: "space-evenly" },
   tab: { textTransform: "capitalize" },
   selectedTab: { borderBottomColor: "grey", borderBottomWidth: 5, height: 35 },
 });

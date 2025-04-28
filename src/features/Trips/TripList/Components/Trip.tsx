@@ -89,7 +89,7 @@ export default function Trip({ trip }: TripProps) {
               <View
                 style={{
                   borderRadius: 12,
-                  backgroundColor: theme.colors.onSurface,
+                  backgroundColor: theme.colors.onBackground,
                   flexDirection: "row",
                   height: 30,
                   gap: 10,
@@ -97,7 +97,7 @@ export default function Trip({ trip }: TripProps) {
                   alignItems: "center",
                 }}
               >
-                <Entypo name="calendar" size={14} color="black" />
+                <Entypo name="calendar" size={14} color={theme.colors.primary} />
                 <Text style={{ color: "white" }}>Feb 15 - 20</Text>
                 {/* {date ?? ""} */}
               </View>

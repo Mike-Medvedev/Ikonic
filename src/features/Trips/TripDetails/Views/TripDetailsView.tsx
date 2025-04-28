@@ -10,6 +10,7 @@ import TripAttendeesView from "@/features/Trips/TripDetails/Components/TripAtten
 import TripDescription from "@/features/Trips/TripDetails/Components/TripDescription";
 import EditTripModal from "@/features/Trips/TripDetails/Components/EditTripModal";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import Background from "@/design-system/components/Background";
 
 /**
  * Renders the UI for the trip details page
@@ -37,19 +38,21 @@ export default function TripDetailsView() {
   }, [trip]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <AsyncStateWrapper loading={isFetching} error={error}>
-          {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
-          <Text style={styles.tripTitle}>{trip?.title}</Text>
-          {/* <TripImage tripImage={trip?.image} currentTripId={selectedTripID} /> */}
-          {trip && <TripDetailsContent trip={trip} />}
-          <TripAttendeesView selectedTripID={selectedTripID as string} />
-          <TripDescription tripDesc={trip?.desc ?? ""} />
-          {trip && <EditTripModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} />}
-        </AsyncStateWrapper>
-      </ScrollView>
-    </View>
+    <Background>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <AsyncStateWrapper loading={isFetching} error={error}>
+            {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
+            <Text style={styles.tripTitle}>{trip?.title}</Text>
+            {/* <TripImage tripImage={trip?.image} currentTripId={selectedTripID} /> */}
+            {trip && <TripDetailsContent trip={trip} />}
+            <TripAttendeesView selectedTripID={selectedTripID as string} />
+            <TripDescription tripDesc={trip?.desc ?? ""} />
+            {trip && <EditTripModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} />}
+          </AsyncStateWrapper>
+        </ScrollView>
+      </View>
+    </Background>
   );
 }
 const styles = StyleSheet.create({
