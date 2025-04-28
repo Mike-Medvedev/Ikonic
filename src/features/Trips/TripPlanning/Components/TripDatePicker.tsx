@@ -30,15 +30,25 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
     setOpen(false);
   }, []);
 
-  const onConfirm = useCallback(({ startDate, endDate }: { startDate: Date; endDate: Date }) => {
-    setOpen(false);
-    setRange({ startDate, endDate });
-    setTripForm((prev) => ({
-      ...prev,
-      startDate: { value: new Date(new Date(startDate).toISOString().split("T")[0]), error: "" },
-      endDate: { value: new Date(new Date(endDate).toISOString().split("T")[0]), error: "" },
-    }));
-  }, []);
+  const onConfirm = useCallback(
+    ({ startDate, endDate }: { startDate: Date | undefined; endDate: Date | undefined }) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+
+      const finalStartDate = startDate ? new Date(startDate) : undefined;
+      finalStartDate?.setHours(0, 0, 0, 0);
+
+      const finalEndDate = endDate ? new Date(endDate) : undefined;
+      finalEndDate?.setHours(0, 0, 0, 0);
+
+      setTripForm((prev) => ({
+        ...prev,
+        startDate: { value: finalStartDate, error: "" },
+        endDate: { value: finalEndDate, error: "" },
+      }));
+    },
+    [setOpen, setRange, setTripForm],
+  );
 
   return (
     <SafeAreaView>

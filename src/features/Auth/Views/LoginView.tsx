@@ -90,7 +90,7 @@ export default function LoginView() {
       sendButton: { flex: 1, justifyContent: "center", alignItems: "center" },
       header: { textTransform: "capitalize", color: theme.colors.primary, paddingVertical: 14 },
       header2: { textTransform: "capitalize", color: theme.colors.tertiary, paddingVertical: 14 },
-      label: { color: theme.colors.secondaryText },
+      label: { color: theme.colors.secondary },
     });
   }, [theme]);
 
@@ -100,7 +100,7 @@ export default function LoginView() {
         <View>
           <View style={{ flexDirection: "row", position: "relative" }}>
             <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
-            <AvatarGlowImage imageUri="@/assets/images/penguin.png" size={100} glowColor="#00e5ff" glowIntensity={15} />
+            <AvatarGlowImage size={100} glowColor="#00e5ff" glowIntensity={15} />
           </View>
 
           <View style={{ marginTop: 50 }}>

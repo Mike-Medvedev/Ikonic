@@ -72,6 +72,6 @@ export type TripPublicParsed = Omit<TripPublic, "startDate" | "endDate"> & {
 };
 
 export type TripUpdateParsed = Omit<TripUpdate, "startDate" | "endDate"> & {
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
 };

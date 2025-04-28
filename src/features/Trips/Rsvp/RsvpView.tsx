@@ -36,7 +36,7 @@ export default function RsvpView() {
       return;
     }
     try {
-      await InviteService.rsvp(selectedTripId, userId, userResponse);
+      await InviteService.rsvp(selectedTripId, userId, { rsvp: userResponse });
       showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}` });
     } catch (error) {
       showFailure({ message: `Error, ${(error as Error).message}` });

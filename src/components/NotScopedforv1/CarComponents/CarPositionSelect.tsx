@@ -27,7 +27,7 @@ export default function CarPositionSelect({ currentCar, styles, position }: CarP
   return (
     <>
       <Pressable style={styles} onPress={seatSelectionHandler}>
-        {currentCar.passengers[position] ? (
+        {currentCar?.passengers?.[position] ? (
           <UserAvatar user={currentCar.passengers[position]} />
         ) : (
           <Ionicons name="add-circle-outline" size={44} color="green" />

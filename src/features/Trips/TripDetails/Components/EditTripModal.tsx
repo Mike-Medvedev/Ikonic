@@ -19,8 +19,6 @@ export default function EditTripModal({ currentTrip, visible, setVisible }: Edit
   const [tripUpdateForm, setTripUpdateForm] = useState<TripUpdateParsed>({
     title: "",
     desc: "",
-    image: "",
-    totalCost: "",
   });
 
   return (

@@ -15,7 +15,7 @@ export default function UserAvatar({ user, styles }: UserAvatarProps) {
   return (
     <Avatar.Text
       key={user.id}
-      label={CalculateInitials(user.firstname, user.lastname)}
+      label={CalculateInitials(user?.firstname ?? "Unknown", user?.lastname ?? "Unknown")}
       size={40}
       labelStyle={{ fontSize: 20 }}
       style={styles}

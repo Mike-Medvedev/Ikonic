@@ -75,7 +75,14 @@ export default function TripPlannerView() {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
-    const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(tripForm);
+    //assert start and end date values so typescript is happy because we checked it in isFormvalid() already
+    const validatedPayload = {
+      startDate: { value: tripForm.startDate.value!, error: tripForm.startDate.error },
+      endDate: { value: tripForm.endDate.value!, error: tripForm.endDate.error },
+      title: { value: tripForm.title.value, error: tripForm.title.error },
+      mountain: { value: tripForm.mountain.value, error: tripForm.mountain.error },
+    };
+    const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(validatedPayload);
     createTripMutation.mutate(createTrip);
   }
   const styles = useMemo(() => {

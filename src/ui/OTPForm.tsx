@@ -25,12 +25,12 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
     if (event.nativeEvent.key === "Backspace") {
       if (index === 0) return;
       setTimeout(() => {
-        inputRef.current[index - 1].focus();
+        inputRef.current[index - 1]?.focus();
       });
     } else {
       if (index === 5) return;
       setTimeout(() => {
-        inputRef.current[index + 1].focus();
+        inputRef.current[index + 1]?.focus();
       });
     }
   }

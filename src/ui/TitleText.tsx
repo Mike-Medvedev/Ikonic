@@ -26,7 +26,7 @@ export default function TitleText({ welcomeText, headline1, headline2 }: TitleTe
         </Text>
       </View>
       <View>
-        <Text variant="displayMedium" style={{ color: theme.colors.text }}>
+        <Text variant="displayMedium" style={{ color: theme.colors.onPrimary }}>
           {headline1}
         </Text>
         <Text variant="displayMedium" style={{ color: theme.colors.primary }}>

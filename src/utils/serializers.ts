@@ -15,9 +15,10 @@ export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
  * Replaces js date objects with ISO strings if dates exist
  */
 export function serializeTripUpdate(trip: TripUpdateParsed): TripUpdate {
+  const { startDate, endDate, ...rest } = trip;
   return {
-    ...trip,
-    ...(trip.startDate && { startDate: trip.startDate.toISOString() }),
-    ...(trip.endDate && { endDate: trip.endDate.toISOString() }),
+    ...rest,
+    startDate: startDate ? startDate.toISOString() : null,
+    endDate: endDate ? endDate.toISOString() : null,
   };
 }

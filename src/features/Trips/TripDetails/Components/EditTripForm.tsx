@@ -1,6 +1,5 @@
-import { View, StyleSheet, Image } from "react-native";
-import { Button, TextInput } from "react-native-paper";
-import * as ImagePicker from "expo-image-picker";
+import { View, StyleSheet } from "react-native";
+import { TextInput } from "react-native-paper";
 import { TripUpdateParsed } from "@/types";
 
 interface EditTripFormProps {
@@ -10,21 +9,22 @@ interface EditTripFormProps {
 
 /**
  * Renders the UI for the Edit Trip page and updates user form submission
- * @todo figure out what to do with images need to store in them in a storage
+ * @todo Figure out Image storage
  */
 export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: EditTripFormProps) {
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images", "videos"],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    if (!result.canceled) {
-      setTripUpdateForm((data) => ({ ...data, image: result.assets[0].uri }));
-    }
-  };
+  // Images are not added yet!
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ["images", "videos"],
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+  //   if (!result.canceled) {
+  //     setTripUpdateForm((data) => ({ ...data, image: result.assets[0]?.uri }));
+  //   }
+  // };
 
   const styles = StyleSheet.create({
     container: {
@@ -42,21 +42,21 @@ export default function EditTripForm({ tripUpdateForm, setTripUpdateForm }: Edit
         mode="outlined"
         label="Edit Trip Title"
         returnKeyType="done"
-        value={tripUpdateForm.title}
+        value={tripUpdateForm.title ?? ""}
         onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, title: text }))}
         style={{ marginBottom: 18 }}
       />
       <TextInput
         mode="outlined"
         label="Edit Trip Description"
-        value={tripUpdateForm.desc}
+        value={tripUpdateForm.desc ?? ""}
         onChangeText={(text) => setTripUpdateForm((prev) => ({ ...prev, desc: text }))}
         multiline
       />
 
       <View style={styles.container}>
-        <Button onPress={pickImage}>Pick an image from camera roll</Button>
-        {tripUpdateForm.image ? <Image source={{ uri: tripUpdateForm.image }} style={styles.image} /> : null}
+        {/* <Button onPress={pickImage}>Pick an image from camera roll</Button>
+        {tripUpdateForm.image ? <Image source={{ uri: tripUpdateForm.image }} style={styles.image} /> : null} */}
       </View>
     </View>
   );

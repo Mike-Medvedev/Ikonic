@@ -29,7 +29,7 @@ export default function UsersAvatarList({
             <Pressable onPress={() => router.push(`/profile/${user.id}?previousTripId=${selectedTripId}`)} key={index}>
               <Avatar.Text
                 key={user.id}
-                label={CalculateInitials(user.firstname, user.lastname)}
+                label={CalculateInitials(user?.firstname ?? "Unknown", user?.lastname ?? "Unknown")}
                 size={size}
                 style={{ backgroundColor: theme.colors.surface }}
                 labelStyle={{ fontSize: 8, color: "white" }}

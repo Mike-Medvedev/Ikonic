@@ -15,13 +15,22 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
  */
 export default function TripInviteList() {
   //prettier-ignore
-  const { data: users, isFetching, error} = useQuery({ queryKey: ["users"], queryFn: UserService.getAll, initialData: [] });
+  const { data: users, isFetching, error} = useQuery({ 
+    queryKey: ["users"],
+    queryFn: UserService.getAll,
+    initialData: []
+   });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredUsers = users.filter((user) => user.firstname.toLowerCase().includes(searchTerm.toLowerCase()));
+  const searchTermLower = searchTerm.toLowerCase();
+  const filteredUsers = users.filter((user) => {
+    const firstNameMatch = (user.firstname ?? "").toLowerCase().includes(searchTermLower);
+    const lastNameMatch = (user.lastname ?? "").toLowerCase().includes(searchTermLower);
+    return firstNameMatch || lastNameMatch;
+  });
 
   /**
    * Event Handler for inviting a user to a trip
@@ -39,6 +48,7 @@ export default function TripInviteList() {
       // throw new Error("Error inviting user: " + user.user_id + String(error));
     } finally {
       setIsInviteSending(false);
+      setSelectedButtonIndex(undefined);
     }
   }
   return (
@@ -56,9 +66,18 @@ export default function TripInviteList() {
           {filteredUsers.map((user, index) => (
             <Card key={index} style={{ marginVertical: 10 }}>
               <Card.Title
-                title={`${user.firstname} ${user.lastname}`}
+                title={`${user.firstname ?? "?"} ${user.lastname ?? "?"}`}
                 titleStyle={{ textTransform: "capitalize" }}
-                left={() => <Avatar.Text size={44} label={CalculateInitials(user.firstname, user.lastname)} />}
+                left={() => (
+                  <Avatar.Text
+                    size={44}
+                    label={
+                      user.firstname && user.lastname
+                        ? CalculateInitials(user.firstname, user.lastname)
+                        : "Unknown User"
+                    }
+                  />
+                )}
                 right={() => (
                   <Button
                     mode="contained"
