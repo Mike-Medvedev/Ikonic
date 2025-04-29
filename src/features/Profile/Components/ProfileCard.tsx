@@ -4,7 +4,6 @@ import { UserPublic } from "@/types";
 import { Button, Text } from "@/design-system/components";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 
 type riderType = "skier" | "boarder";
 
@@ -14,11 +13,11 @@ type riderType = "skier" | "boarder";
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const [riderType, setSelectedRiderType] = useState<riderType>("skier");
   //prettier-ignore
-  const { data: recentTrips, isFetching, error } = useQuery({ 
-    queryKey: ["t"],
-    queryFn: async () => null,
-    enabled: false
-  })
+  // const { data: recentTrips, isFetching, error } = useQuery({
+  //   queryKey: ["t"],
+  //   queryFn: async () => null,
+  //   enabled: false
+  // })
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: { padding: 16 },
@@ -60,7 +59,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
   return (
     <View style={styles.container}>
       <View style={styles.profileCardContainer}>
-        <Avatar.Text size={80} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
+        <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
 
         <View style={styles.profileCardContent}>
           <Text
