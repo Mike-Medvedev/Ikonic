@@ -82,39 +82,6 @@ export default function LoginView() {
       container: {
         flex: 1,
       },
-      headerGroup: {
-        flexDirection: "row",
-        position: "relative",
-        alignItems: "center",
-      },
-      cardContainer: {
-        width: "90%",
-        maxWidth: 400,
-        marginTop: 50,
-      },
-      cardContentContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 20,
-        marginBottom: 20,
-      },
-      avatarIcon: {
-        backgroundColor: "rgba(255, 255, 255, 0.03)",
-        borderWidth: 1,
-        borderColor: theme.colors.onSurface,
-      },
-      welcomeText: {
-        color: theme.colors.primary,
-        fontFamily: "Poppins",
-      },
-      phoneInput: {
-        borderColor: theme.colors.onSurface,
-        backgroundColor: theme.colors.surface,
-        marginBottom: 8,
-      },
-      affixText: {
-        color: theme.colors.secondary,
-      },
       label: {
         color: theme.colors.secondary,
       },
@@ -122,18 +89,6 @@ export default function LoginView() {
         textAlign: "center",
         color: theme.colors.onSurfaceVariant,
         marginBottom: 8,
-      },
-      loginButton: {
-        width: "100%",
-        padding: 15,
-        borderRadius: 12,
-        backgroundColor: theme.colors.primary,
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: 50,
-      },
-      loginButtonText: {
-        color: theme.colors.onPrimary,
       },
       buttonGroup: {
         flexDirection: "row",

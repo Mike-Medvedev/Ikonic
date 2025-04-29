@@ -5,7 +5,7 @@ import type { TextProps } from "react-native-paper";
 
 type Props = React.PropsWithChildren<TextProps<unknown>>;
 
-/**Custom Text wrapper over react native paper text component */
+/** Custom Text wrapper over react native paper text component */
 export default function Text({ children, style, ...rest }: Props) {
   const theme = useTheme();
   const styles = StyleSheet.create({

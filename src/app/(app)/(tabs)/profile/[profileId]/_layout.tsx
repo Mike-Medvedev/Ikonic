@@ -1,8 +1,7 @@
-import BackButton from "@/design-system/components/BackButton";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useMemo } from "react";
 import { View, StyleSheet, SafeAreaView } from "react-native";
-import { useTheme } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 
 /**
  * Display the layout for a selected profile based on /profile/<user-id>
@@ -33,7 +32,9 @@ export default function SelectedProfile() {
           header: () => (
             <SafeAreaView style={{ backgroundColor: theme.colors.surface }}>
               <View style={styles.view}>
-                <BackButton />
+                <Appbar.Header>
+                  <Appbar.BackAction onPress={() => router.back()} />
+                </Appbar.Header>
               </View>
             </SafeAreaView>
           ),
