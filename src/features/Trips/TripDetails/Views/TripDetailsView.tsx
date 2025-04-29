@@ -117,7 +117,7 @@ export default function TripDetailsView() {
                 <Text variant="labelLarge" style={{ marginBottom: 16 }}>
                   Trip Members
                 </Text>
-                <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}>
+                <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/rsvp`)}>
                   <Text style={{ color: theme.colors.secondary }}>Manage</Text>
                 </Pressable>
               </View>
