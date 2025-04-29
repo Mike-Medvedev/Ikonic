@@ -28,7 +28,6 @@ const TripHeader = ({ title, callback }: TripHeaderProps) => {
    * If there are no screens left, we must clear history before we pop to parent navigator (tabs)
    */
   function handlePress() {
-    console.log(navigation.getState());
     const currentState = navigation.getState();
     if (currentState?.index && currentState.index > 0) {
       navigation.goBack();

@@ -92,8 +92,8 @@ export default function RsvpView() {
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Icon source="help" size={32} color={theme.colors.secondary} />
                 <View>
-                  <Text>Count me in</Text>
-                  <Text>Ready to hit the slopes</Text>
+                  <Text>Need to check</Text>
+                  <Text>Still figuring things out</Text>
                 </View>
               </View>
             </Pressable>
@@ -101,8 +101,8 @@ export default function RsvpView() {
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Icon source="close" size={32} color={theme.colors.secondary} />
                 <View>
-                  <Text>Count me in</Text>
-                  <Text>Ready to hit the slopes</Text>
+                  <Text>Can&apos;t make it</Text>
+                  <Text>Maybe next time!</Text>
                 </View>
               </View>
             </Pressable>
