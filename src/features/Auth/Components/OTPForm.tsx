@@ -80,7 +80,7 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
   );
 }
 const styles = StyleSheet.create({
-  container: { flexDirection: "row", gap: 10, marginVertical: 30 },
+  container: { flexDirection: "row", gap: 10, marginVertical: 30, justifyContent: "center" },
   inputContainer: { width: 50, alignContent: "center" },
   inputContent: { textAlign: "center", minWidth: "100%" },
 });
