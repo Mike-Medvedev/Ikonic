@@ -3,9 +3,7 @@ import React from "react";
 import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, Text, Icon } from "react-native-paper";
 import { TripPublicParsed } from "@/types";
-import { TripService } from "../../Services/tripService";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DeleteConfirmation } from "@/utils/ConfirmationModal";
+import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/design-system/components";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
@@ -19,7 +17,6 @@ export interface TripProps {
  * Renders the UI for a Trip in a Trip List which is selectable and navigates to a specific trips details
  */
 export default function Trip({ trip }: TripProps) {
-  const queryClient = useQueryClient();
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
@@ -27,21 +24,13 @@ export default function Trip({ trip }: TripProps) {
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!trip.id,
   });
-  const mutation = useMutation<void, unknown, string>({
-    mutationFn: (trip_id) => TripService.delete(trip_id),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
-  });
+
   const theme = useTheme();
 
   const handleTripSelect = () => {
-    router.push(`/trips/${trip.id}`);
+    console.log("handling select!!");
+    router.replace(`/trips/${trip.id}`);
   };
-  /**
-   * Event Handler for deleting a trip and prompts the user for confirmation
-   */
-  async function handleTripDelete(trip_id: string) {
-    DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });
-  }
 
   const styles = StyleSheet.create({
     tripContainer: { marginVertical: 8, alignItems: "center", width: "100%" },

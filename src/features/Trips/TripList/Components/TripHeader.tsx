@@ -1,7 +1,10 @@
 import { View, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
-import { router } from "expo-router";
-const TripHeader = () => {
+
+interface TripHeaderProps {
+  callback: () => void;
+}
+const TripHeader = ({ callback }: TripHeaderProps) => {
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: {
@@ -19,7 +22,7 @@ const TripHeader = () => {
   return (
     <View style={styles.container}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.BackAction onPress={callback} />
         <Appbar.Content title="Trip Details" />
       </Appbar.Header>
     </View>
