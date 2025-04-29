@@ -127,9 +127,9 @@ export default function TripPlannerView() {
           <Button onPress={handleSubmit} mode="contained">
             Create Trip
           </Button>
-          {/* <Button onPress={resetForm} mode="outlined">
+          <Button onPress={resetForm} mode="outlined">
             Clear
-          </Button> */}
+          </Button>
         </View>
       </View>
     </Background>

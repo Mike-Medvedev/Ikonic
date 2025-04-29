@@ -80,6 +80,7 @@ export default function LoginView() {
       container: {
         flex: 1,
       },
+      centerMargin: { textAlign: "center", marginVertical: 8 },
       label: {
         color: theme.colors.secondary,
       },
@@ -92,31 +93,36 @@ export default function LoginView() {
         flexDirection: "row",
         justifyContent: "space-evenly",
       },
+      formContainer: { marginTop: 32 },
     });
   }, [theme]);
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall">Welcome to SnowTrip</Text>
-      <Text variant="labelLarge" style={styles.label}>
+      <Text variant="headlineSmall" style={styles.centerMargin}>
+        Welcome to SnowTrip
+      </Text>
+      <Text variant="titleMedium" style={[styles.label, styles.centerMargin]}>
         Sign in to plan your next mountain adventure
       </Text>
-      <Text variant="labelLarge" style={styles.label}>
-        Phone Number
-      </Text>
-      <TextInput
-        placeholder="(555) 000-000"
-        returnKeyType="done"
-        value={loginForm.phoneNumber.value}
-        onChangeText={handlePhoneChange}
-        error={!!loginForm.phoneNumber.error}
-        errorText={loginForm.phoneNumber.error}
-        autoCapitalize="none"
-        textContentType="telephoneNumber"
-        keyboardType="phone-pad"
-        maxLength={10}
-        left={<PaperInput.Affix text="+1 " />}
-      />
+      <View style={styles.formContainer}>
+        <Text variant="labelLarge" style={styles.label}>
+          Phone Number
+        </Text>
+        <TextInput
+          placeholder="(555) 000-000"
+          returnKeyType="done"
+          value={loginForm.phoneNumber.value}
+          onChangeText={handlePhoneChange}
+          error={!!loginForm.phoneNumber.error}
+          errorText={loginForm.phoneNumber.error}
+          autoCapitalize="none"
+          textContentType="telephoneNumber"
+          keyboardType="phone-pad"
+          maxLength={10}
+          left={<PaperInput.Affix text="+1 " />}
+        />
+      </View>
       <Text style={styles.secondaryLabel}>* We will send you a one time code</Text>
       <Button mode="contained" onPress={handleLogin} loading={isLoading} disabled={isLoading}>
         Continue with Phone

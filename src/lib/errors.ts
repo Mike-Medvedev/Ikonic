@@ -1,5 +1,6 @@
 import { HTTPSTATUSCODE } from "@/constants/constants";
 import { AuthService } from "@/features/Auth/Services/authService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * Abstract Class that defines an App error which adds a status field to a regular JS Error
@@ -57,7 +58,8 @@ export function withError<TArgs extends unknown[], T>(
       if (error instanceof ApiError) {
         if (error.status === HTTPSTATUSCODE.UNAUTHENTICATED || error.status === HTTPSTATUSCODE.FORBIDDEN) {
           console.error(`Authentication error (${error.status}), signing out.`);
-          AuthService.signOut();
+          await AsyncStorage.clear();
+          await AuthService.signOut();
         }
         throw error;
       }

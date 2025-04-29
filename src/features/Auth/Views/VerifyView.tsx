@@ -5,19 +5,19 @@ import OTPForm from "@/features/Auth/Components/OTPForm";
 import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import useToast from "@/hooks/useToast";
-import { LOGIN_PATH } from "@/constants/constants";
 
 import { Text, Button } from "@/design-system/components";
 
 /**
  * Render the UI for the verify page
+ * @todo CANT ALLOW PHONENUMBER FROM URL params TO RECIEVE A TEXT
  */
 export default function VerifyView() {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
-  const { verifyOTP } = useAuth();
-  const { showFailure } = useToast();
-  const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string };
+  const { signIn, verifyOTP } = useAuth();
+  const { showSuccess, showFailure } = useToast();
+  const { phoneNumber } = useLocalSearchParams() as { phoneNumber: string }; //very unsafe
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
 
   /**
@@ -45,10 +45,20 @@ export default function VerifyView() {
     }
   }
 
-  const handleResendCode = () => {
-    router.replace({
-      pathname: LOGIN_PATH,
-    });
+  const handleResendCode = async () => {
+    try {
+      const { error } = await signIn(phoneNumber);
+      if (error) {
+        showFailure({ message: `Error We could not send you a text! Details: ${error.message}` });
+      } else {
+        showSuccess({
+          message: "We sent you another OTP",
+        });
+      }
+    } catch (unexpectedError) {
+      console.error("Unexpected login error:", unexpectedError);
+      showFailure({ message: "An unexpected error occurred during login." });
+    }
   };
   const styles = StyleSheet.create({
     container: {
@@ -56,6 +66,8 @@ export default function VerifyView() {
     },
     centerText: { textAlign: "center", marginVertical: 4 },
     label: { color: theme.colors.secondary },
+    resendCodeContainer: { marginVertical: 16 },
+    resendCode: { fontWeight: 600, textDecorationLine: "underline" },
   });
   return (
     <View style={styles.container}>
@@ -72,8 +84,11 @@ export default function VerifyView() {
       <Button mode="contained" onPress={handleVerify} loading={isLoading} disabled={isLoading}>
         Verify
       </Button>
-      <Text style={[styles.label, styles.centerText]}>
-        Didn&apos;t receive code? <Text onPress={handleResendCode}>Resend</Text>
+      <Text style={[styles.label, styles.centerText, styles.resendCodeContainer]}>
+        Didn&apos;t receive code?{" "}
+        <Text onPress={handleResendCode} style={styles.resendCode}>
+          Resend
+        </Text>
       </Text>
     </View>
   );
