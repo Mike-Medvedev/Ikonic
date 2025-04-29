@@ -12,7 +12,7 @@ const MAX_AVATARS = 5;
 export default function UsersAvatarList({
   attendees,
   rsvp,
-  size = 50,
+  size = 28,
 }: {
   attendees: AttendanceList;
   rsvp: RSVPStatus;
@@ -22,7 +22,7 @@ export default function UsersAvatarList({
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
 
   return (
-    <View style={{ flexDirection: "row", gap: 5, overflow: "hidden" }}>
+    <View style={{ flexDirection: "row", gap: 5, overflow: "hidden", marginVertical: 8 }}>
       {attendees[rsvp] && (
         <>
           {attendees[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
@@ -31,7 +31,7 @@ export default function UsersAvatarList({
                 key={user.id}
                 label={CalculateInitials(user?.firstname ?? "Unknown", user?.lastname ?? "Unknown")}
                 size={size}
-                style={{ backgroundColor: theme.colors.surface }}
+                style={{ backgroundColor: theme.colors.primary }}
                 labelStyle={{ fontSize: 8, color: "white" }}
               />
             </Pressable>

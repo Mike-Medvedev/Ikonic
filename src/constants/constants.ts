@@ -4,6 +4,7 @@ export const TAB_GROUP = "(tabs)";
 export const LOGIN_PATH = `/${AUTH_GROUP}/login`;
 export const DEFAULT_APP_PATH = `/${APP_GROUP}/${TAB_GROUP}/trips`;
 export const PROFILE_PATH = `/${APP_GROUP}/${TAB_GROUP}/profile`;
+export const PLANNER_PATH = `/${APP_GROUP}/${TAB_GROUP}/plan`;
 
 export const MAX_NET_RETRIES = 3;
 

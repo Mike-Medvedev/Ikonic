@@ -41,5 +41,5 @@ export default function TripListView() {
   );
 }
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 12 },
+  container: { flex: 1, paddingHorizontal: 16 },
 });

@@ -1,17 +1,16 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { Pressable, View, StyleSheet } from "react-native";
-import { useTheme, Text } from "react-native-paper";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { useTheme, Text, Icon } from "react-native-paper";
 import { TripPublicParsed } from "@/types";
 import { TripService } from "../../Services/tripService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import { Card } from "@/design-system/components";
 import UsersAvatarList from "@/components/UsersAvatarList";
-import Entypo from "@expo/vector-icons/Entypo";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import { formatDateRangeShort, getDaysUntil } from "@/utils/dateUtils";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -21,13 +20,12 @@ export interface TripProps {
  */
 export default function Trip({ trip }: TripProps) {
   const queryClient = useQueryClient();
-  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
-    queryKey: ["attendees", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
+    queryKey: ["attendees", trip.id],
+    queryFn: async () => InviteService.getInvitedUsers(trip.id),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
-    enabled: !!selectedTripId,
+    enabled: !!trip.id,
   });
   const mutation = useMutation<void, unknown, string>({
     mutationFn: (trip_id) => TripService.delete(trip_id),
@@ -35,7 +33,7 @@ export default function Trip({ trip }: TripProps) {
   });
   const theme = useTheme();
 
-  const onTripSelect = () => {
+  const handleTripSelect = () => {
     router.push(`/trips/${trip.id}`);
   };
   /**
@@ -46,110 +44,38 @@ export default function Trip({ trip }: TripProps) {
   }
 
   const styles = StyleSheet.create({
-    tripContainer: { marginVertical: 10, alignItems: "center", width: "100%" },
-    subtitleContainer: { gap: 3, padding: 10 },
-    subtitleLabel: { flexDirection: "row", gap: 5 },
-    cardContainer: {
-      backgroundColor: `${"white"}`,
-      width: "99%",
-    },
-    cardTitleStyle: { fontSize: 20, marginVertical: 5 },
+    tripContainer: { marginVertical: 8, alignItems: "center", width: "100%" },
+    chip: { flexDirection: "row", gap: 8, alignItems: "center", backgroundColor: theme.colors.surfaceVariant },
+    label: { color: theme.colors.secondary },
+    iconStyle: { marginLeft: -4, marginRight: -4 },
+    text: { marginBottom: 8 },
   });
 
   return (
-    <View style={styles.tripContainer}>
-      <Card
-        coverSource={require("@/assets/images/react-logo.png")}
-        overlayContent={
-          <View style={{ flex: 1 }}>
-            <View style={{ alignItems: "flex-end", marginHorizontal: 20 }}>
-              <AntDesign
-                name="closecircleo"
-                onPress={() => handleTripDelete(trip.id)}
-                size={20}
-                color={theme.colors.error}
-              />
+    <Pressable style={styles.tripContainer} onPress={handleTripSelect}>
+      <Card date={formatDateRangeShort(trip.startDate, trip.endDate)}>
+        <View>
+          <Text variant="titleLarge" style={styles.text}>
+            {trip.title}
+          </Text>
+          <View style={[styles.chip, styles.text]}>
+            <View style={styles.iconStyle}>
+              <Icon source="map-marker" color={theme.colors.secondary} size={20} />
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                margin: 8,
-                alignItems: "flex-end",
-              }}
-            >
-              <View style={{ alignItems: "center" }}>
-                <Text variant="headlineMedium" style={{ color: "#fff", margin: 8 }}>
-                  {trip.title}
-                </Text>
-                <Text variant="labelSmall" style={{ color: "#fff", margin: 8 }}>
-                  {trip.title}
-                </Text>
-              </View>
-              <View
-                style={{
-                  borderRadius: 12,
-                  backgroundColor: theme.colors.onBackground,
-                  flexDirection: "row",
-                  height: 30,
-                  gap: 10,
-                  padding: 7,
-                  alignItems: "center",
-                }}
-              >
-                <Entypo name="calendar" size={14} color={theme.colors.primary} />
-                <Text style={{ color: "white" }}>Feb 15 - 20</Text>
-                {/* {date ?? ""} */}
-              </View>
-            </View>
+            <Text style={styles.label}>{trip.mountain}</Text>
           </View>
-        }
-      >
-        {/* Overlay content goes here */}
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <AsyncStateWrapper loading={isFetching} error={error}>
-              <UsersAvatarList rsvp="accepted" size={24} attendees={attendees} />
-              <Text style={{ color: "rgba(255, 255, 255, 0.50)" }}>2 Friends Joined</Text>
+              <UsersAvatarList attendees={attendees} rsvp="accepted" />
             </AsyncStateWrapper>
+
+            <View style={styles.chip}>
+              <Icon source="calendar" color={theme.colors.secondary} size={20} />
+              <Text style={styles.label}>{getDaysUntil(trip.startDate)}</Text>
+            </View>
           </View>
-          <Pressable
-            onPress={onTripSelect}
-            style={{
-              alignSelf: "center",
-              borderWidth: 1,
-              borderRadius: 12,
-              borderColor: theme.colors.onSurface,
-              paddingVertical: 8,
-              paddingHorizontal: 18,
-            }}
-          >
-            <Text style={{ color: theme.colors.primary }}>View Trip</Text>
-          </Pressable>
         </View>
       </Card>
-      {/* <Card style={styles.cardContainer}>
-        <Card.Title
-          title={<Text variant="titleMedium">{trip.title}</Text>}
-          titleStyle={styles.cardTitleStyle}
-          subtitle={<CardSubTitle trip={trip} />}
-          subtitleNumberOfLines={2}
-          left={(props) => <Avatar.Image {...props} source={{ uri: trip.image ?? "" }} size={50} />}
-          rightStyle={{
-            bottom: 30,
-            left: 5,
-          }}
-          right={() => (
-            <AntDesign
-              name="closecircleo"
-              onPress={(event) => handleTripDelete(event, trip.id)}
-              size={20}
-              color={theme.colors.error}
-              style={{ marginRight: 10 }}
-            />
-          )}
-        />
-      </Card> */}
-    </View>
+    </Pressable>
   );
 }

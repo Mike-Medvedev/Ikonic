@@ -1,6 +1,8 @@
 import { View, StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
-import Text from "@/design-system/components/Text";
+import { Badge, useTheme } from "react-native-paper";
+import { Text, Button } from "@/design-system/components";
+import { router } from "expo-router";
+import { PLANNER_PATH } from "@/constants/constants";
 /**
  * Renders the UI for the header of TripList page
  */
@@ -11,47 +13,28 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
     headerContainer: {
       flexDirection: "row",
       minWidth: 350,
-      margin: 10,
+      marginVertical: 16,
       justifyContent: "space-between",
     },
-    header: {
-      fontSize: 26,
-      color: "white",
-      fontWeight: "bold",
-      paddingVertical: 14,
-      alignItems: "center",
-    },
+    title: { flexDirection: "row", gap: 8 },
     badge: {
       alignSelf: "flex-start",
-      backgroundColor: theme.colors.background,
-      color: theme.colors.primary,
-    },
-    button: {
-      borderRadius: 12,
-      backgroundColor: theme.colors.primary,
-      alignSelf: "center",
-      paddingHorizontal: 20,
-      paddingVertical: 12,
+      backgroundColor: theme.colors.secondaryContainer,
+      color: theme.colors.onSecondaryContainer,
     },
   });
 
   return (
     <View style={styles.headerContainer}>
-      <Text>Hi</Text>
-      {/* <TitleText welcomeText="Snow Trip Planner" headline1="Plan Your" headline2="Escape" />
-      <View style={{ flexDirection: "row" }}>
-        <Text variant="headlineLarge" style={styles.header}>
-          Your Trips
-        </Text>
+      <View style={styles.title}>
+        <Text variant="headlineSmall">My Trips</Text>
         <Badge size={30} style={styles.badge}>
           {tripLength ?? 0}
         </Badge>
       </View>
-      <Pressable style={styles.button} onPress={() => router.navigate("/plan")}>
-        <Text variant="labelLarge" style={{ color: "#000000" }}>
-          + New Trip
-        </Text>
-      </Pressable> */}
+      <Button icon="plus" mode="contained" onPress={() => router.navigate(PLANNER_PATH)}>
+        New Trip
+      </Button>
     </View>
   );
 }
