@@ -31,3 +31,10 @@ export type UpdateTripMutation = {
   currentTripId: string;
   form: TripUpdateParsed;
 };
+
+export type TripsStackParamList = {
+  index: undefined;
+  attendance: undefined;
+  details: undefined;
+  rsvp: undefined;
+};

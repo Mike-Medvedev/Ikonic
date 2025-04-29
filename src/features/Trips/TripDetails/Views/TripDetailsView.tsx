@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Avatar, Chip, Divider, Icon, IconButton, Text, useTheme } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,9 +11,11 @@ import { Button } from "@/design-system/components";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import useToast from "@/hooks/useToast";
 import { NetworkError } from "@/lib/errors";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import { TripsStackParamList } from "@/types";
+import { NavigationProp } from "@react-navigation/native";
 
 /**
  * Renders the UI for the trip details page
@@ -24,6 +26,7 @@ export default function TripDetailsView() {
   const [modalVisible, setModalVisible] = useState(false);
   const { session } = useAuth();
   const { showFailure } = useToast();
+  const navigation = useNavigation<NavigationProp<TripsStackParamList>>();
   const theme = useTheme();
   const queryClient = useQueryClient();
   const mutation = useMutation<void, unknown, string>({
@@ -114,14 +117,25 @@ export default function TripDetailsView() {
               </Chip>
             </View>
             <View style={{ marginVertical: 16 }}>
-              <Text variant="labelLarge" style={{ marginBottom: 16 }}>
-                Trip Members
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <Avatar.Text label="MM" size={24} />
-                <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
-                <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <Text variant="labelLarge" style={{ marginBottom: 16 }}>
+                  Trip Members
+                </Text>
+                <Pressable onPress={() => navigation.navigate("attendance")}>
+                  <Text style={{ color: theme.colors.secondary }}>Manage</Text>
+                </Pressable>
               </View>
+
+              <Pressable style={{ flexDirection: "row", gap: 16 }} onPress={() => navigation.navigate("attendance")}>
+                <View style={{ flexDirection: "row" }}>
+                  <Avatar.Text label="MM" size={24} />
+                  <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
+                  <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
+                </View>
+                <View>
+                  <Avatar.Icon icon="plus" size={24} style={{ backgroundColor: theme.colors.secondaryContainer }} />
+                </View>
+              </Pressable>
               {/* <AsyncStateWrapper loading={isFetching} error={error}>
               <UsersAvatarList attendees={attendees} rsvp="accepted" />
             </AsyncStateWrapper> */}
@@ -179,40 +193,3 @@ export default function TripDetailsView() {
     </Background>
   );
 }
-
-{
-  /* <View>
-  <Text variant="titleLarge" style={styles.text}>
-    {trip.title}
-  </Text>
-  <View style={[styles.chip, styles.text]}>
-    <View style={styles.iconStyle}>
-      <Icon source="map-marker" color={theme.colors.secondary} size={20} />
-    </View>
-    <Text style={styles.label}>{trip.mountain}</Text>
-  </View>
-  <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-    <AsyncStateWrapper loading={isFetching} error={error}>
-      <UsersAvatarList attendees={attendees} rsvp="accepted" />
-    </AsyncStateWrapper>
-
-    <View style={styles.chip}>
-      <Icon source="calendar" color={theme.colors.secondary} size={20} />
-      <Text style={styles.label}>{getDaysUntil(trip.startDate)}</Text>
-    </View>
-  </View>
-</View>; */
-}
-{
-  /* <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <AsyncStateWrapper loading={isFetching} error={error}>
-            {isOwner && <EditButton onPress={() => setModalVisible(true)} />}
-            <Text style={styles.tripTitle}>{trip?.title}</Text>
-            {/* <TripImage tripImage={trip?.image} currentTripId={selectedTripID} /> */
-}
-//     {trip && <TripDetailsContent trip={trip} />}
-//     <TripAttendeesView selectedTripID={selectedTripID as string} />
-//     <TripDescription tripDesc={trip?.desc ?? ""} />
-//     {trip && <EditTripModal currentTrip={trip} visible={modalVisible} setVisible={setModalVisible} />}
-//   </AsyncStateWrapper>
-// </ScrollView> */}
