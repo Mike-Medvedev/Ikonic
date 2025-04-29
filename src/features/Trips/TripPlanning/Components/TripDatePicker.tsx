@@ -1,10 +1,10 @@
-import { View } from "react-native";
-import { useTheme, TextInput, HelperText } from "react-native-paper";
+import { Pressable, View, StyleSheet } from "react-native";
+import { useTheme, HelperText } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
-import { SafeAreaView } from "react-native-safe-area-context";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { NewTripForm } from "@/types";
 import { useState, useCallback } from "react";
+import { Text } from "@/design-system/components";
 
 interface TripDatePickerProps {
   tripForm: NewTripForm;
@@ -50,52 +50,53 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
     [setOpen, setRange, setTripForm],
   );
 
-  return (
-    <SafeAreaView>
-      <View
-        style={{
-          gap: 20,
-        }}
-      >
-        <View>
-          <TextInput
-            placeholder="Select Date Range"
-            value={
-              tripForm.startDate.value && tripForm.endDate.value
-                ? `${tripForm.startDate?.value?.toLocaleDateString()} - ${tripForm.endDate?.value?.toLocaleDateString()}`
-                : ""
-            }
-            selectionColor={theme.colors.primary}
-            underlineColor="transparent"
-            mode="outlined"
-            error={!!tripForm.startDate.error || !!tripForm.endDate.error}
-            right={
-              <TextInput.Icon
-                icon={({ size, color }) => <AntDesign name="calendar" size={size} color={color} />}
-                onPress={() => setOpen(true)}
-              />
-            }
-          />
-          <HelperText type="error" visible={!!tripForm.startDate.error || !!tripForm.endDate.error}>
-            {tripForm.startDate.error || tripForm.endDate.error}
-          </HelperText>
-        </View>
+  const styles = StyleSheet.create({
+    datePicker: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderColor: theme.colors.outlineVariant,
+      borderWidth: 1,
+      padding: 12,
+    },
+    placeholder: { color: theme.colors.onSurfaceVariant },
+    error: { borderColor: theme.colors.error },
+  });
 
-        <DatePickerModal
-          presentationStyle={"pageSheet"}
-          locale="en"
-          mode="range"
-          visible={open}
-          onDismiss={onDismiss}
-          startDate={range.startDate}
-          endDate={range.endDate}
-          onConfirm={onConfirm}
-          validRange={{ startDate: new Date(), endDate: undefined }}
-          startYear={2023}
-          endYear={2024}
-          placeholder="HIHIHI"
-        />
+  return (
+    <View>
+      <View>
+        <Pressable
+          onPress={() => setOpen(true)}
+          style={[styles.datePicker, !!tripForm.startDate.error || !!tripForm.endDate.error ? styles.error : undefined]}
+        >
+          <Text style={tripForm.startDate.value && tripForm.endDate.value ? undefined : styles.placeholder}>
+            {tripForm.startDate.value && tripForm.endDate.value
+              ? `${tripForm.startDate?.value?.toLocaleDateString()} - ${tripForm.endDate?.value?.toLocaleDateString()}`
+              : "Select Date Range"}
+          </Text>
+
+          <AntDesign name="calendar" size={28} color={theme.colors.onSurfaceVariant} />
+        </Pressable>
+        <HelperText type="error" visible={!!tripForm.startDate.error || !!tripForm.endDate.error}>
+          {tripForm.startDate.error || tripForm.endDate.error}
+        </HelperText>
       </View>
-    </SafeAreaView>
+
+      <DatePickerModal
+        presentationStyle={"pageSheet"}
+        locale="en"
+        mode="range"
+        visible={open}
+        onDismiss={onDismiss}
+        startDate={range.startDate}
+        endDate={range.endDate}
+        onConfirm={onConfirm}
+        validRange={{ startDate: new Date(), endDate: undefined }}
+        startYear={2023}
+        endYear={2024}
+        placeholder="HIHIHI"
+      />
+    </View>
   );
 }

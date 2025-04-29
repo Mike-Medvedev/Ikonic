@@ -15,6 +15,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
       minWidth: 350,
       marginVertical: 16,
       justifyContent: "space-between",
+      alignItems: "center",
     },
     title: { flexDirection: "row", gap: 8 },
     badge: {

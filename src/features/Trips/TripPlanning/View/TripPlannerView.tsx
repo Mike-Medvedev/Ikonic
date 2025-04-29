@@ -1,18 +1,16 @@
 import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMountain";
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
-import { Button, Text, useTheme } from "react-native-paper";
-import TripSummary from "@/features/Trips/TripPlanning/Components/TripSummary";
+import { useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
-import TextInput from "@/design-system/components/TextInput";
 import { dateValidator, nameValidator } from "@/utils/validators";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { NewTripForm, TripCreateParsed, TripPublicParsed } from "@/types";
 import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
-import Background from "@/design-system/components/Background";
+import { Background, Button, Text, TextInput } from "@/design-system/components";
 
 /**
  * Renders the UI for the trip planning page
@@ -85,26 +83,21 @@ export default function TripPlannerView() {
     const createTrip: TripCreateParsed = FormPayloadFactory<Omit<TripCreateParsed, "desc">>(validatedPayload);
     createTripMutation.mutate(createTrip);
   }
-  const styles = useMemo(() => {
-    return StyleSheet.create({
-      tripPlannerContainer: {
-        flex: 1,
-        padding: 20,
-      },
-      header: {
-        fontSize: 26,
-        color: theme.colors.primary,
-        fontWeight: "bold",
-        paddingVertical: 10,
-      },
-    });
-  }, [theme]);
+  const styles = StyleSheet.create({
+    tripPlannerContainer: {
+      flex: 1,
+      padding: 16,
+      overflow: "hidden",
+    },
+    label: { color: theme.colors.secondary, marginBottom: 4, fontWeight: 400 },
+  });
   return (
     <Background>
       <View style={styles.tripPlannerContainer}>
-        <Text style={styles.header}>Plan your trip</Text>
-        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
-        <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
+        {/* <Text variant="headlineMedium">Plan your trip</Text> */}
+        <Text variant="labelMedium" style={(styles.label, { marginBottom: -2 })}>
+          Trip Title
+        </Text>
         <TextInput
           label="Name Your Trip"
           returnKeyType="next"
@@ -114,18 +107,29 @@ export default function TripPlannerView() {
           errorText={tripForm.title.error}
           autoCapitalize="words"
           keyboardType="default"
+          mode="outlined"
         />
-        <View style={{ marginVertical: 20 }}>
-          <TripSummary tripForm={tripForm} />
-        </View>
+        <Text variant="labelMedium" style={styles.label}>
+          Destination
+        </Text>
+        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
 
-        <View style={{ gap: 20 }}>
+        <Text variant="labelMedium" style={styles.label}>
+          Dates
+        </Text>
+        <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
+        <Text variant="labelMedium" style={styles.label}>
+          Trip Description (Optional)
+        </Text>
+        <TextInput multiline style={{ height: 80 }} placeholder="Add any notes or details about your trip..." />
+
+        <View style={{ gap: 16 }}>
           <Button onPress={handleSubmit} mode="contained">
             Create Trip
           </Button>
-          <Button onPress={resetForm} mode="outlined">
+          {/* <Button onPress={resetForm} mode="outlined">
             Clear
-          </Button>
+          </Button> */}
         </View>
       </View>
     </Background>

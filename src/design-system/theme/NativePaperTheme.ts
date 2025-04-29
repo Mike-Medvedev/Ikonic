@@ -4,5 +4,5 @@ import colors from "@/design-system/theme/myGeneratedColors.json";
 export const theme = {
   ...DefaultTheme,
   colors: colors.colors,
-  roundness: 2,
+  roundness: 6,
 };

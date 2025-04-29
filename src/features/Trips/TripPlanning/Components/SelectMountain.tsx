@@ -143,7 +143,7 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
           value: tripForm.mountain.value,
           onChangeText: (text) => setTripForm((prev) => ({ ...prev, mountain: { value: text, error: "" } })),
           placeholder: "Choose a mountain",
-          placeholderTextColor: theme.colors.inverseSurface,
+          placeholderTextColor: theme.colors.onSurfaceVariant,
           style: {
             color: theme.colors.onSurface,
             paddingLeft: 18,

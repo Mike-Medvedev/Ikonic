@@ -11,7 +11,6 @@ function TextInput(props: Props, ref: Ref<NativeTextInput>) {
     return StyleSheet.create({
       container: {
         width: "100%",
-        marginVertical: 8,
       },
       input: {
         backgroundColor: theme.colors.surface,
@@ -21,8 +20,8 @@ function TextInput(props: Props, ref: Ref<NativeTextInput>) {
   return (
     <View style={styles.container}>
       <Input style={styles.input} underlineColor="transparent" mode="outlined" ref={ref} {...rest} />
-      <HelperText type="error" visible={!!errorText}>
-        {errorText}
+      <HelperText type="error" visible={!!true}>
+        {errorText || " "}
       </HelperText>
     </View>
   );

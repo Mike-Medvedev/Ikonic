@@ -74,7 +74,6 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
             mode="outlined"
             returnKeyType="done"
             keyboardType="phone-pad"
-            theme={{ roundness: 8 }}
           />
         ))}
     </View>
