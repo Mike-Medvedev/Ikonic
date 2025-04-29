@@ -7,7 +7,7 @@ import { TripPublicParsed } from "@/types";
 import { TripService } from "../../Services/tripService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
-import { Card } from "@/design-system/components/Card";
+import { Card } from "@/design-system/components";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import Entypo from "@expo/vector-icons/Entypo";
 import { InviteService } from "@/features/Trips/Services/inviteService";

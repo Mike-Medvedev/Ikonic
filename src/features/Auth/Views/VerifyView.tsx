@@ -6,8 +6,8 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import useToast from "@/hooks/useToast";
 import { LOGIN_PATH } from "@/constants/constants";
-import Button from "@/design-system/components/Button";
-import Text from "@/design-system/components/Text";
+
+import { Text, Button } from "@/design-system/components";
 
 /**
  * Render the UI for the verify page

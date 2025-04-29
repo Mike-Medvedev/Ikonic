@@ -32,7 +32,7 @@ const CardComponent = ({ children, coverSource, overlayContent, style }: CardPro
   );
 };
 
-export const Card = memo(CardComponent);
+export default memo(CardComponent);
 
 const styles = StyleSheet.create({
   card: {

@@ -4,7 +4,7 @@ import { HelperText, TextInput as Input, useTheme } from "react-native-paper";
 
 type Props = React.ComponentProps<typeof Input> & { errorText?: string };
 
-function TextInputComponent(props: Props, ref: Ref<NativeTextInput>) {
+function TextInput(props: Props, ref: Ref<NativeTextInput>) {
   const { errorText, ...rest } = props;
   const theme = useTheme();
   const styles = useMemo(() => {
@@ -28,4 +28,4 @@ function TextInputComponent(props: Props, ref: Ref<NativeTextInput>) {
   );
 }
 
-export default memo(forwardRef(TextInputComponent));
+export default memo(forwardRef(TextInput));

@@ -1,7 +1,6 @@
-import { router } from "expo-router";
-import { View, StyleSheet, Pressable } from "react-native";
-import { Badge, Text, useTheme } from "react-native-paper";
-
+import { View, StyleSheet } from "react-native";
+import { useTheme } from "react-native-paper";
+import Text from "@/design-system/components/Text";
 /**
  * Renders the UI for the header of TripList page
  */
@@ -38,7 +37,8 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
 
   return (
     <View style={styles.headerContainer}>
-      {/* <TitleText welcomeText="Snow Trip Planner" headline1="Plan Your" headline2="Escape" /> */}
+      <Text>Hi</Text>
+      {/* <TitleText welcomeText="Snow Trip Planner" headline1="Plan Your" headline2="Escape" />
       <View style={{ flexDirection: "row" }}>
         <Text variant="headlineLarge" style={styles.header}>
           Your Trips
@@ -51,7 +51,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
         <Text variant="labelLarge" style={{ color: "#000000" }}>
           + New Trip
         </Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 }

@@ -5,10 +5,8 @@ import { phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import { SimpleForm } from "@/types";
 import useToast from "@/hooks/useToast";
-import Text from "@/design-system/components/Text";
-import TextInput from "@/design-system/components/TextInput";
-import Button from "@/design-system/components/Button";
-import DividerWithText from "@/design-system/components/DividerText";
+import { Text, TextInput, Button, DividerText } from "@/design-system/components";
+
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
   countryCode: SimpleForm<string>;
@@ -124,7 +122,7 @@ export default function LoginView() {
         Continue with Phone
       </Button>
 
-      <DividerWithText text="Or continue with" />
+      <DividerText text="Or continue with" />
       <View style={styles.buttonGroup}>
         <Button icon="google" mode="outlined">
           {" "}
