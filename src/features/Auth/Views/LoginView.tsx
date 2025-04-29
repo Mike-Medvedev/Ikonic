@@ -99,8 +99,9 @@ export default function LoginView() {
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineSmall" style={styles.centerMargin}>
-        Welcome to SnowTrip
+      <View style={{ height: "15%" }}></View>
+      <Text variant="headlineMedium" style={styles.centerMargin}>
+        Welcome to Ikonic
       </Text>
       <Text variant="titleMedium" style={[styles.label, styles.centerMargin]}>
         Sign in to plan your next mountain adventure

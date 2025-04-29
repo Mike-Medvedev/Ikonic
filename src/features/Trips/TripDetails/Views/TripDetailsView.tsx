@@ -27,13 +27,15 @@ export default function TripDetailsView() {
   });
   const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
   const styles = StyleSheet.create({
-    scrollContainer: { flex: 1, width: "100%", padding: 16 },
+    scrollContainer: { width: "100%", padding: 16 },
     cover: { backgroundColor: theme.colors.secondary, height: 200 },
     coverActions: {
       position: "absolute",
       bottom: 0,
       right: 0,
       flexDirection: "row",
+      marginHorizontal: 8,
+      marginVertical: 16,
     },
     tripOverview: {},
     tripTitle: {},
@@ -51,8 +53,8 @@ export default function TripDetailsView() {
     <Background>
       <View style={styles.cover}>
         <View style={styles.coverActions}>
-          <IconButton icon="share-variant" size={20} iconColor="white" />
-          <IconButton icon="heart-outline" size={20} iconColor="white" />
+          <IconButton icon="share-variant" size={20} iconColor={theme.colors.primary} mode="contained" />
+          <IconButton icon="heart-outline" size={20} iconColor={theme.colors.primary} mode="contained" />
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -75,11 +77,13 @@ export default function TripDetailsView() {
                 borderRadius: 20,
               }}
             >
-              {formatDateRangeShort(trip?.startDate ?? "", trip?.endDate ?? "")}
+              {formatDateRangeShort(trip?.startDate ?? new Date(), trip?.endDate ?? new Date())}
             </Chip>
           </View>
           <View style={{ marginVertical: 16 }}>
-            <Text variant="labelLarge">Trip Members</Text>
+            <Text variant="labelLarge" style={{ marginBottom: 16 }}>
+              Trip Members
+            </Text>
             <View style={{ flexDirection: "row" }}>
               <Avatar.Text label="MM" size={24} />
               <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
@@ -115,11 +119,16 @@ export default function TripDetailsView() {
         </View>
         <Divider style={{ marginVertical: 16 }} />
         <View style={styles.descritpion}>
-          <Text variant="titleMedium">About this trip</Text>
+          <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+            About this trip
+          </Text>
           <Text>
             Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo with
             easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski activities
-            planned. Bring your good vibes and winter gear!
+            planned. Bring your good vibes and winter gear! Join us for an epic winter getaway at Whistler! We&apos;ll
+            be staying in a beautiful slope-side condo with easy access to the gondola. Perfect for both skiing and
+            snowboarding, with plenty of après-ski activities planned. Bring your good vibes and winter gear!Join us for
+            an epic winter getaway at Whistler!
           </Text>
         </View>
       </ScrollView>
