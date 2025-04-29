@@ -4,9 +4,10 @@ import { View, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 
 interface TripHeaderProps {
+  title: string;
   callback: () => void;
 }
-const TripHeader = ({ callback }: TripHeaderProps) => {
+const TripHeader = ({ title, callback }: TripHeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
   const styles = StyleSheet.create({
@@ -53,7 +54,7 @@ const TripHeader = ({ callback }: TripHeaderProps) => {
     <View style={styles.container}>
       <Appbar.Header>
         <Appbar.BackAction onPress={handlePress} />
-        <Appbar.Content title="Trip Details" />
+        <Appbar.Content title={title} />
       </Appbar.Header>
     </View>
   );

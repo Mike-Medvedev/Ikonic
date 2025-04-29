@@ -1,3 +1,5 @@
+import { TripsStackParamList } from "@/types";
+
 export const AUTH_GROUP = "(auth)";
 export const APP_GROUP = "(app)";
 export const TAB_GROUP = "(tabs)";
@@ -12,3 +14,10 @@ export enum HTTPSTATUSCODE {
   UNAUTHENTICATED = 401,
   FORBIDDEN = 403,
 }
+
+export const TripHeaderTitles: { [K in keyof TripsStackParamList]: string } = {
+  index: "Trip",
+  attendance: "Trip Members",
+  details: "Trip Details",
+  rsvp: "RSVP Status",
+};

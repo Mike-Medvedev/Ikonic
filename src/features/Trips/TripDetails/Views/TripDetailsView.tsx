@@ -11,11 +11,9 @@ import { Button } from "@/design-system/components";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import useToast from "@/hooks/useToast";
 import { NetworkError } from "@/lib/errors";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
-import { TripsStackParamList } from "@/types";
-import { NavigationProp } from "@react-navigation/native";
 
 /**
  * Renders the UI for the trip details page
@@ -26,7 +24,6 @@ export default function TripDetailsView() {
   const [modalVisible, setModalVisible] = useState(false);
   const { session } = useAuth();
   const { showFailure } = useToast();
-  const navigation = useNavigation<NavigationProp<TripsStackParamList>>();
   const theme = useTheme();
   const queryClient = useQueryClient();
   const mutation = useMutation<void, unknown, string>({
@@ -121,12 +118,15 @@ export default function TripDetailsView() {
                 <Text variant="labelLarge" style={{ marginBottom: 16 }}>
                   Trip Members
                 </Text>
-                <Pressable onPress={() => navigation.navigate("attendance")}>
+                <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}>
                   <Text style={{ color: theme.colors.secondary }}>Manage</Text>
                 </Pressable>
               </View>
 
-              <Pressable style={{ flexDirection: "row", gap: 16 }} onPress={() => navigation.navigate("attendance")}>
+              <Pressable
+                style={{ flexDirection: "row", gap: 16 }}
+                onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}
+              >
                 <View style={{ flexDirection: "row" }}>
                   <Avatar.Text label="MM" size={24} />
                   <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
