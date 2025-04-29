@@ -118,6 +118,11 @@ export default function LoginView() {
       label: {
         color: theme.colors.secondary,
       },
+      secondaryLabel: {
+        textAlign: "center",
+        color: theme.colors.onSurfaceVariant,
+        marginBottom: 8,
+      },
       loginButton: {
         width: "100%",
         padding: 15,
@@ -146,8 +151,24 @@ export default function LoginView() {
       <Text variant="labelLarge" style={styles.label}>
         Phone Number
       </Text>
-      <TextInput placeholder="(555) 000-000" left={<PaperInput.Affix textStyle={styles.label} text="+1" />} />
-      <Button mode="contained">Continue with Phone</Button>
+      <TextInput
+        placeholder="(555) 000-000"
+        returnKeyType="done"
+        value={loginForm.phoneNumber.value}
+        onChangeText={handlePhoneChange}
+        error={!!loginForm.phoneNumber.error}
+        errorText={loginForm.phoneNumber.error}
+        autoCapitalize="none"
+        textContentType="telephoneNumber"
+        keyboardType="phone-pad"
+        maxLength={10}
+        left={<PaperInput.Affix text="+1 " />}
+      />
+      <Text style={styles.secondaryLabel}>* We will send you a one time code</Text>
+      <Button mode="contained" onPress={handleLogin} loading={isLoading} disabled={isLoading}>
+        Continue with Phone
+      </Button>
+
       <DividerWithText text="Or continue with" />
       <View style={styles.buttonGroup}>
         <Button icon="google" mode="outlined">
@@ -158,47 +179,6 @@ export default function LoginView() {
           Apple
         </Button>
       </View>
-
-      {/* <View style={styles.headerGroup}>
-        <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
-        <AvatarGlowImage size={100} glowColor="#00e5ff" glowIntensity={15} />
-      </View>
-
-      <View style={styles.cardContainer}>
-        <Card>
-          <View style={styles.cardContentContainer}>
-            <Avatar.Icon icon="cellphone" size={48} color={theme.colors.primary} style={styles.avatarIcon} />
-            <Text variant="titleMedium" style={styles.welcomeText}>
-              Welcome
-            </Text>
-          </View>
-
-          <TextInput
-            style={styles.phoneInput}
-            label="Enter Phone Number"
-            returnKeyType="done"
-            value={loginForm.phoneNumber.value}
-            onChangeText={handlePhoneChange}
-            error={!!loginForm.phoneNumber.error}
-            errorText={loginForm.phoneNumber.error}
-            autoCapitalize="none"
-            textContentType="telephoneNumber"
-            keyboardType="phone-pad"
-            maxLength={10}
-            left={<PaperInput.Affix text="+1 " textStyle={styles.affixText} />}
-          />
-          <Text style={styles.label}>We will send you a one time code</Text>
-          <Pressable style={styles.loginButton} onPress={handleLogin} disabled={isLoading}>
-            {isLoading ? (
-              <ActivityIndicator animating={true} color={theme.colors.onPrimary} />
-            ) : (
-              <Text variant="headlineSmall" style={styles.loginButtonText}>
-                Continue
-              </Text>
-            )}
-          </Pressable>
-        </Card>
-      </View> */}
     </View>
   );
 }
