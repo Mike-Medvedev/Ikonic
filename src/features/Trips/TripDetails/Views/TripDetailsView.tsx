@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Avatar, Chip, Divider, Icon, IconButton, Text, useTheme } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router/build/hooks";
@@ -21,7 +20,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
  */
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams();
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
   const { session } = useAuth();
   const { showFailure } = useToast();
   const theme = useTheme();

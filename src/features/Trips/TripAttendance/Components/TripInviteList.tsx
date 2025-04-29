@@ -74,7 +74,7 @@ export default function TripInviteList() {
               contentStyle={{ paddingHorizontal: 15 }}
             >
               <Card.Title
-                title={`${user.firstname ?? "?"} ${user.lastname ?? "?"}`}
+                title={`${user.firstname} ${user.lastname}`}
                 titleStyle={{ textTransform: "capitalize" }}
                 left={() => (
                   <Avatar.Text

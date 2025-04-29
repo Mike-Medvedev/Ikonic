@@ -1,12 +1,13 @@
-import { View, StyleSheet, ScrollView  } from "react-native";
-import { Avatar, Icon, useTheme } from "react-native-paper";
-import { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Icon, useTheme } from "react-native-paper";
+import { useEffect } from "react";
+import { router, useLocalSearchParams } from "expo-router";
 import { AttendanceList } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "../../Services/inviteService";
 import { Background, Text, Button } from "@/design-system/components";
-import CalculateInitials from "@/utils/CalculateInitials";
+import TripTitleDetail from "@/components/TripTitleDetail";
+import UserCard from "@/components/UserCard";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
@@ -14,8 +15,6 @@ import CalculateInitials from "@/utils/CalculateInitials";
  */
 export default function TripAttendanceView() {
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const [selectedTab, setSelectedTab] = useState<keyof AttendanceList>("accepted");
-  const [modalVisible, setModalVisible] = useState(false);
   const theme = useTheme();
   //prettier-ignore
   const {
@@ -47,7 +46,6 @@ export default function TripAttendanceView() {
 
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 16 },
-    title: { marginBottom: 8 },
     label: { color: theme.colors.secondary },
     secondContainer: {
       marginVertical: 24,
@@ -57,19 +55,15 @@ export default function TripAttendanceView() {
     },
     attendanceContainer: {},
   });
-  console.log("ATTENDEES DATA (iOS):", JSON.stringify(attendees, null, 2));
   return (
     <Background>
       <View style={styles.container}>
-        <Text style={styles.title} variant="titleLarge">
-          Winter Shred Trip
-        </Text>
-        <Text style={styles.label}>Feb 15-20, 2025 • Whistler</Text>
+        <TripTitleDetail />
         <View style={styles.secondContainer}>
           <Text>
             3 going <Text style={styles.label}>· 2 pending</Text>
           </Text>
-          <Button theme={{ roundness: theme.roundness }} mode="contained">
+          <Button theme={{ roundness: theme.roundness }} mode="contained" onPress={() => router.push("./invite")}>
             Invite Friends
           </Button>
         </View>
@@ -80,13 +74,15 @@ export default function TripAttendanceView() {
               {Array(2)
                 .fill(0)
                 .map((user, index) => (
-                  <View style={{ flexDirection: "row", gap: 16, alignItems: "center", marginVertical: 8 }} key={index}>
-                    <Avatar.Text label={CalculateInitials(user.firstname, user.lastname)} size={40} />
-
-                    <View style={{ flex: 1 }}>
-                      <Text>Michael Medvedev</Text>
-                      <Text style={styles.label}>Host</Text>
-                    </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                    key={index}
+                  >
+                    <UserCard user={user} />
                     {CalculateIcon(rsvp as keyof AttendanceList)}
                   </View>
                 ))}

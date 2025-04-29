@@ -8,3 +8,4 @@ export { default as SignOutButton } from "./SignOutButton";
 export { default as Text } from "./Text";
 export { default as TextInput } from "./TextInput";
 export { default as UserAvatar } from "./UserAvatar";
+export { default as SearchBar } from "./SearchBar";

@@ -37,4 +37,5 @@ export type TripsStackParamList = {
   attendance: undefined;
   details: undefined;
   rsvp: undefined;
+  invite: undefined;
 };
