@@ -1,11 +1,8 @@
-// context/AuthProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
-// Your Supabase client
 import { AuthService } from "@/features/Auth/Services/authService";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 
-// Define our auth context type
 type AuthContextType = {
   session: Session | null;
   user: User | null;
@@ -15,7 +12,6 @@ type AuthContextType = {
   signOut: () => Promise<void>;
 };
 
-// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 /**
  * Custom hook to use auth context
@@ -36,17 +32,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  // Inside your AuthProvider component...
   useAuthRedirect(session, isLoading);
 
-  // Initialize: Check for existing session when the component is mounted
+  // Check for existing session when the component is mounted
   useEffect(() => {
     AuthService.getSession().then((session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
     });
-    // Listen for changes to auth state
     const unsubscribe = AuthService.onAuthStateChange((session, user) => {
       setSession(session);
       setUser(user);

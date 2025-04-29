@@ -4,7 +4,6 @@ import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-d
 import { AuthProvider } from "@/context/AuthContext";
 import { theme } from "@/design-system/theme/NativePaperTheme";
 import { registerTranslation } from "react-native-paper-dates";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ErrorBoundary } from "react-error-boundary";
@@ -90,7 +89,6 @@ export default function RootLayout() {
                 <QueryClientProvider client={queryClient}>
                   <AuthProvider>
                     <SafeAreaProvider>
-                      <StatusBar style="dark" />
                       <Background>
                         <Slot />
                       </Background>
