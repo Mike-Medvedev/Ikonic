@@ -1,15 +1,14 @@
 import React, { useMemo, useState } from "react";
-import { StyleSheet, View, Pressable } from "react-native";
-import { useTheme, TextInput as PaperInput, Avatar, Text, ActivityIndicator } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { useTheme, TextInput as PaperInput } from "react-native-paper";
 import { phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
-import TextInput from "@/design-system/components/TextInput";
 import { SimpleForm } from "@/types";
 import useToast from "@/hooks/useToast";
-import AvatarGlowImage from "@/design-system/components/AvatarGlowImage";
-import { Card } from "@/design-system/components/Card";
-import TitleText from "@/design-system/components/TitleText";
-
+import Text from "@/design-system/components/Text";
+import TextInput from "@/design-system/components/TextInput";
+import Button from "@/design-system/components/Button";
+import DividerWithText from "@/design-system/components/DividerText";
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
   countryCode: SimpleForm<string>;
@@ -82,8 +81,6 @@ export default function LoginView() {
     return StyleSheet.create({
       container: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
       },
       headerGroup: {
         flexDirection: "row",
@@ -120,9 +117,6 @@ export default function LoginView() {
       },
       label: {
         color: theme.colors.secondary,
-        marginVertical: 8,
-        textAlign: "center",
-        marginBottom: 16,
       },
       loginButton: {
         width: "100%",
@@ -136,12 +130,36 @@ export default function LoginView() {
       loginButtonText: {
         color: theme.colors.onPrimary,
       },
+      buttonGroup: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+      },
     });
   }, [theme]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerGroup}>
+      <Text variant="headlineSmall">Welcome to SnowTrip</Text>
+      <Text variant="labelLarge" style={styles.label}>
+        Sign in to plan your next mountain adventure
+      </Text>
+      <Text variant="labelLarge" style={styles.label}>
+        Phone Number
+      </Text>
+      <TextInput placeholder="(555) 000-000" left={<PaperInput.Affix textStyle={styles.label} text="+1" />} />
+      <Button mode="contained">Continue with Phone</Button>
+      <DividerWithText text="Or continue with" />
+      <View style={styles.buttonGroup}>
+        <Button icon="google" mode="outlined">
+          {" "}
+          Google
+        </Button>
+        <Button icon="apple" mode="outlined">
+          Apple
+        </Button>
+      </View>
+
+      {/* <View style={styles.headerGroup}>
         <TitleText welcomeText="Welcome" headline1="Enter Your" headline2="Phone Number" />
         <AvatarGlowImage size={100} glowColor="#00e5ff" glowIntensity={15} />
       </View>
@@ -180,7 +198,7 @@ export default function LoginView() {
             )}
           </Pressable>
         </Card>
-      </View>
+      </View> */}
     </View>
   );
 }

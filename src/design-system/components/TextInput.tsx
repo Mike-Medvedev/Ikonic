@@ -11,7 +11,7 @@ function TextInputComponent(props: Props, ref: Ref<NativeTextInput>) {
     return StyleSheet.create({
       container: {
         width: "100%",
-        marginVertical: 12,
+        marginVertical: 8,
       },
       input: {
         backgroundColor: theme.colors.surface,
@@ -20,14 +20,7 @@ function TextInputComponent(props: Props, ref: Ref<NativeTextInput>) {
   }, [theme]);
   return (
     <View style={styles.container}>
-      <Input
-        style={styles.input}
-        selectionColor={theme.colors.primary}
-        underlineColor="transparent"
-        mode="outlined"
-        ref={ref}
-        {...rest}
-      />
+      <Input style={styles.input} underlineColor="transparent" mode="outlined" ref={ref} {...rest} />
       <HelperText type="error" visible={!!errorText}>
         {errorText}
       </HelperText>
