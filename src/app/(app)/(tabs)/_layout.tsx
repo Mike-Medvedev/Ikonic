@@ -1,17 +1,11 @@
 import React, { useMemo } from "react";
 import { Tabs } from "expo-router";
-import { StyleSheet, Text } from "react-native";
 import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import SignOutButton from "@/design-system/components/SignOutButton";
-
-const HeaderTitle = () => {
-  const theme = useTheme();
-  return <Text style={[styles.headerRight, { color: theme.colors.primary }]}>Ikonic</Text>;
-};
-
+import { SignOutButton } from "@/design-system/components";
+import HeaderTitle from "@/components/HeaderTitle";
 /**
  * Layout for Expo (tabs) which represent selectable tabs in a mobile app
  */
@@ -83,9 +77,3 @@ export default function TabLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  headerRight: {
-    fontSize: 26,
-  },
-});

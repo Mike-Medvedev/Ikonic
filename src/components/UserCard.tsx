@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import { Avatar, useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
 import CalculateInitials from "@/utils/CalculateInitials";
-import { UserPublic } from "@/generated";
+import { UserPublic } from "@/types";
 
 interface UserCardProps {
   user: UserPublic;

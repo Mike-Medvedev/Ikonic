@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Session, User } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { AuthService } from "@/features/Auth/Services/authService";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import { useQuery } from "@tanstack/react-query";
+import { UserPublic } from "@/types";
+import { UserService } from "@/features/Profile/Services/userService";
 
 type AuthContextType = {
   session: Session | null;
-  user: User | null;
   isLoading: boolean;
   signIn: (phone: string) => Promise<{ error: Error | null }>;
   verifyOTP: (phone: string, otp: string) => Promise<{ error: Error | null }>;
@@ -28,23 +30,36 @@ export function useAuth() {
  * Provider component that wraps the app and makes auth object available to any child component
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  //prettier-ignore
+  const { data: userProfile, isLoading: isLoadingUserProfile,
+  } = useQuery<UserPublic>({
+    queryKey: ['users'],
+    queryFn: async () => {
+      if(session && session?.user){
+       return UserService.getOne(session?.user?.id)
+      }
+      throw new Error("Error No Session please Authenticate")
+     },
+    enabled: !!session?.user?.id,
+  });
 
-  useAuthRedirect(session, isLoading);
+  //derive onboarded from userprofile and isLoading is combined of supabase auth and tanstack loading
+  const isOnboarded = userProfile?.isOnboarded ?? false;
+  const isLoading = isLoadingAuth || (!!session?.user && isLoadingUserProfile);
+
+  useAuthRedirect(session, isLoading, isOnboarded);
 
   // Check for existing session when the component is mounted
   useEffect(() => {
     AuthService.getSession().then((session) => {
       setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
+      setIsLoadingAuth(false);
     });
-    const unsubscribe = AuthService.onAuthStateChange((session, user) => {
+    const unsubscribe = AuthService.onAuthStateChange((session) => {
       setSession(session);
-      setUser(user);
-      setIsLoading(false);
+      setIsLoadingAuth(false);
     });
 
     return unsubscribe;
@@ -52,7 +67,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const value = {
     session,
-    user,
     isLoading,
     signIn: AuthService.signIn,
     verifyOTP: AuthService.verifyOtp,

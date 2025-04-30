@@ -5,7 +5,7 @@ import React from "react";
  * Converts a Form object containing { someKey: { value: V, error: string } }
  * into a payload object { someKey: V }.
  */
-export function FormPayloadFactory<T extends Record<string, unknown>>(form: { [K in keyof T]: SimpleForm<T[K]> }): T {
+export function FormPayloadFactory<T>(form: { [K in keyof T]: SimpleForm<T[K]> }): T {
   return (Object.keys(form) as Array<keyof T>).reduce((acc, key) => {
     (acc as T)[key] = form[key].value;
     return acc;

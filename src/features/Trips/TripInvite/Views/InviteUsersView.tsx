@@ -118,7 +118,7 @@ export default function InviteUsersView() {
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
                   <UserCard
-                    user={{ firstname: "a", lastname: "a", id: "1", phone: "20385" }}
+                    user={{ firstname: "a", lastname: "a", id: "1", phone: "20385", isOnboarded: true }}
                     subtitle="3 mutual friends"
                   />
                   <Button
@@ -133,6 +133,7 @@ export default function InviteUsersView() {
                         lastname: "a",
                         id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
                         phone: "2038587135",
+                        isOnboarded: true,
                       });
                     }}
                   >
@@ -152,7 +153,7 @@ export default function InviteUsersView() {
                   key={index}
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
-                  <UserCard user={{ firstname: "a", lastname: "a", id: "1", phone: "20385" }} />
+                  <UserCard user={{ firstname: "a", lastname: "a", id: "1", phone: "20385", isOnboarded: true }} />
                   <Button
                     mode="outlined"
                     theme={{ roundness: theme.roundness }}
@@ -165,6 +166,7 @@ export default function InviteUsersView() {
                         lastname: "a",
                         id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
                         phone: "2038587135",
+                        isOnboarded: true,
                       });
                     }}
                   >

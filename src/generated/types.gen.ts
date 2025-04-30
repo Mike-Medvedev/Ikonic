@@ -121,6 +121,14 @@ export type UserPublic = {
     phone: string;
     firstname: string | null;
     lastname: string | null;
+    isOnboarded: boolean;
+};
+
+export type UserUpdate = {
+    phone?: string | null;
+    firstname?: string | null;
+    lastname?: string | null;
+    username?: string | null;
 };
 
 export type ValidationError = {
@@ -187,6 +195,49 @@ export type GetUserByIdApiV1UsersUserIdGetResponses = {
 };
 
 export type GetUserByIdApiV1UsersUserIdGetResponse = GetUserByIdApiV1UsersUserIdGetResponses[keyof GetUserByIdApiV1UsersUserIdGetResponses];
+
+export type UpdateUserApiV1UsersUserIdPatchData = {
+    body: UserUpdate;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/users/{user_id}';
+};
+
+export type UpdateUserApiV1UsersUserIdPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateUserApiV1UsersUserIdPatchError = UpdateUserApiV1UsersUserIdPatchErrors[keyof UpdateUserApiV1UsersUserIdPatchErrors];
+
+export type UpdateUserApiV1UsersUserIdPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoUserPublic;
+};
+
+export type UpdateUserApiV1UsersUserIdPatchResponse = UpdateUserApiV1UsersUserIdPatchResponses[keyof UpdateUserApiV1UsersUserIdPatchResponses];
+
+export type CompleteOnboardingApiV1UsersOnboardingPostData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/users/onboarding';
+};
+
+export type CompleteOnboardingApiV1UsersOnboardingPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoBool;
+};
+
+export type CompleteOnboardingApiV1UsersOnboardingPostResponse = CompleteOnboardingApiV1UsersOnboardingPostResponses[keyof CompleteOnboardingApiV1UsersOnboardingPostResponses];
 
 export type GetTripsApiV1TripsGetData = {
     body?: never;

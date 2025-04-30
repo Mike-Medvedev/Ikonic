@@ -12,6 +12,7 @@ export async function fetchWithError(request: Request): Promise<Response> {
     return response;
   } catch (error) {
     if (error instanceof Error) {
+      console.error("Network error fetch failure!");
       throw new NetworkError(error.message, { cause: error });
     }
     throw new UnknownError(`Unknown error: ${String(error)}`, { cause: error });

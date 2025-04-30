@@ -29,7 +29,8 @@ export {
   // User endpoints
   getUsersApiV1UsersGet,
   getUserByIdApiV1UsersUserIdGet,
-
+  updateUserApiV1UsersUserIdPatch,
+  completeOnboardingApiV1UsersOnboardingPost,
   // Misc
   mainApiV1Get,
 } from "@/generated";
@@ -55,6 +56,7 @@ export {
   PassengerPublic,
   TripParticipationRsvp,
   UserPublic,
+  UserUpdate,
   ValidationError,
   TripCreate,
   TripPublic,
