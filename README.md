@@ -8,13 +8,16 @@ Tanstack Query for data management
 
 # Images
 
-<div style="display: flex, justify-content: center, align-items: center">
-<img src="./assets/screenshots/LoginPage.png" alt="Login Page" width="300" />
-<img src="./assets/screenshots/TripPlanPage.png" alt="Trip Plan Page" width="300" />
-<img src="./assets/screenshots/TripsPage.png" alt="Trips Page" width="300" />
-<img src="./assets/screenshots/TripDetailsPage.png" alt="Trip Details Page" width="300" />
-<img src="./assets/screenshots/TripEditPage.png" alt="Trip Edit Page" width="300" />
-<img src="./assets/screenshots/AttendancePage.png" alt="Attendance Page" width="300" />
-<img src="./assets/screenshots/InviteUsersList.png" alt="Invite Users List" width="300" />
-<img src="./assets/screenshots/CarpoolPage.png" alt="Carpool Page" width="300" />
+<div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px;">
+  <img src="./assets/screenshots/mvp/LoginPageLofi.png" alt="Login Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripPlanPageLofi.png" alt="Trip Plan Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripsPageLofi.png" alt="Trips Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripDetailsPageLofi.png" alt="Trip Details Page" width="300" />
+  <img src="./assets/screenshots/mvp/ProfileeditPageLofi.png" alt="Profile Edit Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripAttendancePageLofi.png" alt="Trip Attendance Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripInvitePageLofi.png" alt="Trip Invite Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripOnboardPageLofi.png" alt="Trip Onboard Page" width="300" />
+  <img src="./assets/screenshots/mvp/TripRsvpPageLofi.png" alt="Trip RSVP Page" width="300" />
+  <img src="./assets/screenshots/mvp/ProfilePageLofi.png" alt="Profile Page" width="300" />
+  <img src="./assets/screenshots/mvp/VerificationPageLofi.png" alt="Verification Page" width="300" />
 </div>
