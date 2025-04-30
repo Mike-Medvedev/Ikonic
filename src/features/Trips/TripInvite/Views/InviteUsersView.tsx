@@ -33,7 +33,7 @@ export default function InviteUsersView() {
   const copyToClipboard = async () => {
     try {
       await Clipboard.setStringAsync(inviteLink);
-      showSuccess({ message: "Copied!, Invite link copied to clipboard" });
+      showSuccess({ message: "Copied! Invite link copied to clipboard" });
     } catch (e) {
       console.error("Failed to copy text to clipboard", e);
       showFailure({ message: "Error, Could not copy link." });

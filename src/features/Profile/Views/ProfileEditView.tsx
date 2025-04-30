@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
 import { Avatar, useTheme, TextInput as PaperInput } from "react-native-paper";
 import { SimpleForm, UserPublic, UserUpdate } from "@/types";
@@ -111,7 +111,7 @@ export default function ProfileEditView() {
   });
   return (
     <Background>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.photoContainer}>
           <View style={styles.photoCircle}>
             <Avatar.Text label="?" />
@@ -146,7 +146,7 @@ export default function ProfileEditView() {
         <Button mode="contained" onPress={handleSubmit}>
           Save Changes
         </Button>
-      </View>
+      </ScrollView>
     </Background>
   );
 }
