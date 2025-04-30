@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, Pressable, TextInput as NativeInput } from "react-native";
-import { Icon, useTheme } from "react-native-paper";
+import { ActivityIndicator, Icon, useTheme } from "react-native-paper";
 import { Background, Text, SearchBar, Button } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import { useState } from "react";
@@ -136,8 +136,9 @@ export default function InviteUsersView() {
                         isOnboarded: true,
                       });
                     }}
+                    disabled={isInviteSending && index === selectedButtonIndex}
                   >
-                    Invite
+                    {isInviteSending && index === selectedButtonIndex ? <ActivityIndicator /> : <Text>Invite</Text>}
                   </Button>
                 </View>
               ))}
@@ -169,8 +170,9 @@ export default function InviteUsersView() {
                         isOnboarded: true,
                       });
                     }}
+                    disabled={isInviteSending && index === selectedButtonIndex}
                   >
-                    Invite
+                    {isInviteSending && index === selectedButtonIndex ? <ActivityIndicator /> : <Text>Invite</Text>}
                   </Button>
                 </View>
               ))}

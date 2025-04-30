@@ -1,9 +1,11 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import { Avatar, Icon, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
 import { Button, Text } from "@/design-system/components";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
+import { router } from "expo-router";
+import { PROFILE_PATH } from "@/constants/constants";
 
 type riderType = "skier" | "boarder";
 
@@ -50,6 +52,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
     recentTrip: {
       flexDirection: "row",
       justifyContent: "space-between",
+
       padding: 16,
       borderWidth: 1,
       borderColor: theme.colors.outlineVariant,
@@ -120,6 +123,14 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           </View>
         </View>
       </View>
+      <Pressable style={styles.recentTrip} onPress={() => router.push(`${PROFILE_PATH}/edit`)}>
+        <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
+          <Icon source="account-outline" size={24} color={theme.colors.secondary} />
+          <Text>Edit Profile</Text>
+        </View>
+        <Icon source="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
+      </Pressable>
+
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
         <FlatList
           data={recentTrips}

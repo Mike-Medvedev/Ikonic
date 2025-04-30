@@ -13,7 +13,7 @@ export default function ProfileView() {
   if (!session) return null;
   //prettier-ignore
   const { data: profile, isLoading, error } = useQuery({
-    queryKey: ["profile"],
+    queryKey: ["users", session.user.id],
     queryFn: async () => {
       return UserService.getOne(session.user.id);
     },

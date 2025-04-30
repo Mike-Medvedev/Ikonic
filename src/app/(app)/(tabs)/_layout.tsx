@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
-import { Tabs } from "expo-router";
-import { useTheme } from "react-native-paper";
+import { router, Tabs } from "expo-router";
+import { Icon, useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { SignOutButton } from "@/design-system/components";
 import HeaderTitle from "@/components/HeaderTitle";
+import { Pressable } from "react-native";
 /**
  * Layout for Expo (tabs) which represent selectable tabs in a mobile app
  */
@@ -25,6 +26,13 @@ export default function TabLayout() {
     }),
     [theme],
   );
+  const BackButton = () => {
+    return (
+      <Pressable onPress={() => router.back()}>
+        <Icon source="chevron-left" size={24} />
+      </Pressable>
+    );
+  };
   return (
     <Tabs initialRouteName="plan" screenOptions={tabScreenOptions}>
       <Tabs.Screen
@@ -60,6 +68,17 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
+          headerTitle: HeaderTitle,
+          headerRight: SignOutButton,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/edit"
+        options={{
+          href: null,
+          title: "Profile",
+          tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
+          headerLeft: BackButton,
           headerTitle: HeaderTitle,
           headerRight: SignOutButton,
         }}
