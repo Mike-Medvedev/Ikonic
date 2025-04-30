@@ -1,11 +1,6 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "expo-router";
-import {
-  DEFAULT_APP_PATH,
-  LOGIN_PATH,
-  ONBOARDING_PATH,
-  VERIFY_PATH,
-} from "@/constants/constants";
+import { DEFAULT_APP_PATH, LOGIN_PATH, ONBOARDING_PATH, VERIFY_PATH } from "@/constants/constants";
 import { Session } from "@supabase/supabase-js";
 
 /**
