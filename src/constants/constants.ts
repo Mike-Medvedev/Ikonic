@@ -5,11 +5,12 @@ export const APP_GROUP = "(app)";
 export const TAB_GROUP = "(tabs)";
 export const ONBOARD_GROUP = "(onboard)";
 
-export const LOGIN_PATH = `/${AUTH_GROUP}/login`;
-export const DEFAULT_APP_PATH = `/${APP_GROUP}/${TAB_GROUP}/trips`;
-export const PROFILE_PATH = `/${APP_GROUP}/${TAB_GROUP}/profile`;
-export const PLANNER_PATH = `/${APP_GROUP}/${TAB_GROUP}/plan`;
-export const ONBOARDING_PATH = `/${APP_GROUP}/${ONBOARD_GROUP}/onboard`;
+export const LOGIN_PATH = `/login`;
+export const VERIFY_PATH = `/verify`;
+export const DEFAULT_APP_PATH = `/trips`;
+export const PROFILE_PATH = `/profile`;
+export const PLANNER_PATH = `/plan`;
+export const ONBOARDING_PATH = `/onboard`;
 
 export const MAX_NET_RETRIES = 3;
 

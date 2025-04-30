@@ -17,7 +17,6 @@ const CardComponent = ({ date, children }: CardProps) => {
     coverContainer: {
       position: "relative",
     },
-    cover: { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 },
     overlay: {
       ...StyleSheet.absoluteFillObject, //shorthand for abs position over parent
       padding: 16,
@@ -31,7 +30,7 @@ const CardComponent = ({ date, children }: CardProps) => {
   return (
     <PaperCard style={{ width: "98%" }}>
       <View style={styles.coverContainer}>
-        <PaperCard.Cover style={styles.cover} />
+        <PaperCard.Cover style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
         <View style={styles.overlay}>
           <Chip style={{ borderRadius: 20 }}>{date}</Chip>
         </View>

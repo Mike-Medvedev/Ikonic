@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "expo-router";
-import { AUTH_GROUP, DEFAULT_APP_PATH, LOGIN_PATH, ONBOARD_GROUP, ONBOARDING_PATH } from "@/constants/constants";
+import {
+  DEFAULT_APP_PATH,
+  LOGIN_PATH,
+  ONBOARDING_PATH,
+  VERIFY_PATH,
+} from "@/constants/constants";
 import { Session } from "@supabase/supabase-js";
 
 /**
@@ -16,61 +21,44 @@ export function useAuthRedirect(session: Session | null, isLoading: boolean, isO
 
     console.log(`Auth Redirect Check: Path=${pathname}, Session=${!!session}, Onboarded=${isOnboarded}`);
 
-    const isAuthRoute = pathname.startsWith("/" + AUTH_GROUP);
-    const isOnboardRoute = pathname.startsWith("/" + ONBOARD_GROUP);
+    const isAuthRoute = pathname === LOGIN_PATH || pathname === VERIFY_PATH;
+    const isOnboardRoute = pathname === ONBOARDING_PATH;
     const isRoot = pathname === "/";
 
-    // --- Scenario 1: No Session ---
     if (!session) {
-      // Redirect to login ONLY if NOT already on login or onboarding path
-      // Assumes AuthGuard handles protecting '/app' routes separately
-      if (pathname !== LOGIN_PATH) {
-        console.log(`Redirect: No session -> ${LOGIN_PATH}`);
+      if (pathname !== LOGIN_PATH && pathname != VERIFY_PATH) {
+        console.log(`Redirect: No session -> ${LOGIN_PATH}. Current Path: ${pathname}`);
         router.replace(LOGIN_PATH);
-        return; // Exit after redirect
+        return;
       }
-    }
-    // --- Scenario 2: Session Exists ---
-    else {
-      // Using else if for mutually exclusive path types
+    } else {
       if (isRoot) {
         if (isOnboarded) {
           console.log(`Redirect: Session, Root, Onboarded -> ${DEFAULT_APP_PATH}`);
           router.replace(DEFAULT_APP_PATH);
           return;
         } else {
-          // Not Onboarded
-
           console.log(`Redirect: Session, Root, !Onboarded -> ${ONBOARDING_PATH}`);
           router.replace(ONBOARDING_PATH);
           return;
         }
       } else if (isAuthRoute) {
         if (isOnboarded) {
-          if (pathname !== DEFAULT_APP_PATH) {
-            console.log(`Redirect: Session, Auth Route, Onboarded -> ${DEFAULT_APP_PATH}`);
-            router.replace(DEFAULT_APP_PATH);
-            return;
-          }
+          console.log(`Redirect: Session, Auth Route, Onboarded -> ${DEFAULT_APP_PATH}`);
+          router.replace(DEFAULT_APP_PATH);
+          return;
         } else {
-          // Not Onboarded
-          if (pathname !== ONBOARDING_PATH) {
-            console.log(`Redirect: Session, Auth Route, !Onboarded -> ${ONBOARDING_PATH}`);
-            router.replace(ONBOARDING_PATH);
-            return;
-          }
+          console.log(`Redirect: Session, Auth Route, !Onboarded -> ${ONBOARDING_PATH}`);
+          router.replace(ONBOARDING_PATH);
+          return;
         }
       } else if (isOnboardRoute) {
         if (isOnboarded) {
-          // User is onboarded but still on the onboarding path? Send to app.
-          if (pathname !== DEFAULT_APP_PATH) {
-            console.log(`Redirect: Session, Onboarding Route, Onboarded -> ${DEFAULT_APP_PATH}`);
-            router.replace(DEFAULT_APP_PATH);
-            return;
-          }
+          console.log(`Redirect: Session, Onboarding Route, Onboarded -> ${DEFAULT_APP_PATH}`);
+          router.replace(DEFAULT_APP_PATH);
+          return;
         }
       }
-      // If none of the above (e.g., session, onboarded, on a regular app route), do nothing.
     }
   }, [session, pathname, isLoading, router, isOnboarded]);
 }
