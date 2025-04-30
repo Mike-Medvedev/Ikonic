@@ -69,3 +69,14 @@
 5. use husky to run linting, formatting, and typechecking on every commit to ensure code base stays pristine
 6. use typescript tsc --noEmit to check types before commit
 7. Add Jsdoc to all classes and functions to completely document codebase, prefer describing WHY not WHAT a piece of code does. (use jsdoc linting tool)
+
+## File Routing
+
+1. File Routing involves a special directory where each file represents a route that renders a page
+2. Navigation in principle is modeled by a Navigation stack which pushes and pops routes the users visit
+3. File Routing is picked by expo so it can be platform agnostic
+4. Each directory (usually) has a (\_layout.tsx) which provides and overrides a layout for the routes in this nesting
+5. Navigation gets complicated when you start to nest navigators, its important to
+   pay attention which navigator controls the current route and visualize both are a Stack
+6. In this project (Expo) IF you nest navigators, you need to ensure when navigating between nested layers, the nested navigators are properly popping and pushing routes onto their stack
+7. Pay attention to wear custom hooks call a navigator, like useNavigation() will yield different results based on which file calls it.

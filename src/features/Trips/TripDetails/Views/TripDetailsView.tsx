@@ -6,7 +6,7 @@ import { TripService } from "@/features/Trips/Services/tripService";
 import Background from "@/design-system/components/Background";
 import { useAuth } from "@/context/AuthContext";
 import { formatDateRangeShort } from "@/utils/dateUtils";
-import { Button } from "@/design-system/components";
+import { Button, EditButton } from "@/design-system/components";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import useToast from "@/hooks/useToast";
 import { NetworkError } from "@/lib/errors";
@@ -91,7 +91,7 @@ export default function TripDetailsView() {
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.tripOverview}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
               <View>
                 <Text variant="titleLarge" style={styles.tripTitle}>
                   {trip?.title}
@@ -104,13 +104,18 @@ export default function TripDetailsView() {
                   <Text style={styles.label}>{trip?.mountain}</Text>
                 </View>
               </View>
-              <Chip
-                style={{
-                  borderRadius: 20,
-                }}
-              >
-                {formatDateRangeShort(trip?.startDate ?? new Date(), trip?.endDate ?? new Date())}
-              </Chip>
+              <View style={{ alignItems: "flex-end", gap: 16 }}>
+                {isOwner && (
+                  <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />
+                )}
+                <Chip
+                  style={{
+                    borderRadius: 20,
+                  }}
+                >
+                  <Text>{formatDateRangeShort(trip?.startDate ?? new Date(), trip?.endDate ?? new Date())}</Text>
+                </Chip>
+              </View>
             </View>
             <View style={{ marginVertical: 16 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -142,9 +147,13 @@ export default function TripDetailsView() {
           </View>
           <Divider />
           <View style={styles.tripDetails}>
-            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-              Trip Details
-            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+                Trip Details
+              </Text>
+              {isOwner && <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />}
+            </View>
+
             <View style={styles.tripDetailsContent}>
               <View style={{ flexDirection: "row", gap: 8 }}>
                 <Icon source="home" size={16} color={theme.colors.secondary} />
@@ -165,9 +174,12 @@ export default function TripDetailsView() {
           </View>
           <Divider style={{ marginVertical: 16 }} />
           <View style={styles.descritpion}>
-            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-              About this trip
-            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+                About this trip
+              </Text>
+              {isOwner && <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />}
+            </View>
             <Text>
               Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo with
               easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski activities

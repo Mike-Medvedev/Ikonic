@@ -2,9 +2,9 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "module": "ESNext", // or "NodeNext"
+    "module": "ESNext",
     "moduleResolution": "Bundler",
-    "noUncheckedIndexedAccess": true, // or "NodeNext",
+    "noUncheckedIndexedAccess": true,
     "paths": {
       "@/*": ["./src/*"],
       "@/assets/*": ["./assets/*"]
