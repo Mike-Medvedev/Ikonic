@@ -1,23 +1,25 @@
-export const emailValidator = (email: string) => {
+import { ILLEGAL_WORDS } from "@/constants/constants";
+
+export function emailValidator(email: string) {
   const re = /\S+@\S+\.\S+/;
 
   if (!email || email.length <= 0) return "Email cannot be empty.";
   if (!re.test(email)) return "Ooops! We need a valid email address.";
 
   return "";
-};
+}
 
-export const passwordValidator = (password: string) => {
+export function passwordValidator(password: string) {
   if (!password || password.length <= 0) return "Password cannot be empty.";
 
   return "";
-};
+}
 
-export const nameValidator = (name: string) => {
+export function nameValidator(name: string) {
   if (!name || name.length <= 0) return "Name cannot be empty.";
 
   return "";
-};
+}
 
 /**
  * Validates a full name string.
@@ -25,7 +27,7 @@ export const nameValidator = (name: string) => {
  * @param fullname The full name string to validate. Can be null or undefined.
  * @returns An error message string if validation fails, or an empty string "" if valid.
  */
-export const fullnameValidator = (fullname: string | null | undefined): string => {
+export function fullnameValidator(fullname: string | null | undefined): string {
   if (!fullname || fullname.trim().length === 0) {
     return "Full name cannot be empty.";
   }
@@ -59,27 +61,25 @@ export const fullnameValidator = (fullname: string | null | undefined): string =
   }
 
   return "";
-};
+}
 
-export const phoneValidator = (phone: string) => {
+export function phoneValidator(phone: string) {
   if (!phone || phone.length !== 10) return "Phone Number cannot be empty or non 10-digit";
 
   return "";
-};
+}
 
-export const dateValidator = (date: Date | undefined) => {
+export function dateValidator(date: Date | undefined) {
   if (!date) return "Date cannot be empty.";
   if (date.getTime() < Date.now() - 8.64e7 || isNaN(date.getTime())) return "Date outside the valid range";
 
   return "";
-};
+}
 
-export type ValidatorTypes = "email" | "date" | "phone" | "name" | "password";
-
-export const ValidatorMap = {
-  email: () => emailValidator,
-  date: () => dateValidator,
-  phone: () => phoneValidator,
-  name: () => nameValidator,
-  passwordValidator: () => passwordValidator,
-};
+export function descriptionValidator(description: string) {
+  const loweredText = description.toLowerCase();
+  if (ILLEGAL_WORDS.some((illegalWord) => loweredText.includes(illegalWord.toLowerCase()))) {
+    return "Please Remove Illegal Words";
+  }
+  return "";
+}

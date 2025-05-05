@@ -27,3 +27,5 @@ export const TripHeaderTitles: { [K in keyof TripsStackParamList]: string } = {
   invite: "Invite Friends",
   edit: "Trip Edit",
 };
+
+export const ILLEGAL_WORDS = ["illegal"];

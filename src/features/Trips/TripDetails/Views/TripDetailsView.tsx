@@ -172,14 +172,18 @@ export default function TripDetailsView() {
               About this trip
             </Text>
 
-            <Text>
-              Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo with
-              easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski activities
-              planned. Bring your good vibes and winter gear! Join us for an epic winter getaway at Whistler! We&apos;ll
-              be staying in a beautiful slope-side condo with easy access to the gondola. Perfect for both skiing and
-              snowboarding, with plenty of après-ski activities planned. Bring your good vibes and winter gear!Join us
-              for an epic winter getaway at Whistler!
-            </Text>
+            {trip?.desc ? (
+              <Text>{trip?.desc}</Text>
+            ) : (
+              <Text>
+                Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo
+                with easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski
+                activities planned. Bring your good vibes and winter gear! Join us for an epic winter getaway at
+                Whistler! We&apos;ll be staying in a beautiful slope-side condo with easy access to the gondola. Perfect
+                for both skiing and snowboarding, with plenty of après-ski activities planned. Bring your good vibes and
+                winter gear!Join us for an epic winter getaway at Whistler!
+              </Text>
+            )}
           </View>
           {isOwner && (
             <Button
