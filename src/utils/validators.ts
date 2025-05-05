@@ -1,5 +1,6 @@
 import { ILLEGAL_WORDS } from "@/constants/constants";
 
+/** Validate Emails */
 export function emailValidator(email: string) {
   const re = /\S+@\S+\.\S+/;
 
@@ -8,13 +9,13 @@ export function emailValidator(email: string) {
 
   return "";
 }
-
+/** Validate Passwords */
 export function passwordValidator(password: string) {
   if (!password || password.length <= 0) return "Password cannot be empty.";
 
   return "";
 }
-
+/** Validate Names */
 export function nameValidator(name: string) {
   if (!name || name.length <= 0) return "Name cannot be empty.";
 
@@ -62,20 +63,20 @@ export function fullnameValidator(fullname: string | null | undefined): string {
 
   return "";
 }
-
+/** Validate Phones */
 export function phoneValidator(phone: string) {
   if (!phone || phone.length !== 10) return "Phone Number cannot be empty or non 10-digit";
 
   return "";
 }
-
+/** Validate Dates */
 export function dateValidator(date: Date | undefined) {
   if (!date) return "Date cannot be empty.";
   if (date.getTime() < Date.now() - 8.64e7 || isNaN(date.getTime())) return "Date outside the valid range";
 
   return "";
 }
-
+/** Validate Paragraphs of text */
 export function descriptionValidator(description: string) {
   const loweredText = description.toLowerCase();
   if (ILLEGAL_WORDS.some((illegalWord) => loweredText.includes(illegalWord.toLowerCase()))) {
