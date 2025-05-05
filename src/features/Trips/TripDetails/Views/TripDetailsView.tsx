@@ -6,7 +6,7 @@ import { TripService } from "@/features/Trips/Services/tripService";
 import Background from "@/design-system/components/Background";
 import { useAuth } from "@/context/AuthContext";
 import { formatDateRangeShort } from "@/utils/dateUtils";
-import { Button, EditButton } from "@/design-system/components";
+import { Button } from "@/design-system/components";
 import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import useToast from "@/hooks/useToast";
 import { NetworkError } from "@/lib/errors";
@@ -105,9 +105,6 @@ export default function TripDetailsView() {
                 </View>
               </View>
               <View style={{ alignItems: "flex-end", gap: 16 }}>
-                {isOwner && (
-                  <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />
-                )}
                 <Chip
                   style={{
                     borderRadius: 20,
@@ -147,12 +144,9 @@ export default function TripDetailsView() {
           </View>
           <Divider />
           <View style={styles.tripDetails}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-                Trip Details
-              </Text>
-              {isOwner && <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />}
-            </View>
+            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+              Trip Details
+            </Text>
 
             <View style={styles.tripDetailsContent}>
               <View style={{ flexDirection: "row", gap: 8 }}>
@@ -174,12 +168,10 @@ export default function TripDetailsView() {
           </View>
           <Divider style={{ marginVertical: 16 }} />
           <View style={styles.descritpion}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-                About this trip
-              </Text>
-              {isOwner && <EditButton size={18} color={theme.colors.primary} onPress={() => console.log("editing!")} />}
-            </View>
+            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+              About this trip
+            </Text>
+
             <Text>
               Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo with
               easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski activities
@@ -189,6 +181,21 @@ export default function TripDetailsView() {
               for an epic winter getaway at Whistler!
             </Text>
           </View>
+          {isOwner && (
+            <Button
+              onPress={() =>
+                router.push({
+                  pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/edit`,
+                  params: { selectedTrip: trip.id },
+                })
+              }
+              style={{ marginVertical: 16 }}
+              icon="pencil-outline"
+              mode="contained"
+            >
+              Edit Trip
+            </Button>
+          )}
           {isOwner && (
             <Button
               onPress={() => handleTripDelete(trip?.id)}

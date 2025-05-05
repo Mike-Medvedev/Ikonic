@@ -2,7 +2,6 @@
  * Exports Frontend specific types
  */
 
-import { TripUpdateParsed } from "@/types";
 export type RSVPStatus = "accepted" | "pending" | "uncertain" | "declined";
 export interface AttendanceCount {
   accepted: number;
@@ -25,17 +24,26 @@ export interface NewTripForm {
   startDate: SimpleForm<Date | undefined>;
   endDate: SimpleForm<Date | undefined>;
   title: SimpleForm<string>;
+  desc?: SimpleForm<string>;
 }
 
-export type UpdateTripMutation = {
-  currentTripId: string;
-  form: TripUpdateParsed;
-};
+export interface UpdateTripForm {
+  mountain?: SimpleForm<string>;
+  startDate?: SimpleForm<Date | undefined>;
+  endDate?: SimpleForm<Date | undefined>;
+  title?: SimpleForm<string>;
+  desc?: SimpleForm<string>;
+}
 
+export interface TripComponentProps<T extends NewTripForm | UpdateTripForm> {
+  tripForm: T;
+  setTripForm: React.Dispatch<React.SetStateAction<T>>;
+}
 export type TripsStackParamList = {
   index: undefined;
   attendance: undefined;
   details: undefined;
   rsvp: undefined;
   invite: undefined;
+  edit: undefined;
 };

@@ -25,4 +25,5 @@ export const TripHeaderTitles: { [K in keyof TripsStackParamList]: string } = {
   details: "Trip Details",
   rsvp: "RSVP Status",
   invite: "Invite Friends",
+  edit: "Trip Edit",
 };

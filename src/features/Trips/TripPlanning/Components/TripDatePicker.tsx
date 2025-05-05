@@ -2,20 +2,17 @@ import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, HelperText } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { NewTripForm } from "@/types";
+import { NewTripForm, TripComponentProps, UpdateTripForm } from "@/types";
 import { useState, useCallback } from "react";
 import { Text } from "@/design-system/components";
-
-interface TripDatePickerProps {
-  tripForm: NewTripForm;
-  setTripForm: React.Dispatch<React.SetStateAction<NewTripForm>>;
-}
-
 /**
  * Renders a date selection component that allows users to choose a date for a trip during planning
  * @todo review the date transformations in the confirmation handler and any data type
  */
-export default function TripDatePicker({ tripForm, setTripForm }: TripDatePickerProps) {
+export default function TripDatePicker<T extends NewTripForm | UpdateTripForm>({
+  tripForm,
+  setTripForm,
+}: TripComponentProps<T>) {
   const [range, setRange] = useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
@@ -68,18 +65,21 @@ export default function TripDatePicker({ tripForm, setTripForm }: TripDatePicker
       <View>
         <Pressable
           onPress={() => setOpen(true)}
-          style={[styles.datePicker, !!tripForm.startDate.error || !!tripForm.endDate.error ? styles.error : undefined]}
+          style={[
+            styles.datePicker,
+            !!tripForm?.startDate?.error || !!tripForm?.endDate?.error ? styles.error : undefined,
+          ]}
         >
-          <Text style={tripForm.startDate.value && tripForm.endDate.value ? undefined : styles.placeholder}>
-            {tripForm.startDate.value && tripForm.endDate.value
-              ? `${tripForm.startDate?.value?.toLocaleDateString()} - ${tripForm.endDate?.value?.toLocaleDateString()}`
+          <Text style={tripForm?.startDate?.value && tripForm?.endDate?.value ? undefined : styles.placeholder}>
+            {tripForm?.startDate?.value && tripForm?.endDate?.value
+              ? `${tripForm?.startDate?.value?.toLocaleDateString()} - ${tripForm?.endDate?.value?.toLocaleDateString()}`
               : "Select Date Range"}
           </Text>
 
           <AntDesign name="calendar" size={28} color={theme.colors.onSurfaceVariant} />
         </Pressable>
-        <HelperText type="error" visible={!!tripForm.startDate.error || !!tripForm.endDate.error}>
-          {tripForm.startDate.error || tripForm.endDate.error}
+        <HelperText type="error" visible={!!tripForm?.startDate?.error || !!tripForm?.endDate?.error}>
+          {tripForm?.startDate?.error || tripForm?.endDate?.error}
         </HelperText>
       </View>
 

@@ -2,12 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { HelperText, Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { NewTripForm } from "@/types";
 import CustomAutoCompleteInput from "@/features/Trips/TripPlanning/Components/CustomAutoCompleteInput";
-interface SelectMountainProps {
-  tripForm: NewTripForm;
-  setTripForm: React.Dispatch<React.SetStateAction<NewTripForm>>;
-}
+import { NewTripForm, TripComponentProps, UpdateTripForm } from "@/types";
 
 const newEnglandSkiResorts = [
   // Maine
@@ -109,7 +105,7 @@ const newEnglandSkiResorts = [
   { id: "92", title: "Sugarbush Resort" },
 ];
 
-const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
+const SelectMountain = <T extends NewTripForm | UpdateTripForm>({ tripForm, setTripForm }: TripComponentProps<T>) => {
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const dropdownController = useRef<{ clear: () => void } | null>(null);
@@ -119,8 +115,8 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
   }, []);
 
   useEffect(() => {
-    if (!tripForm.mountain && dropdownController.current) dropdownController.current.clear();
-  }, [tripForm.mountain]);
+    if (!tripForm?.mountain && dropdownController.current) dropdownController.current.clear();
+  }, [tripForm?.mountain]);
 
   if (!isClient) return null; // Prevent rendering on the server
 
@@ -140,7 +136,7 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
         }}
         InputComponent={CustomAutoCompleteInput}
         textInputProps={{
-          value: tripForm.mountain.value,
+          value: tripForm?.mountain?.value,
           onChangeText: (text) => setTripForm((prev) => ({ ...prev, mountain: { value: text, error: "" } })),
           placeholder: "Choose a mountain",
           placeholderTextColor: theme.colors.onSurfaceVariant,
@@ -148,7 +144,7 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
             color: theme.colors.onSurface,
             paddingLeft: 18,
             borderColor: theme.colors.error,
-            borderWidth: tripForm.mountain.error ? 1 : 0,
+            borderWidth: tripForm?.mountain?.error ? 1 : 0,
           },
         }}
         rightButtonsContainerStyle={{
@@ -162,16 +158,16 @@ const SelectMountain = ({ tripForm, setTripForm }: SelectMountainProps) => {
           minWidth: 300,
           backgroundColor: theme.colors.surface,
           borderColor: theme.colors.error,
-          borderWidth: tripForm.mountain.error ? 1 : 0,
+          borderWidth: tripForm?.mountain?.error ? 1 : 0,
         }}
         suggestionsListContainerStyle={{
           backgroundColor: theme.colors.surface,
         }}
-        renderItem={(item) => <Text style={{ color: theme.colors.onSurface, padding: 15 }}>{item.title}</Text>}
+        renderItem={(item) => <Text style={{ color: theme.colors.onSurface, padding: 15 }}>{item?.title}</Text>}
         showChevron={false}
         dataSet={newEnglandSkiResorts}
       />
-      <HelperText type="error" visible={!!tripForm.mountain.error}>
+      <HelperText type="error" visible={!!tripForm?.mountain?.error}>
         Please Select A Mountain!
       </HelperText>
     </View>

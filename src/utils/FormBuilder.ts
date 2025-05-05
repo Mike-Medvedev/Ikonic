@@ -17,7 +17,7 @@ export function FormPayloadFactory<T>(form: { [K in keyof T]: SimpleForm<T[K]> }
  * error fields via the setter if errors are found, and returns true if no errors exist,
  * false otherwise.
  */
-export function ValidateErrors<T extends Record<keyof T, SimpleForm<unknown>>>(
+export function ValidateErrors<T extends object>(
   errors: Partial<Record<keyof T, string>>,
   setter: React.Dispatch<React.SetStateAction<T>>,
 ): boolean {
