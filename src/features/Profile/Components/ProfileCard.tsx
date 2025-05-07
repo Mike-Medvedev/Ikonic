@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Avatar, Icon, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
 import { Text } from "@/design-system/components";
@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort } from "@/utils/dateUtils";
+import { router } from "expo-router";
+import { DEFAULT_APP_PATH } from "@/constants/constants";
 
 /**
  * Render the UI for Profile Information on the Profile Page
@@ -48,11 +50,10 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
 
     recentTripsContainer: { marginVertical: 0 },
     recentTripsHeader: { flexDirection: "row", justifyContent: "space-between", marginVertical: 16 },
-    recentTripsList: { gap: 16 },
     recentTrip: {
       flexDirection: "row",
       justifyContent: "space-between",
-
+      marginVertical: 8,
       padding: 16,
       borderWidth: 1,
       borderColor: theme.colors.outlineVariant,
@@ -103,10 +104,19 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           <Text variant="titleMedium">Recent Trips</Text>
         </View>
         <AsyncStateWrapper loading={isFetching} error={error}>
-          <View style={styles.recentTripsList}>
+          <ScrollView>
             {recentTrips
               ? recentTrips.map((trip) => (
-                  <View style={styles.recentTrip} key={trip.id}>
+                  <Pressable
+                    style={styles.recentTrip}
+                    key={trip.id}
+                    onPress={() =>
+                      router.push({
+                        pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/details`,
+                        params: { selectedTrip: trip.id },
+                      })
+                    }
+                  >
                     <View>
                       <Text variant="bodyLarge">{trip.title}</Text>
                       <Text style={{ color: theme.colors.secondary }}>{trip.mountain}</Text>
@@ -115,10 +125,10 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
                       </Text>
                     </View>
                     <Icon source="ski" size={24} color={theme.colors.onSurfaceVariant} />
-                  </View>
+                  </Pressable>
                 ))
               : null}
-          </View>
+          </ScrollView>
         </AsyncStateWrapper>
       </View>
 
