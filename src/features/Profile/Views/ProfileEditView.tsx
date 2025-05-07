@@ -12,6 +12,8 @@ import { ValidateErrors } from "@/utils/FormBuilder";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
 
+type riderType = "skier" | "snowboarder";
+
 type UpdateProfileForm = {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -26,6 +28,7 @@ export default function ProfileEditView() {
   const theme = useTheme();
   const { session } = useAuth();
   const { showSuccess, showFailure } = useToast();
+  const [riderType, setSelectedRiderType] = useState<riderType>("skier");
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
     mutationFn: ({ user_id, ...UserUpdate }) => UserService.updateOne(UserUpdate, user_id),
     onError: (error) => {
@@ -108,6 +111,17 @@ export default function ProfileEditView() {
       height: 72,
     },
     label: { marginBottom: 8 },
+    riderTypeContainer: {
+      borderWidth: 1,
+      borderRadius: theme.roundness,
+      borderColor: theme.colors.outlineVariant,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      marginBottom: 32,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
   });
   return (
     <Background>
@@ -142,7 +156,25 @@ export default function ProfileEditView() {
 
         <Text style={styles.label}>Phone Number</Text>
         <TextInput placeholder="(555) 000-0000" left={<PaperInput.Affix text="+1 " />} />
-
+        <Text style={styles.label}>Rider Type:</Text>
+        <View style={styles.riderTypeContainer}>
+          <Button
+            icon="ski"
+            mode="text"
+            textColor={riderType === "skier" ? undefined : theme.colors.onSurfaceVariant}
+            onPress={() => setSelectedRiderType("skier")}
+          >
+            Skier
+          </Button>
+          <Button
+            icon="snowboard"
+            mode="text"
+            textColor={riderType === "snowboarder" ? undefined : theme.colors.onSurfaceVariant}
+            onPress={() => setSelectedRiderType("snowboarder")}
+          >
+            Snowboarder
+          </Button>
+        </View>
         <Button mode="contained" onPress={handleSubmit}>
           Save Changes
         </Button>

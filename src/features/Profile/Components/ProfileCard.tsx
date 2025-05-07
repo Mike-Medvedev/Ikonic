@@ -1,34 +1,40 @@
 import { View, StyleSheet, Pressable } from "react-native";
 import { Avatar, Icon, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
-import { Button, Text } from "@/design-system/components";
+import { Text } from "@/design-system/components";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
-import FriendsListModal from "./FriendsListModal";
-import ProfileEditModal from "./ProfileEditModal";
-
-type riderType = "skier" | "snowboarder";
+import FriendsListModal from "@/features/Profile/Components/FriendsListModal";
+import ProfileEditModal from "@/features/Profile/Components/ProfileEditModal";
+import { useQuery } from "@tanstack/react-query";
+import { TripService } from "@/features/Trips/Services/tripService";
+import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import { formatDateRangeShort } from "@/utils/dateUtils";
 
 /**
  * Render the UI for Profile Information on the Profile Page
  */
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
-  const [riderType, setSelectedRiderType] = useState<riderType>("skier");
   const [friendsModalVisible, setFriendsModalVisible] = useState<boolean>(false);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   //prettier-ignore
-  // const { data: recentTrips, isFetching, error } = useQuery({
-  //   queryKey: ["t"],
-  //   queryFn: async () => null,
-  //   enabled: false
-  // })
+  const { data: recentTrips, isFetching, error } = useQuery({
+    queryKey: ["trips", "past"],
+    queryFn: async () => TripService.getAll({ past: true }),
+  })
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: { padding: 16 },
     profileCardContainer: { flexDirection: "row", alignItems: "center", gap: 16 },
-    profileCardContent: { gap: 8 },
+    profileCardContent: { gap: 8, flex: 1 },
     label: { textTransform: "capitalize", color: theme.colors.secondary, fontSize: 16 },
-    squaresContainer: { flexDirection: "row", gap: 16, justifyContent: "space-evenly", marginVertical: 32 },
+    squaresContainer: {
+      flexDirection: "row",
+      gap: 16,
+      justifyContent: "space-evenly",
+      marginTop: 24,
+      marginBottom: 16,
+    },
     square: {
       borderWidth: 1,
       borderColor: theme.colors.outlineVariant,
@@ -39,16 +45,8 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
       alignItems: "center",
     },
     squareLabel: { textTransform: "capitalize", color: theme.colors.secondary, fontSize: 14 },
-    riderTypeContainer: {
-      borderWidth: 1,
-      borderRadius: theme.roundness,
-      borderColor: theme.colors.outlineVariant,
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    recentTripsContainer: { marginVertical: 32 },
+
+    recentTripsContainer: { marginVertical: 0 },
     recentTripsHeader: { flexDirection: "row", justifyContent: "space-between", marginVertical: 16 },
     recentTripsList: { gap: 16 },
     recentTrip: {
@@ -60,11 +58,18 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
       borderColor: theme.colors.outlineVariant,
       borderRadius: theme.roundness,
     },
+    avatarOverlay: { position: "absolute", bottom: -10, right: 0 },
+    iconContainer: { backgroundColor: theme.colors.secondaryContainer },
   });
   return (
     <View style={styles.container}>
       <View style={styles.profileCardContainer}>
-        <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
+        <View>
+          <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
+          <View style={styles.avatarOverlay}>
+            <Avatar.Icon icon="ski" size={24} color={theme.colors.onSecondaryContainer} style={styles.iconContainer} />
+          </View>
+        </View>
 
         <View style={styles.profileCardContent}>
           <Text
@@ -73,6 +78,9 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           >{`${profile.firstname} ${profile.lastname}`}</Text>
           <Text style={styles.label}>Joined January 2025</Text>
         </View>
+        <Pressable onPress={() => setEditModalVisible(true)}>
+          <Icon source="cog" size={32} color={theme.colors.primary} />
+        </Pressable>
       </View>
 
       <View style={styles.squaresContainer}>
@@ -90,48 +98,30 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         </Pressable>
       </View>
 
-      <View style={styles.riderTypeContainer}>
-        <Text style={styles.label}>Rider Type:</Text>
-        <Button
-          icon="ski"
-          mode="text"
-          textColor={riderType === "skier" ? undefined : theme.colors.onSurfaceVariant}
-          onPress={() => setSelectedRiderType("skier")}
-        >
-          Skier
-        </Button>
-        <Button
-          icon="snowboard"
-          mode="text"
-          textColor={riderType === "snowboarder" ? undefined : theme.colors.onSurfaceVariant}
-          onPress={() => setSelectedRiderType("snowboarder")}
-        >
-          Snowboarder
-        </Button>
-      </View>
       <View style={styles.recentTripsContainer}>
         <View style={styles.recentTripsHeader}>
           <Text variant="titleMedium">Recent Trips</Text>
-          <Text style={{ color: theme.colors.secondary }}>See All</Text>
         </View>
-        <View style={styles.recentTripsList}>
-          <View style={styles.recentTrip}>
-            <View>
-              <Text variant="bodyLarge">Winter Escape 2025</Text>
-              <Text style={{ color: theme.colors.secondary }}>Whistler Blackcomb</Text>
-              <Text style={{ color: theme.colors.secondary }}>Feb 15-22, 2025</Text>
-            </View>
-            <Icon source="ski" size={24} color={theme.colors.onSurfaceVariant} />
+        <AsyncStateWrapper loading={isFetching} error={error}>
+          <View style={styles.recentTripsList}>
+            {recentTrips
+              ? recentTrips.map((trip) => (
+                  <View style={styles.recentTrip} key={trip.id}>
+                    <View>
+                      <Text variant="bodyLarge">{trip.title}</Text>
+                      <Text style={{ color: theme.colors.secondary }}>{trip.mountain}</Text>
+                      <Text style={{ color: theme.colors.secondary }}>
+                        {formatDateRangeShort(trip.startDate, trip.endDate)}
+                      </Text>
+                    </View>
+                    <Icon source="ski" size={24} color={theme.colors.onSurfaceVariant} />
+                  </View>
+                ))
+              : null}
           </View>
-        </View>
+        </AsyncStateWrapper>
       </View>
-      <Pressable style={styles.recentTrip} onPress={() => setEditModalVisible(true)}>
-        <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
-          <Icon source="account-outline" size={24} color={theme.colors.secondary} />
-          <Text>Edit Profile</Text>
-        </View>
-        <Icon source="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
-      </Pressable>
+
       <FriendsListModal visible={friendsModalVisible} setVisible={setFriendsModalVisible} />
       <ProfileEditModal visible={editModalVisible} setVisible={setEditModalVisible} />
 

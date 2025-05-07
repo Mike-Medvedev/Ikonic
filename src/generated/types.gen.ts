@@ -269,9 +269,20 @@ export type GetFriendsApiV1UsersUserIdFriendsGetResponse = GetFriendsApiV1UsersU
 export type GetTripsApiV1TripsGetData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        past?: boolean;
+    };
     url: '/api/v1/trips/';
 };
+
+export type GetTripsApiV1TripsGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetTripsApiV1TripsGetError = GetTripsApiV1TripsGetErrors[keyof GetTripsApiV1TripsGetErrors];
 
 export type GetTripsApiV1TripsGetResponses = {
     /**
