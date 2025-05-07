@@ -6,14 +6,16 @@ import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
 import { router } from "expo-router";
 import { PROFILE_PATH } from "@/constants/constants";
+import FriendsListModal from "./FriendsListModal";
 
-type riderType = "skier" | "boarder";
+type riderType = "skier" | "snowboarder";
 
 /**
  * Render the UI for Profile Information on the Profile Page
  */
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const [riderType, setSelectedRiderType] = useState<riderType>("skier");
+  const [visible, setVisible] = useState<boolean>(false);
   //prettier-ignore
   // const { data: recentTrips, isFetching, error } = useQuery({
   //   queryKey: ["t"],
@@ -82,10 +84,10 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           <Text variant="headlineSmall">8</Text>
           <Text style={styles.squareLabel}>Resorts</Text>
         </View>
-        <View style={styles.square}>
+        <Pressable style={styles.square} onPress={() => setVisible(true)}>
           <Text variant="headlineSmall">45</Text>
           <Text style={styles.squareLabel}>Friends</Text>
-        </View>
+        </Pressable>
       </View>
 
       <View style={styles.riderTypeContainer}>
@@ -101,8 +103,8 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         <Button
           icon="snowboard"
           mode="text"
-          textColor={riderType === "boarder" ? undefined : theme.colors.onSurfaceVariant}
-          onPress={() => setSelectedRiderType("boarder")}
+          textColor={riderType === "snowboarder" ? undefined : theme.colors.onSurfaceVariant}
+          onPress={() => setSelectedRiderType("snowboarder")}
         >
           Snowboarder
         </Button>
@@ -130,6 +132,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         </View>
         <Icon source="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
       </Pressable>
+      <FriendsListModal visible={visible} setVisible={setVisible} />
 
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
         <FlatList

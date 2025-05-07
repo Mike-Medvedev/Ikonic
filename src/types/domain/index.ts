@@ -31,6 +31,7 @@ export {
   getUserByIdApiV1UsersUserIdGet,
   updateUserApiV1UsersUserIdPatch,
   completeOnboardingApiV1UsersOnboardingPost,
+  getFriendsApiV1UsersUserIdFriendsGet,
   // Misc
   mainApiV1Get,
 } from "@/generated";

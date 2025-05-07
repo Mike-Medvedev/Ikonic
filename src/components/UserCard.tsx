@@ -33,7 +33,9 @@ export default function UserCard({ user, subtitle }: UserCardProps) {
       />
 
       <View>
-        <Text>Michael Medvedev</Text>
+        <Text>
+          {user.firstname} {user.lastname}
+        </Text>
         {subtitle && <Text style={styles.label}>{subtitle}</Text>}
       </View>
     </View>

@@ -239,6 +239,33 @@ export type CompleteOnboardingApiV1UsersOnboardingPostResponses = {
 
 export type CompleteOnboardingApiV1UsersOnboardingPostResponse = CompleteOnboardingApiV1UsersOnboardingPostResponses[keyof CompleteOnboardingApiV1UsersOnboardingPostResponses];
 
+export type GetFriendsApiV1UsersUserIdFriendsGetData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/users/{user_id}/friends';
+};
+
+export type GetFriendsApiV1UsersUserIdFriendsGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetFriendsApiV1UsersUserIdFriendsGetError = GetFriendsApiV1UsersUserIdFriendsGetErrors[keyof GetFriendsApiV1UsersUserIdFriendsGetErrors];
+
+export type GetFriendsApiV1UsersUserIdFriendsGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoListUserPublic;
+};
+
+export type GetFriendsApiV1UsersUserIdFriendsGetResponse = GetFriendsApiV1UsersUserIdFriendsGetResponses[keyof GetFriendsApiV1UsersUserIdFriendsGetResponses];
+
 export type GetTripsApiV1TripsGetData = {
     body?: never;
     path?: never;

@@ -5,6 +5,7 @@ import {
   updateUserApiV1UsersUserIdPatch,
   UserUpdate,
   completeOnboardingApiV1UsersOnboardingPost,
+  getFriendsApiV1UsersUserIdFriendsGet,
 } from "@/types";
 
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
@@ -49,6 +50,18 @@ export const UserService = {
     if (!res.data?.data) {
       console.warn(`Onboarding Update was not successful`);
       throw new ApiError(500, "Error: Onboard Update was not successful");
+    }
+    return res.data.data;
+  }),
+  getFriends: withError(async (user_id: string) => {
+    const client = await createAuthenticatedClient();
+    const res = await getFriendsApiV1UsersUserIdFriendsGet<true>({
+      path: { user_id },
+      client,
+    });
+    if (!res.data.data) {
+      console.warn(`Friends List fetch was not successful`);
+      throw new ApiError(500, "Error: Friends List fetch was not successful");
     }
     return res.data.data;
   }),
