@@ -13,7 +13,7 @@ interface UpdateTripMutation {
   form: TripUpdateParsed;
 }
 /**
- *
+ * Renders the view for editing a trip's details
  */
 export default function TripEditView() {
   const theme = useTheme();

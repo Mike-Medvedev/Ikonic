@@ -4,9 +4,8 @@ import { UserPublic } from "@/types";
 import { Button, Text } from "@/design-system/components";
 import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
-import { router } from "expo-router";
-import { PROFILE_PATH } from "@/constants/constants";
 import FriendsListModal from "./FriendsListModal";
+import ProfileEditModal from "./ProfileEditModal";
 
 type riderType = "skier" | "snowboarder";
 
@@ -15,7 +14,8 @@ type riderType = "skier" | "snowboarder";
  */
 export default function ProfileCard({ profile }: { profile: UserPublic }) {
   const [riderType, setSelectedRiderType] = useState<riderType>("skier");
-  const [visible, setVisible] = useState<boolean>(false);
+  const [friendsModalVisible, setFriendsModalVisible] = useState<boolean>(false);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   //prettier-ignore
   // const { data: recentTrips, isFetching, error } = useQuery({
   //   queryKey: ["t"],
@@ -84,7 +84,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           <Text variant="headlineSmall">8</Text>
           <Text style={styles.squareLabel}>Resorts</Text>
         </View>
-        <Pressable style={styles.square} onPress={() => setVisible(true)}>
+        <Pressable style={styles.square} onPress={() => setFriendsModalVisible(true)}>
           <Text variant="headlineSmall">45</Text>
           <Text style={styles.squareLabel}>Friends</Text>
         </Pressable>
@@ -125,14 +125,15 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           </View>
         </View>
       </View>
-      <Pressable style={styles.recentTrip} onPress={() => router.push(`${PROFILE_PATH}/edit`)}>
+      <Pressable style={styles.recentTrip} onPress={() => setEditModalVisible(true)}>
         <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
           <Icon source="account-outline" size={24} color={theme.colors.secondary} />
           <Text>Edit Profile</Text>
         </View>
         <Icon source="chevron-right" size={24} color={theme.colors.onSurfaceVariant} />
       </Pressable>
-      <FriendsListModal visible={visible} setVisible={setVisible} />
+      <FriendsListModal visible={friendsModalVisible} setVisible={setFriendsModalVisible} />
+      <ProfileEditModal visible={editModalVisible} setVisible={setEditModalVisible} />
 
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
         <FlatList

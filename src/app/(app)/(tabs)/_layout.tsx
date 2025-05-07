@@ -7,11 +7,15 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { SignOutButton } from "@/design-system/components";
 import HeaderTitle from "@/components/HeaderTitle";
 import { Pressable } from "react-native";
+import { useAuth } from "@/context/AuthContext";
+import { APP_GROUP, PROFILE_PATH, TAB_GROUP } from "@/constants/constants";
 /**
  * Layout for Expo (tabs) which represent selectable tabs in a mobile app
  */
 export default function TabLayout() {
   const theme = useTheme();
+  const { session } = useAuth();
+  if (!session) return null;
   const tabScreenOptions = useMemo(
     () => ({
       tabBarActiveTintColor: theme.colors.primary,
@@ -64,32 +68,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile/index"
+        name="profile/[profileId]/index"
         options={{
+          href: `/${APP_GROUP}/${TAB_GROUP}/${PROFILE_PATH}/${session.user.id}`,
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
           headerTitle: HeaderTitle,
-          headerRight: SignOutButton,
-        }}
-      />
-      <Tabs.Screen
-        name="profile/edit"
-        options={{
-          href: null,
-          title: "Profile",
-          tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
-          headerLeft: BackButton,
-          headerTitle: HeaderTitle,
-          headerRight: SignOutButton,
-        }}
-      />
-      <Tabs.Screen
-        name="profile/[profileId]"
-        options={{
-          title: "Profile",
-          href: null,
-          headerShown: false,
-          tabBarStyle: { display: "none" },
           headerRight: SignOutButton,
         }}
       />

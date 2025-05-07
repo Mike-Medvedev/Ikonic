@@ -1,5 +1,6 @@
 import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
+import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 
@@ -10,6 +11,10 @@ interface TripHeaderProps {
 const TripHeader = ({ title, callback }: TripHeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    console.log(navigation.getState());
+  }, [navigation]);
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
