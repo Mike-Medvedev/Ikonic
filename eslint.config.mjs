@@ -11,7 +11,7 @@ import * as pluginImportX from "eslint-plugin-import-x";
 export default defineConfig([
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: globals.browser } },
-  globalIgnores(["**/node_modules/**", ".expo", ".vscode", "dist", "build"]),
+  globalIgnores(["**/node_modules/**", ".expo", ".vscode", "dist", "build", "metro.config.js"]),
   tseslintConfigs.recommended,
   pluginReact.configs.flat.recommended,
   jsdoc.configs["flat/recommended-typescript"],

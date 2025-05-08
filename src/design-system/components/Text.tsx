@@ -9,7 +9,7 @@ type Props = React.PropsWithChildren<TextProps<unknown>>;
 export default function Text({ children, style, ...rest }: Props) {
   const theme = useTheme();
   const styles = StyleSheet.create({
-    textStyles: { color: theme.colors.onSurface },
+    textStyles: { color: theme.colors.onSurface, fontFamily: "Poppins" },
   });
 
   return (

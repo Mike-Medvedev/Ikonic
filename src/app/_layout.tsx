@@ -1,3 +1,4 @@
+import "react-native-url-polyfill";
 import { Slot } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
@@ -67,7 +68,9 @@ export default function RootLayout() {
   });
   useEffect(() => {
     if (loaded || error) {
-      SplashScreen.hideAsync();
+      setTimeout(() => {
+        SplashScreen.hideAsync();
+      }, 5000);
     }
   }, [loaded, error]);
 

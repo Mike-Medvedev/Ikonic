@@ -33,15 +33,9 @@
         }
       ],
       [
-        "expo-font",
-        {
-          "fonts": ["./assets/fonts/Poppins-Regular.ttf"]
-        }
-      ],
-      [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/penguin.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -66,9 +60,7 @@
       }
     },
     "owner": "medvedevm",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/7b99cd0c-c0a5-4a42-905e-12ddfca00c12"
     }
