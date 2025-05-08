@@ -17,7 +17,7 @@ const OTP_LENGTH = 6;
 
 /** Renders a SMS One Time Passcode form which accepts a code for user verification */
 export default function OTPForm({ code, setCode }: OTPFormProps) {
-  const inputRef = useRef<NativeTextInput[]>([]);
+  const inputRef = useRef<(NativeTextInput | null)[]>([]);
   const [hiddenInputCode, setHiddenInputCode] = useState<string>("");
 
   /** Event Handler handling sms otp input, uses setTimout as a hack to delay focus */
@@ -65,7 +65,9 @@ export default function OTPForm({ code, setCode }: OTPFormProps) {
           <TextInput
             key={index}
             value={code[index]}
-            ref={(ref: NativeTextInput) => (inputRef.current[index] = ref)}
+            ref={(instance: NativeTextInput | null) => {
+              inputRef.current[index] = instance;
+            }}
             onChangeText={(text) => handleTextChange(text, index)}
             maxLength={1}
             onKeyPress={(event) => handleKeyPress(event, index)}
