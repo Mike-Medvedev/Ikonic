@@ -44,7 +44,6 @@ export default function InviteUsersView() {
    */
   async function handleInvite(user: UserPublic) {
     setIsInviteSending(true);
-    console.log(user);
     const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
     try {
       await InviteService.inviteUser(selectedTripId, user.id, { deepLink });

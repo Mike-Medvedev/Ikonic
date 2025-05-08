@@ -1,6 +1,4 @@
-import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Appbar, useTheme } from "react-native-paper";
 
@@ -12,9 +10,6 @@ const TripHeader = ({ title, callback }: TripHeaderProps) => {
   const theme = useTheme();
   const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log(navigation.getState());
-  }, [navigation]);
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.background,
@@ -29,28 +24,13 @@ const TripHeader = ({ title, callback }: TripHeaderProps) => {
     },
   });
   /**
-   * If There are screens in the current navigator (stack), then pop them
-   * If there are no screens left, we must clear history before we pop to parent navigator (tabs)
+   * If There are screens in the current navigator (stack), then call global expo router.back()
+   * If there are screens in the current navigator, useNavigation calls gobBack() for current nav
    */
   function handlePress() {
-    const currentState = navigation.getState();
-    if (currentState?.index && currentState.index > 0) {
+    if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      const initialRouteName = navigation.getState()?.routeNames?.[0];
-      if (!initialRouteName) return;
-      //reset the stack before navigating back to (tabs)
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: initialRouteName,
-            },
-          ],
-        }),
-      );
-      //navigates back to (tabs)
       callback();
     }
   }

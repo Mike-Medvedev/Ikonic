@@ -16,7 +16,6 @@ export default function AuthGuard() {
   }
 
   if (!session) {
-    console.log("no session in (tabs)");
     return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
   }
 

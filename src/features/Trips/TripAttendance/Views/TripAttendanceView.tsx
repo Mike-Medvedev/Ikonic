@@ -1,6 +1,5 @@
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
-import { useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { AttendanceList } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -27,9 +26,6 @@ export default function TripAttendanceView() {
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
-  useEffect(() => {
-    console.log(selectedTripId);
-  }, [selectedTripId]);
 
   function CalculateIcon(rsvp: keyof AttendanceList) {
     switch (rsvp) {

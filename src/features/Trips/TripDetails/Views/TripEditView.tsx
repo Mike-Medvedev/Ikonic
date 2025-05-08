@@ -28,7 +28,13 @@ export default function TripEditView() {
       queryClient.invalidateQueries({ queryKey: ["trip", data?.id] });
     },
   });
-  const [updateTripForm, setUpdateTripForm] = useState<UpdateTripForm>({});
+  const [updateTripForm, setUpdateTripForm] = useState<UpdateTripForm>({
+    title: { value: "", error: "" },
+    mountain: { value: "", error: "" },
+    startDate: { value: undefined, error: "" },
+    endDate: { value: undefined, error: "" },
+    desc: { value: "", error: "" },
+  });
   const styles = StyleSheet.create({
     container: { padding: 16 },
     cover: { backgroundColor: theme.colors.secondary, height: 200 },
@@ -71,7 +77,13 @@ export default function TripEditView() {
         <Text variant="labelMedium" style={styles.label}>
           Trip Description (Optional)
         </Text>
-        <TextInput multiline style={{ height: 80 }} placeholder="Add any notes or details about your trip..." />
+        <TextInput
+          multiline
+          style={{ height: 80 }}
+          placeholder="Add any notes or details about your trip..."
+          value={updateTripForm.desc?.value}
+          onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, desc: { value: text, error: "" } }))}
+        />
         <Button mode="contained">Accept Changes</Button>
       </ScrollView>
     </Background>

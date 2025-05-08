@@ -9,6 +9,7 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort, getDaysUntil } from "@/utils/dateUtils";
+import { DEFAULT_APP_PATH } from "@/constants/constants";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -28,8 +29,7 @@ export default function Trip({ trip }: TripProps) {
   const theme = useTheme();
 
   const handleTripSelect = () => {
-    console.log("handling select!!");
-    router.replace(`/trips/${trip.id}`);
+    router.push({ pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/details`, params: { selectedTrip: trip.id } });
   };
 
   const styles = StyleSheet.create({
