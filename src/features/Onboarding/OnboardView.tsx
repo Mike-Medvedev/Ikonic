@@ -24,7 +24,7 @@ export default function OnboardView() {
   const { session, signOut } = useAuth();
   if (!session) return null;
   const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -57,6 +57,7 @@ export default function OnboardView() {
       showSuccess({ message: "Successfully Updated " });
       completeOnboardingMutation.mutate();
     },
+    onSettled: () => setLoading(false),
   });
   const completeOnboardingMutation = useMutation<boolean, Error, void>({
     mutationFn: () => UserService.completeOnboard(),
@@ -102,7 +103,9 @@ export default function OnboardView() {
    * dissects full name into first name and last name variables, joining middle names to last names
    */
   async function handleSubmit() {
+    setLoading(true);
     if (!session) {
+      showFailure({ message: "Error No valid session, signing out" });
       await signOut();
       return;
     }
@@ -117,6 +120,7 @@ export default function OnboardView() {
       return;
     }
     if (!image || image.canceled) {
+      showFailure({ message: "Error: Image is missing or cancelled by user" });
       console.log("image missing or cancelled");
       return;
     }
@@ -191,7 +195,7 @@ export default function OnboardView() {
         <Text style={styles.label}>Phone Number</Text>
         <TextInput placeholder="(555) 000-0000" left={<PaperInput.Affix text="+1 " />} /> */}
 
-        <Button mode="contained" onPress={handleSubmit}>
+        <Button mode="contained" onPress={handleSubmit} loading={loading}>
           Complete Profile
         </Button>
       </View>
