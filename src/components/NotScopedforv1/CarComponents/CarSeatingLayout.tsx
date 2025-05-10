@@ -1,7 +1,8 @@
 import { CarPublic } from "@/types";
-import UserAvatar from "@/design-system/components/UserAvatar";
+
 import { View, Image, StyleSheet } from "react-native";
 import CarPositionSelect from "@/components/NotScopedforv1/CarComponents/CarPositionSelect";
+import UserAvatar from "@/components/UserAvatar";
 
 /**
  * Render the layout for assignable car seats that the user can select and assign passengers to seats
@@ -10,7 +11,7 @@ export default function CarSeatingLayout({ currentCar }: { currentCar: CarPublic
   return (
     <View style={styles.container}>
       <Image source={require("@/assets/images/seats.png")} style={{ width: 100, height: 200 }} resizeMode="cover" />
-      <UserAvatar user={currentCar.owner} styles={styles.driverPosition} />
+      <UserAvatar profile={currentCar.owner} style={styles.driverPosition} />
       <CarPositionSelect currentCar={currentCar} styles={styles.shotgunPosition} position={0} />
       <CarPositionSelect currentCar={currentCar} styles={styles.backSeatLeft} position={1} />
       <CarPositionSelect currentCar={currentCar} styles={styles.backSeatRight} position={2} />

@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Avatar, Chip, Divider, Icon, IconButton, Text, useTheme } from "react-native-paper";
+import { Chip, Divider, Icon, IconButton, Text, useTheme } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
@@ -13,13 +13,15 @@ import { NetworkError } from "@/lib/errors";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import UsersAvatarList from "@/components/UsersAvatarList";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 
 /**
  * Renders the UI for the trip details page
  * @todo handle getting attendess of userInvites list
  */
 export default function TripDetailsView() {
-  const { selectedTrip: selectedTripID } = useLocalSearchParams();
+  const { selectedTrip: selectedTripID } = useLocalSearchParams() as { selectedTrip: string };
   // const [modalVisible, setModalVisible] = useState(false);
   const { session } = useAuth();
   const { showFailure } = useToast();
@@ -42,7 +44,7 @@ export default function TripDetailsView() {
   });
 
   // prettier-ignore
-  const { data: trip, isFetching, error } = useQuery({
+  const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
     queryKey: ["trip", selectedTripID], queryFn: async () => {
       return TripService.getOne(selectedTripID as string);
     },
@@ -50,6 +52,13 @@ export default function TripDetailsView() {
   });
   const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
 
+  //prettier-ignore
+  const { data: attendees, isFetching: fAttendees, error: eAttendees } = useQuery({
+     queryKey: ["attendees", selectedTripID],
+     queryFn: async () => InviteService.getInvitedUsers(selectedTripID),
+     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
+     enabled: !!selectedTripID,
+   });
   /**
    * Event Handler for deleting a trip and prompts the user for confirmation
    */
@@ -82,7 +91,7 @@ export default function TripDetailsView() {
   });
   return (
     <Background>
-      <AsyncStateWrapper loading={isFetching} error={error}>
+      <AsyncStateWrapper loading={fTrips} error={eTrips}>
         <View style={styles.cover}>
           <View style={styles.coverActions}>
             <IconButton icon="share-variant" size={20} iconColor={theme.colors.primary} mode="contained" />
@@ -129,12 +138,10 @@ export default function TripDetailsView() {
                 onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}
               >
                 <View style={{ flexDirection: "row" }}>
-                  <Avatar.Text label="MM" size={24} />
-                  <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
-                  <Avatar.Text label="MM" size={24} style={{ marginLeft: -4 }} />
-                </View>
-                <View>
-                  <Avatar.Icon icon="plus" size={24} style={{ backgroundColor: theme.colors.secondaryContainer }} />
+                  <AsyncStateWrapper loading={fAttendees} error={eAttendees}>
+                    <UsersAvatarList attendees={attendees} rsvp="accepted" />
+                  </AsyncStateWrapper>
+                  {/* <Avatar.Icon icon="plus" size={24} style={{ backgroundColor: theme.colors.secondaryContainer }} /> */}
                 </View>
               </Pressable>
               {/* <AsyncStateWrapper loading={isFetching} error={error}>

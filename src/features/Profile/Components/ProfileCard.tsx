@@ -2,7 +2,6 @@ import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Avatar, Icon, useTheme } from "react-native-paper";
 import { UserPublic } from "@/types";
 import { Text } from "@/design-system/components";
-import CalculateInitials from "@/utils/CalculateInitials";
 import { useState } from "react";
 import FriendsListModal from "@/features/Profile/Components/FriendsListModal";
 import ProfileEditModal from "@/features/Profile/Components/ProfileEditModal";
@@ -12,6 +11,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
+import UserAvatar from "@/components/UserAvatar";
 
 /**
  * Render the UI for Profile Information on the Profile Page
@@ -66,11 +66,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
     <View style={styles.container}>
       <View style={styles.profileCardContainer}>
         <View>
-          {profile?.avatarPublicUrl ? (
-            <Avatar.Image source={{ uri: profile?.avatarPublicUrl }} />
-          ) : (
-            <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
-          )}
+          <UserAvatar profile={profile} size={64} />
           <View style={styles.avatarOverlay}>
             <Avatar.Icon icon="ski" size={24} color={theme.colors.onSecondaryContainer} style={styles.iconContainer} />
           </View>

@@ -1,8 +1,8 @@
 import { AttendanceList, RSVPStatus } from "@/types";
-import CalculateInitials from "@/utils/CalculateInitials";
 import { router, useLocalSearchParams } from "expo-router";
 import { Pressable, View } from "react-native";
 import { Avatar, useTheme } from "react-native-paper";
+import UserAvatar from "@/components/UserAvatar";
 
 const MAX_AVATARS = 5;
 
@@ -22,18 +22,12 @@ export default function UsersAvatarList({
   const { selectedTrip: selectedTripId } = useLocalSearchParams();
 
   return (
-    <View style={{ flexDirection: "row", gap: 5, overflow: "hidden", marginVertical: 8 }}>
+    <View style={{ flexDirection: "row", gap: 5 }}>
       {attendees[rsvp] && (
         <>
           {attendees[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
             <Pressable onPress={() => router.push(`/profile/${user.id}?previousTripId=${selectedTripId}`)} key={index}>
-              <Avatar.Text
-                key={user.id}
-                label={CalculateInitials(user?.firstname ?? "Unknown", user?.lastname ?? "Unknown")}
-                size={size}
-                style={{ backgroundColor: theme.colors.primary }}
-                labelStyle={{ fontSize: 8, color: "white" }}
-              />
+              <UserAvatar profile={user} size={24} />
             </Pressable>
           ))}
           {attendees[rsvp].length > MAX_AVATARS && (

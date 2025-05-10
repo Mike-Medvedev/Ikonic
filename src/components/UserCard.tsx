@@ -1,39 +1,37 @@
-import { View, StyleSheet } from "react-native";
-import { Avatar, useTheme } from "react-native-paper";
+import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
-import CalculateInitials from "@/utils/CalculateInitials";
 import { UserPublic } from "@/types";
+import UserAvatar from "./UserAvatar";
 
 interface UserCardProps {
   user: UserPublic;
   subtitle?: string;
+  iconSize?: number;
+  titleFontSize?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 /**
  * Reusable User Card that displays User information
  */
-export default function UserCard({ user, subtitle }: UserCardProps) {
+export default function UserCard({ user, subtitle, iconSize = 32, titleFontSize, style }: UserCardProps) {
   const theme = useTheme();
   const styles = StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      gap: 16,
+      alignItems: "center",
+      marginVertical: 8,
+    },
     label: { color: theme.colors.secondary },
   });
   return (
-    <View
-      style={{
-        flexDirection: "row",
-        gap: 16,
-        alignItems: "center",
-        marginVertical: 8,
-      }}
-    >
-      <Avatar.Text
-        labelStyle={{ fontFamily: "Poppins" }}
-        label={CalculateInitials(user.firstname, user.lastname)}
-        size={40}
-      />
+    <View style={[styles.container, style]}>
+      <UserAvatar profile={user} size={iconSize} />
 
       <View>
-        <Text>
+        <Text style={{ fontSize: titleFontSize }}>
           {user.firstname} {user.lastname}
         </Text>
         {subtitle && <Text style={styles.label}>{subtitle}</Text>}

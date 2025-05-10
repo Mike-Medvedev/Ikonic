@@ -1,18 +1,22 @@
 import { View, StyleSheet, ScrollView } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
-import { AttendanceList } from "@/types";
+import { RSVPStatus, UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "../../Services/inviteService";
 import { Background, Text, Button } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import UserCard from "@/components/UserCard";
+import { useState } from "react";
+import AsyncStateWrapper from "@/components/AsyncStateWrapper";
+import Pill from "@/design-system/components/Pill";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
  * @todo undefined selected Trip Id slips through and errors, we need to fix this globally
  */
 export default function TripAttendanceView() {
+  const [selectedPill, setSelectedPill] = useState<RSVPStatus>("accepted");
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const theme = useTheme();
   //prettier-ignore
@@ -27,7 +31,7 @@ export default function TripAttendanceView() {
     enabled: !!selectedTripId,
   });
 
-  function CalculateIcon(rsvp: keyof AttendanceList) {
+  function CalculateIcon(rsvp: RSVPStatus) {
     switch (rsvp) {
       case "accepted":
         return <Icon source="check" size={16} />;
@@ -49,7 +53,8 @@ export default function TripAttendanceView() {
       justifyContent: "space-between",
       alignItems: "center",
     },
-    attendanceContainer: {},
+    attendanceContainer: { marginVertical: 16 },
+    pillsContainer: { flexGrow: 0 },
   });
   return (
     <Background>
@@ -57,43 +62,39 @@ export default function TripAttendanceView() {
         <TripTitleDetail />
         <View style={styles.secondContainer}>
           <Text>
-            3 going <Text style={styles.label}>· 2 pending</Text>
+            {attendees["accepted"].length} going{" "}
+            <Text style={styles.label}>· {attendees["pending"].length} pending</Text>
           </Text>
-          <Button theme={{ roundness: theme.roundness }} mode="contained" onPress={() => router.push("./invite")}>
+          <Button
+            icon="plus"
+            theme={{ roundness: theme.roundness }}
+            mode="contained"
+            onPress={() => router.push("./invite")}
+          >
             Invite Friends
           </Button>
         </View>
-        <ScrollView style={styles.attendanceContainer}>
-          {Object.entries(attendees).map(([rsvp, users], index) => (
-            <View key={index}>
-              <Text style={[{ textTransform: "capitalize" }, styles.label]}>{rsvp}</Text>
-              {Array(2)
-                .fill(0)
-                .map((user, index) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                    key={index}
-                  >
-                    <UserCard user={user} />
-                    {CalculateIcon(rsvp as keyof AttendanceList)}
-                  </View>
-                ))}
-            </View>
-          ))}
-        </ScrollView>
-        {/* <AsyncStateWrapper loading={isFetching} error={error}>
-          <View style={{ height: "10%" }}>
-          </View>
-          <View style={{ height: "30%" }}>
-            <UsersAvatarList attendees={attendees} rsvp={selectedTab} />
-          </View>
-          <DisplayInviteModalButton onPress={() => setModalVisible(true)} />
-          <InviteUsersModal visible={modalVisible} setModalVisible={setModalVisible} />
-        </AsyncStateWrapper> */}
+        <AsyncStateWrapper loading={isFetching} error={error}>
+          <ScrollView horizontal style={styles.pillsContainer}>
+            {(Object.entries(attendees) as [RSVPStatus, UserPublic[]][]).map(([rsvp, users], index) => (
+              <Pill
+                label={rsvp}
+                count={users.length}
+                isSelected={rsvp === selectedPill}
+                onPress={() => setSelectedPill(rsvp)}
+                key={index}
+              />
+            ))}
+          </ScrollView>
+          <ScrollView style={styles.attendanceContainer}>
+            {attendees[selectedPill].map((user, index) => (
+              <View style={{ flexDirection: "row" }} key={user.id}>
+                <UserCard style={{ flex: 1 }} user={user} key={index} iconSize={40} titleFontSize={18} />
+                <View style={{ alignSelf: "center" }}>{CalculateIcon(selectedPill)}</View>
+              </View>
+            ))}
+          </ScrollView>
+        </AsyncStateWrapper>
       </View>
     </Background>
   );

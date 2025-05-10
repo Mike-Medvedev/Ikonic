@@ -1,9 +1,9 @@
-import UserAvatar from "@/design-system/components/UserAvatar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { Pressable, StyleProp, ViewStyle } from "react-native";
 import SeatingModal from "@/components/NotScopedforv1/CarComponents/SeatingModal/SeatingModal";
 import { CarPublic } from "@/types";
+import UserAvatar from "@/components/UserAvatar";
 
 interface CarPositionSelectProps {
   currentCar: CarPublic;
@@ -28,7 +28,7 @@ export default function CarPositionSelect({ currentCar, styles, position }: CarP
     <>
       <Pressable style={styles} onPress={seatSelectionHandler}>
         {currentCar?.passengers?.[position] ? (
-          <UserAvatar user={currentCar.passengers[position]} />
+          <UserAvatar profile={currentCar.passengers[position]} />
         ) : (
           <Ionicons name="add-circle-outline" size={44} color="green" />
         )}
