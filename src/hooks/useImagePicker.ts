@@ -1,8 +1,8 @@
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
 /** Custom hook that allows users to choose an image from their native os photos */
-export default function useImagePicker() {
-  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
+export default function useImagePicker(
+  setImage: React.Dispatch<React.SetStateAction<ImagePicker.ImagePickerResult | null>>,
+) {
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -17,5 +17,5 @@ export default function useImagePicker() {
     }
   };
 
-  return { image, pickImage };
+  return { pickImage };
 }

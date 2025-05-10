@@ -11,9 +11,8 @@ import { UserService } from "../Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
-import useImagePicker from "@/hooks/useImagePicker";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
-
+import * as ImagePicker from "expo-image-picker";
 interface OnBoardForm {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -25,7 +24,7 @@ export default function OnboardView() {
   const queryClient = useQueryClient();
   const { session, signOut } = useAuth();
   if (!session) return null;
-  const { image, pickImage } = useImagePicker();
+  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
@@ -147,7 +146,7 @@ export default function OnboardView() {
   return (
     <Background>
       <View style={styles.container}>
-        <SelectProfileAvatar />
+        <SelectProfileAvatar image={image} setImage={setImage} />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput

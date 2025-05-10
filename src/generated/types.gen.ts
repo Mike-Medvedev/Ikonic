@@ -85,6 +85,8 @@ export type PassengerPublic = {
     carId: string;
 };
 
+export type RiderType = 'skier' | 'snowboarder';
+
 export type TripCreate = {
     title: string;
     startDate: string;
@@ -121,6 +123,8 @@ export type UserPublic = {
     phone: string;
     firstname: string | null;
     lastname: string | null;
+    username: string | null;
+    riderType: RiderType | null;
     isOnboarded: boolean;
     avatarPublicUrl: string | null;
 };
@@ -130,6 +134,7 @@ export type UserUpdate = {
     firstname?: string | null;
     lastname?: string | null;
     username?: string | null;
+    riderType?: RiderType | null;
     avatarStoragePath?: string | null;
 };
 

@@ -77,10 +77,9 @@ export const UserService = {
     }
     const mimeType = image.mimeType || "image/jpeg";
     const fileExtension = mimeType.split("/")[1] || "jpg"; //'jpeg' becomes 'jpg'
-    const blobPath = `${user_id}/avatar.${fileExtension}`;
+    const blobPath = `${user_id}/avatar?t=${Date.now()}.${fileExtension}`;
 
     const blobOptions = {
-      cacheControl: "3600",
       upsert: true,
       contentType: mimeType,
     };
@@ -93,7 +92,7 @@ export const UserService = {
       return;
     }
     const existingAvatar = uploadedFiles.some((file) => file.name.includes("avatar"));
-    const previousFile = `${user_id}/${uploadedFiles[0]!.name}`;
+    const previousFile = `${user_id}/${uploadedFiles[0]!.name}?t=${Date.now()}`;
 
     if (Platform.OS === "web") {
       try {

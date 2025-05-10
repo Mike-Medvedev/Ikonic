@@ -1,35 +1,38 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
-import { useTheme, TextInput as PaperInput, Icon } from "react-native-paper";
-import { SimpleForm, UserPublic, UserUpdate } from "@/types";
+import { useTheme, Icon } from "react-native-paper";
+import { SimpleForm, UserPublic, UserUpdate, RiderType } from "@/types";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { fullnameValidator, nameValidator, phoneValidator } from "@/utils/validators";
+import { fullnameValidator, nameValidator } from "@/utils/validators";
 import { ValidateErrors } from "@/utils/FormBuilder";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
-
-type riderType = "skier" | "snowboarder";
+import * as ImagePicker from "expo-image-picker";
+interface ProfileEditProps {
+  profile: UserPublic;
+  close: () => void;
+}
 
 type UpdateProfileForm = {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
-  phone: SimpleForm<string>;
-  riderType: SimpleForm<string>;
-  biography: SimpleForm<string>;
+  riderType: SimpleForm<RiderType | null>;
 };
 /**
  * Render the ui for Profile Edit page for users to update profile
  */
-export default function ProfileEditView({ close }: { close: () => void }) {
+export default function ProfileEditView({ profile, close }: ProfileEditProps) {
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const { session } = useAuth();
+  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
   const { showSuccess, showFailure } = useToast();
-  const [riderType, setSelectedRiderType] = useState<riderType>("skier");
+  const [loading, setLoading] = useState<boolean>(false);
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
     mutationFn: ({ user_id, ...UserUpdate }) => UserService.updateOne(UserUpdate, user_id),
     onError: (error) => {
@@ -47,14 +50,17 @@ export default function ProfileEditView({ close }: { close: () => void }) {
     },
     onSuccess: () => {
       showSuccess({ message: "Successfully Updated " });
+      close();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", profile.id] });
+      setLoading(false);
     },
   });
   const [profileForm, setProfileForm] = useState<UpdateProfileForm>({
-    fullname: { value: "", error: "" },
-    username: { value: "", error: "" },
-    phone: { value: "", error: "" },
-    riderType: { value: "", error: "" },
-    biography: { value: "", error: "" },
+    fullname: { value: `${profile?.firstname ?? ""} ${profile?.lastname ?? ""}`, error: "" },
+    username: { value: profile?.username ?? "", error: "" },
+    riderType: { value: profile?.riderType ?? null, error: "" },
   });
 
   /**
@@ -62,11 +68,8 @@ export default function ProfileEditView({ close }: { close: () => void }) {
    */
   function isFormValid(): boolean {
     const errors = {
-      fullname: fullnameValidator(profileForm.fullname.value),
-      username: nameValidator(profileForm.username.value),
-      phone: phoneValidator(profileForm.phone.value),
-      riderType: nameValidator(profileForm.riderType.value),
-      biography: nameValidator(profileForm.biography.value),
+      fullname: profileForm.fullname.value ? fullnameValidator(profileForm.fullname.value) : "",
+      username: profileForm.username.value ? nameValidator(profileForm.username.value) : "",
     };
 
     //sets errors in onboard form and returns if there is an error
@@ -76,29 +79,47 @@ export default function ProfileEditView({ close }: { close: () => void }) {
   /**
    * Validates and submits onboarding form
    * dissects full name into first name and last name variables, joining middle names to last names
+   *
+   * If Field has been modified, submit change otherwise exclude field from update
    */
-  function handleSubmit() {
+  async function handleSubmit() {
+    setLoading(true);
+
+    //If no values are modifed then close page
+    if (!Object.values(profileForm).some((val) => val.value?.trim?.())) close();
     if (!isFormValid()) {
       showFailure({ message: "Please correct errors" });
+      setLoading(false);
       return;
     }
+
+    const userUpdate: UserUpdate = {};
     const fullNameValue = profileForm.fullname.value?.trim() ?? "";
     const nameParts = fullNameValue.split(/\s+/);
     const firstname = nameParts[0] ?? "";
     const lastname = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
-    const userUpdate: UserUpdate = {
-      firstname: firstname,
-      lastname: lastname,
-      username: profileForm.username.value ?? "",
-      phone: profileForm.phone.value,
-    };
+    if (image && !image.canceled) {
+      const avatarStoragePath = await UserService.upload(image, profile.id);
+      userUpdate.avatarStoragePath = avatarStoragePath;
+    }
+    if (profile.firstname != firstname) userUpdate.firstname = firstname;
+    if (profile.lastname != lastname) userUpdate.lastname = lastname;
+    if (profile.username != profileForm.username.value) userUpdate.username = profileForm.username.value;
+    if (profile.riderType != profileForm.riderType.value) userUpdate.riderType = profileForm.riderType.value;
 
     const user_id = session?.user?.id;
     if (!user_id) {
-      showFailure({ message: "Error No User Id found in app group", url: LOGIN_PATH });
+      showFailure({ message: "Error No User Id found in app group, signing out!", url: LOGIN_PATH });
+      setLoading(false);
       return;
     }
-    // updateProfileMutation.mutate({ ...userUpdate, user_id });
+    if (Object.keys(userUpdate).length === 0) {
+      console.log("Update object is empty! returning");
+      setLoading(false);
+      return;
+    }
+    console.log(userUpdate, profile);
+    updateProfileMutation.mutate({ ...userUpdate, user_id });
   }
   const styles = StyleSheet.create({
     container: { padding: 16 },
@@ -113,15 +134,12 @@ export default function ProfileEditView({ close }: { close: () => void }) {
     },
     label: { marginBottom: 8 },
     riderTypeContainer: {
-      borderWidth: 1,
-      borderRadius: theme.roundness,
-      borderColor: theme.colors.outlineVariant,
       paddingVertical: 8,
       paddingHorizontal: 16,
       marginBottom: 32,
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
+      justifyContent: "space-between",
     },
   });
   return (
@@ -131,7 +149,7 @@ export default function ProfileEditView({ close }: { close: () => void }) {
           <Icon source="close-circle-outline" size={24} color={theme.colors.error} />
         </Pressable>
 
-        <SelectProfileAvatar />
+        <SelectProfileAvatar image={image} setImage={setImage} />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput
@@ -154,28 +172,33 @@ export default function ProfileEditView({ close }: { close: () => void }) {
         {/* <Text style={styles.label}>Email</Text>
         <TextInput placeholder="Enter your email" /> */}
 
-        <Text style={styles.label}>Phone Number</Text>
-        <TextInput placeholder="(555) 000-0000" left={<PaperInput.Affix text="+1 " />} />
         <Text style={styles.label}>Rider Type:</Text>
         <View style={styles.riderTypeContainer}>
           <Button
             icon="ski"
-            mode="text"
-            textColor={riderType === "skier" ? undefined : theme.colors.onSurfaceVariant}
-            onPress={() => setSelectedRiderType("skier")}
+            mode={profileForm.riderType.value === "skier" ? "contained" : "outlined"}
+            onPress={() => {
+              if (profileForm.riderType.value === "skier")
+                setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
+              else setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
+            }}
           >
             Skier
           </Button>
+
           <Button
             icon="snowboard"
-            mode="text"
-            textColor={riderType === "snowboarder" ? undefined : theme.colors.onSurfaceVariant}
-            onPress={() => setSelectedRiderType("snowboarder")}
+            mode={profileForm.riderType.value === "snowboarder" ? "contained" : "outlined"}
+            onPress={() => {
+              if (profileForm.riderType.value === "snowboarder")
+                setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
+              else setProfileForm((prev) => ({ ...prev, riderType: { value: "snowboarder", error: "" } }));
+            }}
           >
             Snowboarder
           </Button>
         </View>
-        <Button mode="contained" onPress={handleSubmit}>
+        <Button mode="contained" onPress={handleSubmit} loading={loading}>
           Save Changes
         </Button>
       </ScrollView>

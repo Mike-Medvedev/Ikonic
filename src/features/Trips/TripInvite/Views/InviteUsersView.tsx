@@ -16,6 +16,16 @@ import * as Linking from "expo-linking";
  */
 export default function InviteUsersView() {
   const theme = useTheme();
+  const mockUser = {
+    firstname: "a",
+    lastname: "a",
+    username: "mev",
+    id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
+    phone: "2038587135",
+    isOnboarded: true,
+    riderType: "skier",
+    avatarPublicUrl: null,
+  };
   const { showSuccess, showFailure } = useToast();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   //prettier-ignore
@@ -116,17 +126,7 @@ export default function InviteUsersView() {
                   key={index}
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
-                  <UserCard
-                    user={{
-                      firstname: "a",
-                      lastname: "a",
-                      id: "1",
-                      phone: "20385",
-                      isOnboarded: true,
-                      avatarPublicUrl: null,
-                    }}
-                    subtitle="3 mutual friends"
-                  />
+                  <UserCard user={mockUser as UserPublic} subtitle="3 mutual friends" />
                   <Button
                     mode="outlined"
                     theme={{ roundness: theme.roundness }}
@@ -134,14 +134,7 @@ export default function InviteUsersView() {
                     contentStyle={{ paddingVertical: 0 }}
                     onPress={() => {
                       setSelectedButtonIndex(index);
-                      handleInvite({
-                        firstname: "a",
-                        lastname: "a",
-                        id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
-                        phone: "2038587135",
-                        isOnboarded: true,
-                        avatarPublicUrl: null,
-                      });
+                      handleInvite(mockUser as UserPublic);
                     }}
                     disabled={isInviteSending && index === selectedButtonIndex}
                   >
@@ -161,16 +154,7 @@ export default function InviteUsersView() {
                   key={index}
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
-                  <UserCard
-                    user={{
-                      firstname: "a",
-                      lastname: "a",
-                      id: "1",
-                      phone: "20385",
-                      isOnboarded: true,
-                      avatarPublicUrl: null,
-                    }}
-                  />
+                  <UserCard user={mockUser as UserPublic} />
                   <Button
                     mode="outlined"
                     theme={{ roundness: theme.roundness }}
@@ -178,14 +162,7 @@ export default function InviteUsersView() {
                     contentStyle={{ paddingVertical: 0 }}
                     onPress={() => {
                       setSelectedButtonIndex(index);
-                      handleInvite({
-                        firstname: "a",
-                        lastname: "a",
-                        id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
-                        phone: "2038587135",
-                        isOnboarded: true,
-                        avatarPublicUrl: null,
-                      });
+                      handleInvite(mockUser as UserPublic);
                     }}
                     disabled={isInviteSending && index === selectedButtonIndex}
                   >

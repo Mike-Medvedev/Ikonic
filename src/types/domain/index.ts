@@ -62,6 +62,7 @@ export {
   TripCreate,
   TripPublic,
   TripUpdate,
+  RiderType,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {

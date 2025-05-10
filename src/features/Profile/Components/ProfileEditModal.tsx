@@ -5,14 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
 import { UserService } from "@/features/Profile/Services/userService";
 import ProfileEditView from "../Views/ProfileEditView";
+import { UserPublic } from "@/types";
 interface ProfileEditModalProps {
+  profile: UserPublic;
   visible: boolean;
   callback: () => void;
 }
 /**
  * Modal that renders a list of a current users accepted friends
  */
-export default function ProfileEditModal({ visible, callback }: ProfileEditModalProps) {
+export default function ProfileEditModal({ profile, visible, callback }: ProfileEditModalProps) {
   const theme = useTheme();
   const { session } = useAuth();
   if (!session) return null;
@@ -28,7 +30,7 @@ export default function ProfileEditModal({ visible, callback }: ProfileEditModal
     <Modal visible={visible}>
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          <ProfileEditView close={callback} />
+          <ProfileEditView profile={profile} close={callback} />
         </View>
       </SafeAreaView>
     </Modal>

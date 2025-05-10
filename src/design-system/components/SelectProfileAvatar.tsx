@@ -2,13 +2,19 @@ import { Pressable, View, Image, StyleSheet } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
 import useImagePicker from "@/hooks/useImagePicker";
+import * as ImagePicker from "expo-image-picker";
+
+interface SelectProfileAvatarProps {
+  image: ImagePicker.ImagePickerResult | null;
+  setImage: React.Dispatch<React.SetStateAction<ImagePicker.ImagePickerResult | null>>;
+}
 
 /**
  * Renders a Pressable Profile Picture Button to select users Avatars
  */
-export default function SelectProfileAvatar() {
+export default function SelectProfileAvatar({ image, setImage }: SelectProfileAvatarProps) {
   const theme = useTheme();
-  const { image, pickImage } = useImagePicker();
+  const { pickImage } = useImagePicker(setImage);
   const styles = StyleSheet.create({
     container: { alignItems: "center" },
     photoContainer: { alignItems: "center", gap: 8 },
