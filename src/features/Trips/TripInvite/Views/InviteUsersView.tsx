@@ -117,7 +117,14 @@ export default function InviteUsersView() {
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
                   <UserCard
-                    user={{ firstname: "a", lastname: "a", id: "1", phone: "20385", isOnboarded: true }}
+                    user={{
+                      firstname: "a",
+                      lastname: "a",
+                      id: "1",
+                      phone: "20385",
+                      isOnboarded: true,
+                      avatarPublicUrl: null,
+                    }}
                     subtitle="3 mutual friends"
                   />
                   <Button
@@ -133,6 +140,7 @@ export default function InviteUsersView() {
                         id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
                         phone: "2038587135",
                         isOnboarded: true,
+                        avatarPublicUrl: null,
                       });
                     }}
                     disabled={isInviteSending && index === selectedButtonIndex}
@@ -153,7 +161,16 @@ export default function InviteUsersView() {
                   key={index}
                   style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
                 >
-                  <UserCard user={{ firstname: "a", lastname: "a", id: "1", phone: "20385", isOnboarded: true }} />
+                  <UserCard
+                    user={{
+                      firstname: "a",
+                      lastname: "a",
+                      id: "1",
+                      phone: "20385",
+                      isOnboarded: true,
+                      avatarPublicUrl: null,
+                    }}
+                  />
                   <Button
                     mode="outlined"
                     theme={{ roundness: theme.roundness }}
@@ -167,6 +184,7 @@ export default function InviteUsersView() {
                         id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
                         phone: "2038587135",
                         isOnboarded: true,
+                        avatarPublicUrl: null,
                       });
                     }}
                     disabled={isInviteSending && index === selectedButtonIndex}

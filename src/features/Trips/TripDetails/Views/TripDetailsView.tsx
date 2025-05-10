@@ -167,24 +167,15 @@ export default function TripDetailsView() {
             </View>
           </View>
           <Divider style={{ marginVertical: 16 }} />
-          <View style={styles.descritpion}>
-            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-              About this trip
-            </Text>
-
-            {trip?.desc ? (
-              <Text>{trip?.desc}</Text>
-            ) : (
-              <Text>
-                Join us for an epic winter getaway at Whistler! We&apos;ll be staying in a beautiful slope-side condo
-                with easy access to the gondola. Perfect for both skiing and snowboarding, with plenty of après-ski
-                activities planned. Bring your good vibes and winter gear! Join us for an epic winter getaway at
-                Whistler! We&apos;ll be staying in a beautiful slope-side condo with easy access to the gondola. Perfect
-                for both skiing and snowboarding, with plenty of après-ski activities planned. Bring your good vibes and
-                winter gear!Join us for an epic winter getaway at Whistler!
+          {trip?.desc ? (
+            <View style={styles.descritpion}>
+              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+                About this trip
               </Text>
-            )}
-          </View>
+
+              <Text>{trip?.desc}</Text>
+            </View>
+          ) : null}
           {isOwner && (
             <Button
               onPress={() =>

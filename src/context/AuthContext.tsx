@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   //prettier-ignore
   const { data: userProfile, isLoading: isLoadingUserProfile,
   } = useQuery<UserPublic>({
-    queryKey: ['users'],
+    queryKey: ["users"],
     queryFn: async () => {
       if(session && session?.user){
        return UserService.getOne(session?.user?.id)

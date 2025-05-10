@@ -122,6 +122,7 @@ export type UserPublic = {
     firstname: string | null;
     lastname: string | null;
     isOnboarded: boolean;
+    avatarPublicUrl: string | null;
 };
 
 export type UserUpdate = {
@@ -129,6 +130,7 @@ export type UserUpdate = {
     firstname?: string | null;
     lastname?: string | null;
     username?: string | null;
+    avatarStoragePath?: string | null;
 };
 
 export type ValidationError = {

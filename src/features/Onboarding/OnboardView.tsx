@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable, Image } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
 import { Icon, useTheme } from "react-native-paper";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { UserService } from "../Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
+import * as ImagePicker from "expo-image-picker";
 interface OnBoardForm {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -20,7 +21,23 @@ interface OnBoardForm {
  */
 export default function OnboardView() {
   const queryClient = useQueryClient();
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
+  if (!session) return null;
+  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images", "videos"],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result);
+    }
+  };
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
     mutationFn: ({ user_id, ...UserUpdate }) => UserService.updateOne(UserUpdate, user_id),
     onError: (error) => {
@@ -84,26 +101,39 @@ export default function OnboardView() {
    * Validates and submits onboarding form
    * dissects full name into first name and last name variables, joining middle names to last names
    */
-  function handleSubmit() {
-    if (!isFormValid()) {
-      showFailure({ message: "Please correct errors" });
+  async function handleSubmit() {
+    if (!session) {
+      await signOut();
       return;
     }
-    const fullNameValue = onboardForm.fullname.value?.trim() ?? "";
-    const nameParts = fullNameValue.split(/\s+/);
-    const firstname = nameParts[0] ?? "";
-    const lastname = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
-    const userUpdate: UserUpdate = {
-      firstname: firstname,
-      lastname: lastname,
-      username: onboardForm.username.value ?? "",
-    };
-
     const user_id = session?.user?.id;
     if (!user_id) {
       showFailure({ message: "Error No User Id found in app group", url: LOGIN_PATH });
       return;
     }
+
+    if (!isFormValid()) {
+      showFailure({ message: "Please correct errors" });
+      return;
+    }
+    if (!image || image.canceled) {
+      console.log("image missing or cancelled");
+      return;
+    }
+    const avatarStoragePath = await UserService.upload(image, session.user.id);
+    const fullNameValue = onboardForm.fullname.value?.trim() ?? "";
+    const nameParts = fullNameValue.split(/\s+/);
+    const firstname = nameParts[0] ?? "";
+    const lastname = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+    let userUpdate: UserUpdate = {
+      firstname: firstname,
+      lastname: lastname,
+      username: onboardForm.username.value ?? "",
+    };
+    if (image) {
+      userUpdate = { ...userUpdate, avatarStoragePath };
+    }
+
     updateProfileMutation.mutate({ ...userUpdate, user_id });
   }
 
@@ -123,12 +153,19 @@ export default function OnboardView() {
   return (
     <Background>
       <View style={styles.container}>
-        <View style={styles.photoContainer}>
+        <Pressable style={styles.photoContainer} onPress={pickImage}>
           <View style={styles.photoCircle}>
-            <Icon source="camera" size={24} color={theme.colors.secondary} />
+            {image ? (
+              <Image
+                source={{ uri: image.assets![0]!.uri }}
+                style={[StyleSheet.absoluteFillObject, styles.photoCircle]}
+              />
+            ) : (
+              <Icon source="camera" size={24} color={theme.colors.secondary} />
+            )}
           </View>
           <Text>Add Profile Photo</Text>
-        </View>
+        </Pressable>
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput

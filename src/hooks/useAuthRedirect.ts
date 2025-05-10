@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "expo-router";
-import { DEFAULT_APP_PATH, LOGIN_PATH, ONBOARDING_PATH, VERIFY_PATH } from "@/constants/constants";
+import {
+  DEFAULT_APP_PATH,
+  LOGIN_PATH,
+  ONBOARDING_PATH,
+  PLANNER_PATH,
+  PROFILE_PATH,
+  VERIFY_PATH,
+} from "@/constants/constants";
 import { Session } from "@supabase/supabase-js";
 
 /**
@@ -14,9 +21,13 @@ export function useAuthRedirect(session: Session | null, isLoading: boolean, isO
   useEffect(() => {
     if (isLoading) return;
 
+    const APP_ROUTES = [DEFAULT_APP_PATH, PROFILE_PATH, PLANNER_PATH];
+
     console.log(`Auth Redirect Check: Path=${pathname}, Session=${!!session}, Onboarded=${isOnboarded}`);
 
     const isAuthRoute = pathname === LOGIN_PATH || pathname === VERIFY_PATH;
+    const isAppRoute = APP_ROUTES.includes("/" + pathname?.split("/")?.[1] || "");
+    console.log("printing isAPpRoute", pathname, isAppRoute, APP_ROUTES);
     const isOnboardRoute = pathname === ONBOARDING_PATH;
     const isRoot = pathname === "/";
 
@@ -52,6 +63,11 @@ export function useAuthRedirect(session: Session | null, isLoading: boolean, isO
           console.log(`Redirect: Session, Onboarding Route, Onboarded -> ${DEFAULT_APP_PATH}`);
           router.replace(DEFAULT_APP_PATH);
           return;
+        }
+      } else if (isAppRoute) {
+        if (!isOnboarded) {
+          console.log(`Redirect: Session, App Route, is NOT onboarded -> ${ONBOARDING_PATH}`);
+          router.replace(ONBOARDING_PATH);
         }
       }
     }

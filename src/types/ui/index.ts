@@ -47,3 +47,9 @@ export type TripsStackParamList = {
   invite: undefined;
   edit: undefined;
 };
+
+export interface ReactNativeFileLikeObject {
+  uri: string;
+  name: string;
+  type: string;
+}

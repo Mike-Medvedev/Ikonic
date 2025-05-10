@@ -66,7 +66,11 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
     <View style={styles.container}>
       <View style={styles.profileCardContainer}>
         <View>
-          <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
+          {profile?.avatarPublicUrl ? (
+            <Avatar.Image source={{ uri: profile?.avatarPublicUrl }} />
+          ) : (
+            <Avatar.Text size={64} label={CalculateInitials(profile?.firstname ?? "?", profile?.lastname ?? "?")} />
+          )}
           <View style={styles.avatarOverlay}>
             <Avatar.Icon icon="ski" size={24} color={theme.colors.onSecondaryContainer} style={styles.iconContainer} />
           </View>
