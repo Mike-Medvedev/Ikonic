@@ -133,7 +133,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
       </View>
 
       <FriendsListModal visible={friendsModalVisible} setVisible={setFriendsModalVisible} />
-      <ProfileEditModal visible={editModalVisible} setVisible={setEditModalVisible} />
+      <ProfileEditModal visible={editModalVisible} callback={() => setEditModalVisible(false)} />
 
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
         <FlatList

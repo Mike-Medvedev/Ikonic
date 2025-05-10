@@ -1,6 +1,6 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
-import { Avatar, useTheme, TextInput as PaperInput } from "react-native-paper";
+import { useTheme, TextInput as PaperInput, Icon } from "react-native-paper";
 import { SimpleForm, UserPublic, UserUpdate } from "@/types";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { fullnameValidator, nameValidator, phoneValidator } from "@/utils/valida
 import { ValidateErrors } from "@/utils/FormBuilder";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
+import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
 
 type riderType = "skier" | "snowboarder";
 
@@ -24,7 +25,7 @@ type UpdateProfileForm = {
 /**
  * Render the ui for Profile Edit page for users to update profile
  */
-export default function ProfileEditView() {
+export default function ProfileEditView({ close }: { close: () => void }) {
   const theme = useTheme();
   const { session } = useAuth();
   const { showSuccess, showFailure } = useToast();
@@ -126,12 +127,11 @@ export default function ProfileEditView() {
   return (
     <Background>
       <ScrollView style={styles.container}>
-        <View style={styles.photoContainer}>
-          <View style={styles.photoCircle}>
-            <Avatar.Text label="?" />
-          </View>
-          <Text>Add Profile Photo</Text>
-        </View>
+        <Pressable style={{ position: "absolute", padding: 8, zIndex: 10 }} onPress={close}>
+          <Icon source="close-circle-outline" size={24} color={theme.colors.error} />
+        </Pressable>
+
+        <SelectProfileAvatar />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput
@@ -151,8 +151,8 @@ export default function ProfileEditView() {
           errorText={profileForm.username.error}
         />
 
-        <Text style={styles.label}>Email</Text>
-        <TextInput placeholder="Enter your email" />
+        {/* <Text style={styles.label}>Email</Text>
+        <TextInput placeholder="Enter your email" /> */}
 
         <Text style={styles.label}>Phone Number</Text>
         <TextInput placeholder="(555) 000-0000" left={<PaperInput.Affix text="+1 " />} />

@@ -1,6 +1,6 @@
-import { View, StyleSheet, Pressable, Image } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
-import { Icon, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import { useState } from "react";
 import { SimpleForm, UserPublic, UserUpdate } from "@/types";
 import { fullnameValidator, nameValidator } from "@/utils/validators";
@@ -11,7 +11,9 @@ import { UserService } from "../Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
-import * as ImagePicker from "expo-image-picker";
+import useImagePicker from "@/hooks/useImagePicker";
+import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
+
 interface OnBoardForm {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -23,21 +25,9 @@ export default function OnboardView() {
   const queryClient = useQueryClient();
   const { session, signOut } = useAuth();
   if (!session) return null;
-  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
+  const { image, pickImage } = useImagePicker();
   const [loading, setLoading] = useState<boolean>(false);
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images", "videos"],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
 
-    if (!result.canceled) {
-      setImage(result);
-    }
-  };
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
     mutationFn: ({ user_id, ...UserUpdate }) => UserService.updateOne(UserUpdate, user_id),
     onError: (error) => {
@@ -157,19 +147,7 @@ export default function OnboardView() {
   return (
     <Background>
       <View style={styles.container}>
-        <Pressable style={styles.photoContainer} onPress={pickImage}>
-          <View style={styles.photoCircle}>
-            {image ? (
-              <Image
-                source={{ uri: image.assets![0]!.uri }}
-                style={[StyleSheet.absoluteFillObject, styles.photoCircle]}
-              />
-            ) : (
-              <Icon source="camera" size={24} color={theme.colors.secondary} />
-            )}
-          </View>
-          <Text>Add Profile Photo</Text>
-        </Pressable>
+        <SelectProfileAvatar />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput
