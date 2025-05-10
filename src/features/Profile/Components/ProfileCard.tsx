@@ -12,6 +12,7 @@ import { formatDateRangeShort } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import UserAvatar from "@/components/UserAvatar";
+import { UserService } from "@/features/Profile/Services/userService";
 
 /**
  * Render the UI for Profile Information on the Profile Page
@@ -24,6 +25,8 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
     queryKey: ["trips", "past"],
     queryFn: async () => TripService.getAll({ past: true }),
   })
+  //prettier-ignore
+  const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ queryKey: ["friends", profile.id ], queryFn: async () => UserService.getFriends(profile.id)})
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: { padding: 16 },
@@ -68,7 +71,22 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         <View>
           <UserAvatar profile={profile} size={64} />
           <View style={styles.avatarOverlay}>
-            <Avatar.Icon icon="ski" size={24} color={theme.colors.onSecondaryContainer} style={styles.iconContainer} />
+            {profile.riderType === "skier" && (
+              <Avatar.Icon
+                icon="ski"
+                size={24}
+                color={theme.colors.onSecondaryContainer}
+                style={styles.iconContainer}
+              />
+            )}
+            {profile.riderType === "snowboarder" && (
+              <Avatar.Icon
+                icon="snowboard"
+                size={24}
+                color={theme.colors.onSecondaryContainer}
+                style={styles.iconContainer}
+              />
+            )}
           </View>
         </View>
 
@@ -86,7 +104,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
 
       <View style={styles.squaresContainer}>
         <View style={styles.square}>
-          <Text variant="headlineSmall">12</Text>
+          <Text variant="headlineSmall">{recentTrips?.length || 0}</Text>
           <Text style={styles.squareLabel}>Trips</Text>
         </View>
         <View style={styles.square}>
@@ -94,7 +112,7 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           <Text style={styles.squareLabel}>Resorts</Text>
         </View>
         <Pressable style={styles.square} onPress={() => setFriendsModalVisible(true)}>
-          <Text variant="headlineSmall">45</Text>
+          <Text variant="headlineSmall">{friends?.length || 0}</Text>
           <Text style={styles.squareLabel}>Friends</Text>
         </Pressable>
       </View>
@@ -132,7 +150,13 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         </AsyncStateWrapper>
       </View>
 
-      <FriendsListModal visible={friendsModalVisible} setVisible={setFriendsModalVisible} />
+      <FriendsListModal
+        friends={friends || []}
+        isFriendsFetching={isFriendsFetching}
+        friendsError={friendsError}
+        visible={friendsModalVisible}
+        setVisible={setFriendsModalVisible}
+      />
       <ProfileEditModal profile={profile} visible={editModalVisible} callback={() => setEditModalVisible(false)} />
 
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
