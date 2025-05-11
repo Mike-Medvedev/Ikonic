@@ -48,7 +48,7 @@ export default function TripDetailsView() {
     queryKey: ["trip", selectedTripID], queryFn: async () => {
       return TripService.getOne(selectedTripID as string);
     },
-    enabled: !!selectedTripID
+    enabled: !!selectedTripID,
   });
   const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
 
@@ -56,7 +56,6 @@ export default function TripDetailsView() {
   const { data: attendees, isFetching: fAttendees, error: eAttendees } = useQuery({
      queryKey: ["attendees", selectedTripID],
      queryFn: async () => InviteService.getInvitedUsers(selectedTripID),
-     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
      enabled: !!selectedTripID,
    });
   /**
@@ -129,7 +128,7 @@ export default function TripDetailsView() {
                   Trip Members
                 </Text>
                 <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}>
-                  <Text style={{ color: theme.colors.secondary }}>Manage</Text>
+                  <Icon source="account-plus" color={theme.colors.secondary} size={24} />
                 </Pressable>
               </View>
 
@@ -137,11 +136,11 @@ export default function TripDetailsView() {
                 style={{ flexDirection: "row", gap: 16 }}
                 onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}
               >
-                <View style={{ flexDirection: "row" }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", flex: 1 }}>
                   <AsyncStateWrapper loading={fAttendees} error={eAttendees}>
                     <UsersAvatarList attendees={attendees} rsvp="accepted" />
                   </AsyncStateWrapper>
-                  {/* <Avatar.Icon icon="plus" size={24} style={{ backgroundColor: theme.colors.secondaryContainer }} /> */}
+                  <Icon source="chevron-right" size={28} />
                 </View>
               </Pressable>
               {/* <AsyncStateWrapper loading={isFetching} error={error}>

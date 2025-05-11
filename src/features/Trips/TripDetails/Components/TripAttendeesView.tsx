@@ -16,7 +16,6 @@ export default function TripAttendeesView({ selectedTripID }: { selectedTripID: 
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", selectedTripId],
     queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
-    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
   return (

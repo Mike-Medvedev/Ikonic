@@ -10,11 +10,11 @@ const MAX_AVATARS = 5;
  * Renders a List of User Initial Avatars given an attendance list, if more than max avatars, render an avatar showing surplus users
  */
 export default function UsersAvatarList({
-  attendees,
+  attendees = { accepted: [], pending: [], uncertain: [], declined: [] },
   rsvp,
   size = 28,
 }: {
-  attendees: AttendanceList;
+  attendees: AttendanceList | undefined;
   rsvp: RSVPStatus;
   size?: number;
 }) {

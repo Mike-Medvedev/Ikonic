@@ -22,7 +22,6 @@ export default function Trip({ trip }: TripProps) {
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
     queryFn: async () => InviteService.getInvitedUsers(trip.id),
-    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!trip.id,
   });
 

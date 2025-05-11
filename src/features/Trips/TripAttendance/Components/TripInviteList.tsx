@@ -19,7 +19,6 @@ export default function TripInviteList() {
   const { data: users, isFetching, error} = useQuery({ 
     queryKey: ["users"],
     queryFn: UserService.getAll,
-    initialData: []
    });
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
@@ -27,11 +26,13 @@ export default function TripInviteList() {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const searchTermLower = searchTerm.toLowerCase();
-  const filteredUsers = users.filter((user) => {
-    const firstNameMatch = (user.firstname ?? "").toLowerCase().includes(searchTermLower);
-    const lastNameMatch = (user.lastname ?? "").toLowerCase().includes(searchTermLower);
-    return firstNameMatch || lastNameMatch;
-  });
+  const filteredUsers =
+    users &&
+    users.filter((user) => {
+      const firstNameMatch = (user.firstname ?? "").toLowerCase().includes(searchTermLower);
+      const lastNameMatch = (user.lastname ?? "").toLowerCase().includes(searchTermLower);
+      return firstNameMatch || lastNameMatch;
+    });
 
   /**
    * Event Handler for inviting a user to a trip
@@ -66,40 +67,41 @@ export default function TripInviteList() {
       />
       <AsyncStateWrapper loading={isFetching} error={error}>
         <ScrollView style={{ padding: 10 }}>
-          {filteredUsers.map((user, index) => (
-            <Card
-              key={index}
-              style={{ marginVertical: 10, backgroundColor: theme.colors.backdrop }}
-              contentStyle={{ paddingHorizontal: 15 }}
-            >
-              <Card.Title
-                title={`${user.firstname} ${user.lastname}`}
-                titleStyle={{ textTransform: "capitalize" }}
-                left={() => (
-                  <Avatar.Text
-                    size={44}
-                    label={
-                      user.firstname && user.lastname
-                        ? CalculateInitials(user.firstname, user.lastname)
-                        : "Unknown User"
-                    }
-                  />
-                )}
-                right={() => (
-                  <Button
-                    mode="contained"
-                    onPress={() => {
-                      setSelectedButtonIndex(index);
-                      handleInvite(user);
-                    }}
-                    loading={isInviteSending && index === selectedButtonIndex}
-                  >
-                    Add
-                  </Button>
-                )}
-              />
-            </Card>
-          ))}
+          {filteredUsers &&
+            filteredUsers.map((user, index) => (
+              <Card
+                key={index}
+                style={{ marginVertical: 10, backgroundColor: theme.colors.backdrop }}
+                contentStyle={{ paddingHorizontal: 15 }}
+              >
+                <Card.Title
+                  title={`${user.firstname} ${user.lastname}`}
+                  titleStyle={{ textTransform: "capitalize" }}
+                  left={() => (
+                    <Avatar.Text
+                      size={44}
+                      label={
+                        user.firstname && user.lastname
+                          ? CalculateInitials(user.firstname, user.lastname)
+                          : "Unknown User"
+                      }
+                    />
+                  )}
+                  right={() => (
+                    <Button
+                      mode="contained"
+                      onPress={() => {
+                        setSelectedButtonIndex(index);
+                        handleInvite(user);
+                      }}
+                      loading={isInviteSending && index === selectedButtonIndex}
+                    >
+                      Add
+                    </Button>
+                  )}
+                />
+              </Card>
+            ))}
         </ScrollView>
       </AsyncStateWrapper>
     </View>

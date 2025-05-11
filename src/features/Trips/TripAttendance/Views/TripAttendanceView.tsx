@@ -26,7 +26,7 @@ export default function TripAttendanceView() {
       queryKey: ["trip", selectedTripId], queryFn: async () => {
         return TripService.getOne(selectedTripId as string);
       },
-      enabled: !!selectedTripId
+      enabled: !!selectedTripId,
     });
   const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
   const theme = useTheme();
@@ -38,7 +38,6 @@ export default function TripAttendanceView() {
   } = useQuery({
     queryKey: ["attendees", selectedTripId],
     queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
-    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: !!selectedTripId,
   });
 
@@ -84,23 +83,25 @@ export default function TripAttendanceView() {
         </View>
         <AsyncStateWrapper loading={isFetching} error={error}>
           <ScrollView horizontal style={styles.pillsContainer}>
-            {(Object.entries(attendees) as [RSVPStatus, UserPublic[]][]).map(([rsvp, users], index) => (
-              <Pill
-                label={rsvp}
-                count={users.length}
-                isSelected={rsvp === selectedPill}
-                onPress={() => setSelectedPill(rsvp)}
-                key={index}
-              />
-            ))}
+            {attendees &&
+              (Object.entries(attendees) as [RSVPStatus, UserPublic[]][]).map(([rsvp, users], index) => (
+                <Pill
+                  label={rsvp}
+                  count={users.length}
+                  isSelected={rsvp === selectedPill}
+                  onPress={() => setSelectedPill(rsvp)}
+                  key={index}
+                />
+              ))}
           </ScrollView>
           <ScrollView style={styles.attendanceContainer}>
-            {attendees[selectedPill].map((user, index) => (
-              <View style={{ flexDirection: "row" }} key={user.id}>
-                <UserCard style={{ flex: 1 }} user={user} key={index} iconSize={40} titleFontSize={18} />
-                <View style={{ alignSelf: "center" }}>{CalculateIcon(selectedPill)}</View>
-              </View>
-            ))}
+            {attendees &&
+              attendees[selectedPill].map((user, index) => (
+                <View style={{ flexDirection: "row" }} key={user.id}>
+                  <UserCard style={{ flex: 1 }} user={user} key={index} iconSize={40} titleFontSize={18} />
+                  <View style={{ alignSelf: "center" }}>{CalculateIcon(selectedPill)}</View>
+                </View>
+              ))}
           </ScrollView>
         </AsyncStateWrapper>
       </View>

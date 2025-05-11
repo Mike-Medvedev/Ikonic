@@ -31,7 +31,6 @@ export default function InviteUsersView() {
   const { data: s, isFetching, error } = useQuery({
     queryKey: ["friends", selectedTripId],
     queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
-    initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: false,
   });
 
