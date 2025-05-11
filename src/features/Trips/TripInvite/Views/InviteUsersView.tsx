@@ -53,7 +53,9 @@ export default function InviteUsersView() {
           />
         );
       case "contacts":
-        return <ContactsList selectedUserIds={selectedUsers} setSelectedUserIds={setSelectedUsers} />;
+        return (
+          <ContactsList query={searchQuery} selectedUserIds={selectedUsers} setSelectedUserIds={setSelectedUsers} />
+        );
       case "manual":
         return <ManualInvite />;
     }

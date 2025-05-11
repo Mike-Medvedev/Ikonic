@@ -10,12 +10,11 @@ export default function useContacts() {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === "granted") {
         const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Emails],
+          fields: [Contacts.Fields.PhoneNumbers],
         });
 
         if (data.length > 0) {
           const contacts = data;
-          console.log(contacts);
           setContacts(contacts);
         }
       }

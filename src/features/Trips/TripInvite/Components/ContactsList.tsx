@@ -6,6 +6,7 @@ import * as Contacts from "expo-contacts";
 import { UserCardUser } from "@/types";
 
 interface ContactsListProps {
+  query: string;
   selectedUserIds: string[];
   setSelectedUserIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -25,21 +26,34 @@ function serializeContact(contact: Contacts.Contact): UserCardUser | undefined {
 }
 
 /**
- *
+ * Render list of contacts from phones native contacts and filter out contacts without phone numbers or names
  */
-export default function ContactsList({ selectedUserIds, setSelectedUserIds }: ContactsListProps) {
+export default function ContactsList({ query, selectedUserIds, setSelectedUserIds }: ContactsListProps) {
   const { contacts } = useContacts();
+  console.log(query);
   const filteredContacts =
-    contacts?.filter(
-      (c): c is Contacts.Contact & { id: string; phoneNumbers: Contacts.Contact[] } =>
-        !!c.id && (c.phoneNumbers?.length ?? 0) > 0,
-    ) ?? [];
+    contacts?.filter((c): c is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
+      const hasId = !!c.id;
+      const hasPhone = (c.phoneNumbers?.length ?? 0) > 0;
+
+      if (!hasId || !hasPhone) return false;
+
+      if (query && query.trim() !== "") {
+        const name = c.name ?? "";
+        const lowerCaseName = name.toLowerCase();
+        const lowerCaseQuery = query.toLowerCase().trim();
+
+        return lowerCaseName.includes(lowerCaseQuery);
+      }
+
+      return true; // If no query (or query is empty), return all contacts
+    }) ?? [];
 
   const styles = StyleSheet.create({
     container: {},
   });
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
         data={filteredContacts}
         keyExtractor={(item) => item.id}
