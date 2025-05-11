@@ -4,7 +4,7 @@ import { useTheme } from "react-native-paper";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
 import { UserService } from "@/features/Profile/Services/userService";
-import ProfileEditView from "../Views/ProfileEditView";
+import ProfileEditView from "@/features/Profile/Views/ProfileEditView";
 import { UserPublic } from "@/types";
 interface ProfileEditModalProps {
   profile: UserPublic;

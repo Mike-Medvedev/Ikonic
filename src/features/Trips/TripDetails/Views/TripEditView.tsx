@@ -8,6 +8,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
+import useImagePicker from "@/hooks/useImagePicker";
 interface UpdateTripMutation {
   currentTripId: string;
   form: TripUpdateParsed;
@@ -18,6 +19,7 @@ interface UpdateTripMutation {
 export default function TripEditView() {
   const theme = useTheme();
   const queryClient = useQueryClient();
+  const { image, pickImage } = useImagePicker();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const updateTripMutation = useMutation<TripPublicParsed, Error, UpdateTripMutation>({
     mutationFn: async ({ currentTripId, form }) => {

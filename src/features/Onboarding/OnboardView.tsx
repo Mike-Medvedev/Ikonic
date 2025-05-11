@@ -7,12 +7,13 @@ import { fullnameValidator, nameValidator } from "@/utils/validators";
 import { ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UserService } from "../Profile/Services/userService";
+import { UserService } from "@/features/Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
-import * as ImagePicker from "expo-image-picker";
+import storageClient from "@/lib/storage";
+import useImagePicker from "@/hooks/useImagePicker";
 interface OnBoardForm {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -24,7 +25,7 @@ export default function OnboardView() {
   const queryClient = useQueryClient();
   const { session, signOut } = useAuth();
   if (!session) return null;
-  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
+  const { image, pickImage } = useImagePicker();
   const [loading, setLoading] = useState<boolean>(false);
 
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
@@ -113,7 +114,11 @@ export default function OnboardView() {
       console.log("image missing or cancelled");
       return;
     }
-    const avatarStoragePath = await UserService.upload(image, session.user.id);
+    const avatarStoragePath = await storageClient.uploadImage({
+      file: image,
+      bucket: "profile",
+      path: `${session.user.id}/avatar`,
+    });
     const fullNameValue = onboardForm.fullname.value?.trim() ?? "";
     const nameParts = fullNameValue.split(/\s+/);
     const firstname = nameParts[0] ?? "";
@@ -146,7 +151,7 @@ export default function OnboardView() {
   return (
     <Background>
       <View style={styles.container}>
-        <SelectProfileAvatar image={image} setImage={setImage} />
+        <SelectProfileAvatar uri={image?.assets?.[0]?.uri} pickImage={pickImage} />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput

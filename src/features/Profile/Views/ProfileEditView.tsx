@@ -12,7 +12,8 @@ import { ValidateErrors } from "@/utils/FormBuilder";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
-import * as ImagePicker from "expo-image-picker";
+import storageClient from "@/lib/storage";
+import useImagePicker from "@/hooks/useImagePicker";
 interface ProfileEditProps {
   profile: UserPublic;
   close: () => void;
@@ -30,7 +31,7 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
   const theme = useTheme();
   const queryClient = useQueryClient();
   const { session } = useAuth();
-  const [image, setImage] = useState<ImagePicker.ImagePickerResult | null>(null);
+  const { image, pickImage } = useImagePicker();
   const { showSuccess, showFailure } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
@@ -99,7 +100,11 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
     const firstname = nameParts[0] ?? "";
     const lastname = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
     if (image && !image.canceled) {
-      const avatarStoragePath = await UserService.upload(image, profile.id);
+      const avatarStoragePath = await storageClient.uploadImage({
+        file: image,
+        bucket: "profile",
+        path: `${profile.id}/avatar`,
+      });
       userUpdate.avatarStoragePath = avatarStoragePath;
     }
     if (profile.firstname != firstname) userUpdate.firstname = firstname;
@@ -149,7 +154,7 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
           <Icon source="close" size={24} />
         </Pressable>
 
-        <SelectProfileAvatar image={image} setImage={setImage} />
+        <SelectProfileAvatar uri={image?.assets?.[0]?.uri} pickImage={pickImage} />
 
         <Text style={styles.label}>Full Name</Text>
         <TextInput

@@ -3,7 +3,7 @@ import { Icon, useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import { RSVPStatus, UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { InviteService } from "../../Services/inviteService";
+import { InviteService } from "@/features/Trips/Services/inviteService";
 import { Background, Text } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import UserCard from "@/components/UserCard";

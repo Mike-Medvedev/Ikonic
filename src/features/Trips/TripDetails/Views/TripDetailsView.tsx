@@ -124,7 +124,7 @@ export default function TripDetailsView() {
             </View>
             <View style={{ marginVertical: 16 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text variant="labelLarge" style={{ marginBottom: 16 }}>
+                <Text variant="titleMedium" style={{ marginBottom: 16 }}>
                   Trip Members
                 </Text>
                 <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}>

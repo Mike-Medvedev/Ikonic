@@ -1,20 +1,18 @@
 import { Pressable, View, Image, StyleSheet } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
-import useImagePicker from "@/hooks/useImagePicker";
-import * as ImagePicker from "expo-image-picker";
 
 interface SelectProfileAvatarProps {
-  image: ImagePicker.ImagePickerResult | null;
-  setImage: React.Dispatch<React.SetStateAction<ImagePicker.ImagePickerResult | null>>;
+  uri: string | undefined;
+  pickImage: () => void;
 }
 
 /**
  * Renders a Pressable Profile Picture Button to select users Avatars
  */
-export default function SelectProfileAvatar({ image, setImage }: SelectProfileAvatarProps) {
+export default function SelectProfileAvatar({ uri, pickImage }: SelectProfileAvatarProps) {
   const theme = useTheme();
-  const { pickImage } = useImagePicker(setImage);
+
   const styles = StyleSheet.create({
     container: { alignItems: "center" },
     photoContainer: { alignItems: "center", gap: 8 },
@@ -32,11 +30,8 @@ export default function SelectProfileAvatar({ image, setImage }: SelectProfileAv
     <View style={styles.container}>
       <Pressable style={styles.photoContainer} onPress={pickImage}>
         <View style={styles.photoCircle}>
-          {image ? (
-            <Image
-              source={{ uri: image.assets![0]!.uri }}
-              style={[StyleSheet.absoluteFillObject, styles.photoCircle]}
-            />
+          {uri ? (
+            <Image source={{ uri: uri }} style={[StyleSheet.absoluteFillObject, styles.photoCircle]} />
           ) : (
             <Icon source="camera" size={24} color={theme.colors.secondary} />
           )}
