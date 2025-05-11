@@ -1,36 +1,35 @@
 import UserCard from "@/components/UserCard";
 import useContacts from "@/hooks/useContacts";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Linking, Platform } from "react-native";
 import { Checkbox } from "@/design-system/components";
 import * as Contacts from "expo-contacts";
-import { UserCardUser } from "@/types";
+import { UserPublic } from "@/types";
 
 interface ContactsListProps {
   query: string;
-  selectedUserIds: string[];
-  setSelectedUserIds: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedUsers: UserPublic[];
+  setSelectedUsers: React.Dispatch<React.SetStateAction<UserPublic[]>>;
 }
 
 /** Function to convert Expo Contact to User to display in a Contact Lists */
-function serializeContact(contact: Contacts.Contact): UserCardUser | undefined {
+function serializeContact(contact: Contacts.Contact): UserPublic | undefined {
   // Ensure there's at least one phone number
   const phoneNumber = contact.phoneNumbers?.[0]?.number;
   if (!phoneNumber) return;
 
   return {
     firstname: contact.firstName ?? contact.name ?? "",
-    lastname: contact.lastName,
+    lastname: contact.lastName as string | null,
     avatarPublicUrl: contact.imageAvailable ? (contact.image?.uri ?? null) : null,
     phone: phoneNumber,
-  };
+  } as UserPublic;
 }
 
 /**
  * Render list of contacts from phones native contacts and filter out contacts without phone numbers or names
  */
-export default function ContactsList({ query, selectedUserIds, setSelectedUserIds }: ContactsListProps) {
+export default function ContactsList({ query, selectedUsers, setSelectedUsers }: ContactsListProps) {
   const { contacts } = useContacts();
-  console.log(query);
   const filteredContacts =
     contacts?.filter((c): c is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
       const hasId = !!c.id;
@@ -48,12 +47,20 @@ export default function ContactsList({ query, selectedUserIds, setSelectedUserId
 
       return true; // If no query (or query is empty), return all contacts
     }) ?? [];
+  function openAppSettings() {
+    if (Platform.OS === "ios") {
+      Linking.openURL("app-settings:");
+    }
+  }
 
   const styles = StyleSheet.create({
     container: {},
   });
   return (
     <View>
+      {/* <Button onPress={openAppSettings} mode="contained">
+        Enable Contacts in Settings
+      </Button> */}
       <FlatList
         data={filteredContacts}
         keyExtractor={(item) => item.id}
@@ -63,11 +70,11 @@ export default function ContactsList({ query, selectedUserIds, setSelectedUserId
           return (
             <UserCard
               onPress={() => {
-                if (selectedUserIds.includes(item.id)) setSelectedUserIds((prev) => prev.filter((id) => id != item.id));
-                else setSelectedUserIds((prev) => [...prev, item.id]);
+                if (selectedUsers.includes(user)) setSelectedUsers((prev) => prev.filter((u) => u.id != user.id));
+                else setSelectedUsers((u) => [...u, user]);
               }}
               user={user}
-              right={<Checkbox isSelected={selectedUserIds.includes(item.id)} />}
+              right={<Checkbox isSelected={selectedUsers.includes(user)} />}
             />
           );
         }}

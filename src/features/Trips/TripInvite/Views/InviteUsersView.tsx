@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
 import { Background, SearchBar, Button } from "@/design-system/components";
 import { useState } from "react";
@@ -13,6 +13,8 @@ import Pill from "@/design-system/components/Pill";
 import FriendsList from "@/features/Trips/TripInvite/Components/FriendsList";
 import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
 import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
+import { UserPublic } from "@/generated";
+import useInvite from "@/hooks/useInvite";
 /**
  * Route for displaying Invite Friends page
  */
@@ -22,8 +24,9 @@ export default function InviteUsersView() {
   if (!session) return null;
 
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<UserPublic[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const { invite, loading } = useInvite();
   //prettier-ignore
   const { data: s, isFetching, error } = useQuery({
     queryKey: ["friends", selectedTripId],
@@ -45,17 +48,15 @@ export default function InviteUsersView() {
       case "friends":
         return (
           <FriendsList
-            filteredFriends={filteredFriends}
+            filteredFriends={filteredFriends ?? []}
             isFriendsFetching={isFriendsFetching}
             friendsError={friendsError}
-            selectedUserIds={selectedUsers}
-            setSelectedUserIds={setSelectedUsers}
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
           />
         );
       case "contacts":
-        return (
-          <ContactsList query={searchQuery} selectedUserIds={selectedUsers} setSelectedUserIds={setSelectedUsers} />
-        );
+        return <ContactsList query={searchQuery} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />;
       case "manual":
         return <ManualInvite />;
     }
@@ -94,26 +95,42 @@ export default function InviteUsersView() {
     inviteSmsContainer: {},
     inputContainer: { flexDirection: "row" },
 
-    pillsContainer: { flexGrow: 0, marginVertical: 8 },
+    pillsContainer: { flexDirection: "row", marginVertical: 16 },
   });
   return (
     <Background>
       <View style={styles.container}>
         {/* <TripTitleDetail /> */}
-        {selectedPill != "manual" && (
-          <View style={styles.searchContainer}>
-            <SearchBar
-              placeholder="Search Friends"
-              onChangeText={setSearchQuery}
-              value={searchQuery}
-              containerStyle={styles.searchBarContainer}
-            />
-            <Button mode="text" disabled={selectedUsers.length < 1}>
-              Invite ({selectedUsers.length})
-            </Button>
-          </View>
-        )}
-        <ScrollView horizontal style={styles.pillsContainer}>
+
+        <View style={styles.searchContainer}>
+          <SearchBar
+            placeholder="Search Friends"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            containerStyle={styles.searchBarContainer}
+          />
+          <Button
+            mode="text"
+            onPress={() => {
+              // if (!selectedUsers[0]) return;
+              const mock: UserPublic = {
+                firstname: "michael",
+                lastname: "medvededev",
+                id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
+                phone: "12038587135",
+                username: "mev",
+                riderType: "skier",
+                isOnboarded: true,
+                avatarPublicUrl: "1",
+              };
+              invite(mock);
+            }}
+          >
+            Invite ({selectedUsers.length})
+          </Button>
+        </View>
+
+        <View style={styles.pillsContainer}>
           {["Friends", "Contacts", "manual"].map((option, index) => (
             <Pill
               label={option}
@@ -122,7 +139,7 @@ export default function InviteUsersView() {
               key={index}
             />
           ))}
-        </ScrollView>
+        </View>
         {renderList(selectedPill)}
       </View>
     </Background>

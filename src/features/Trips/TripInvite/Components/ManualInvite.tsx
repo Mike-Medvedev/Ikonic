@@ -7,7 +7,7 @@ import useInvite from "@/hooks/useInvite";
 import { useState } from "react";
 import { SimpleForm } from "@/types";
 /**
- *
+ * Renders a Component to manually invite a user via phone number directly
  */
 export default function ManualInvite() {
   const theme = useTheme();

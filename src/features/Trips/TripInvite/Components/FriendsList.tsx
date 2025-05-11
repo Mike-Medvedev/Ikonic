@@ -1,26 +1,26 @@
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UserCard from "@/components/UserCard";
-import Checkbox from "@/design-system/components/Checkbox";
+import { Text, Checkbox } from "@/design-system/components";
 import { UserPublic } from "@/generated";
 import { View, StyleSheet, FlatList } from "react-native";
 
 interface FriendsListProps {
-  filteredFriends: UserPublic[] | undefined;
+  filteredFriends: UserPublic[];
   isFriendsFetching: boolean;
   friendsError: Error | null;
-  selectedUserIds: string[];
-  setSelectedUserIds: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedUsers: UserPublic[];
+  setSelectedUsers: React.Dispatch<React.SetStateAction<UserPublic[]>>;
 }
 
 /**
- *
+ * Renders a friends list given a list of friends, these are registered users and added through the app
  */
 export default function FriendsList({
   filteredFriends,
   isFriendsFetching,
   friendsError,
-  selectedUserIds,
-  setSelectedUserIds,
+  selectedUsers,
+  setSelectedUsers,
 }: FriendsListProps) {
   const styles = StyleSheet.create({
     friendsList: { marginVertical: 8, flex: 1 },
@@ -34,13 +34,15 @@ export default function FriendsList({
           renderItem={({ item }) => (
             <UserCard
               onPress={() => {
-                if (selectedUserIds.includes(item.id)) setSelectedUserIds((prev) => prev.filter((id) => id != item.id));
-                else setSelectedUserIds((prev) => [...prev, item.id]);
+                if (selectedUsers?.includes(item))
+                  setSelectedUsers((prev) => prev.filter((user) => user.id != item.id));
+                else setSelectedUsers((prev) => [...prev, item]);
               }}
               user={item}
-              right={<Checkbox isSelected={selectedUserIds.includes(item.id)} />}
+              right={<Checkbox isSelected={selectedUsers?.includes(item)} />}
             />
           )}
+          ListEmptyComponent={<Text> No Friends Added!</Text>}
         />
       </AsyncStateWrapper>
     </View>
