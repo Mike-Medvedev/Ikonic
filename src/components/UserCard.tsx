@@ -1,21 +1,31 @@
-import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { Pressable, View, StyleSheet, StyleProp, ViewStyle } from "react-native";
 import { useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
-import { UserPublic } from "@/types";
+import { UserCardUser } from "@/types";
 import UserAvatar from "./UserAvatar";
 
 interface UserCardProps {
-  user: UserPublic;
+  user: UserCardUser;
+  onPress?: () => void;
   subtitle?: string;
   iconSize?: number;
   titleFontSize?: number;
   style?: StyleProp<ViewStyle>;
+  right?: React.ReactNode;
 }
 
 /**
  * Reusable User Card that displays User information
  */
-export default function UserCard({ user, subtitle, iconSize = 32, titleFontSize, style }: UserCardProps) {
+export default function UserCard({
+  onPress,
+  user,
+  subtitle,
+  iconSize = 40,
+  titleFontSize,
+  style,
+  right,
+}: UserCardProps) {
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: {
@@ -27,15 +37,16 @@ export default function UserCard({ user, subtitle, iconSize = 32, titleFontSize,
     label: { color: theme.colors.secondary },
   });
   return (
-    <View style={[styles.container, style]}>
+    <Pressable style={[styles.container, style]} onPress={onPress}>
       <UserAvatar profile={user} size={iconSize} />
 
-      <View>
-        <Text style={{ fontSize: titleFontSize }}>
-          {user.firstname} {user.lastname}
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: titleFontSize, textTransform: "capitalize" }}>
+          {user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : user.firstname}
         </Text>
         {subtitle && <Text style={styles.label}>{subtitle}</Text>}
       </View>
-    </View>
+      <View>{right}</View>
+    </Pressable>
   );
 }

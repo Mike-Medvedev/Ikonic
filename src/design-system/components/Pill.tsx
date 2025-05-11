@@ -16,9 +16,9 @@ export default function Pill({ label, count, isSelected, onPress }: PillProps) {
       theme={{ roundness: theme.roundness }}
       onPress={onPress}
     >
-      <Text
-        style={{ textTransform: "capitalize", color: isSelected ? theme.colors.surface : theme.colors.secondary }}
-      >{`${label} (${count})`}</Text>
+      <Text style={{ textTransform: "capitalize", color: isSelected ? theme.colors.surface : theme.colors.secondary }}>
+        {`${label}`} {count ? `(${count})` : ""}
+      </Text>
     </Button>
   );
 }

@@ -1,21 +1,28 @@
-import { View, StyleSheet, ScrollView, Pressable, TextInput as NativeInput } from "react-native";
-import { ActivityIndicator, Icon, useTheme } from "react-native-paper";
-import { Background, Text, SearchBar, Button } from "@/design-system/components";
-import TripTitleDetail from "@/components/TripTitleDetail";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { useTheme } from "react-native-paper";
+import { Background, SearchBar, Button } from "@/design-system/components";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { InviteService } from "@/features/Trips/Services/inviteService";
-import UserCard from "@/components/UserCard";
-import * as Clipboard from "expo-clipboard";
+
 import useToast from "@/hooks/useToast";
 import { UserPublic } from "@/types";
 import * as Linking from "expo-linking";
+import { useAuth } from "@/context/AuthContext";
+import { UserService } from "@/features/Profile/Services/userService";
+import Pill from "@/design-system/components/Pill";
+
+import FriendsList from "@/features/Trips/TripInvite/Components/FriendsList";
+import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
+import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
 /**
  * Route for displaying Invite Friends page
  */
 export default function InviteUsersView() {
   const theme = useTheme();
+  const { session } = useAuth();
+  if (!session) return null;
   const mockUser = {
     firstname: "a",
     lastname: "a",
@@ -28,27 +35,26 @@ export default function InviteUsersView() {
   };
   const { showSuccess, showFailure } = useToast();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   //prettier-ignore
-  const { data: friends, isFetching, error } = useQuery({
+  const { data: s, isFetching, error } = useQuery({
     queryKey: ["friends", selectedTripId],
     queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
     initialData: { accepted: [], pending: [], uncertain: [], declined: [] },
     enabled: false,
   });
-  const [searchQuery, setSearchQuery] = useState("");
+
+  //prettier-ignore
+  const { data: friends, isFetching: isFriendsFetching, error: friendsError,
+  } = useQuery({ queryKey: ["friends", session.user.id], queryFn: async () => UserService.getFriends(session.user.id) });
+  const filteredFriends = friends?.filter((friend) =>
+    friend.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+  const [selectedPill, setSelectedPill] = useState<string>("Friends");
   const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
-  const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
 
-  const copyToClipboard = async () => {
-    try {
-      await Clipboard.setStringAsync(inviteLink);
-      showSuccess({ message: "Copied! Invite link copied to clipboard" });
-    } catch (e) {
-      console.error("Failed to copy text to clipboard", e);
-      showFailure({ message: "Error, Could not copy link." });
-    }
-  };
   /**
    * Event Handler for inviting a user to a trip
    */
@@ -66,10 +72,30 @@ export default function InviteUsersView() {
       setSelectedButtonIndex(undefined);
     }
   }
+  function renderList(selectedPill: string) {
+    switch (selectedPill.toLowerCase().trim()) {
+      case "friends":
+        return (
+          <FriendsList
+            filteredFriends={filteredFriends}
+            isFriendsFetching={isFriendsFetching}
+            friendsError={friendsError}
+            selectedUserIds={selectedUsers}
+            setSelectedUserIds={setSelectedUsers}
+          />
+        );
+      case "contacts":
+        return <ContactsList selectedUserIds={selectedUsers} setSelectedUserIds={setSelectedUsers} />;
+      case "manual":
+        return <ManualInvite />;
+    }
+  }
   const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16 },
-    searchBar: { marginVertical: 16 },
-    label: { color: theme.colors.secondary },
+    container: { flex: 1, paddingHorizontal: 16 },
+    searchContainer: { flexDirection: "row", alignItems: "center", gap: 12 },
+    searchBarContainer: { flex: 1 },
+    searchBar: { padding: 0 },
+    label: { marginVertical: 8, color: theme.colors.secondary },
     linkLabel: { marginVertical: 8 },
     nativeInputContainer: {
       flexDirection: "row",
@@ -95,83 +121,37 @@ export default function InviteUsersView() {
       alignItems: "center",
     },
     scrollContainer: {},
+    inviteSmsContainer: {},
+    inputContainer: { flexDirection: "row" },
+
+    pillsContainer: { flexGrow: 0, marginVertical: 8 },
   });
   return (
     <Background>
       <View style={styles.container}>
-        <TripTitleDetail />
-        <SearchBar
-          placeholder="Search"
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          containerStyle={styles.searchBar}
-        />
-        <Text style={[styles.linkLabel, styles.label]}>Share Link</Text>
-
-        <View style={styles.nativeInputContainer}>
-          <NativeInput value={inviteLink} style={styles.nativeInput} editable={false} />
-          <Pressable onPress={copyToClipboard} style={styles.iconContainer}>
-            <Icon source="content-copy" size={24} color={theme.colors.primary} />
-          </Pressable>
+        {/* <TripTitleDetail /> */}
+        <View style={styles.searchContainer}>
+          <SearchBar
+            placeholder="Search Friends"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            containerStyle={styles.searchBarContainer}
+          />
+          <Button mode="text" disabled={selectedUsers.length < 1}>
+            Invite ({selectedUsers.length})
+          </Button>
         </View>
-        <ScrollView style={styles.scrollContainer}>
-          <Text variant="labelLarge" style={[styles.label, styles.linkLabel]}>
-            Suggested
-          </Text>
-          <View>
-            {Array(2)
-              .fill(0)
-              .map((_, index) => (
-                <View
-                  key={index}
-                  style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-                >
-                  <UserCard user={mockUser as UserPublic} subtitle="3 mutual friends" />
-                  <Button
-                    mode="outlined"
-                    theme={{ roundness: theme.roundness }}
-                    style={{ borderColor: theme.colors.primary }}
-                    contentStyle={{ paddingVertical: 0 }}
-                    onPress={() => {
-                      setSelectedButtonIndex(index);
-                      handleInvite(mockUser as UserPublic);
-                    }}
-                    disabled={isInviteSending && index === selectedButtonIndex}
-                  >
-                    {isInviteSending && index === selectedButtonIndex ? <ActivityIndicator /> : <Text>Invite</Text>}
-                  </Button>
-                </View>
-              ))}
-          </View>
-          <Text variant="labelLarge" style={styles.label}>
-            From Previous Trips
-          </Text>
-          <View>
-            {Array(2)
-              .fill(0)
-              .map((_, index) => (
-                <View
-                  key={index}
-                  style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-                >
-                  <UserCard user={mockUser as UserPublic} />
-                  <Button
-                    mode="outlined"
-                    theme={{ roundness: theme.roundness }}
-                    style={{ borderColor: theme.colors.primary }}
-                    contentStyle={{ paddingVertical: 0 }}
-                    onPress={() => {
-                      setSelectedButtonIndex(index);
-                      handleInvite(mockUser as UserPublic);
-                    }}
-                    disabled={isInviteSending && index === selectedButtonIndex}
-                  >
-                    {isInviteSending && index === selectedButtonIndex ? <ActivityIndicator /> : <Text>Invite</Text>}
-                  </Button>
-                </View>
-              ))}
-          </View>
+        <ScrollView horizontal style={styles.pillsContainer}>
+          {["Friends", "Contacts", "manual"].map((option, index) => (
+            <Pill
+              label={option}
+              isSelected={option === selectedPill}
+              onPress={() => setSelectedPill(option)}
+              key={index}
+            />
+          ))}
         </ScrollView>
+        {renderList(selectedPill)}
       </View>
     </Background>
   );

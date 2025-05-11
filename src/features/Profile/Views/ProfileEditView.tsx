@@ -145,8 +145,8 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
   return (
     <Background>
       <ScrollView style={styles.container}>
-        <Pressable style={{ position: "absolute", padding: 8, zIndex: 10 }} onPress={close}>
-          <Icon source="close-circle-outline" size={24} color={theme.colors.error} />
+        <Pressable style={{ padding: 8, zIndex: 10 }} onPress={close}>
+          <Icon source="close" size={24} />
         </Pressable>
 
         <SelectProfileAvatar image={image} setImage={setImage} />

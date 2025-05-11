@@ -53,3 +53,10 @@ export interface ReactNativeFileLikeObject {
   name: string;
   type: string;
 }
+
+export type UserCardUser = {
+  firstname: string | null;
+  lastname?: string | null;
+  phone: string;
+  avatarPublicUrl?: string | null;
+};
