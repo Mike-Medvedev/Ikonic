@@ -1,6 +1,6 @@
 import { useNavigation } from "expo-router";
 import { View, StyleSheet } from "react-native";
-import { Appbar, useTheme } from "react-native-paper";
+import { Appbar, Divider, useTheme } from "react-native-paper";
 
 interface TripHeaderProps {
   title: string;
@@ -40,6 +40,7 @@ const TripHeader = ({ title, callback }: TripHeaderProps) => {
         <Appbar.BackAction onPress={handlePress} />
         <Appbar.Content title={title} />
       </Appbar.Header>
+      <Divider />
     </View>
   );
 };

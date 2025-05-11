@@ -1,15 +1,17 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
 import { RSVPStatus, UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "../../Services/inviteService";
-import { Background, Text, Button } from "@/design-system/components";
+import { Background, Text } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import UserCard from "@/components/UserCard";
 import { useState } from "react";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Pill from "@/design-system/components/Pill";
+import { TripService } from "@/features/Trips/Services/tripService";
+import { useAuth } from "@/context/AuthContext";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
@@ -17,7 +19,16 @@ import Pill from "@/design-system/components/Pill";
  */
 export default function TripAttendanceView() {
   const [selectedPill, setSelectedPill] = useState<RSVPStatus>("accepted");
+  const { session } = useAuth();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  // prettier-ignore
+  const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
+      queryKey: ["trip", selectedTripId], queryFn: async () => {
+        return TripService.getOne(selectedTripId as string);
+      },
+      enabled: !!selectedTripId
+    });
+  const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
   const theme = useTheme();
   //prettier-ignore
   const {
@@ -48,10 +59,11 @@ export default function TripAttendanceView() {
     container: { flex: 1, padding: 16 },
     label: { color: theme.colors.secondary },
     secondContainer: {
-      marginVertical: 24,
+      marginBottom: 24,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      gap: 16,
     },
     attendanceContainer: { marginVertical: 16 },
     pillsContainer: { flexGrow: 0 },
@@ -59,20 +71,16 @@ export default function TripAttendanceView() {
   return (
     <Background>
       <View style={styles.container}>
-        <TripTitleDetail />
         <View style={styles.secondContainer}>
-          <Text>
-            {attendees["accepted"].length} going{" "}
-            <Text style={styles.label}>· {attendees["pending"].length} pending</Text>
-          </Text>
-          <Button
-            icon="plus"
-            theme={{ roundness: theme.roundness }}
-            mode="contained"
-            onPress={() => router.push("./invite")}
-          >
-            Invite Friends
-          </Button>
+          <AsyncStateWrapper loading={fTrips} error={eTrips}>
+            <TripTitleDetail trip={trip} />
+          </AsyncStateWrapper>
+
+          <Pressable onPress={() => router.push("./invite")}>
+            <View style={{ backgroundColor: theme.colors.primary, borderRadius: 50, padding: 4 }}>
+              <Icon source="plus" color={theme.colors.surface} size={32}></Icon>
+            </View>
+          </Pressable>
         </View>
         <AsyncStateWrapper loading={isFetching} error={error}>
           <ScrollView horizontal style={styles.pillsContainer}>

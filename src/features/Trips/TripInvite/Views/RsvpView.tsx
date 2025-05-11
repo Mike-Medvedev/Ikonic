@@ -59,7 +59,7 @@ export default function RsvpView() {
   return (
     <Background>
       <View style={{ padding: 20 }}>
-        <TripTitleDetail />
+        <TripTitleDetail trip={tripData} />
 
         <View style={{ marginVertical: 16, gap: 8 }}>
           <Text>Organized by</Text>
