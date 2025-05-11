@@ -1,7 +1,7 @@
 import * as Contacts from "expo-contacts";
 import { useEffect, useState } from "react";
 /**
- *
+ * Custom Hook for asking for contact permission and returning list of contacts
  */
 export default function useContacts() {
   const [contacts, setContacts] = useState<Contacts.Contact[] | null>(null);

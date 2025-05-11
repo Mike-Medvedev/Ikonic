@@ -5,6 +5,9 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import useToast from "@/hooks/useToast";
 
+/**
+ * Custom Hook for inviting users to trips
+ */
 export default function useInvite() {
   const [loading, setLoading] = useState<boolean>(false);
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
