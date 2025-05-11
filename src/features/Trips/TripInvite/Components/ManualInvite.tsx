@@ -1,14 +1,19 @@
 import { Pressable, View, TextInput as NativeInput, StyleSheet } from "react-native";
-import { Icon, TextInput as PaperTextInput, useTheme } from "react-native-paper";
+import { Icon, useTheme, TextInput as PaperInput } from "react-native-paper";
 import { DividerText, Text, TextInput } from "@/design-system/components";
 import * as Clipboard from "expo-clipboard";
 import useToast from "@/hooks/useToast";
+import useInvite from "@/hooks/useInvite";
+import { useState } from "react";
+import { SimpleForm } from "@/types";
 /**
  *
  */
 export default function ManualInvite() {
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
+  const [phone, setPhone] = useState<SimpleForm<string>>({ value: "", error: "" });
+  const { invite, loading } = useInvite();
   const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
 
   const copyToClipboard = async () => {
@@ -53,12 +58,35 @@ export default function ManualInvite() {
       <Text style={styles.label}>Invite By Phone</Text>
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="Enter phone number"
+          placeholder="(555) 000-000"
+          returnKeyType="done"
+          value={phone?.value}
+          onChangeText={(text) => setPhone({ value: text, error: "" })}
+          error={!!phone.error}
+          errorText={phone.error}
+          autoCapitalize="none"
+          textContentType="telephoneNumber"
+          keyboardType="phone-pad"
+          maxLength={10}
+          left={<PaperInput.Affix text="+1 " />}
           right={
-            <PaperTextInput.Icon
+            <PaperInput.Icon
               icon={() => (
-                <Pressable onPress={() => console.log("Invited Users via SMS")}>
-                  <Icon source="send-circle" size={28} />
+                <Pressable
+                  onPress={() =>
+                    invite({
+                      firstname: "michael",
+                      lastname: "medvededev",
+                      id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
+                      phone: "12038587135",
+                      username: "mev",
+                      riderType: "skier",
+                      isOnboarded: true,
+                      avatarPublicUrl: "1",
+                    })
+                  }
+                >
+                  <Icon source="send" size={24} />
                 </Pressable>
               )}
             />

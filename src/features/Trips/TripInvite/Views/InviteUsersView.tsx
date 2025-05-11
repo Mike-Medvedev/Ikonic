@@ -6,9 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 
-import useToast from "@/hooks/useToast";
-import { UserPublic } from "@/types";
-import * as Linking from "expo-linking";
 import { useAuth } from "@/context/AuthContext";
 import { UserService } from "@/features/Profile/Services/userService";
 import Pill from "@/design-system/components/Pill";
@@ -23,17 +20,7 @@ export default function InviteUsersView() {
   const theme = useTheme();
   const { session } = useAuth();
   if (!session) return null;
-  const mockUser = {
-    firstname: "a",
-    lastname: "a",
-    username: "mev",
-    id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
-    phone: "2038587135",
-    isOnboarded: true,
-    riderType: "skier",
-    avatarPublicUrl: null,
-  };
-  const { showSuccess, showFailure } = useToast();
+
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,26 +39,7 @@ export default function InviteUsersView() {
     friend.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
   const [selectedPill, setSelectedPill] = useState<string>("Friends");
-  const [isInviteSending, setIsInviteSending] = useState<boolean>(false);
-  const [selectedButtonIndex, setSelectedButtonIndex] = useState<number | undefined>(undefined);
 
-  /**
-   * Event Handler for inviting a user to a trip
-   */
-  async function handleInvite(user: UserPublic) {
-    setIsInviteSending(true);
-    const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
-    try {
-      await InviteService.inviteUser(selectedTripId, user.id, { deepLink });
-      showSuccess({ message: "Invite Sent Successfully!" });
-    } catch (error) {
-      showFailure({ message: "Error: Invite Failed" });
-      console.error(error);
-    } finally {
-      setIsInviteSending(false);
-      setSelectedButtonIndex(undefined);
-    }
-  }
   function renderList(selectedPill: string) {
     switch (selectedPill.toLowerCase().trim()) {
       case "friends":
@@ -130,17 +98,19 @@ export default function InviteUsersView() {
     <Background>
       <View style={styles.container}>
         {/* <TripTitleDetail /> */}
-        <View style={styles.searchContainer}>
-          <SearchBar
-            placeholder="Search Friends"
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-            containerStyle={styles.searchBarContainer}
-          />
-          <Button mode="text" disabled={selectedUsers.length < 1}>
-            Invite ({selectedUsers.length})
-          </Button>
-        </View>
+        {selectedPill != "manual" && (
+          <View style={styles.searchContainer}>
+            <SearchBar
+              placeholder="Search Friends"
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+              containerStyle={styles.searchBarContainer}
+            />
+            <Button mode="text" disabled={selectedUsers.length < 1}>
+              Invite ({selectedUsers.length})
+            </Button>
+          </View>
+        )}
         <ScrollView horizontal style={styles.pillsContainer}>
           {["Friends", "Contacts", "manual"].map((option, index) => (
             <Pill
