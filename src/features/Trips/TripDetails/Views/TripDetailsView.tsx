@@ -90,7 +90,7 @@ export default function TripDetailsView() {
             {cacheBustedUrl ? (
               <>
                 <Image
-                  source={{ uri: cacheBustedUrl }}
+                  source={{ uri: imageUrl! }}
                   style={styles.image}
                   onLoadStart={() => setImageLoading(true)}
                   onLoadEnd={() => setImageLoading(false)}

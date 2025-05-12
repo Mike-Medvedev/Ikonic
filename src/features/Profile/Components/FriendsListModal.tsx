@@ -1,7 +1,7 @@
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, Button } from "@/design-system/components";
-import { ActivityIndicator, Icon, useTheme } from "react-native-paper";
+import { ActivityIndicator, Icon } from "react-native-paper";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/context/AuthContext";
 import { UserPublic } from "@/types";

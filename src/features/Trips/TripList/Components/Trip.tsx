@@ -17,6 +17,7 @@ export interface TripProps {
 }
 /**
  * Renders the UI for a Trip in a Trip List which is selectable and navigates to a specific trips details
+ * @todo DELETE TRIP BLOB WHEN DELETING TRIP
  */
 export default function Trip({ trip }: TripProps) {
   //prettier-ignore

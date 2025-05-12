@@ -109,16 +109,7 @@ export default function OnboardView() {
       showFailure({ message: "Please correct errors" });
       return;
     }
-    if (!image || image.canceled) {
-      showFailure({ message: "Error: Image is missing or cancelled by user" });
-      console.log("image missing or cancelled");
-      return;
-    }
-    const avatarStoragePath = await storageClient.uploadImage({
-      file: image,
-      bucket: "profile",
-      path: `${session.user.id}/avatar`,
-    });
+
     const fullNameValue = onboardForm.fullname.value?.trim() ?? "";
     const nameParts = fullNameValue.split(/\s+/);
     const firstname = nameParts[0] ?? "";
@@ -128,7 +119,12 @@ export default function OnboardView() {
       lastname: lastname,
       username: onboardForm.username.value ?? "",
     };
-    if (image) {
+    if (image && !image.canceled) {
+      const avatarStoragePath = await storageClient.uploadImage({
+        file: image,
+        bucket: "profile",
+        path: `${session.user.id}/avatar`,
+      });
       userUpdate = { ...userUpdate, avatarStoragePath };
     }
 
