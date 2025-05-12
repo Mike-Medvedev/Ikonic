@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Text } from "@/design-system/components";
+import { Button } from "@/design-system/components";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";

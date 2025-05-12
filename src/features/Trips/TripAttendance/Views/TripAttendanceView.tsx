@@ -11,7 +11,6 @@ import { useState } from "react";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Pill from "@/design-system/components/Pill";
 import { TripService } from "@/features/Trips/Services/tripService";
-import { useAuth } from "@/context/AuthContext";
 import useProfileModal from "@/hooks/useProfileModal";
 
 /**

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, ViewStyle, StyleProp, ImageSourcePropType } from "react-native";
 import { Card as PaperCard, Chip } from "react-native-paper";
 type CardProps = {
