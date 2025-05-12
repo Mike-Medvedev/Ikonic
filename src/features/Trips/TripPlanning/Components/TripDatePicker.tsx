@@ -2,14 +2,14 @@ import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, HelperText } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { NewTripForm, TripComponentProps, UpdateTripForm } from "@/types";
+import { NewTripForm, TripComponentProps, TripUpdateForm } from "@/types";
 import { useState, useCallback } from "react";
 import { Text } from "@/design-system/components";
 /**
  * Renders a date selection component that allows users to choose a date for a trip during planning
  * @todo review the date transformations in the confirmation handler and any data type
  */
-export default function TripDatePicker<T extends NewTripForm | UpdateTripForm>({
+export default function TripDatePicker<T extends NewTripForm | TripUpdateForm>({
   tripForm,
   setTripForm,
 }: TripComponentProps<T>) {

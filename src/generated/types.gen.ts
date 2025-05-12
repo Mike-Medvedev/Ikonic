@@ -108,6 +108,7 @@ export type TripPublic = {
     desc?: string | null;
     id: string;
     owner: UserPublic;
+    tripImageStoragePath: string | null;
 };
 
 export type TripUpdate = {
@@ -116,6 +117,7 @@ export type TripUpdate = {
     endDate?: string | null;
     mountain?: string | null;
     desc?: string | null;
+    tripImageStoragePath?: string | null;
 };
 
 export type UserPublic = {
@@ -126,7 +128,7 @@ export type UserPublic = {
     username: string | null;
     riderType: RiderType | null;
     isOnboarded: boolean;
-    avatarPublicUrl: string | null;
+    avatarPublicUrl: null | string;
 };
 
 export type UserUpdate = {

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { HelperText, Text, useTheme } from "react-native-paper";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import CustomAutoCompleteInput from "@/features/Trips/TripPlanning/Components/CustomAutoCompleteInput";
-import { NewTripForm, TripComponentProps, UpdateTripForm } from "@/types";
+import { NewTripForm, TripComponentProps, TripUpdateForm } from "@/types";
 
 const newEnglandSkiResorts = [
   // Maine
@@ -105,7 +105,7 @@ const newEnglandSkiResorts = [
   { id: "92", title: "Sugarbush Resort" },
 ];
 
-const SelectMountain = <T extends NewTripForm | UpdateTripForm>({ tripForm, setTripForm }: TripComponentProps<T>) => {
+const SelectMountain = <T extends NewTripForm | TripUpdateForm>({ tripForm, setTripForm }: TripComponentProps<T>) => {
   const theme = useTheme();
   const [isClient, setIsClient] = useState(false);
   const dropdownController = useRef<{ clear: () => void } | null>(null);
@@ -136,7 +136,7 @@ const SelectMountain = <T extends NewTripForm | UpdateTripForm>({ tripForm, setT
         }}
         InputComponent={CustomAutoCompleteInput}
         textInputProps={{
-          value: tripForm?.mountain?.value,
+          value: tripForm?.mountain?.value ?? "",
           onChangeText: (text) => setTripForm((prev) => ({ ...prev, mountain: { value: text, error: "" } })),
           placeholder: "Choose a mountain",
           placeholderTextColor: theme.colors.onSurfaceVariant,

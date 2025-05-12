@@ -6,7 +6,7 @@ import { dateValidator, descriptionValidator, nameValidator } from "@/utils/vali
 import { useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { NewTripForm, TripCreateParsed, TripPublicParsed } from "@/types";
-import { FormPayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
+import { CreatePayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
@@ -89,7 +89,7 @@ export default function TripPlannerView() {
       ? { ...basePayload, desc: { value: tripForm.desc.value, error: tripForm.desc.error } }
       : basePayload;
 
-    const createTrip = FormPayloadFactory<TripCreateParsed>(validatedPayload);
+    const createTrip = CreatePayloadFactory<TripCreateParsed>(validatedPayload);
     createTripMutation.mutate(createTrip);
   }
   const styles = StyleSheet.create({

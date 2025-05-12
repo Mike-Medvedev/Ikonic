@@ -1,14 +1,21 @@
-import { useNavigation } from "expo-router";
-import { View, StyleSheet } from "react-native";
-import { Appbar, Divider, useTheme } from "react-native-paper";
+import { RouteParamList } from "@/types";
+import { NavigationProp } from "@react-navigation/native";
+import { useNavigation, useSegments } from "expo-router";
+import { View, StyleSheet, Pressable } from "react-native";
+import { Appbar, Divider, Icon, useTheme } from "react-native-paper";
 
 interface TripHeaderProps {
+  isOwner: boolean;
   title: string;
   callback: () => void;
+  selectedTripId: string;
 }
-const TripHeader = ({ title, callback }: TripHeaderProps) => {
+const TripHeader = ({ isOwner, selectedTripId, title, callback }: TripHeaderProps) => {
   const theme = useTheme();
-  const navigation = useNavigation();
+
+  const navigation = useNavigation<NavigationProp<RouteParamList>>();
+  const segments = useSegments();
+  const lastSegment = segments[segments.length - 1];
 
   const styles = StyleSheet.create({
     container: {
@@ -39,6 +46,11 @@ const TripHeader = ({ title, callback }: TripHeaderProps) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={handlePress} />
         <Appbar.Content title={title} />
+        {lastSegment === "details" && isOwner && (
+          <Pressable onPress={() => navigation.navigate("edit", { selectedTrip: selectedTripId })}>
+            <Icon source="cog" size={24} />
+          </Pressable>
+        )}
       </Appbar.Header>
       <Divider />
     </View>

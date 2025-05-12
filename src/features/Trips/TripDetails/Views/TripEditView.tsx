@@ -1,53 +1,114 @@
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Image } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
 import { useTheme } from "react-native-paper";
 import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMountain";
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
-import { TripPublicParsed, TripUpdateParsed, UpdateTripForm } from "@/types";
+import { TripUpdateForm, TripUpdateParsed } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import useImagePicker from "@/hooks/useImagePicker";
+import { UpdatePayloadFactory } from "@/utils/FormBuilder";
+import storageClient from "@/lib/storage";
+import { DeleteConfirmation } from "@/utils/ConfirmationModal";
+import { NetworkError } from "@/lib/errors";
+import { DEFAULT_APP_PATH } from "@/constants/constants";
+import useToast from "@/hooks/useToast";
 interface UpdateTripMutation {
-  currentTripId: string;
+  selectedTripId: string;
   form: TripUpdateParsed;
 }
 /**
  * Renders the view for editing a trip's details
+ * @todo rollback image upload if mutation fails
  */
 export default function TripEditView() {
   const theme = useTheme();
+  const { showSuccess, showFailure } = useToast();
   const queryClient = useQueryClient();
   const { image, pickImage } = useImagePicker();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const updateTripMutation = useMutation<TripPublicParsed, Error, UpdateTripMutation>({
-    mutationFn: async ({ currentTripId, form }) => {
-      return TripService.update(currentTripId, form);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const updateTripMutation = useMutation<TripUpdateParsed, Error, UpdateTripMutation>({
+    mutationFn: async ({ selectedTripId, form }) => {
+      return TripService.update(selectedTripId, form);
     },
-    onSettled: (data) => {
+    onError: (error) => {
+      console.error(error);
+      if (error instanceof NetworkError) {
+        showFailure({ message: "Error Updating Trip! Please check your network" });
+      } else {
+        showFailure({ message: "Error Updating Trip!" });
+      }
+    },
+    onSuccess: () => {
+      showSuccess({ message: "Successfully updated trip!", url: `${DEFAULT_APP_PATH}/${selectedTripId}/details` });
+    },
+    onSettled: () => {
+      setLoading(false);
       queryClient.invalidateQueries({ queryKey: ["trips"] });
-      queryClient.invalidateQueries({ queryKey: ["trip", data?.id] });
+      queryClient.invalidateQueries({ queryKey: ["trip", selectedTripId] });
+      queryClient.invalidateQueries({ queryKey: ["trip-image", selectedTripId] });
     },
   });
-  const [updateTripForm, setUpdateTripForm] = useState<UpdateTripForm>({
-    title: { value: "", error: "" },
-    mountain: { value: "", error: "" },
-    startDate: { value: undefined, error: "" },
-    endDate: { value: undefined, error: "" },
-    desc: { value: "", error: "" },
+  const mutation = useMutation<void, unknown, string>({
+    mutationFn: (trip_id) => TripService.delete(trip_id),
+    onError: (error) => {
+      console.error(error);
+      if (error instanceof NetworkError) {
+        showFailure({ message: "Error Deleting Trip! Please check your network" });
+      } else {
+        showFailure({ message: "Error Deleting Trip!" });
+      }
+    },
+    onSuccess: () => {
+      showSuccess({ message: "Successfully updated edit", url: DEFAULT_APP_PATH });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+    },
   });
+
+  const [updateTripForm, setUpdateTripForm] = useState<TripUpdateForm>({});
   const styles = StyleSheet.create({
     container: { padding: 16 },
+    image: { width: "100%", height: "100%", objectFit: "cover" },
     cover: { backgroundColor: theme.colors.secondary, height: 200 },
     overlay: { ...StyleSheet.absoluteFillObject, padding: 16, justifyContent: "center", alignItems: "center" },
     label: { color: theme.colors.secondary },
   });
+
+  async function handleSubmit() {
+    setLoading(true);
+    if (image && !image.canceled) {
+      const imagePath = await storageClient.uploadImage({
+        file: image,
+        bucket: "trips",
+        path: `${selectedTripId}/trip-image`,
+      });
+      console.log("PRINTING IMAGE PATH!!!: ", imagePath);
+      if (imagePath) setUpdateTripForm((prev) => ({ ...prev, tripImageStoragePath: { value: imagePath, error: "" } }));
+    }
+
+    const updateForm = UpdatePayloadFactory<TripUpdateParsed>(updateTripForm);
+    updateTripMutation.mutate({ selectedTripId, form: updateForm });
+  }
+
+  /**
+   * Event Handler for deleting a trip and prompts the user for confirmation
+   */
+  async function handleTripDelete(trip_id: string) {
+    DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });
+  }
+
   return (
     <Background>
       <View style={styles.cover}>
+        {image?.assets?.[0]?.uri && <Image source={{ uri: image.assets[0].uri }} style={styles.image} />}
         <View style={styles.overlay}>
-          <Button mode="elevated" icon="camera">
+          <Button mode="elevated" icon="camera" onPress={pickImage}>
             Change Cover Photo
           </Button>
         </View>
@@ -59,7 +120,7 @@ export default function TripEditView() {
         <TextInput
           label="Name Your Trip"
           returnKeyType="next"
-          value={updateTripForm?.title?.value}
+          value={updateTripForm?.title?.value ?? ""}
           onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
           error={!!updateTripForm?.title?.error}
           errorText={updateTripForm?.title?.error}
@@ -71,7 +132,6 @@ export default function TripEditView() {
           Destination
         </Text>
         <SelectMountain tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
-
         <Text variant="labelMedium" style={styles.label}>
           Dates
         </Text>
@@ -83,10 +143,20 @@ export default function TripEditView() {
           multiline
           style={{ height: 80 }}
           placeholder="Add any notes or details about your trip..."
-          value={updateTripForm.desc?.value}
+          value={updateTripForm.desc?.value ?? ""}
           onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, desc: { value: text, error: "" } }))}
         />
-        <Button mode="contained">Accept Changes</Button>
+        <Button mode="contained" onPress={handleSubmit} loading={loading}>
+          Accept Changes
+        </Button>
+        <Button
+          onPress={() => handleTripDelete(selectedTripId)}
+          style={{ marginVertical: 16 }}
+          icon="trash-can"
+          mode="contained"
+        >
+          Delete Trip
+        </Button>
       </ScrollView>
     </Background>
   );

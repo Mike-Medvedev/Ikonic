@@ -1,6 +1,9 @@
 import { TripHeaderTitles } from "@/constants/constants";
+import { useAuth } from "@/context/AuthContext";
+import { TripService } from "@/features/Trips/Services/tripService";
 import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
-import { Stack, useNavigation } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
 
 /**
  * Layout for a selected trip and its children at /trips/<trip-id>, overides tabs from parent tab layout
@@ -8,6 +11,16 @@ import { Stack, useNavigation } from "expo-router";
  */
 export default function TripsNoTabLayout() {
   const navigation = useNavigation();
+  const { session } = useAuth();
+  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  // prettier-ignore
+  const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
+    queryKey: ["trip", selectedTripId], queryFn: async () => {
+      return TripService.getOne(selectedTripId);
+    },
+    enabled: !!selectedTripId,
+  });
+  const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
 
   /**
    * Calculates Title for a given page for selected trips
@@ -24,7 +37,14 @@ export default function TripsNoTabLayout() {
     <Stack
       screenOptions={({ route }) => {
         return {
-          header: () => <TripHeader title={getHeaderTitle(route.name)} callback={() => navigation.goBack()} />,
+          header: () => (
+            <TripHeader
+              title={getHeaderTitle(route.name)}
+              isOwner={isOwner}
+              selectedTripId={selectedTripId}
+              callback={() => navigation.goBack()}
+            />
+          ),
         };
       }}
     ></Stack>

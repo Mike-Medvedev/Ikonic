@@ -10,6 +10,7 @@ import { InviteService } from "@/features/Trips/Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort, getDaysUntil } from "@/utils/dateUtils";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
+import storageClient from "@/lib/storage";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -23,6 +24,17 @@ export default function Trip({ trip }: TripProps) {
     queryKey: ["attendees", trip.id],
     queryFn: async () => InviteService.getInvitedUsers(trip.id),
     enabled: !!trip.id,
+  });
+  const { data: imageUrl } = useQuery({
+    queryKey: ["trip-image", trip.id],
+    queryFn: async () => {
+      if (!trip.tripImageStoragePath) return null;
+      return await storageClient.downloadPrivateImage({
+        bucket: "trips",
+        path: trip.tripImageStoragePath,
+      });
+    },
+    enabled: !!trip.tripImageStoragePath,
   });
 
   const theme = useTheme();
@@ -41,7 +53,7 @@ export default function Trip({ trip }: TripProps) {
 
   return (
     <Pressable style={styles.tripContainer} onPress={handleTripSelect}>
-      <Card date={formatDateRangeShort(trip.startDate, trip.endDate)}>
+      <Card uri={imageUrl ?? undefined} date={formatDateRangeShort(trip.startDate, trip.endDate)}>
         <View>
           <Text variant="titleLarge" style={styles.text}>
             {trip.title}

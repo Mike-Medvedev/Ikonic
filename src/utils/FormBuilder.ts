@@ -2,14 +2,29 @@ import { SimpleForm } from "@/types";
 import React from "react";
 
 /**
- * Converts a Form object containing { someKey: { value: V, error: string } }
- * into a payload object { someKey: V }.
+ * Converts a form object of type { key: SimpleForm<V> } back to { key: V }
+ * Ensures All keys are present in object
  */
-export function FormPayloadFactory<T>(form: { [K in keyof T]: SimpleForm<T[K]> }): T {
-  return (Object.keys(form) as Array<keyof T>).reduce((acc, key) => {
-    (acc as T)[key] = form[key].value;
-    return acc;
-  }, {} as T);
+export function CreatePayloadFactory<T>(form: { [K in keyof T]: SimpleForm<T[K]> }): T {
+  const payload = {} as T;
+  for (const key in form) payload[key] = form[key].value;
+  return payload;
+}
+/**
+ * Converts a form object of type { key: SimpleForm<V> } back to { key: V }.
+ * Flexibly allows partial updates
+ */
+export function UpdatePayloadFactory<T>(form: { [K in keyof T]?: SimpleForm<T[K]> }): Partial<T> {
+  const payload = {} as Partial<T>;
+
+  for (const key in form) {
+    const value = form[key]?.value;
+    if (value !== undefined && value !== "") {
+      payload[key as keyof T] = value;
+    }
+  }
+
+  return payload;
 }
 
 /**

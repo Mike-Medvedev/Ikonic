@@ -9,6 +9,10 @@ interface UploadParams {
   bucket: string;
   path: string;
 }
+interface DownloadParams {
+  bucket: string;
+  path: string;
+}
 /**
  * client for interacting with supabase storage api,
  * @returns The path to the uploaded blob on success, or undefined on failure.
@@ -24,8 +28,7 @@ const storageClient = {
     console.log(bucket, path);
 
     const mimeType = image.mimeType || "image/jpeg";
-    const fileExtension = mimeType.split("/")[1] || "jpg";
-    const blobPath = `${path}.${fileExtension}`;
+    const blobPath = path;
 
     const blobOptions = {
       upsert: true,
@@ -59,6 +62,18 @@ const storageClient = {
         console.error(new ApiError(400, error.message, { cause: error.cause }));
       } else return blobPath;
     }
+  },
+  downloadPrivateImage: async ({ bucket, path }: DownloadParams): Promise<string | undefined> => {
+    const { data, error } = await supabase.storage.from(bucket).createSignedUrl(path, 3600);
+    if (error) {
+      if (error instanceof ApiError)
+        console.error(new ApiError(400, "Error creating image url ", { cause: error.cause }));
+      if (error instanceof NetworkError)
+        console.error(new NetworkError("Error creating image url ", { cause: error.cause }));
+      else console.error(new Error(error.message, { cause: error.cause }));
+      return;
+    }
+    return data.signedUrl;
   },
 };
 

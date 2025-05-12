@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { View, StyleSheet, ViewStyle, StyleProp, ImageSourcePropType } from "react-native";
 import { Card as PaperCard, Chip } from "react-native-paper";
 type CardProps = {
@@ -6,10 +6,14 @@ type CardProps = {
   children: React.ReactNode;
   coverSource?: ImageSourcePropType;
   overlayContent?: React.ReactNode;
+  uri?: string;
   style?: StyleProp<ViewStyle>;
 };
 
-const CardComponent = ({ date, children }: CardProps) => {
+const CardComponent = ({ uri, date, children }: CardProps) => {
+  useEffect(() => {
+    console.log(uri);
+  }, [uri]);
   const styles = StyleSheet.create({
     card: {
       margin: 16,
@@ -30,7 +34,10 @@ const CardComponent = ({ date, children }: CardProps) => {
   return (
     <PaperCard style={{ width: "98%" }}>
       <View style={styles.coverContainer}>
-        <PaperCard.Cover style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }} />
+        <PaperCard.Cover
+          style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
+          source={{ uri: uri ?? undefined }}
+        />
         <View style={styles.overlay}>
           <Chip style={{ borderRadius: 20 }}>{date}</Chip>
         </View>

@@ -16,9 +16,12 @@ export function serializeTripCreate(trip: TripCreateParsed): TripCreate {
  */
 export function serializeTripUpdate(trip: TripUpdateParsed): TripUpdate {
   const { startDate, endDate, ...rest } = trip;
-  return {
+
+  const serialized: TripUpdate = {
     ...rest,
-    startDate: startDate ? startDate.toISOString() : null,
-    endDate: endDate ? endDate.toISOString() : null,
+    ...(startDate ? { startDate: startDate.toISOString().split("T")[0] } : {}),
+    ...(endDate ? { endDate: endDate.toISOString().split("T")[0] } : {}),
   };
+
+  return serialized;
 }

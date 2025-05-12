@@ -1,20 +1,16 @@
-import { View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Chip, Divider, Icon, IconButton, Text, useTheme } from "react-native-paper";
+import { View, StyleSheet, ScrollView, Pressable, Image } from "react-native";
+import { Chip, Divider, Icon, Text, useTheme } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router/build/hooks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import Background from "@/design-system/components/Background";
-import { useAuth } from "@/context/AuthContext";
 import { formatDateRangeShort } from "@/utils/dateUtils";
-import { Button } from "@/design-system/components";
-import { DeleteConfirmation } from "@/utils/ConfirmationModal";
-import useToast from "@/hooks/useToast";
-import { NetworkError } from "@/lib/errors";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
+import storageClient from "@/lib/storage";
 
 /**
  * Renders the UI for the trip details page
@@ -23,25 +19,7 @@ import { InviteService } from "@/features/Trips/Services/inviteService";
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams() as { selectedTrip: string };
   // const [modalVisible, setModalVisible] = useState(false);
-  const { session } = useAuth();
-  const { showFailure } = useToast();
   const theme = useTheme();
-  const queryClient = useQueryClient();
-  const mutation = useMutation<void, unknown, string>({
-    mutationFn: (trip_id) => TripService.delete(trip_id),
-    onError: (error) => {
-      console.error(error);
-      if (error instanceof NetworkError) {
-        showFailure({ message: "Error Deleting Trip! Please check your network" });
-      } else {
-        showFailure({ message: "Error Deleting Trip!" });
-      }
-    },
-    onSuccess: () => {
-      router.replace(DEFAULT_APP_PATH);
-    },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["trips"] }),
-  });
 
   // prettier-ignore
   const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
@@ -50,7 +28,6 @@ export default function TripDetailsView() {
     },
     enabled: !!selectedTripID,
   });
-  const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
 
   //prettier-ignore
   const { data: attendees, isFetching: fAttendees, error: eAttendees } = useQuery({
@@ -58,12 +35,18 @@ export default function TripDetailsView() {
      queryFn: async () => InviteService.getInvitedUsers(selectedTripID),
      enabled: !!selectedTripID,
    });
-  /**
-   * Event Handler for deleting a trip and prompts the user for confirmation
-   */
-  async function handleTripDelete(trip_id: string) {
-    DeleteConfirmation({ deleteFn: () => mutation.mutate(trip_id) });
-  }
+
+  const { data: imageUrl } = useQuery({
+    queryKey: ["trip-image", trip?.id],
+    queryFn: async () => {
+      if (!trip?.tripImageStoragePath) return null;
+      return await storageClient.downloadPrivateImage({
+        bucket: "trips",
+        path: trip.tripImageStoragePath,
+      });
+    },
+    enabled: !!trip?.tripImageStoragePath,
+  });
 
   const styles = StyleSheet.create({
     scrollContainer: { width: "100%", padding: 16 },
@@ -87,15 +70,17 @@ export default function TripDetailsView() {
     tripDetailsContent: {
       gap: 16,
     },
+    image: { width: "100%", height: "100%", objectFit: "cover" },
   });
   return (
     <Background>
       <AsyncStateWrapper loading={fTrips} error={eTrips}>
         <View style={styles.cover}>
-          <View style={styles.coverActions}>
+          <Image source={{ uri: imageUrl ?? undefined }} style={styles.image} />
+          {/* <View style={styles.coverActions}>
             <IconButton icon="share-variant" size={20} iconColor={theme.colors.primary} mode="contained" />
             <IconButton icon="heart-outline" size={20} iconColor={theme.colors.primary} mode="contained" />
-          </View>
+          </View> */}
         </View>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.tripOverview}>
@@ -182,31 +167,6 @@ export default function TripDetailsView() {
               <Text>{trip?.desc}</Text>
             </View>
           ) : null}
-          {isOwner && (
-            <Button
-              onPress={() =>
-                router.push({
-                  pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/edit`,
-                  params: { selectedTrip: trip.id },
-                })
-              }
-              style={{ marginVertical: 16 }}
-              icon="pencil-outline"
-              mode="contained"
-            >
-              Edit Trip
-            </Button>
-          )}
-          {isOwner && (
-            <Button
-              onPress={() => handleTripDelete(trip?.id)}
-              style={{ marginVertical: 16 }}
-              icon="trash-can"
-              mode="contained"
-            >
-              Delete Trip
-            </Button>
-          )}
         </ScrollView>
       </AsyncStateWrapper>
     </Background>

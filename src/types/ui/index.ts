@@ -2,6 +2,8 @@
  * Exports Frontend specific types
  */
 
+import { TripUpdateParsed } from "@/types/domain";
+
 export type RSVPStatus = "accepted" | "pending" | "uncertain" | "declined";
 export interface AttendanceCount {
   accepted: number;
@@ -27,15 +29,12 @@ export interface NewTripForm {
   desc?: SimpleForm<string>;
 }
 
-export interface UpdateTripForm {
-  mountain?: SimpleForm<string>;
-  startDate?: SimpleForm<Date | undefined>;
-  endDate?: SimpleForm<Date | undefined>;
-  title?: SimpleForm<string>;
-  desc?: SimpleForm<string>;
-}
+type Formified<T> = {
+  [K in keyof T]?: SimpleForm<T[K]>;
+};
+export type TripUpdateForm = Formified<TripUpdateParsed>;
 
-export interface TripComponentProps<T extends NewTripForm | UpdateTripForm> {
+export interface TripComponentProps<T extends NewTripForm | TripUpdateForm> {
   tripForm: T;
   setTripForm: React.Dispatch<React.SetStateAction<T>>;
 }
@@ -46,6 +45,9 @@ export type TripsStackParamList = {
   rsvp: undefined;
   invite: undefined;
   edit: undefined;
+};
+export type RouteParamList = {
+  edit: { selectedTrip: string };
 };
 
 export interface ReactNativeFileLikeObject {
