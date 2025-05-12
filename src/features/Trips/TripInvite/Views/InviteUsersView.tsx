@@ -36,7 +36,7 @@ export default function InviteUsersView() {
 
   //prettier-ignore
   const { data: friends, isFetching: isFriendsFetching, error: friendsError,
-  } = useQuery({ queryKey: ["friends", session.user.id], queryFn: async () => UserService.getFriends(session.user.id) });
+  } = useQuery({ queryKey: ["friends", session.user.id], queryFn: async () => UserService.getFriends() });
   const filteredFriends = friends?.filter((friend) =>
     friend.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
   );

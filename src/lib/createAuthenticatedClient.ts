@@ -23,6 +23,7 @@ export async function fetchWithError(request: Request): Promise<Response> {
  * Creates an http client to facilitate http calls
  * Configures global http configs like tokens and headers
  * Error interceptor classifes and rethrows Api Errors
+ * @todo fix error handling for api errors to include detail
  */
 export async function createAuthenticatedClient() {
   const token = await getToken();
@@ -36,6 +37,7 @@ export async function createAuthenticatedClient() {
     throwOnError: true,
   });
   client.interceptors.error.use((error, response) => {
+    console.error(error);
     const message = errors[response.status];
     const knownMessage = message ?? `API Error: Status ${response.status}`;
     throw new ApiError(response.status, knownMessage, { cause: error });

@@ -11,9 +11,6 @@ type CardProps = {
 };
 
 const CardComponent = ({ uri, date, children }: CardProps) => {
-  useEffect(() => {
-    console.log(uri);
-  }, [uri]);
   const styles = StyleSheet.create({
     card: {
       margin: 16,

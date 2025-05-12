@@ -12,6 +12,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Pill from "@/design-system/components/Pill";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { useAuth } from "@/context/AuthContext";
+import useProfileModal from "@/hooks/useProfileModal";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
@@ -19,7 +20,7 @@ import { useAuth } from "@/context/AuthContext";
  */
 export default function TripAttendanceView() {
   const [selectedPill, setSelectedPill] = useState<RSVPStatus>("accepted");
-  const { session } = useAuth();
+  const { setModalState, ProfileModal } = useProfileModal();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   // prettier-ignore
   const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
@@ -28,7 +29,6 @@ export default function TripAttendanceView() {
       },
       enabled: !!selectedTripId,
     });
-  const isOwner = !!trip?.owner.id && trip.owner.id === session?.user.id;
   const theme = useTheme();
   //prettier-ignore
   const {
@@ -98,12 +98,22 @@ export default function TripAttendanceView() {
             {attendees &&
               attendees[selectedPill].map((user, index) => (
                 <View style={{ flexDirection: "row" }} key={user.id}>
-                  <UserCard style={{ flex: 1 }} user={user} key={index} iconSize={40} titleFontSize={18} />
+                  <UserCard
+                    style={{ flex: 1 }}
+                    user={user}
+                    key={index}
+                    iconSize={40}
+                    titleFontSize={18}
+                    onPress={() => {
+                      setModalState({ visible: true, profile: user });
+                    }}
+                  />
                   <View style={{ alignSelf: "center" }}>{CalculateIcon(selectedPill)}</View>
                 </View>
               ))}
           </ScrollView>
         </AsyncStateWrapper>
+        <ProfileModal />
       </View>
     </Background>
   );

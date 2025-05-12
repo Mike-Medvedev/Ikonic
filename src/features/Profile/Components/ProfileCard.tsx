@@ -1,11 +1,11 @@
 import { View, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Avatar, Icon, useTheme } from "react-native-paper";
-import { UserPublic } from "@/types";
+import { FriendshipCreate, UserPublic } from "@/types";
 import { Text } from "@/design-system/components";
 import { useState } from "react";
 import FriendsListModal from "@/features/Profile/Components/FriendsListModal";
 import ProfileEditModal from "@/features/Profile/Components/ProfileEditModal";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort } from "@/utils/dateUtils";
@@ -13,20 +13,56 @@ import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import UserAvatar from "@/components/UserAvatar";
 import { UserService } from "@/features/Profile/Services/userService";
+import { useAuth } from "@/context/AuthContext";
+import SpinningAddFriendIcon from "@/features/Profile/Components/SpinningAddFriend";
+import useToast from "@/hooks/useToast";
+
+interface ProfileCardProps {
+  profile: UserPublic;
+  isOwner: boolean;
+}
 
 /**
- * Render the UI for Profile Information on the Profile Page
+ * Render the UI for Profile Information for a User
+ * Profile Page can render both a users page or someone else's page
  */
-export default function ProfileCard({ profile }: { profile: UserPublic }) {
+export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
   const [friendsModalVisible, setFriendsModalVisible] = useState<boolean>(false);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [requesting, setRequesting] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const { showSuccess, showFailure } = useToast();
+  const { session } = useAuth();
+  if (!session) return null;
   //prettier-ignore
   const { data: recentTrips, isFetching, error } = useQuery({
     queryKey: ["trips", "past"],
     queryFn: async () => TripService.getAll({ past: true }),
   })
   //prettier-ignore
-  const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ queryKey: ["friends", profile.id ], queryFn: async () => UserService.getFriends(profile.id)})
+  const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ 
+    queryKey: ["friends", profile.id ],
+    queryFn: async () => UserService.getFriends()
+    })
+
+  const requestFriendMutation = useMutation<boolean, Error, FriendshipCreate>({
+    mutationFn: ({ userId, friendId, initiatorId }) => {
+      return UserService.requestFriend({ userId, friendId, initiatorId });
+    },
+    onError: (error) => {
+      showFailure({ message: error.message });
+      console.error(error);
+    },
+    onSuccess: () => {
+      showSuccess({ message: "Friend request sent" });
+    },
+    onSettled: () => {
+      setRequesting(false);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["users", session.user.id] });
+      queryClient.invalidateQueries({ queryKey: ["users", profile.id] });
+    },
+  });
   const theme = useTheme();
   const styles = StyleSheet.create({
     container: { padding: 16 },
@@ -97,9 +133,24 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           >{`${profile.firstname} ${profile.lastname}`}</Text>
           <Text style={styles.label}>Joined January 2025</Text>
         </View>
-        <Pressable onPress={() => setEditModalVisible(true)}>
-          <Icon source="cog" size={32} color={theme.colors.primary} />
-        </Pressable>
+        {isOwner ? (
+          <Pressable onPress={() => setEditModalVisible(true)}>
+            <Icon source="cog" size={32} color={theme.colors.primary} />
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={() => {
+              setRequesting(true);
+              requestFriendMutation.mutate({
+                userId: session.user.id,
+                friendId: profile.id,
+                initiatorId: session.user.id,
+              });
+            }}
+          >
+            <SpinningAddFriendIcon requesting={requesting} />
+          </Pressable>
+        )}
       </View>
 
       <View style={styles.squaresContainer}>
@@ -111,10 +162,17 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
           <Text variant="headlineSmall">8</Text>
           <Text style={styles.squareLabel}>Resorts</Text>
         </View>
-        <Pressable style={styles.square} onPress={() => setFriendsModalVisible(true)}>
-          <Text variant="headlineSmall">{friends?.length || 0}</Text>
-          <Text style={styles.squareLabel}>Friends</Text>
-        </Pressable>
+        {isOwner ? (
+          <Pressable style={styles.square} onPress={() => setFriendsModalVisible(true)}>
+            <Text variant="headlineSmall">{friends?.length || 0}</Text>
+            <Text style={styles.squareLabel}>Friends</Text>
+          </Pressable>
+        ) : (
+          <View style={styles.square}>
+            <Text variant="headlineSmall">{friends?.length || 0}</Text>
+            <Text style={styles.squareLabel}>Friends</Text>
+          </View>
+        )}
       </View>
 
       <View style={styles.recentTripsContainer}>
@@ -128,12 +186,13 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
                   <Pressable
                     style={styles.recentTrip}
                     key={trip.id}
-                    onPress={() =>
+                    onPress={() => {
+                      if (!isOwner) return;
                       router.push({
                         pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/details`,
                         params: { selectedTrip: trip.id },
-                      })
-                    }
+                      });
+                    }}
                   >
                     <View>
                       <Text variant="bodyLarge">{trip.title}</Text>
@@ -150,14 +209,19 @@ export default function ProfileCard({ profile }: { profile: UserPublic }) {
         </AsyncStateWrapper>
       </View>
 
-      <FriendsListModal
-        friends={friends || []}
-        isFriendsFetching={isFriendsFetching}
-        friendsError={friendsError}
-        visible={friendsModalVisible}
-        setVisible={setFriendsModalVisible}
-      />
-      <ProfileEditModal profile={profile} visible={editModalVisible} callback={() => setEditModalVisible(false)} />
+      {isOwner && (
+        <FriendsListModal
+          friends={friends || []}
+          isFriendsFetching={isFriendsFetching}
+          friendsError={friendsError}
+          visible={friendsModalVisible}
+          setVisible={setFriendsModalVisible}
+        />
+      )}
+
+      {isOwner && (
+        <ProfileEditModal profile={profile} visible={editModalVisible} callback={() => setEditModalVisible(false)} />
+      )}
 
       {/* <AsyncStateWrapper loading={isFetching} error={error}>
         <FlatList

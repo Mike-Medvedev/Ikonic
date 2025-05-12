@@ -24,7 +24,7 @@ export default function ProfileView() {
     <Background>
       <View style={{ flex: 1, width: "100%", height: "100%" }}>
         <AsyncStateWrapper loading={isLoading} error={error}>
-          {profile ? <ProfileCard profile={profile} /> : null}
+          {profile && <ProfileCard profile={profile} isOwner />}
         </AsyncStateWrapper>
       </View>
     </Background>

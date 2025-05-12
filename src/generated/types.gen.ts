@@ -48,6 +48,10 @@ export type DtoListCarPublic = {
     data: Array<CarPublic>;
 };
 
+export type DtoListFriendshipPublic = {
+    data: Array<FriendshipPublic>;
+};
+
 export type DtoListPassengerPublic = {
     data: Array<PassengerPublic>;
 };
@@ -62,6 +66,27 @@ export type DtoListUserPublic = {
 
 export type DeepLink = {
     deepLink: string;
+};
+
+export type FriendshipCreate = {
+    userId: string;
+    friendId: string;
+    initiatorId: string;
+};
+
+export type FriendshipPublic = {
+    userId: string;
+    friendId: string;
+    initiatorId: string;
+    status: FriendshipStatus;
+};
+
+export type FriendshipStatus = 'pending' | 'accepted' | 'rejected' | 'blocked';
+
+export type FriendshipUpdate = {
+    userId: string;
+    friendId: string;
+    status: FriendshipStatus;
 };
 
 export type HttpValidationError = {
@@ -247,33 +272,6 @@ export type CompleteOnboardingApiV1UsersOnboardingPostResponses = {
 };
 
 export type CompleteOnboardingApiV1UsersOnboardingPostResponse = CompleteOnboardingApiV1UsersOnboardingPostResponses[keyof CompleteOnboardingApiV1UsersOnboardingPostResponses];
-
-export type GetFriendsApiV1UsersUserIdFriendsGetData = {
-    body?: never;
-    path: {
-        user_id: string;
-    };
-    query?: never;
-    url: '/api/v1/users/{user_id}/friends';
-};
-
-export type GetFriendsApiV1UsersUserIdFriendsGetErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetFriendsApiV1UsersUserIdFriendsGetError = GetFriendsApiV1UsersUserIdFriendsGetErrors[keyof GetFriendsApiV1UsersUserIdFriendsGetErrors];
-
-export type GetFriendsApiV1UsersUserIdFriendsGetResponses = {
-    /**
-     * Successful Response
-     */
-    200: DtoListUserPublic;
-};
-
-export type GetFriendsApiV1UsersUserIdFriendsGetResponse = GetFriendsApiV1UsersUserIdFriendsGetResponses[keyof GetFriendsApiV1UsersUserIdFriendsGetResponses];
 
 export type GetTripsApiV1TripsGetData = {
     body?: never;
@@ -662,6 +660,99 @@ export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponses = {
 };
 
 export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponse = InviteUserApiV1TripsTripIdInvitesUserIdPostResponses[keyof InviteUserApiV1TripsTripIdInvitesUserIdPostResponses];
+
+export type GetFriendsApiV1FriendshipsGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/friendships/';
+};
+
+export type GetFriendsApiV1FriendshipsGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoListUserPublic;
+};
+
+export type GetFriendsApiV1FriendshipsGetResponse = GetFriendsApiV1FriendshipsGetResponses[keyof GetFriendsApiV1FriendshipsGetResponses];
+
+export type ResponseFriendRequestApiV1FriendshipsPatchData = {
+    body: FriendshipUpdate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/friendships/';
+};
+
+export type ResponseFriendRequestApiV1FriendshipsPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ResponseFriendRequestApiV1FriendshipsPatchError = ResponseFriendRequestApiV1FriendshipsPatchErrors[keyof ResponseFriendRequestApiV1FriendshipsPatchErrors];
+
+export type ResponseFriendRequestApiV1FriendshipsPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoBool;
+};
+
+export type ResponseFriendRequestApiV1FriendshipsPatchResponse = ResponseFriendRequestApiV1FriendshipsPatchResponses[keyof ResponseFriendRequestApiV1FriendshipsPatchResponses];
+
+export type CreateFriendRequestApiV1FriendshipsPostData = {
+    body: FriendshipCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/friendships/';
+};
+
+export type CreateFriendRequestApiV1FriendshipsPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateFriendRequestApiV1FriendshipsPostError = CreateFriendRequestApiV1FriendshipsPostErrors[keyof CreateFriendRequestApiV1FriendshipsPostErrors];
+
+export type CreateFriendRequestApiV1FriendshipsPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoBool;
+};
+
+export type CreateFriendRequestApiV1FriendshipsPostResponse = CreateFriendRequestApiV1FriendshipsPostResponses[keyof CreateFriendRequestApiV1FriendshipsPostResponses];
+
+export type CheckFriendRequestsApiV1FriendshipsUserIdGetData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/friendships/{user_id}';
+};
+
+export type CheckFriendRequestsApiV1FriendshipsUserIdGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CheckFriendRequestsApiV1FriendshipsUserIdGetError = CheckFriendRequestsApiV1FriendshipsUserIdGetErrors[keyof CheckFriendRequestsApiV1FriendshipsUserIdGetErrors];
+
+export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoListFriendshipPublic;
+};
+
+export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponse = CheckFriendRequestsApiV1FriendshipsUserIdGetResponses[keyof CheckFriendRequestsApiV1FriendshipsUserIdGetResponses];
 
 export type ClientOptions = {
     baseUrl: 'http://localhost:8080' | (string & {});

@@ -87,13 +87,19 @@ export default function TripDetailsView() {
       <AsyncStateWrapper loading={fTrips || fetchingImage} error={eTrips || imageError}>
         <View style={styles.cover}>
           <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: cacheBustedUrl }}
-              style={styles.image}
-              onLoadStart={() => setImageLoading(true)}
-              onLoadEnd={() => setImageLoading(false)}
-            />
-            {imageLoading && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
+            {cacheBustedUrl ? (
+              <>
+                <Image
+                  source={{ uri: cacheBustedUrl }}
+                  style={styles.image}
+                  onLoadStart={() => setImageLoading(true)}
+                  onLoadEnd={() => setImageLoading(false)}
+                />
+                {imageLoading && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
+              </>
+            ) : (
+              <Text style={{ textAlign: "center", color: theme.colors.primary }}>Tap the Cog to upload an image</Text>
+            )}
           </View>
 
           {/* <View style={styles.coverActions}>

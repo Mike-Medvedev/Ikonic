@@ -19,7 +19,7 @@ export default function ProfileEditModal({ profile, visible, callback }: Profile
   const { session } = useAuth();
   if (!session) return null;
   //prettier-ignore
-  const { data: friends, isFetching, error } = useQuery({ queryKey: ["friends", session.user.id ], queryFn: async () => UserService.getFriends(session.user.id)})
+  const { data: friends, isFetching, error } = useQuery({ queryKey: ["friends", session.user.id ], queryFn: async () => UserService.getFriends()})
   const styles = StyleSheet.create({
     container: { padding: 16, flex: 1 },
     content: { flex: 1 },

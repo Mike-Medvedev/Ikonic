@@ -31,7 +31,13 @@ export {
   getUserByIdApiV1UsersUserIdGet,
   updateUserApiV1UsersUserIdPatch,
   completeOnboardingApiV1UsersOnboardingPost,
-  getFriendsApiV1UsersUserIdFriendsGet,
+
+  // Friendships endpoints
+  getFriendsApiV1FriendshipsGet,
+  responseFriendRequestApiV1FriendshipsPatch,
+  createFriendRequestApiV1FriendshipsPost,
+  checkFriendRequestsApiV1FriendshipsUserIdGet,
+
   // Misc
   mainApiV1Get,
 } from "@/generated";
@@ -63,6 +69,10 @@ export {
   TripPublic,
   TripUpdate,
   RiderType,
+  FriendshipPublic,
+  FriendshipCreate,
+  FriendshipStatus,
+  FriendshipUpdate,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {
