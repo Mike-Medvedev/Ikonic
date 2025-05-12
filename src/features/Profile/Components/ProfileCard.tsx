@@ -12,7 +12,7 @@ import { formatDateRangeShort } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import UserAvatar from "@/components/UserAvatar";
-import { UserService } from "@/features/Profile/Services/userService";
+import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import { useAuth } from "@/context/AuthContext";
 import SpinningAddFriendIcon from "@/features/Profile/Components/SpinningAddFriend";
 import useToast from "@/hooks/useToast";
@@ -42,12 +42,12 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
   //prettier-ignore
   const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ 
     queryKey: ["friends", profile.id ],
-    queryFn: async () => UserService.getFriends()
+    queryFn: async () => FriendshipService.getFriends()
     })
 
   const requestFriendMutation = useMutation<boolean, Error, FriendshipCreate>({
     mutationFn: ({ userId, friendId, initiatorId }) => {
-      return UserService.requestFriend({ userId, friendId, initiatorId });
+      return FriendshipService.requestFriend({ userId, friendId, initiatorId });
     },
     onError: (error) => {
       showFailure({ message: error.message });

@@ -22,7 +22,7 @@ export default function UserCard({
   user,
   subtitle,
   iconSize = 40,
-  titleFontSize,
+  titleFontSize = 16,
   style,
   right,
 }: UserCardProps) {

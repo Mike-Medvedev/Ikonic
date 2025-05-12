@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "react-native-paper";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
-import { UserService } from "@/features/Profile/Services/userService";
+import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import ProfileEditView from "@/features/Profile/Views/ProfileEditView";
 import { UserPublic } from "@/types";
 interface ProfileEditModalProps {
@@ -19,7 +19,7 @@ export default function ProfileEditModal({ profile, visible, callback }: Profile
   const { session } = useAuth();
   if (!session) return null;
   //prettier-ignore
-  const { data: friends, isFetching, error } = useQuery({ queryKey: ["friends", session.user.id ], queryFn: async () => UserService.getFriends()})
+  const { data: friends, isFetching, error } = useQuery({ queryKey: ["friends", "me", session.user.id ], queryFn: async () => FriendshipService.getFriends()})
   const styles = StyleSheet.create({
     container: { padding: 16, flex: 1 },
     content: { flex: 1 },

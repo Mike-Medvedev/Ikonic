@@ -7,13 +7,13 @@ import { useLocalSearchParams } from "expo-router";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 
 import { useAuth } from "@/context/AuthContext";
-import { UserService } from "@/features/Profile/Services/userService";
+import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import Pill from "@/design-system/components/Pill";
 
 import FriendsList from "@/features/Trips/TripInvite/Components/FriendsList";
 import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
 import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
-import { UserPublic } from "@/generated";
+import { UserPublic } from "@/types";
 import useInvite from "@/hooks/useInvite";
 /**
  * Route for displaying Invite Friends page
@@ -36,7 +36,7 @@ export default function InviteUsersView() {
 
   //prettier-ignore
   const { data: friends, isFetching: isFriendsFetching, error: friendsError,
-  } = useQuery({ queryKey: ["friends", session.user.id], queryFn: async () => UserService.getFriends() });
+  } = useQuery({ queryKey: ["friends", "me", session.user.id], queryFn: async () => FriendshipService.getFriends() });
   const filteredFriends = friends?.filter((friend) =>
     friend.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
   );

@@ -75,8 +75,8 @@ export type FriendshipCreate = {
 };
 
 export type FriendshipPublic = {
-    userId: string;
-    friendId: string;
+    user: User;
+    friend: User;
     initiatorId: string;
     status: FriendshipStatus;
 };
@@ -143,6 +143,18 @@ export type TripUpdate = {
     mountain?: string | null;
     desc?: string | null;
     tripImageStoragePath?: string | null;
+};
+
+export type User = {
+    id: string;
+    phone?: string | null;
+    firstname?: string | null;
+    lastname?: string | null;
+    username?: string | null;
+    rider_type?: RiderType | null;
+    is_onboarded?: boolean;
+    avatar_storage_path?: string | null;
+    avatar_public_url?: string | null;
 };
 
 export type UserPublic = {
@@ -661,21 +673,21 @@ export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponses = {
 
 export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponse = InviteUserApiV1TripsTripIdInvitesUserIdPostResponses[keyof InviteUserApiV1TripsTripIdInvitesUserIdPostResponses];
 
-export type GetFriendsApiV1FriendshipsGetData = {
+export type GetFriendsApiV1FriendshipsMeGetData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/api/v1/friendships/';
+    url: '/api/v1/friendships/me';
 };
 
-export type GetFriendsApiV1FriendshipsGetResponses = {
+export type GetFriendsApiV1FriendshipsMeGetResponses = {
     /**
      * Successful Response
      */
     200: DtoListUserPublic;
 };
 
-export type GetFriendsApiV1FriendshipsGetResponse = GetFriendsApiV1FriendshipsGetResponses[keyof GetFriendsApiV1FriendshipsGetResponses];
+export type GetFriendsApiV1FriendshipsMeGetResponse = GetFriendsApiV1FriendshipsMeGetResponses[keyof GetFriendsApiV1FriendshipsMeGetResponses];
 
 export type ResponseFriendRequestApiV1FriendshipsPatchData = {
     body: FriendshipUpdate;

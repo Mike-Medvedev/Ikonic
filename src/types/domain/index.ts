@@ -33,7 +33,7 @@ export {
   completeOnboardingApiV1UsersOnboardingPost,
 
   // Friendships endpoints
-  getFriendsApiV1FriendshipsGet,
+  getFriendsApiV1FriendshipsMeGet,
   responseFriendRequestApiV1FriendshipsPatch,
   createFriendRequestApiV1FriendshipsPost,
   checkFriendRequestsApiV1FriendshipsUserIdGet,
