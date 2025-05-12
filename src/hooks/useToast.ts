@@ -8,7 +8,7 @@ const useToast = () => {
     } else {
       Alert.alert(message);
     }
-    if (url) router.push({ pathname: url as `/`, params });
+    if (url) router.replace({ pathname: url as `/`, params });
   };
   const showFailure = ({ message, url, params }: { message: string; url?: string; params?: UnknownInputParams }) => {
     if (Platform.OS === "web") {
@@ -16,7 +16,7 @@ const useToast = () => {
     } else {
       Alert.alert(message);
     }
-    if (url) router.push({ pathname: url as `/`, params });
+    if (url) router.replace({ pathname: url as `/`, params });
   };
 
   return { showSuccess, showFailure };

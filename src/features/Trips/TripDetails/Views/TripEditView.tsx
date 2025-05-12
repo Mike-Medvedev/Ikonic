@@ -82,6 +82,7 @@ export default function TripEditView() {
 
   async function handleSubmit() {
     setLoading(true);
+    let tripImageStoragePath = updateTripForm.tripImageStoragePath;
     if (image && !image.canceled) {
       const imagePath = await storageClient.uploadImage({
         file: image,
@@ -89,11 +90,16 @@ export default function TripEditView() {
         path: `${selectedTripId}/trip-image`,
       });
       console.log("PRINTING IMAGE PATH!!!: ", imagePath);
-      if (imagePath) setUpdateTripForm((prev) => ({ ...prev, tripImageStoragePath: { value: imagePath, error: "" } }));
+      if (imagePath) {
+        tripImageStoragePath = { value: imagePath, error: "" };
+      }
     }
-
-    const updateForm = UpdatePayloadFactory<TripUpdateParsed>(updateTripForm);
-    updateTripMutation.mutate({ selectedTripId, form: updateForm });
+    const updateForm: TripUpdateForm = {
+      ...updateTripForm,
+      tripImageStoragePath,
+    };
+    const parsedForm = UpdatePayloadFactory<TripUpdateParsed>(updateForm);
+    updateTripMutation.mutate({ selectedTripId, form: parsedForm });
   }
 
   /**

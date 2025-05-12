@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, Pressable, Image } from "react-native";
-import { Chip, Divider, Icon, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Chip, Divider, Icon, Text, useTheme } from "react-native-paper";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
@@ -11,6 +11,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import storageClient from "@/lib/storage";
+import { useMemo, useState } from "react";
 
 /**
  * Renders the UI for the trip details page
@@ -18,6 +19,7 @@ import storageClient from "@/lib/storage";
  */
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams() as { selectedTrip: string };
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   // const [modalVisible, setModalVisible] = useState(false);
   const theme = useTheme();
 
@@ -36,7 +38,11 @@ export default function TripDetailsView() {
      enabled: !!selectedTripID,
    });
 
-  const { data: imageUrl } = useQuery({
+  const {
+    data: imageUrl,
+    isFetching: fetchingImage,
+    error: imageError,
+  } = useQuery({
     queryKey: ["trip-image", trip?.id],
     queryFn: async () => {
       if (!trip?.tripImageStoragePath) return null;
@@ -70,13 +76,26 @@ export default function TripDetailsView() {
     tripDetailsContent: {
       gap: 16,
     },
+    imageContainer: { width: "100%", height: "100%", justifyContent: "center" },
     image: { width: "100%", height: "100%", objectFit: "cover" },
   });
+  const cacheBustedUrl = useMemo(() => {
+    return imageUrl ? `${imageUrl}&cache_bust=${Date.now()}` : undefined;
+  }, [imageUrl]);
   return (
     <Background>
-      <AsyncStateWrapper loading={fTrips} error={eTrips}>
+      <AsyncStateWrapper loading={fTrips || fetchingImage} error={eTrips || imageError}>
         <View style={styles.cover}>
-          <Image source={{ uri: imageUrl ?? undefined }} style={styles.image} />
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: cacheBustedUrl }}
+              style={styles.image}
+              onLoadStart={() => setImageLoading(true)}
+              onLoadEnd={() => setImageLoading(false)}
+            />
+            {imageLoading && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
+          </View>
+
           {/* <View style={styles.coverActions}>
             <IconButton icon="share-variant" size={20} iconColor={theme.colors.primary} mode="contained" />
             <IconButton icon="heart-outline" size={20} iconColor={theme.colors.primary} mode="contained" />
