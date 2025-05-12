@@ -1,4 +1,4 @@
-import { FriendshipPublic, FriendshipStatus, FriendshipUpdate } from "@/types";
+import { FriendshipPublic, FriendshipUpdate } from "@/types";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Text } from "@/design-system/components";
 import UserCard from "@/components/UserCard";

@@ -1,13 +1,13 @@
-import { FlatList, Modal, ScrollView, StyleSheet, View } from "react-native";
+import { FlatList, Modal, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, Button } from "@/design-system/components";
-import { Divider, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/context/AuthContext";
-import { FriendshipPublic, UserPublic } from "@/types";
+import { UserPublic } from "@/types";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import FriendRequest from "@/features/Profile/Components/FriendRequest";
 interface FriendsListModalProps {
   friends: UserPublic[];

@@ -1,6 +1,5 @@
 import { Modal, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "react-native-paper";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
@@ -15,7 +14,6 @@ interface ProfileEditModalProps {
  * Modal that renders a list of a current users accepted friends
  */
 export default function ProfileEditModal({ profile, visible, callback }: ProfileEditModalProps) {
-  const theme = useTheme();
   const { session } = useAuth();
   if (!session) return null;
   //prettier-ignore
