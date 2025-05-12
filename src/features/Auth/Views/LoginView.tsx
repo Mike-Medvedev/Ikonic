@@ -132,7 +132,6 @@ export default function LoginView() {
       <DividerText text="Or continue with" />
       <View style={styles.buttonGroup}>
         <Button icon="google" mode="outlined">
-          {" "}
           Google
         </Button>
         <Button icon="apple" mode="outlined">
