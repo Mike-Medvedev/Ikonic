@@ -56,7 +56,7 @@ export function withError<TArgs extends unknown[], T>(
       return result;
     } catch (error) {
       if (error instanceof ApiError) {
-        if (error.status === HTTPSTATUSCODE.UNAUTHENTICATED || error.status === HTTPSTATUSCODE.FORBIDDEN) {
+        if (error.status === HTTPSTATUSCODE.UNAUTHENTICATED) {
           console.error(`Authentication error (${error.status}), signing out.`);
           await AsyncStorage.clear();
           await AuthService.signOut();
