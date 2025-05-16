@@ -184,7 +184,7 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
             mode={profileForm.riderType.value === "skier" ? "contained" : "outlined"}
             onPress={() => {
               if (profileForm.riderType.value === "skier")
-                setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
+                setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
               else setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
             }}
           >

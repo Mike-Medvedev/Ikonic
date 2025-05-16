@@ -23,7 +23,7 @@ export default function TripPlannerView() {
       resetForm();
       showSuccess({
         message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,
-        url: `/trips/${data.id}`,
+        url: `/trips`,
       });
     },
     onError: (error) => {
