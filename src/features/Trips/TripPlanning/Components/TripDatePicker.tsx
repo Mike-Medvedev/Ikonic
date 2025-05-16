@@ -17,8 +17,8 @@ export default function TripDatePicker<T extends NewTripForm | TripUpdateForm>({
     startDate: Date | undefined;
     endDate: Date | undefined;
   }>({
-    startDate: undefined,
-    endDate: undefined,
+    startDate: tripForm?.startDate?.value,
+    endDate: tripForm?.endDate?.value,
   });
   const theme = useTheme();
   const [open, setOpen] = useState(false);

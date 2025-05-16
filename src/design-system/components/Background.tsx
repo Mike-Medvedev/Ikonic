@@ -9,13 +9,7 @@ type Props = {
 /** Renders the Main Background for the application */
 function Background({ children }: Props) {
   const theme = useTheme();
-  return (
-    <View style={[{ backgroundColor: theme.colors.background }, styles.background]}>
-      <KeyboardAvoidingView style={styles.background} behavior="padding">
-        {children}
-      </KeyboardAvoidingView>
-    </View>
-  );
+  return <View style={[{ backgroundColor: theme.colors.background }, styles.background]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

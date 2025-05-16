@@ -5,8 +5,8 @@ import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMount
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
 import { TripUpdateForm, TripUpdateParsed } from "@/types";
 import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import useImagePicker from "@/hooks/useImagePicker";
 import { UpdatePayloadFactory } from "@/utils/FormBuilder";
@@ -15,6 +15,7 @@ import { DeleteConfirmation } from "@/utils/ConfirmationModal";
 import { NetworkError } from "@/lib/errors";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import useToast from "@/hooks/useToast";
+import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 interface UpdateTripMutation {
   selectedTripId: string;
   form: TripUpdateParsed;
@@ -30,6 +31,13 @@ export default function TripEditView() {
   const { image, pickImage } = useImagePicker();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const [loading, setLoading] = useState<boolean>(false);
+  // prettier-ignore
+  const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
+      queryKey: ["trip", selectedTripId], queryFn: async () => {
+        return TripService.getOne(selectedTripId as string);
+      },
+      enabled: !!selectedTripId,
+    });
 
   const updateTripMutation = useMutation<TripUpdateParsed, Error, UpdateTripMutation>({
     mutationFn: async ({ selectedTripId, form }) => {
@@ -71,7 +79,14 @@ export default function TripEditView() {
     },
   });
 
-  const [updateTripForm, setUpdateTripForm] = useState<TripUpdateForm>({});
+  const [updateTripForm, setUpdateTripForm] = useState<TripUpdateForm>({
+    title: { value: trip?.title, error: "" },
+    mountain: { value: trip?.mountain, error: "" },
+    desc: { value: trip?.desc, error: "" },
+    tripImageStoragePath: { value: trip?.tripImageStoragePath, error: "" },
+    startDate: { value: trip?.startDate, error: "" },
+    endDate: { value: trip?.endDate, error: "" },
+  });
   const styles = StyleSheet.create({
     container: { padding: 16 },
     image: { width: "100%", height: "100%", objectFit: "cover" },
@@ -119,51 +134,53 @@ export default function TripEditView() {
           </Button>
         </View>
       </View>
-      <ScrollView style={styles.container}>
-        <Text variant="labelMedium" style={(styles.label, { marginBottom: -2 })}>
-          Trip Title
-        </Text>
-        <TextInput
-          label="Name Your Trip"
-          returnKeyType="next"
-          value={updateTripForm?.title?.value ?? ""}
-          onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
-          error={!!updateTripForm?.title?.error}
-          errorText={updateTripForm?.title?.error}
-          autoCapitalize="words"
-          keyboardType="default"
-          mode="outlined"
-        />
-        <Text variant="labelMedium" style={styles.label}>
-          Destination
-        </Text>
-        <SelectMountain tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
-        <Text variant="labelMedium" style={styles.label}>
-          Dates
-        </Text>
-        <TripDatePicker tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
-        <Text variant="labelMedium" style={styles.label}>
-          Trip Description (Optional)
-        </Text>
-        <TextInput
-          multiline
-          style={{ height: 80 }}
-          placeholder="Add any notes or details about your trip..."
-          value={updateTripForm.desc?.value ?? ""}
-          onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, desc: { value: text, error: "" } }))}
-        />
-        <Button mode="contained" onPress={handleSubmit} loading={loading}>
-          Accept Changes
-        </Button>
-        <Button
-          onPress={() => handleTripDelete(selectedTripId)}
-          style={{ marginVertical: 16 }}
-          icon="trash-can"
-          mode="contained"
-        >
-          Delete Trip
-        </Button>
-      </ScrollView>
+      <AsyncStateWrapper loading={fTrips} error={eTrips}>
+        <ScrollView style={styles.container}>
+          <Text variant="labelMedium" style={(styles.label, { marginBottom: -2 })}>
+            Trip Title
+          </Text>
+          <TextInput
+            label="Name Your Trip"
+            returnKeyType="next"
+            value={updateTripForm?.title?.value ?? ""}
+            onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, title: { value: text, error: "" } }))}
+            error={!!updateTripForm?.title?.error}
+            errorText={updateTripForm?.title?.error}
+            autoCapitalize="words"
+            keyboardType="default"
+            mode="outlined"
+          />
+          <Text variant="labelMedium" style={styles.label}>
+            Destination
+          </Text>
+          <SelectMountain tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
+          <Text variant="labelMedium" style={styles.label}>
+            Dates
+          </Text>
+          <TripDatePicker tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
+          <Text variant="labelMedium" style={styles.label}>
+            Trip Description (Optional)
+          </Text>
+          <TextInput
+            multiline
+            style={{ height: 80 }}
+            placeholder="Add any notes or details about your trip..."
+            value={updateTripForm.desc?.value ?? ""}
+            onChangeText={(text) => setUpdateTripForm((prev) => ({ ...prev, desc: { value: text, error: "" } }))}
+          />
+          <Button mode="contained" onPress={handleSubmit} loading={loading}>
+            Accept Changes
+          </Button>
+          <Button
+            onPress={() => handleTripDelete(selectedTripId)}
+            style={{ marginVertical: 16 }}
+            icon="trash-can"
+            mode="contained"
+          >
+            Delete Trip
+          </Button>
+        </ScrollView>
+      </AsyncStateWrapper>
     </Background>
   );
 }

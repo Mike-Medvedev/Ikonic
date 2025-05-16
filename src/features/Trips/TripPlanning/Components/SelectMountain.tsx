@@ -129,7 +129,11 @@ const SelectMountain = <T extends NewTripForm | TripUpdateForm>({ tripForm, setT
         showClear={false}
         enableLoadingIndicator={false}
         onSelectItem={(item) => {
-          setTripForm((prev) => ({ ...prev, mountain: { value: item?.title ?? "", error: "" } }));
+          if (!item?.title) return;
+          setTripForm((prev) => ({
+            ...prev,
+            mountain: { value: item.title, error: "" },
+          }));
         }}
         controller={(controller) => {
           dropdownController.current = controller;
