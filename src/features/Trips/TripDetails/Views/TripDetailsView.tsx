@@ -12,6 +12,8 @@ import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import storageClient from "@/lib/storage";
 import { useMemo, useState } from "react";
+import { Button } from "@/design-system/components";
+import { useAuth } from "@/context/AuthContext";
 
 /**
  * Renders the UI for the trip details page
@@ -20,6 +22,8 @@ import { useMemo, useState } from "react";
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams() as { selectedTrip: string };
   const [imageLoading, setImageLoading] = useState<boolean>(false);
+  const { session } = useAuth();
+  if (!session) return null;
   // const [modalVisible, setModalVisible] = useState(false);
   const theme = useTheme();
 
@@ -30,6 +34,7 @@ export default function TripDetailsView() {
     },
     enabled: !!selectedTripID,
   });
+  const isOwner = trip?.owner.id === session.user.id;
 
   //prettier-ignore
   const { data: attendees, isFetching: fAttendees, error: eAttendees } = useQuery({
@@ -132,14 +137,19 @@ export default function TripDetailsView() {
                 </Chip>
               </View>
             </View>
-            <View style={{ marginVertical: 16 }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-                  Trip Members
-                </Text>
-                <Pressable onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/attendance`)}>
-                  <Icon source="account-plus" color={theme.colors.secondary} size={24} />
-                </Pressable>
+            <View style={{ marginVertical: 16, gap: 16 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <Text variant="titleMedium">Trip Members</Text>
+                {isOwner && (
+                  <Button
+                    mode="elevated"
+                    icon="account-plus"
+                    onPress={() => router.push(`${DEFAULT_APP_PATH}/${trip?.id}/invite`)}
+                    theme={{ roundness: theme.roundness }}
+                  >
+                    Invite
+                  </Button>
+                )}
               </View>
 
               <Pressable
@@ -148,9 +158,9 @@ export default function TripDetailsView() {
               >
                 <View style={{ flexDirection: "row", justifyContent: "space-between", flex: 1 }}>
                   <AsyncStateWrapper loading={fAttendees} error={eAttendees}>
-                    <UsersAvatarList attendees={attendees} rsvp="accepted" />
+                    <UsersAvatarList attendees={attendees} rsvp="accepted" size={40} />
                   </AsyncStateWrapper>
-                  <Icon source="chevron-right" size={28} />
+                  <Icon source="chevron-right" size={40} />
                 </View>
               </Pressable>
               {/* <AsyncStateWrapper loading={isFetching} error={error}>

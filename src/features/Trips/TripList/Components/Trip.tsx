@@ -67,7 +67,7 @@ export default function Trip({ trip }: TripProps) {
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
             <AsyncStateWrapper loading={isFetching} error={error}>
-              <UsersAvatarList attendees={attendees} rsvp="accepted" />
+              <UsersAvatarList attendees={attendees} rsvp="accepted" labelFontSize={12} />
             </AsyncStateWrapper>
 
             <View style={styles.chip}>

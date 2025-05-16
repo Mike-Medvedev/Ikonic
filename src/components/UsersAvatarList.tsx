@@ -1,9 +1,16 @@
 import { AttendanceList, RSVPStatus } from "@/types";
 import { View } from "react-native";
-import { Avatar } from "react-native-paper";
+import { Avatar, useTheme } from "react-native-paper";
 import UserAvatar from "@/components/UserAvatar";
 
 const MAX_AVATARS = 5;
+
+interface UsersAvatarListProps {
+  attendees: AttendanceList | undefined;
+  rsvp: RSVPStatus;
+  size?: number;
+  labelFontSize?: number;
+}
 
 /**
  * Renders a List of User Initial Avatars given an attendance list, if more than max avatars, render an avatar showing surplus users
@@ -11,25 +18,23 @@ const MAX_AVATARS = 5;
 export default function UsersAvatarList({
   attendees = { accepted: [], pending: [], uncertain: [], declined: [] },
   rsvp,
-  size = 28,
-}: {
-  attendees: AttendanceList | undefined;
-  rsvp: RSVPStatus;
-  size?: number;
-}) {
+  size = 24,
+  labelFontSize = 16,
+}: UsersAvatarListProps) {
+  const theme = useTheme();
   return (
     <View style={{ flexDirection: "row", gap: 5 }}>
       {attendees[rsvp] && (
         <>
           {attendees[rsvp].slice(0, MAX_AVATARS).map((user, index) => (
-            <UserAvatar profile={user} size={24} key={index} />
+            <UserAvatar profile={user} size={size} key={index} />
           ))}
           {attendees[rsvp].length > MAX_AVATARS && (
             <Avatar.Text
               label={`+${attendees[rsvp].length - MAX_AVATARS}`}
-              style={{ backgroundColor: "grey" }}
+              style={{ backgroundColor: theme.colors.primaryContainer }}
               size={size}
-              labelStyle={{ fontSize: 12 }}
+              labelStyle={{ fontSize: labelFontSize, color: theme.colors.onPrimaryContainer }}
             />
           )}
         </>
