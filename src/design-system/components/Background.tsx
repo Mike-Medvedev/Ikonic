@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { StyleSheet, KeyboardAvoidingView, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
 type Props = {

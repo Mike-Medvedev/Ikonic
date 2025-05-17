@@ -28,6 +28,10 @@ export type DtoCarPublic = {
     data: CarPublic;
 };
 
+export type DtoFriendshipPublic = {
+    data: FriendshipPublic;
+};
+
 export type DtoPassengerCreate = {
     data: PassengerCreate;
 };
@@ -64,28 +68,30 @@ export type DtoListUserPublic = {
     data: Array<UserPublic>;
 };
 
+export type DtoListUserWithFriendshipInfo = {
+    data: Array<UserWithFriendshipInfo>;
+};
+
 export type DeepLink = {
     deepLink: string;
 };
 
+export type FriendRequestType = 'outgoing' | 'incoming';
+
 export type FriendshipCreate = {
-    userId: string;
-    friendId: string;
-    initiatorId: string;
+    addresseeId: string;
 };
 
 export type FriendshipPublic = {
-    user: User;
-    friend: User;
-    initiatorId: string;
+    id: string;
+    requester: User;
+    addressee: User;
     status: FriendshipStatus;
 };
 
 export type FriendshipStatus = 'pending' | 'accepted' | 'rejected' | 'blocked';
 
 export type FriendshipUpdate = {
-    userId: string;
-    friendId: string;
     status: FriendshipStatus;
 };
 
@@ -165,7 +171,7 @@ export type UserPublic = {
     username: string | null;
     riderType: RiderType | null;
     isOnboarded: boolean;
-    avatarPublicUrl: null | string;
+    avatarPublicUrl: string | null;
 };
 
 export type UserUpdate = {
@@ -175,6 +181,11 @@ export type UserUpdate = {
     username?: string | null;
     riderType?: RiderType | null;
     avatarStoragePath?: string | null;
+};
+
+export type UserWithFriendshipInfo = {
+    user: UserPublic;
+    friendshipId: string;
 };
 
 export type ValidationError = {
@@ -684,35 +695,10 @@ export type GetFriendsApiV1FriendshipsMeGetResponses = {
     /**
      * Successful Response
      */
-    200: DtoListUserPublic;
+    200: DtoListUserWithFriendshipInfo;
 };
 
 export type GetFriendsApiV1FriendshipsMeGetResponse = GetFriendsApiV1FriendshipsMeGetResponses[keyof GetFriendsApiV1FriendshipsMeGetResponses];
-
-export type ResponseFriendRequestApiV1FriendshipsPatchData = {
-    body: FriendshipUpdate;
-    path?: never;
-    query?: never;
-    url: '/api/v1/friendships/';
-};
-
-export type ResponseFriendRequestApiV1FriendshipsPatchErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ResponseFriendRequestApiV1FriendshipsPatchError = ResponseFriendRequestApiV1FriendshipsPatchErrors[keyof ResponseFriendRequestApiV1FriendshipsPatchErrors];
-
-export type ResponseFriendRequestApiV1FriendshipsPatchResponses = {
-    /**
-     * Successful Response
-     */
-    200: DtoBool;
-};
-
-export type ResponseFriendRequestApiV1FriendshipsPatchResponse = ResponseFriendRequestApiV1FriendshipsPatchResponses[keyof ResponseFriendRequestApiV1FriendshipsPatchResponses];
 
 export type CreateFriendRequestApiV1FriendshipsPostData = {
     body: FriendshipCreate;
@@ -744,7 +730,9 @@ export type CheckFriendRequestsApiV1FriendshipsUserIdGetData = {
     path: {
         user_id: string;
     };
-    query?: never;
+    query: {
+        request_type: FriendRequestType | null;
+    };
     url: '/api/v1/friendships/{user_id}';
 };
 
@@ -765,6 +753,33 @@ export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponses = {
 };
 
 export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponse = CheckFriendRequestsApiV1FriendshipsUserIdGetResponses[keyof CheckFriendRequestsApiV1FriendshipsUserIdGetResponses];
+
+export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchData = {
+    body: FriendshipUpdate;
+    path: {
+        friendship_id: string;
+    };
+    query?: never;
+    url: '/api/v1/friendships/{friendship_id}';
+};
+
+export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchError = RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchErrors[keyof RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchErrors];
+
+export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoFriendshipPublic;
+};
+
+export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchResponse = RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchResponses[keyof RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchResponses];
 
 export type ClientOptions = {
     baseUrl: 'http://localhost:8080' | (string & {});

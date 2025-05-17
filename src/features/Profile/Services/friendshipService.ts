@@ -3,9 +3,10 @@ import {
   createFriendRequestApiV1FriendshipsPost,
   FriendshipCreate,
   checkFriendRequestsApiV1FriendshipsUserIdGet,
-  FriendshipStatus,
-  responseFriendRequestApiV1FriendshipsPatch,
+  respondToFriendRequestApiV1FriendshipsFriendshipIdPatch,
   FriendshipUpdate,
+  FriendRequestType,
+  FriendshipPublic,
 } from "@/types";
 
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
@@ -29,11 +30,12 @@ export const FriendshipService = {
       throw error;
     }
   }),
-  getFriendRequests: withError(async (user_id: string) => {
+  getFriendRequests: withError(async (user_id: string, request_type: FriendRequestType) => {
     const client = await createAuthenticatedClient();
     const res = await checkFriendRequestsApiV1FriendshipsUserIdGet<true>({
       path: { user_id },
       client,
+      query: { request_type },
     });
     if (!res.data.data) {
       console.error("Friend Requests List fetch was not successful");
@@ -53,10 +55,11 @@ export const FriendshipService = {
     }
     return res.data.data;
   }),
-  respond: withError(async (response: FriendshipUpdate): Promise<boolean> => {
+  respond: withError(async (friendship_id: string, status: FriendshipUpdate): Promise<FriendshipPublic> => {
     const client = await createAuthenticatedClient();
-    const res = await responseFriendRequestApiV1FriendshipsPatch<true>({
-      body: response,
+    const res = await respondToFriendRequestApiV1FriendshipsFriendshipIdPatch<true>({
+      path: { friendship_id },
+      body: status,
       client,
     });
     if (!res.data.data) {

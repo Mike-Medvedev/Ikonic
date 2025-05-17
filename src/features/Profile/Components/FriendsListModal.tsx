@@ -4,14 +4,13 @@ import { Text, Button } from "@/design-system/components";
 import { ActivityIndicator, Icon } from "react-native-paper";
 import UserCard from "@/components/UserCard";
 import { useAuth } from "@/context/AuthContext";
-import { UserPublic } from "@/types";
+import { UserWithFriendshipInfo } from "@/types";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import { useQuery } from "@tanstack/react-query";
-import FriendRequest from "@/features/Profile/Components/FriendRequest";
 import useRespondFriendRequest from "@/hooks/useRespondFriendRequest";
 interface FriendsListModalProps {
-  friends: UserPublic[];
+  friends: UserWithFriendshipInfo[];
   isFriendsFetching: boolean;
   friendsError: Error | null;
   visible: boolean;
@@ -27,13 +26,14 @@ export default function FriendsListModal({
   visible,
   setVisible,
 }: FriendsListModalProps) {
-  const { loading, setLoading, respondToRequestMutation } = useRespondFriendRequest();
   const { session } = useAuth();
   if (!session) return null;
+  const { loading, setLoading, respondToRequestMutation } = useRespondFriendRequest();
+
   //prettier-ignore
   const { data: friendRequests, isFetching: isFriendRequestsFetching, error: friendRequestsError} = useQuery({ 
     queryKey: ["friend-requests", "me", session.user.id],
-    queryFn: async () => FriendshipService.getFriendRequests(session.user.id)
+    queryFn: async () => FriendshipService.getFriendRequests(session.user.id, "outgoing")
     })
 
   const styles = StyleSheet.create({
@@ -49,21 +49,6 @@ export default function FriendsListModal({
       <SafeAreaView style={styles.container}>
         <AsyncStateWrapper loading={isFriendsFetching} error={friendsError}>
           <View style={styles.content}>
-            {friendRequests && friendRequests.length > 0 && (
-              <View style={styles.requestsContainer}>
-                <Text variant="headlineSmall" style={styles.title}>
-                  Friend Requests
-                </Text>
-                <FlatList
-                  data={friendRequests.filter((item) => item.status.toLowerCase().trim() === "pending")}
-                  renderItem={({ item }) => (
-                    <FriendRequest outgoing={item.initiatorId === session.user.id} request={item} />
-                  )}
-                  keyExtractor={(item) => item.user.id + item.friend.id}
-                />
-              </View>
-            )}
-
             {friends && (
               <View style={styles.friendsContainer}>
                 <Text variant="headlineMedium" style={styles.title}>
@@ -73,14 +58,13 @@ export default function FriendsListModal({
                   data={friends}
                   renderItem={({ item }) => (
                     <UserCard
-                      user={item}
-                      key={item.id}
+                      user={item.user}
+                      key={item.user.id}
                       right={
                         <Pressable
                           disabled={loading}
                           onPress={() => {
-                            const [id1, id2] = [session.user.id, item.id].sort();
-                            respondToRequestMutation.mutate({ userId: id1!, friendId: id2!, status: "rejected" });
+                            respondToRequestMutation.mutate({ id: item.friendshipId, status: "rejected" });
                           }}
                         >
                           {loading ? <ActivityIndicator /> : <Icon source="delete" size={24} color="red" />}
@@ -88,7 +72,7 @@ export default function FriendsListModal({
                       }
                     />
                   )}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => item.user.id}
                 />
               </View>
             )}

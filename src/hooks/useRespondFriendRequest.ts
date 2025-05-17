@@ -1,19 +1,28 @@
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
-import { FriendshipUpdate } from "@/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { FriendshipPublic, FriendshipUpdate } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
-export default function useRespondFriendRequest() {
-  const queryClient = useQueryClient();
+interface RespondFriendRequestProps {
+  options?: {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+    onSettled?: () => void;
+  };
+}
+
+export default function useRespondToFriendRequest({ options }: RespondFriendRequestProps = {}) {
   const [loading, setLoading] = useState<boolean>(false);
-  const respondToRequestMutation = useMutation<boolean, Error, FriendshipUpdate>({
-    mutationFn: (response) => FriendshipService.respond(response),
-    onError: () => {},
-    onSuccess: () => {},
+  const respondToRequestMutation = useMutation<FriendshipPublic, Error, FriendshipUpdate & { id: string }>({
+    mutationFn: ({ id, status }) => FriendshipService.respond(id, { status }),
+    onError: (error) => {
+      options?.onError?.(error);
+    },
+    onSuccess: () => {
+      options?.onSuccess?.();
+    },
     onSettled: () => {
-      setLoading(false);
-      queryClient.invalidateQueries({ queryKey: ["friends"], exact: false });
-      queryClient.invalidateQueries({ queryKey: ["friend-requests"], exact: false });
+      options?.onSettled?.();
     },
   });
 

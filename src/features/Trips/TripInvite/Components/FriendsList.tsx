@@ -1,11 +1,11 @@
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UserCard from "@/components/UserCard";
 import { Text, Checkbox } from "@/design-system/components";
-import { UserPublic } from "@/generated";
+import { UserPublic, UserWithFriendshipInfo } from "@/types";
 import { View, StyleSheet, FlatList } from "react-native";
 
 interface FriendsListProps {
-  filteredFriends: UserPublic[];
+  filteredFriends: UserWithFriendshipInfo[];
   isFriendsFetching: boolean;
   friendsError: Error | null;
   selectedUsers: UserPublic[];
@@ -30,16 +30,16 @@ export default function FriendsList({
       <AsyncStateWrapper loading={isFriendsFetching} error={friendsError}>
         <FlatList
           data={filteredFriends}
-          keyExtractor={(item) => item?.id?.toString()}
+          keyExtractor={(item) => item?.user.id?.toString()}
           renderItem={({ item }) => (
             <UserCard
               onPress={() => {
-                if (selectedUsers?.includes(item))
-                  setSelectedUsers((prev) => prev.filter((user) => user.id != item.id));
-                else setSelectedUsers((prev) => [...prev, item]);
+                if (selectedUsers?.includes(item.user))
+                  setSelectedUsers((prev) => prev.filter((user) => user.id != item.user.id));
+                else setSelectedUsers((prev) => [...prev, item.user]);
               }}
-              user={item}
-              right={<Checkbox isSelected={selectedUsers?.includes(item)} />}
+              user={item.user}
+              right={<Checkbox isSelected={selectedUsers?.includes(item.user)} />}
             />
           )}
           ListEmptyComponent={<Text> No Friends Added!</Text>}

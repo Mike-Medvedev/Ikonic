@@ -38,7 +38,7 @@ export default function InviteUsersView() {
   const { data: friends, isFetching: isFriendsFetching, error: friendsError,
   } = useQuery({ queryKey: ["friends", "me", session.user.id], queryFn: async () => FriendshipService.getFriends() });
   const filteredFriends = friends?.filter((friend) =>
-    friend.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
+    friend.user.firstname?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
   const [selectedPill, setSelectedPill] = useState<string>("Friends");
 

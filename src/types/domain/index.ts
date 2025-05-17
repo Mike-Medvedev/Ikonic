@@ -34,7 +34,7 @@ export {
 
   // Friendships endpoints
   getFriendsApiV1FriendshipsMeGet,
-  responseFriendRequestApiV1FriendshipsPatch,
+  respondToFriendRequestApiV1FriendshipsFriendshipIdPatch,
   createFriendRequestApiV1FriendshipsPost,
   checkFriendRequestsApiV1FriendshipsUserIdGet,
 
@@ -48,6 +48,7 @@ export {
   CarPublic,
   DtoAttendanceList,
   DtoCarPublic,
+  DtoFriendshipPublic,
   DtoPassengerCreate,
   DtoTripPublic,
   DtoUserPublic,
@@ -73,6 +74,9 @@ export {
   FriendshipCreate,
   FriendshipStatus,
   FriendshipUpdate,
+  FriendRequestType,
+  UserWithFriendshipInfo,
+  DtoListUserWithFriendshipInfo,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {

@@ -5,7 +5,7 @@ import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMount
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
 import { TripUpdateForm, TripUpdateParsed } from "@/types";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import useImagePicker from "@/hooks/useImagePicker";

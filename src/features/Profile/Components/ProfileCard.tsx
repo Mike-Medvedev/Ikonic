@@ -46,8 +46,8 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
     })
 
   const requestFriendMutation = useMutation<boolean, Error, FriendshipCreate>({
-    mutationFn: ({ userId, friendId, initiatorId }) => {
-      return FriendshipService.requestFriend({ userId, friendId, initiatorId });
+    mutationFn: ({ addresseeId }) => {
+      return FriendshipService.requestFriend({ addresseeId });
     },
     onError: (error) => {
       showFailure({ message: error.message });
@@ -142,9 +142,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
             onPress={() => {
               setRequesting(true);
               requestFriendMutation.mutate({
-                userId: session.user.id,
-                friendId: profile.id,
-                initiatorId: session.user.id,
+                addresseeId: profile.id,
               });
             }}
           >

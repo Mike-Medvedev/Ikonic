@@ -139,7 +139,7 @@ export default function TripDetailsView() {
             </View>
             <View style={{ marginVertical: 16, gap: 16 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <Text variant="titleMedium">Trip Members</Text>
+                <Text variant="titleMedium">{`Trip Members (${attendees?.accepted.length})`}</Text>
                 {isOwner && (
                   <Button
                     mode="elevated"

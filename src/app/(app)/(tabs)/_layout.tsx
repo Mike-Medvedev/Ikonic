@@ -9,6 +9,7 @@ import HeaderTitle from "@/components/HeaderTitle";
 import { Pressable } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import { APP_GROUP, PROFILE_PATH, TAB_GROUP } from "@/constants/constants";
+import NotificationMenu from "@/components/NotificationMenu";
 /**
  * Layout for Expo (tabs) which represent selectable tabs in a mobile app
  */
@@ -37,6 +38,10 @@ export default function TabLayout() {
       </Pressable>
     );
   };
+  const NotificationMenuWrapper = () => {
+    return <NotificationMenu key={Date.now()} />;
+  };
+
   return (
     <Tabs initialRouteName="plan" screenOptions={tabScreenOptions}>
       <Tabs.Screen
@@ -46,6 +51,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome name="newspaper-o" size={24} color={color} />,
           headerTitle: HeaderTitle,
           headerRight: SignOutButton,
+          headerLeft: NotificationMenuWrapper,
         }}
       />
       <Tabs.Screen
