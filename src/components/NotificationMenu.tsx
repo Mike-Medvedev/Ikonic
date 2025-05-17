@@ -16,7 +16,7 @@ export default function NotificationMenu() {
   const queryClient = useQueryClient();
   const { respondToRequestMutation } = useRespondFriendRequest({
     options: {
-      onSuccess: () => {
+      onSettled: () => {
         setLoadingAction(null);
         queryClient.invalidateQueries({ queryKey: ["friends"], exact: false });
         queryClient.invalidateQueries({ queryKey: ["friend-requests"], exact: false });
