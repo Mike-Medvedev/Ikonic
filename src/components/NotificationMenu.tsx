@@ -28,7 +28,10 @@ export default function NotificationMenu() {
   //prettier-ignore
   const { data: friendRequests, isFetching: isFetchingFriendRequests, error: friendRequestsError} = useQuery({ 
     queryKey: ["friend-requests", "me", session.user.id],
-    queryFn: async () => FriendshipService.getFriendRequests(session.user.id, "incoming")
+    queryFn: async () => FriendshipService.getFriendRequests(session.user.id, "incoming"),
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
     })
   const [l, sL] = useState<LayoutRectangle | undefined>(undefined);
   const [visible, setVisible] = useState<boolean>(false);

@@ -36,7 +36,8 @@ export {
   getFriendsApiV1FriendshipsMeGet,
   respondToFriendRequestApiV1FriendshipsFriendshipIdPatch,
   createFriendRequestApiV1FriendshipsPost,
-  checkFriendRequestsApiV1FriendshipsUserIdGet,
+  getFriendRequestsApiV1FriendshipsUserIdGet,
+  deleteFriendshipApiV1FriendshipsFriendshipIdDelete,
 
   // Misc
   mainApiV1Get,

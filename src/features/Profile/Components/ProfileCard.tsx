@@ -42,7 +42,10 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
   //prettier-ignore
   const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ 
     queryKey: ["friends", profile.id ],
-    queryFn: async () => FriendshipService.getFriends()
+    queryFn: async () => FriendshipService.getFriends(),
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
     })
 
   const requestFriendMutation = useMutation<boolean, Error, FriendshipCreate>({

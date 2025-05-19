@@ -2,11 +2,12 @@ import {
   getFriendsApiV1FriendshipsMeGet,
   createFriendRequestApiV1FriendshipsPost,
   FriendshipCreate,
-  checkFriendRequestsApiV1FriendshipsUserIdGet,
+  getFriendRequestsApiV1FriendshipsUserIdGet,
   respondToFriendRequestApiV1FriendshipsFriendshipIdPatch,
   FriendshipUpdate,
   FriendRequestType,
   FriendshipPublic,
+  deleteFriendshipApiV1FriendshipsFriendshipIdDelete,
 } from "@/types";
 
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
@@ -32,7 +33,7 @@ export const FriendshipService = {
   }),
   getFriendRequests: withError(async (user_id: string, request_type: FriendRequestType) => {
     const client = await createAuthenticatedClient();
-    const res = await checkFriendRequestsApiV1FriendshipsUserIdGet<true>({
+    const res = await getFriendRequestsApiV1FriendshipsUserIdGet<true>({
       path: { user_id },
       client,
       query: { request_type },
@@ -67,5 +68,16 @@ export const FriendshipService = {
       throw new ApiError(500, "Error: Friend Request was not successful please try again");
     }
     return res.data.data;
+  }),
+  removeFriend: withError(async (friendship_id: string): Promise<boolean | undefined> => {
+    const client = await createAuthenticatedClient();
+    const res = await deleteFriendshipApiV1FriendshipsFriendshipIdDelete({
+      path: { friendship_id },
+      client,
+    });
+    if (!res.data?.data) {
+      throw new ApiError(500, "Internal Server Error");
+    }
+    return res.data?.data;
   }),
 };

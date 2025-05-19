@@ -725,7 +725,7 @@ export type CreateFriendRequestApiV1FriendshipsPostResponses = {
 
 export type CreateFriendRequestApiV1FriendshipsPostResponse = CreateFriendRequestApiV1FriendshipsPostResponses[keyof CreateFriendRequestApiV1FriendshipsPostResponses];
 
-export type CheckFriendRequestsApiV1FriendshipsUserIdGetData = {
+export type GetFriendRequestsApiV1FriendshipsUserIdGetData = {
     body?: never;
     path: {
         user_id: string;
@@ -736,23 +736,50 @@ export type CheckFriendRequestsApiV1FriendshipsUserIdGetData = {
     url: '/api/v1/friendships/{user_id}';
 };
 
-export type CheckFriendRequestsApiV1FriendshipsUserIdGetErrors = {
+export type GetFriendRequestsApiV1FriendshipsUserIdGetErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type CheckFriendRequestsApiV1FriendshipsUserIdGetError = CheckFriendRequestsApiV1FriendshipsUserIdGetErrors[keyof CheckFriendRequestsApiV1FriendshipsUserIdGetErrors];
+export type GetFriendRequestsApiV1FriendshipsUserIdGetError = GetFriendRequestsApiV1FriendshipsUserIdGetErrors[keyof GetFriendRequestsApiV1FriendshipsUserIdGetErrors];
 
-export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponses = {
+export type GetFriendRequestsApiV1FriendshipsUserIdGetResponses = {
     /**
      * Successful Response
      */
     200: DtoListFriendshipPublic;
 };
 
-export type CheckFriendRequestsApiV1FriendshipsUserIdGetResponse = CheckFriendRequestsApiV1FriendshipsUserIdGetResponses[keyof CheckFriendRequestsApiV1FriendshipsUserIdGetResponses];
+export type GetFriendRequestsApiV1FriendshipsUserIdGetResponse = GetFriendRequestsApiV1FriendshipsUserIdGetResponses[keyof GetFriendRequestsApiV1FriendshipsUserIdGetResponses];
+
+export type DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteData = {
+    body?: never;
+    path: {
+        friendship_id: string;
+    };
+    query?: never;
+    url: '/api/v1/friendships/{friendship_id}';
+};
+
+export type DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteError = DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteErrors[keyof DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteErrors];
+
+export type DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoBool;
+};
+
+export type DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteResponse = DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteResponses[keyof DeleteFriendshipApiV1FriendshipsFriendshipIdDeleteResponses];
 
 export type RespondToFriendRequestApiV1FriendshipsFriendshipIdPatchData = {
     body: FriendshipUpdate;

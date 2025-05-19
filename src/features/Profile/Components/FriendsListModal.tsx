@@ -7,8 +7,10 @@ import { useAuth } from "@/context/AuthContext";
 import { UserWithFriendshipInfo } from "@/types";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useRespondFriendRequest from "@/hooks/useRespondFriendRequest";
+import useToast from "@/hooks/useToast";
+import { ApiError, NetworkError } from "@/lib/errors";
 interface FriendsListModalProps {
   friends: UserWithFriendshipInfo[];
   isFriendsFetching: boolean;
@@ -27,14 +29,23 @@ export default function FriendsListModal({
   setVisible,
 }: FriendsListModalProps) {
   const { session } = useAuth();
+  const queryClient = useQueryClient();
+  const { showSuccess, showFailure } = useToast();
   if (!session) return null;
-  const { loading, setLoading, respondToRequestMutation } = useRespondFriendRequest();
 
-  //prettier-ignore
-  const { data: friendRequests, isFetching: isFriendRequestsFetching, error: friendRequestsError} = useQuery({ 
-    queryKey: ["friend-requests", "me", session.user.id],
-    queryFn: async () => FriendshipService.getFriendRequests(session.user.id, "outgoing")
-    })
+  const deleteFriendMutation = useMutation<boolean | undefined, Error, { friendship_id: string }>({
+    mutationFn: ({ friendship_id }) => FriendshipService.removeFriend(friendship_id),
+    onError: (error) => {
+      if (error instanceof NetworkError) showFailure({ message: "Error Please check your connecting and try again!" });
+      else if (error instanceof ApiError) showFailure({ message: "Server Error Please try again later" });
+      else showFailure({ message: "Unknown Error Please try again later" });
+    },
+    onSuccess: () => showSuccess({ message: "Successfully deleted friend" }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["friend-requests"], exact: false });
+    },
+  });
 
   const styles = StyleSheet.create({
     container: { padding: 16, flex: 1 },
@@ -62,12 +73,16 @@ export default function FriendsListModal({
                       key={item.user.id}
                       right={
                         <Pressable
-                          disabled={loading}
+                          disabled={deleteFriendMutation.isPending}
                           onPress={() => {
-                            respondToRequestMutation.mutate({ id: item.friendshipId, status: "rejected" });
+                            deleteFriendMutation.mutate({ friendship_id: item.friendshipId });
                           }}
                         >
-                          {loading ? <ActivityIndicator /> : <Icon source="delete" size={24} color="red" />}
+                          {deleteFriendMutation.isPending ? (
+                            <ActivityIndicator />
+                          ) : (
+                            <Icon source="delete" size={24} color="red" />
+                          )}
                         </Pressable>
                       }
                     />
