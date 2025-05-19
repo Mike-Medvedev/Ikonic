@@ -108,6 +108,7 @@ export default function NotificationMenu() {
           style={{
             position: "absolute",
             top: l?.height,
+            right: 0,
             width: 300,
             maxHeight: 300,
             backgroundColor: theme.colors.surface,
