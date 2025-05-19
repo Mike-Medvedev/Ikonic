@@ -7,8 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { UserWithFriendshipInfo } from "@/types";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import useRespondFriendRequest from "@/hooks/useRespondFriendRequest";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useToast from "@/hooks/useToast";
 import { ApiError, NetworkError } from "@/lib/errors";
 interface FriendsListModalProps {
