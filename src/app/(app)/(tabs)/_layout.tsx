@@ -1,12 +1,10 @@
 import React, { useMemo } from "react";
-import { router, Tabs } from "expo-router";
-import { Icon, useTheme } from "react-native-paper";
+import { Tabs } from "expo-router";
+import { useTheme } from "react-native-paper";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { SignOutButton } from "@/design-system/components";
 import HeaderTitle from "@/components/HeaderTitle";
-import { Pressable } from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import { APP_GROUP, PROFILE_PATH, TAB_GROUP } from "@/constants/constants";
 import NotificationMenu from "@/components/NotificationMenu";
@@ -31,15 +29,8 @@ export default function TabLayout() {
     }),
     [theme],
   );
-  const BackButton = () => {
-    return (
-      <Pressable onPress={() => router.back()}>
-        <Icon source="chevron-left" size={24} />
-      </Pressable>
-    );
-  };
   const NotificationMenuWrapper = () => {
-    return <NotificationMenu key={Date.now()} />;
+    return <NotificationMenu key={Date.now()} />; //add date to help react pick up changes
   };
 
   return (
@@ -50,8 +41,7 @@ export default function TabLayout() {
           title: "Trips",
           tabBarIcon: ({ color }) => <FontAwesome name="newspaper-o" size={24} color={color} />,
           headerTitle: HeaderTitle,
-          headerRight: SignOutButton,
-          headerLeft: NotificationMenuWrapper,
+          headerRight: NotificationMenuWrapper,
         }}
       />
       <Tabs.Screen
@@ -70,7 +60,7 @@ export default function TabLayout() {
           title: "Plan",
           tabBarIcon: ({ color }) => <AntDesign name="pluscircle" size={24} color={color} />,
           headerTitle: HeaderTitle,
-          headerRight: SignOutButton,
+          headerRight: NotificationMenuWrapper,
         }}
       />
       <Tabs.Screen
@@ -80,7 +70,7 @@ export default function TabLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
           headerTitle: HeaderTitle,
-          headerRight: SignOutButton,
+          headerRight: NotificationMenuWrapper,
         }}
       />
     </Tabs>

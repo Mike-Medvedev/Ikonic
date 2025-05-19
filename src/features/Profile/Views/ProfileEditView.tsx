@@ -14,6 +14,8 @@ import { LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
 import storageClient from "@/lib/storage";
 import useImagePicker from "@/hooks/useImagePicker";
+import { SignOutButton } from "@/design-system/components";
+import { SafeAreaView } from "react-native-safe-area-context";
 interface ProfileEditProps {
   profile: UserPublic;
   close: () => void;
@@ -127,7 +129,9 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
     updateProfileMutation.mutate({ ...userUpdate, user_id });
   }
   const styles = StyleSheet.create({
-    container: { padding: 16 },
+    container: { flex: 1 },
+    scrollContainer: { padding: 16 },
+    header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     photoContainer: { alignItems: "center", gap: 8 },
     photoCircle: {
       justifyContent: "center",
@@ -149,64 +153,69 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
   });
   return (
     <Background>
-      <ScrollView style={styles.container}>
-        <Pressable style={{ padding: 8, zIndex: 10 }} onPress={close}>
-          <Icon source="close" size={24} />
-        </Pressable>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollContainer}>
+          <View style={styles.header}>
+            <Pressable style={{ padding: 8, zIndex: 10 }} onPress={close}>
+              <Icon source="close" size={24} />
+            </Pressable>
+            <SignOutButton />
+          </View>
 
-        <SelectProfileAvatar uri={image?.assets?.[0]?.uri} pickImage={pickImage} />
+          <SelectProfileAvatar uri={image?.assets?.[0]?.uri} pickImage={pickImage} />
 
-        <Text style={styles.label}>Full Name</Text>
-        <TextInput
-          placeholder="Enter your full name"
-          value={profileForm.fullname.value}
-          onChangeText={(text) => setProfileForm((prev) => ({ ...prev, fullname: { value: text, error: "" } }))}
-          error={!!profileForm.fullname.error}
-          errorText={profileForm.fullname.error}
-        />
+          <Text style={styles.label}>Full Name</Text>
+          <TextInput
+            placeholder="Enter your full name"
+            value={profileForm.fullname.value}
+            onChangeText={(text) => setProfileForm((prev) => ({ ...prev, fullname: { value: text, error: "" } }))}
+            error={!!profileForm.fullname.error}
+            errorText={profileForm.fullname.error}
+          />
 
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          placeholder="Choose a username"
-          value={profileForm.username.value}
-          onChangeText={(text) => setProfileForm((prev) => ({ ...prev, username: { value: text, error: "" } }))}
-          error={!!profileForm.username.error}
-          errorText={profileForm.username.error}
-        />
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            placeholder="Choose a username"
+            value={profileForm.username.value}
+            onChangeText={(text) => setProfileForm((prev) => ({ ...prev, username: { value: text, error: "" } }))}
+            error={!!profileForm.username.error}
+            errorText={profileForm.username.error}
+          />
 
-        {/* <Text style={styles.label}>Email</Text>
+          {/* <Text style={styles.label}>Email</Text>
         <TextInput placeholder="Enter your email" /> */}
 
-        <Text style={styles.label}>Rider Type:</Text>
-        <View style={styles.riderTypeContainer}>
-          <Button
-            icon="ski"
-            mode={profileForm.riderType.value === "skier" ? "contained" : "outlined"}
-            onPress={() => {
-              if (profileForm.riderType.value === "skier")
-                setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
-              else setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
-            }}
-          >
-            Skier
-          </Button>
+          <Text style={styles.label}>Rider Type:</Text>
+          <View style={styles.riderTypeContainer}>
+            <Button
+              icon="ski"
+              mode={profileForm.riderType.value === "skier" ? "contained" : "outlined"}
+              onPress={() => {
+                if (profileForm.riderType.value === "skier")
+                  setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
+                else setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
+              }}
+            >
+              Skier
+            </Button>
 
-          <Button
-            icon="snowboard"
-            mode={profileForm.riderType.value === "snowboarder" ? "contained" : "outlined"}
-            onPress={() => {
-              if (profileForm.riderType.value === "snowboarder")
-                setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
-              else setProfileForm((prev) => ({ ...prev, riderType: { value: "snowboarder", error: "" } }));
-            }}
-          >
-            Snowboarder
+            <Button
+              icon="snowboard"
+              mode={profileForm.riderType.value === "snowboarder" ? "contained" : "outlined"}
+              onPress={() => {
+                if (profileForm.riderType.value === "snowboarder")
+                  setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
+                else setProfileForm((prev) => ({ ...prev, riderType: { value: "snowboarder", error: "" } }));
+              }}
+            >
+              Snowboarder
+            </Button>
+          </View>
+          <Button mode="contained" onPress={handleSubmit} loading={loading}>
+            Save Changes
           </Button>
-        </View>
-        <Button mode="contained" onPress={handleSubmit} loading={loading}>
-          Save Changes
-        </Button>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     </Background>
   );
 }

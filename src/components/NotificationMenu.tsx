@@ -94,7 +94,9 @@ export default function NotificationMenu() {
   };
   return (
     <View>
-      <Badge style={{ position: "absolute", zIndex: -100 }}>{friendRequests?.length}</Badge>
+      {friendRequests && friendRequests.length > 0 && (
+        <Badge style={{ position: "absolute", zIndex: -100 }}>{friendRequests.length}</Badge>
+      )}
       <IconButton
         icon="bell"
         onPress={() => setVisible((prev) => !prev)}
