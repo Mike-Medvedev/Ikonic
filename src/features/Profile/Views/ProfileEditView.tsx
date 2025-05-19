@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
-import { Background, Button, Text, TextInput } from "@/design-system/components";
+import { Background, Button, Text, TextInput, SelectProfileAvatar, SignOutButton } from "@/design-system/components";
 import { useTheme, Icon } from "react-native-paper";
 import { SimpleForm, UserPublic, UserUpdate, RiderType } from "@/types";
 import useToast from "@/hooks/useToast";
@@ -11,10 +11,8 @@ import { fullnameValidator, nameValidator } from "@/utils/validators";
 import { ValidateErrors } from "@/utils/FormBuilder";
 import { useAuth } from "@/context/AuthContext";
 import { LOGIN_PATH } from "@/constants/constants";
-import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
 import storageClient from "@/lib/storage";
 import useImagePicker from "@/hooks/useImagePicker";
-import { SignOutButton } from "@/design-system/components";
 import { SafeAreaView } from "react-native-safe-area-context";
 interface ProfileEditProps {
   profile: UserPublic;
