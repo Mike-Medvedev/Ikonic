@@ -7,20 +7,26 @@ import { useState } from "react";
 import { SimpleForm } from "@/types";
 import useInvite from "@/hooks/useInvite";
 import { useLocalSearchParams } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 /**
  * Renders a Component to manually invite a user via phone number directly
  */
 export default function ManualInvite() {
   const theme = useTheme();
+  const queryClient = useQueryClient();
+  const { showSuccess, showFailure } = useToast();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const { inviteUsersMutation } = useInvite({
     options: {
-      onSuccess: () => {},
-      onError: (error: Error) => {},
+      onError: (error) => {
+        showFailure({ message: String(error) });
+      },
+      onSuccess: () => {
+        showSuccess({ message: "Successfully invited User!" });
+      },
       onSettled: () => {},
     },
   });
-  const { showSuccess, showFailure } = useToast();
   const [phone, setPhone] = useState<SimpleForm<string>>({ value: "", error: "" });
   const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
 
@@ -86,7 +92,7 @@ export default function ManualInvite() {
                   onPress={() => {
                     inviteUsersMutation.mutate({
                       tripId: selectedTripId,
-                      invitees: [{ type: "external", phoneNumber: phone.value }],
+                      invitees: [{ type: "external", phoneNumber: `+1${phone.value}` }],
                     });
                   }}
                   icon="send"
