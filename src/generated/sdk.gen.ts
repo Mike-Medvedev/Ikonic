@@ -323,7 +323,12 @@ export const getInvitedUsersApiV1TripsTripIdInvitesGet = <ThrowOnError extends b
 
 /**
  * Invite Users
- * Invite users to a trip.
+ * Invited users are classified as registered or external users.
+ *
+ * Registered Users have a user Id which is their source of authenticity
+ * External Users use their phone number
+ *
+ * SMS errors are just skipped and logged
  */
 export const inviteUsersApiV1TripsTripIdInvitesPost = <ThrowOnError extends boolean = false>(options: Options<InviteUsersApiV1TripsTripIdInvitesPostData, ThrowOnError>) => {
     return (options.client ?? _heyApiClient).post<InviteUsersApiV1TripsTripIdInvitesPostResponse, InviteUsersApiV1TripsTripIdInvitesPostError, ThrowOnError>({
