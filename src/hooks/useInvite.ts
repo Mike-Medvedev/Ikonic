@@ -1,11 +1,6 @@
 import { InviteService } from "@/features/Trips/Services/inviteService";
-import { InviteBatchResponseData, InviteCreate } from "@/types";
+import { InvitationBatchResponseData, InvitationCreate } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-
-interface InviteUserPayload {
-  tripId: string;
-  invites: InviteCreate;
-}
 
 interface UseInviteProps {
   options?: {
@@ -19,8 +14,8 @@ interface UseInviteProps {
  * Custom Hook for inviting users to trips
  */
 export default function useInvite({ options }: UseInviteProps) {
-  const inviteUsersMutation = useMutation<InviteBatchResponseData, Error, InviteUserPayload>({
-    mutationFn: (payload) => InviteService.inviteUsers(payload.tripId, payload.invites),
+  const inviteUsersMutation = useMutation<InvitationBatchResponseData, Error, { tripId: string } & InvitationCreate>({
+    mutationFn: (payload) => InviteService.inviteUsers(payload.tripId, { invites: payload.invites }),
     onError: (error) => {
       options?.onError?.(error);
     },

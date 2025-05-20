@@ -35,9 +35,6 @@ export default function NotificationMenu() {
     })
   const [l, sL] = useState<LayoutRectangle | undefined>(undefined);
   const [visible, setVisible] = useState<boolean>(false);
-  useEffect(() => {
-    console.log(l);
-  }, [l]);
   const styles = StyleSheet.create({
     content: { width: "100%", padding: 16, flexDirection: "row", alignItems: "center" },
     iconContainer: { marginRight: 8 },

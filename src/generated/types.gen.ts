@@ -32,8 +32,8 @@ export type DtoFriendshipPublic = {
     data: FriendshipPublic;
 };
 
-export type DtoInviteBatchResponseData = {
-    data: InviteBatchResponseData;
+export type DtoInvitationBatchResponseData = {
+    data: InvitationBatchResponseData;
 };
 
 export type DtoPassengerCreate = {
@@ -99,15 +99,19 @@ export type HttpValidationError = {
     detail?: Array<ValidationError>;
 };
 
-export type InviteBatchResponseData = {
+export type InvitationBatchResponseData = {
     allInvitesProcessedSuccessfully: boolean;
     smsFailuresCount?: number;
     smsPhoneNumberFailures?: Array<string>;
 };
 
-export type InviteCreate = {
-    invites: Array<TripParticipationCreate>;
-    deepLink: string;
+export type InvitationCreate = {
+    invites: Array<string>;
+};
+
+export type InvitationRsvp = {
+    rsvp?: string | null;
+    paid?: number | null;
 };
 
 export type Passenger = {
@@ -135,15 +139,6 @@ export type TripCreate = {
     endDate: string;
     mountain: string;
     desc?: string | null;
-};
-
-export type TripParticipationCreate = {
-    userId: string;
-};
-
-export type TripParticipationRsvp = {
-    rsvp?: string | null;
-    paid?: number | null;
 };
 
 export type TripPublic = {
@@ -644,7 +639,7 @@ export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponses = {
 export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponse = GetInvitedUsersApiV1TripsTripIdInvitesGetResponses[keyof GetInvitedUsersApiV1TripsTripIdInvitesGetResponses];
 
 export type InviteUsersApiV1TripsTripIdInvitesPostData = {
-    body: InviteCreate;
+    body: InvitationCreate;
     path: {
         trip_id: string;
     };
@@ -665,13 +660,13 @@ export type InviteUsersApiV1TripsTripIdInvitesPostResponses = {
     /**
      * Successful Response
      */
-    200: DtoInviteBatchResponseData;
+    200: DtoInvitationBatchResponseData;
 };
 
 export type InviteUsersApiV1TripsTripIdInvitesPostResponse = InviteUsersApiV1TripsTripIdInvitesPostResponses[keyof InviteUsersApiV1TripsTripIdInvitesPostResponses];
 
 export type RsvpApiV1TripsTripIdInvitesUserIdPatchData = {
-    body: TripParticipationRsvp;
+    body: InvitationRsvp;
     path: {
         trip_id: string;
         user_id: string;

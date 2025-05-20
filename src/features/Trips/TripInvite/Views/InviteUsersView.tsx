@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { InviteService } from "@/features/Trips/Services/inviteService";
-import * as Linking from "expo-linking";
 import { useAuth } from "@/context/AuthContext";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import Pill from "@/design-system/components/Pill";
@@ -29,7 +28,6 @@ export default function InviteUsersView() {
   const [selectedUsers, setSelectedUsers] = useState<UserPublic[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { showSuccess, showFailure } = useToast();
-  const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
   const { inviteUsersMutation } = useInvite({
     options: {
       onError: (error) => {
@@ -83,7 +81,6 @@ export default function InviteUsersView() {
     searchBarContainer: { flex: 1 },
     searchBar: { padding: 0 },
     label: { marginVertical: 8, color: theme.colors.secondary },
-    linkLabel: { marginVertical: 8 },
     nativeInputContainer: {
       flexDirection: "row",
       alignItems: "center",
@@ -133,7 +130,7 @@ export default function InviteUsersView() {
               if (!selectedUsers || selectedUsers.length < 1) return;
               inviteUsersMutation.mutate({
                 tripId: selectedTripId,
-                invites: { invites: selectedUsers.map((u) => ({ userId: u.id })), deepLink: deepLink },
+                invites: selectedUsers.map((u) => u.id),
               });
             }}
           >

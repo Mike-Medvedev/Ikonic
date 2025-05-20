@@ -4,7 +4,7 @@ import {
   inviteUsersApiV1TripsTripIdInvitesPost,
 } from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
-import type { AttendanceList, TripParticipationRsvp, InviteCreate, InviteBatchResponseData } from "@/types";
+import type { AttendanceList, InvitationRsvp, InvitationCreate, InvitationBatchResponseData } from "@/types";
 import { withError } from "@/lib/errors";
 
 export const InviteService = {
@@ -19,7 +19,7 @@ export const InviteService = {
   },
 
   /** RSVP to an invite */
-  rsvp: async (tripId: string, userId: string, payload: TripParticipationRsvp): Promise<boolean> => {
+  rsvp: async (tripId: string, userId: string, payload: InvitationRsvp): Promise<boolean> => {
     const client = await createAuthenticatedClient();
     const res = await rsvpApiV1TripsTripIdInvitesUserIdPatch<true>({
       path: { trip_id: tripId, user_id: userId },
@@ -30,7 +30,7 @@ export const InviteService = {
   },
 
   /** Invite a user to a trip */
-  inviteUsers: withError(async (tripId: string, invites: InviteCreate): Promise<InviteBatchResponseData> => {
+  inviteUsers: withError(async (tripId: string, invites: InvitationCreate): Promise<InvitationBatchResponseData> => {
     const client = await createAuthenticatedClient();
     const res = await inviteUsersApiV1TripsTripIdInvitesPost<true>({
       path: { trip_id: tripId },
