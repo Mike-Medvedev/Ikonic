@@ -1,15 +1,13 @@
-import { Pressable } from "react-native";
-import { useTheme, Text } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";
+import Button from "@/design-system/components/Button";
 
 /** Renders a signout button that signs the user out */
 export default function SignOutButton() {
-  const theme = useTheme();
   const { signOut } = useAuth();
 
   return (
-    <Pressable style={{ marginRight: 10 }} onPress={signOut}>
-      <Text style={{ fontSize: 12, color: theme.colors.primary }}>Logout</Text>
-    </Pressable>
+    <Button mode="contained" style={{ marginRight: 10 }} onPress={signOut}>
+      Logout
+    </Button>
   );
 }

@@ -22,7 +22,7 @@ export default function OnboardingLayout() {
       headerTintColor: theme.colors.onPrimary,
       headerTitle: HeaderTitle,
       headerRight: () => (
-        <Button onPress={() => signOut()} mode="text">
+        <Button onPress={() => signOut()} mode="contained">
           Logout
         </Button>
       ),

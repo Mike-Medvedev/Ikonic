@@ -13,7 +13,6 @@ export default function ManualInvite() {
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
   const [phone, setPhone] = useState<SimpleForm<string>>({ value: "", error: "" });
-  const { invite, loading } = useInvite();
   const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
 
   const copyToClipboard = async () => {
@@ -72,20 +71,7 @@ export default function ManualInvite() {
           right={
             <PaperInput.Icon
               icon={() => (
-                <Pressable
-                  onPress={() =>
-                    invite({
-                      firstname: "michael",
-                      lastname: "medvededev",
-                      id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
-                      phone: "12038587135",
-                      username: "mev",
-                      riderType: "skier",
-                      isOnboarded: true,
-                      avatarPublicUrl: "1",
-                    })
-                  }
-                >
+                <Pressable>
                   <Icon source="send" size={24} />
                 </Pressable>
               )}

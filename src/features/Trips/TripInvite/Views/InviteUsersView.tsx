@@ -2,10 +2,10 @@ import { View, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
 import { Background, SearchBar, Button } from "@/design-system/components";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { InviteService } from "@/features/Trips/Services/inviteService";
-
+import * as Linking from "expo-linking";
 import { useAuth } from "@/context/AuthContext";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import Pill from "@/design-system/components/Pill";
@@ -15,18 +15,35 @@ import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
 import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
 import { UserPublic } from "@/types";
 import useInvite from "@/hooks/useInvite";
+import useToast from "@/hooks/useToast";
 /**
  * Route for displaying Invite Friends page
  */
 export default function InviteUsersView() {
   const theme = useTheme();
+  const queryClient = useQueryClient();
   const { session } = useAuth();
   if (!session) return null;
 
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const [selectedUsers, setSelectedUsers] = useState<UserPublic[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const { invite, loading } = useInvite();
+  const { showSuccess, showFailure } = useToast();
+  const deepLink = Linking.createURL(`trips/${selectedTripId}/rsvp`);
+  const { inviteUsersMutation } = useInvite({
+    options: {
+      onError: (error) => {
+        showFailure({ message: String(error) });
+      },
+      onSuccess: () => {
+        showSuccess({ message: "Successfully invited Users!" });
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["trip", selectedTripId] });
+        queryClient.invalidateQueries({ queryKey: ["attendees", selectedTripId] });
+      },
+    },
+  });
   //prettier-ignore
   const { data: s, isFetching, error } = useQuery({
     queryKey: ["friends", selectedTripId],
@@ -110,19 +127,14 @@ export default function InviteUsersView() {
           />
           <Button
             mode="text"
+            loading={inviteUsersMutation.isPending}
+            disabled={inviteUsersMutation.isPending}
             onPress={() => {
-              // if (!selectedUsers[0]) return;
-              const mock: UserPublic = {
-                firstname: "michael",
-                lastname: "medvededev",
-                id: "e25b2f98-f6e0-4a54-84f6-16f42cb849b4",
-                phone: "12038587135",
-                username: "mev",
-                riderType: "skier",
-                isOnboarded: true,
-                avatarPublicUrl: "1",
-              };
-              invite(mock);
+              if (!selectedUsers || selectedUsers.length < 1) return;
+              inviteUsersMutation.mutate({
+                tripId: selectedTripId,
+                invites: { invites: selectedUsers.map((u) => ({ userId: u.id })), deepLink: deepLink },
+              });
             }}
           >
             Invite ({selectedUsers.length})

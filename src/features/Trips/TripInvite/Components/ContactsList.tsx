@@ -31,14 +31,14 @@ function serializeContact(contact: Contacts.Contact): UserPublic | undefined {
 export default function ContactsList({ query, selectedUsers, setSelectedUsers }: ContactsListProps) {
   const { contacts } = useContacts();
   const filteredContacts =
-    contacts?.filter((c): c is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
-      const hasId = !!c.id;
-      const hasPhone = (c.phoneNumbers?.length ?? 0) > 0;
+    contacts?.filter((contact): contact is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
+      const hasId = !!contact.id;
+      const hasPhone = (contact.phoneNumbers?.length ?? 0) > 0;
 
       if (!hasId || !hasPhone) return false;
 
       if (query && query.trim() !== "") {
-        const name = c.name ?? "";
+        const name = contact.name ?? "";
         const lowerCaseName = name.toLowerCase();
         const lowerCaseQuery = query.toLowerCase().trim();
 
@@ -70,11 +70,15 @@ export default function ContactsList({ query, selectedUsers, setSelectedUsers }:
           return (
             <UserCard
               onPress={() => {
-                if (selectedUsers.includes(user)) setSelectedUsers((prev) => prev.filter((u) => u.id != user.id));
-                else setSelectedUsers((u) => [...u, user]);
+                const isAlreadySelected = selectedUsers.some((u) => u.phone === user.phone);
+                if (isAlreadySelected) {
+                  setSelectedUsers((prev) => prev.filter((u) => u.phone !== user.phone));
+                } else {
+                  setSelectedUsers((prev) => [...prev, user]);
+                }
               }}
               user={user}
-              right={<Checkbox isSelected={selectedUsers.includes(user)} />}
+              right={<Checkbox isSelected={selectedUsers.some((u) => u.phone === user.phone)} />}
             />
           );
         }}

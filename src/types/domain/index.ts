@@ -23,7 +23,7 @@ export {
 
   // Invite endpoints
   getInvitedUsersApiV1TripsTripIdInvitesGet,
-  inviteUserApiV1TripsTripIdInvitesUserIdPost,
+  inviteUsersApiV1TripsTripIdInvitesPost,
   rsvpApiV1TripsTripIdInvitesUserIdPatch,
 
   // User endpoints
@@ -58,7 +58,7 @@ export {
   DtoListPassengerPublic,
   DtoListTripPublic,
   DtoListUserPublic,
-  DeepLink,
+  DtoInviteBatchResponseData,
   HttpValidationError,
   Passenger,
   PassengerCreate,
@@ -70,6 +70,7 @@ export {
   TripCreate,
   TripPublic,
   TripUpdate,
+  TripParticipationCreate,
   RiderType,
   FriendshipPublic,
   FriendshipCreate,
@@ -78,6 +79,8 @@ export {
   FriendRequestType,
   UserWithFriendshipInfo,
   DtoListUserWithFriendshipInfo,
+  InviteBatchResponseData,
+  InviteCreate,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {

@@ -32,6 +32,10 @@ export type DtoFriendshipPublic = {
     data: FriendshipPublic;
 };
 
+export type DtoInviteBatchResponseData = {
+    data: InviteBatchResponseData;
+};
+
 export type DtoPassengerCreate = {
     data: PassengerCreate;
 };
@@ -72,10 +76,6 @@ export type DtoListUserWithFriendshipInfo = {
     data: Array<UserWithFriendshipInfo>;
 };
 
-export type DeepLink = {
-    deepLink: string;
-};
-
 export type FriendRequestType = 'outgoing' | 'incoming';
 
 export type FriendshipCreate = {
@@ -97,6 +97,17 @@ export type FriendshipUpdate = {
 
 export type HttpValidationError = {
     detail?: Array<ValidationError>;
+};
+
+export type InviteBatchResponseData = {
+    allInvitesProcessedSuccessfully: boolean;
+    smsFailuresCount?: number;
+    smsPhoneNumberFailures?: Array<string>;
+};
+
+export type InviteCreate = {
+    invites: Array<TripParticipationCreate>;
+    deepLink: string;
 };
 
 export type Passenger = {
@@ -124,6 +135,10 @@ export type TripCreate = {
     endDate: string;
     mountain: string;
     desc?: string | null;
+};
+
+export type TripParticipationCreate = {
+    userId: string;
 };
 
 export type TripParticipationRsvp = {
@@ -628,6 +643,33 @@ export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponses = {
 
 export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponse = GetInvitedUsersApiV1TripsTripIdInvitesGetResponses[keyof GetInvitedUsersApiV1TripsTripIdInvitesGetResponses];
 
+export type InviteUsersApiV1TripsTripIdInvitesPostData = {
+    body: InviteCreate;
+    path: {
+        trip_id: string;
+    };
+    query?: never;
+    url: '/api/v1/trips/{trip_id}/invites';
+};
+
+export type InviteUsersApiV1TripsTripIdInvitesPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type InviteUsersApiV1TripsTripIdInvitesPostError = InviteUsersApiV1TripsTripIdInvitesPostErrors[keyof InviteUsersApiV1TripsTripIdInvitesPostErrors];
+
+export type InviteUsersApiV1TripsTripIdInvitesPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoInviteBatchResponseData;
+};
+
+export type InviteUsersApiV1TripsTripIdInvitesPostResponse = InviteUsersApiV1TripsTripIdInvitesPostResponses[keyof InviteUsersApiV1TripsTripIdInvitesPostResponses];
+
 export type RsvpApiV1TripsTripIdInvitesUserIdPatchData = {
     body: TripParticipationRsvp;
     path: {
@@ -655,34 +697,6 @@ export type RsvpApiV1TripsTripIdInvitesUserIdPatchResponses = {
 };
 
 export type RsvpApiV1TripsTripIdInvitesUserIdPatchResponse = RsvpApiV1TripsTripIdInvitesUserIdPatchResponses[keyof RsvpApiV1TripsTripIdInvitesUserIdPatchResponses];
-
-export type InviteUserApiV1TripsTripIdInvitesUserIdPostData = {
-    body: DeepLink;
-    path: {
-        trip_id: string;
-        user_id: string;
-    };
-    query?: never;
-    url: '/api/v1/trips/{trip_id}/invites/{user_id}';
-};
-
-export type InviteUserApiV1TripsTripIdInvitesUserIdPostErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type InviteUserApiV1TripsTripIdInvitesUserIdPostError = InviteUserApiV1TripsTripIdInvitesUserIdPostErrors[keyof InviteUserApiV1TripsTripIdInvitesUserIdPostErrors];
-
-export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponses = {
-    /**
-     * Successful Response
-     */
-    201: DtoBool;
-};
-
-export type InviteUserApiV1TripsTripIdInvitesUserIdPostResponse = InviteUserApiV1TripsTripIdInvitesUserIdPostResponses[keyof InviteUserApiV1TripsTripIdInvitesUserIdPostResponses];
 
 export type GetFriendsApiV1FriendshipsMeGetData = {
     body?: never;

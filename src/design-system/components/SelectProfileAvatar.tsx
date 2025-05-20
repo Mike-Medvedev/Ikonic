@@ -1,6 +1,6 @@
 import { Pressable, View, Image, StyleSheet } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
-import { Text } from "@/design-system/components";
+import Text from "@/design-system/components/Text"; //direct import to break circular import
 
 interface SelectProfileAvatarProps {
   uri: string | undefined;
