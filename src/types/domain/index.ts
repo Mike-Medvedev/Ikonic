@@ -80,6 +80,8 @@ export {
   DtoListUserWithFriendshipInfo,
   InvitationBatchResponseData,
   InvitationCreate,
+  RegisteredInvitee,
+  ExternalInvitee,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {

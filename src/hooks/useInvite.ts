@@ -15,7 +15,7 @@ interface UseInviteProps {
  */
 export default function useInvite({ options }: UseInviteProps) {
   const inviteUsersMutation = useMutation<InvitationBatchResponseData, Error, { tripId: string } & InvitationCreate>({
-    mutationFn: (payload) => InviteService.inviteUsers(payload.tripId, { invites: payload.invites }),
+    mutationFn: (payload) => InviteService.inviteUsers(payload.tripId, { invitees: payload.invitees }),
     onError: (error) => {
       options?.onError?.(error);
     },

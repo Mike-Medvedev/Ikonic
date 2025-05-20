@@ -3,12 +3,12 @@ import useContacts from "@/hooks/useContacts";
 import { FlatList, View, StyleSheet, Linking, Platform } from "react-native";
 import { Checkbox } from "@/design-system/components";
 import * as Contacts from "expo-contacts";
-import { UserPublic } from "@/types";
+import { ExternalInvitee, RegisteredInvitee, UserPublic } from "@/types";
 
 interface ContactsListProps {
   query: string;
-  selectedUsers: UserPublic[];
-  setSelectedUsers: React.Dispatch<React.SetStateAction<UserPublic[]>>;
+  selectedInvitees: (RegisteredInvitee | ExternalInvitee)[];
+  setSelectedInvitees: React.Dispatch<React.SetStateAction<(RegisteredInvitee | ExternalInvitee)[]>>;
 }
 
 /** Function to convert Expo Contact to User to display in a Contact Lists */
@@ -28,7 +28,7 @@ function serializeContact(contact: Contacts.Contact): UserPublic | undefined {
 /**
  * Render list of contacts from phones native contacts and filter out contacts without phone numbers or names
  */
-export default function ContactsList({ query, selectedUsers, setSelectedUsers }: ContactsListProps) {
+export default function ContactsList({ query, selectedInvitees, setSelectedInvitees }: ContactsListProps) {
   const { contacts } = useContacts();
   const filteredContacts =
     contacts?.filter((contact): contact is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
@@ -70,15 +70,25 @@ export default function ContactsList({ query, selectedUsers, setSelectedUsers }:
           return (
             <UserCard
               onPress={() => {
-                const isAlreadySelected = selectedUsers.some((u) => u.phone === user.phone);
+                const isAlreadySelected = selectedInvitees.some(
+                  (invitee) => invitee.type === "external" && invitee.phoneNumber === user.phone,
+                );
                 if (isAlreadySelected) {
-                  setSelectedUsers((prev) => prev.filter((u) => u.phone !== user.phone));
+                  setSelectedInvitees((prev) =>
+                    prev.filter((invitee) => invitee.type === "external" && invitee.phoneNumber !== user.phone),
+                  );
                 } else {
-                  setSelectedUsers((prev) => [...prev, user]);
+                  setSelectedInvitees((prev) => [...prev, { type: "external", phoneNumber: user.phone }]);
                 }
               }}
               user={user}
-              right={<Checkbox isSelected={selectedUsers.some((u) => u.phone === user.phone)} />}
+              right={
+                <Checkbox
+                  isSelected={selectedInvitees.some(
+                    (invitee) => invitee.type === "external" && invitee.phoneNumber === user.phone,
+                  )}
+                />
+              }
             />
           );
         }}

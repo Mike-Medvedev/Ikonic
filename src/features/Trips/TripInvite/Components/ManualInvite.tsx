@@ -1,15 +1,25 @@
 import { Pressable, View, TextInput as NativeInput, StyleSheet } from "react-native";
-import { Icon, useTheme, TextInput as PaperInput } from "react-native-paper";
+import { Icon, useTheme, TextInput as PaperInput, IconButton } from "react-native-paper";
 import { DividerText, Text, TextInput } from "@/design-system/components";
 import * as Clipboard from "expo-clipboard";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
 import { SimpleForm } from "@/types";
+import useInvite from "@/hooks/useInvite";
+import { useLocalSearchParams } from "expo-router";
 /**
  * Renders a Component to manually invite a user via phone number directly
  */
 export default function ManualInvite() {
   const theme = useTheme();
+  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  const { inviteUsersMutation } = useInvite({
+    options: {
+      onSuccess: () => {},
+      onError: (error: Error) => {},
+      onSettled: () => {},
+    },
+  });
   const { showSuccess, showFailure } = useToast();
   const [phone, setPhone] = useState<SimpleForm<string>>({ value: "", error: "" });
   const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
@@ -70,9 +80,18 @@ export default function ManualInvite() {
           right={
             <PaperInput.Icon
               icon={() => (
-                <Pressable>
-                  <Icon source="send" size={24} />
-                </Pressable>
+                <IconButton
+                  loading={inviteUsersMutation.isPending}
+                  disabled={inviteUsersMutation.isPending}
+                  onPress={() => {
+                    inviteUsersMutation.mutate({
+                      tripId: selectedTripId,
+                      invitees: [{ type: "external", phoneNumber: phone.value }],
+                    });
+                  }}
+                  icon="send"
+                  size={24}
+                />
               )}
             />
           }

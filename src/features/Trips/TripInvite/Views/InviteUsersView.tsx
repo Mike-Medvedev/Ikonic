@@ -4,7 +4,6 @@ import { Background, SearchBar, Button } from "@/design-system/components";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { InviteService } from "@/features/Trips/Services/inviteService";
 import { useAuth } from "@/context/AuthContext";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
 import Pill from "@/design-system/components/Pill";
@@ -12,9 +11,11 @@ import Pill from "@/design-system/components/Pill";
 import FriendsList from "@/features/Trips/TripInvite/Components/FriendsList";
 import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
 import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
-import { UserPublic } from "@/types";
+import { ExternalInvitee } from "@/types";
 import useInvite from "@/hooks/useInvite";
 import useToast from "@/hooks/useToast";
+import { RegisteredInvitee } from "@/types";
+
 /**
  * Route for displaying Invite Friends page
  */
@@ -25,7 +26,8 @@ export default function InviteUsersView() {
   if (!session) return null;
 
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
-  const [selectedUsers, setSelectedUsers] = useState<UserPublic[]>([]);
+  const [selectedInvitees, setSelectedInvitees] = useState<(RegisteredInvitee | ExternalInvitee)[]>([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const { showSuccess, showFailure } = useToast();
   const { inviteUsersMutation } = useInvite({
@@ -41,12 +43,6 @@ export default function InviteUsersView() {
         queryClient.invalidateQueries({ queryKey: ["attendees", selectedTripId] });
       },
     },
-  });
-  //prettier-ignore
-  const { data: s, isFetching, error } = useQuery({
-    queryKey: ["friends", selectedTripId],
-    queryFn: async () => InviteService.getInvitedUsers(selectedTripId),
-    enabled: false,
   });
 
   //prettier-ignore
@@ -65,12 +61,18 @@ export default function InviteUsersView() {
             filteredFriends={filteredFriends ?? []}
             isFriendsFetching={isFriendsFetching}
             friendsError={friendsError}
-            selectedUsers={selectedUsers}
-            setSelectedUsers={setSelectedUsers}
+            selectedInvitees={selectedInvitees}
+            setSelectedInvitees={setSelectedInvitees}
           />
         );
       case "contacts":
-        return <ContactsList query={searchQuery} selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />;
+        return (
+          <ContactsList
+            query={searchQuery}
+            selectedInvitees={selectedInvitees}
+            setSelectedInvitees={setSelectedInvitees}
+          />
+        );
       case "manual":
         return <ManualInvite />;
     }
@@ -127,14 +129,14 @@ export default function InviteUsersView() {
             loading={inviteUsersMutation.isPending}
             disabled={inviteUsersMutation.isPending}
             onPress={() => {
-              if (!selectedUsers || selectedUsers.length < 1) return;
+              if (!selectedInvitees || selectedInvitees.length < 1) return;
               inviteUsersMutation.mutate({
                 tripId: selectedTripId,
-                invites: selectedUsers.map((u) => u.id),
+                invitees: selectedInvitees,
               });
             }}
           >
-            Invite ({selectedUsers.length})
+            Invite ({selectedInvitees.length})
           </Button>
         </View>
 

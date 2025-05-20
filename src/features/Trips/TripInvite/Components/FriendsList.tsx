@@ -1,15 +1,15 @@
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UserCard from "@/components/UserCard";
 import { Text, Checkbox } from "@/design-system/components";
-import { UserPublic, UserWithFriendshipInfo } from "@/types";
+import { ExternalInvitee, InvitationCreate, RegisteredInvitee, UserPublic, UserWithFriendshipInfo } from "@/types";
 import { View, StyleSheet, FlatList } from "react-native";
 
 interface FriendsListProps {
   filteredFriends: UserWithFriendshipInfo[];
   isFriendsFetching: boolean;
   friendsError: Error | null;
-  selectedUsers: UserPublic[];
-  setSelectedUsers: React.Dispatch<React.SetStateAction<UserPublic[]>>;
+  selectedInvitees: (RegisteredInvitee | ExternalInvitee)[];
+  setSelectedInvitees: React.Dispatch<React.SetStateAction<(RegisteredInvitee | ExternalInvitee)[]>>;
 }
 
 /**
@@ -19,8 +19,8 @@ export default function FriendsList({
   filteredFriends,
   isFriendsFetching,
   friendsError,
-  selectedUsers,
-  setSelectedUsers,
+  selectedInvitees,
+  setSelectedInvitees,
 }: FriendsListProps) {
   const styles = StyleSheet.create({
     friendsList: { marginVertical: 8, flex: 1 },
@@ -34,12 +34,22 @@ export default function FriendsList({
           renderItem={({ item }) => (
             <UserCard
               onPress={() => {
-                if (selectedUsers?.includes(item.user))
-                  setSelectedUsers((prev) => prev.filter((user) => user.id != item.user.id));
-                else setSelectedUsers((prev) => [...prev, item.user]);
+                if (
+                  selectedInvitees.some((invitee) => invitee.type === "registered" && invitee.userId === item.user.id)
+                )
+                  setSelectedInvitees((prev) =>
+                    prev.filter((invitee) => invitee.type === "registered" && invitee.userId != item.user.id),
+                  );
+                else setSelectedInvitees((prev) => [...prev, { type: "registered", userId: item.user.id }]);
               }}
               user={item.user}
-              right={<Checkbox isSelected={selectedUsers?.includes(item.user)} />}
+              right={
+                <Checkbox
+                  isSelected={selectedInvitees.some(
+                    (invitee) => invitee.type === "registered" && invitee.userId === item.user.id,
+                  )}
+                />
+              }
             />
           )}
           ListEmptyComponent={<Text> No Friends Added!</Text>}

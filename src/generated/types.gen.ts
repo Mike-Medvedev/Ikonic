@@ -76,6 +76,11 @@ export type DtoListUserWithFriendshipInfo = {
     data: Array<UserWithFriendshipInfo>;
 };
 
+export type ExternalInvitee = {
+    type?: 'external';
+    phoneNumber: string;
+};
+
 export type FriendRequestType = 'outgoing' | 'incoming';
 
 export type FriendshipCreate = {
@@ -106,7 +111,7 @@ export type InvitationBatchResponseData = {
 };
 
 export type InvitationCreate = {
-    invites: Array<string>;
+    invitees: Array<RegisteredInvitee | ExternalInvitee>;
 };
 
 export type InvitationRsvp = {
@@ -129,6 +134,11 @@ export type PassengerPublic = {
     userId: string;
     seatPosition: number;
     carId: string;
+};
+
+export type RegisteredInvitee = {
+    type?: 'registered';
+    userId: string;
 };
 
 export type RiderType = 'skier' | 'snowboarder';
