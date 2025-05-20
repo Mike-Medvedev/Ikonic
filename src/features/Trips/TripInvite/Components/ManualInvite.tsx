@@ -3,7 +3,6 @@ import { Icon, useTheme, TextInput as PaperInput } from "react-native-paper";
 import { DividerText, Text, TextInput } from "@/design-system/components";
 import * as Clipboard from "expo-clipboard";
 import useToast from "@/hooks/useToast";
-import useInvite from "@/hooks/useInvite";
 import { useState } from "react";
 import { SimpleForm } from "@/types";
 /**
