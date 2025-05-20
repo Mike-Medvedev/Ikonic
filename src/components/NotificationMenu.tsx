@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, LayoutRectangle } from "react-native";
 import { Badge, Divider, Icon, IconButton, Surface, useTheme } from "react-native-paper";
 import { Text } from "@/design-system/components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useRespondFriendRequest from "@/hooks/useRespondFriendRequest";
 import { useAuth } from "@/context/AuthContext";
 import { FriendshipService } from "@/features/Profile/Services/friendshipService";
