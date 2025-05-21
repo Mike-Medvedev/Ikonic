@@ -36,6 +36,8 @@ export default function VerifyView() {
       const { error } = await verifyOTP(phone, otp);
       if (error) {
         showFailure({ message: `Error Invalid or Expired Code please try again: ${error.message}` });
+      } else {
+        router.replace("/"); //navigate to index and allow redirects to happen naturally
       }
     } catch (unexpectedError) {
       console.error("Unexpected verification error:", unexpectedError);

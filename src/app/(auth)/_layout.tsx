@@ -1,3 +1,4 @@
+import { Background } from "@/design-system/components";
 import { Slot } from "expo-router";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,9 +8,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
  */
 export default function AuthLayout() {
   return (
-    <SafeAreaView style={styles.layout}>
-      <Slot />
-    </SafeAreaView>
+    <Background>
+      <SafeAreaView style={styles.layout}>
+        <Slot />
+      </SafeAreaView>
+    </Background>
   );
 }
 const styles = StyleSheet.create({

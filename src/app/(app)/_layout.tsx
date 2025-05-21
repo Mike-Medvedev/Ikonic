@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Slot, usePathname } from "expo-router";
+import { Stack } from "expo-router";
 import { ActivityIndicator } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";
 
@@ -8,16 +8,21 @@ import { useAuth } from "@/context/AuthContext";
  * if a user came from a deep link invite, callback is appended to re navigate to rsvp page after successful auth
  */
 export default function AuthGuard() {
-  const { session, isLoading } = useAuth();
-  const pathname = usePathname();
+  const { isLoading, isOnboarded } = useAuth();
 
   if (isLoading) {
     return <ActivityIndicator size="large" />;
   }
 
-  if (!session) {
-    return <Redirect href={pathname.endsWith("/rsvp") ? `/login/?callback=${pathname}` : "/login"} />;
-  }
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={!isOnboarded}>
+        <Stack.Screen name="(onboard)" />
+      </Stack.Protected>
 
-  return <Slot />;
+      <Stack.Protected guard={isOnboarded}>
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
+    </Stack>
+  );
 }

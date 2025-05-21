@@ -6,7 +6,7 @@ export default function SignOutButton() {
   const { signOut } = useAuth();
 
   return (
-    <Button mode="contained" style={{ marginRight: 10 }} onPress={signOut}>
+    <Button mode="outlined" style={{ marginRight: 10 }} onPress={signOut}>
       Logout
     </Button>
   );

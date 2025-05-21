@@ -1,4 +1,5 @@
 import { supabase } from "@/utils/Supabase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Session, User } from "@supabase/supabase-js";
 
 export const AuthService = {
@@ -46,5 +47,6 @@ export const AuthService = {
   /** Sign out */
   signOut: async (): Promise<void> => {
     await supabase.auth.signOut();
+    await AsyncStorage.clear();
   },
 };

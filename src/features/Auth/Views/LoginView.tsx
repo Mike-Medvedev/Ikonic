@@ -5,7 +5,7 @@ import { phoneValidator } from "@/utils/validators";
 import { useAuth } from "@/context/AuthContext";
 import { SimpleForm } from "@/types";
 import useToast from "@/hooks/useToast";
-import { Text, TextInput, Button, DividerText } from "@/design-system/components";
+import { Text, TextInput, Button, DividerText, Background } from "@/design-system/components";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;

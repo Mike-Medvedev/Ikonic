@@ -1,8 +1,8 @@
 import "react-native-url-polyfill";
-import { Slot } from "expo-router";
-import { PaperProvider } from "react-native-paper";
+import { Stack } from "expo-router";
+import { ActivityIndicator, PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { theme } from "@/design-system/theme/NativePaperTheme";
 import { registerTranslation } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
+import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -60,20 +61,46 @@ registerTranslation("en", {
 });
 
 /**
+ * Component to handle the actual navigation logic based on auth state.
+ * This will be rendered once fonts are loaded and inside AuthProvider.
+ */
+function AppNavigation() {
+  const { session, isLoading: authIsLoading, isOnboarded } = useAuth();
+
+  useEffect(() => {
+    if (!authIsLoading) {
+      SplashScreen.hideAsync();
+    }
+  }, [authIsLoading]);
+
+  if (authIsLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!!session}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+      <Stack.Screen name="index" />
+    </Stack>
+  );
+}
+
+/**
  * Top level layout and applications entry point, contains global providers, contexts, and configs.
- * <Slot /> is like <router-outlet> and "passes-through" and renders the request page
  */
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     Poppins: require("@/assets/fonts/Poppins-Regular.ttf"),
   });
-  useEffect(() => {
-    if (loaded || error) {
-      setTimeout(() => {
-        SplashScreen.hideAsync();
-      }, 5000);
-    }
-  }, [loaded, error]);
 
   if (!loaded && !error) {
     return null;
@@ -94,7 +121,7 @@ export default function RootLayout() {
                   <AuthProvider>
                     <SafeAreaProvider>
                       <Background>
-                        <Slot />
+                        <AppNavigation />
                       </Background>
                     </SafeAreaProvider>
                   </AuthProvider>
