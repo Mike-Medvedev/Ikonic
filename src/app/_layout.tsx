@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import { ActivityIndicator, PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -14,9 +14,10 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { MAX_NET_RETRIES } from "@/constants/constants";
+import { MAX_NET_RETRIES, RSVP_PATH } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
 import { View } from "react-native";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -65,8 +66,19 @@ registerTranslation("en", {
  * This will be rendered once fonts are loaded and inside AuthProvider.
  */
 function AppNavigation() {
-  const { session, isLoading: authIsLoading, isOnboarded } = useAuth();
+  const { session, isLoading: authIsLoading } = useAuth();
+  const { set } = useLocalStorage();
+  const pathname = usePathname();
 
+  useEffect(() => {
+    const storeIntendedPath = async () => {
+      if (pathname.includes(RSVP_PATH)) {
+        const { error } = await set({ key: "rsvp_callback", value: pathname });
+        if (error !== undefined) console.error(error);
+      }
+    };
+    storeIntendedPath();
+  }, [pathname]);
   useEffect(() => {
     if (!authIsLoading) {
       SplashScreen.hideAsync();

@@ -104,7 +104,6 @@ export default function TripEditView() {
         bucket: "trips",
         path: `${selectedTripId}/trip-image`,
       });
-      console.log("PRINTING IMAGE PATH!!!: ", imagePath);
       if (imagePath) {
         tripImageStoragePath = { value: imagePath, error: "" };
       }

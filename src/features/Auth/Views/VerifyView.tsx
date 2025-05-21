@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useTheme, Appbar } from "react-native-paper";
 import OTPForm from "@/features/Auth/Components/OTPForm";
-import { router, useLocalSearchParams } from "expo-router";
+import { ExternalPathString, router, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import useToast from "@/hooks/useToast";
 
 import { Text, Button } from "@/design-system/components";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 /**
  * Render the UI for the verify page
@@ -14,6 +15,7 @@ import { Text, Button } from "@/design-system/components";
  */
 export default function VerifyView() {
   const theme = useTheme();
+  const { get, remove } = useLocalStorage();
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, verifyOTP } = useAuth();
   const { showSuccess, showFailure } = useToast();
@@ -37,7 +39,24 @@ export default function VerifyView() {
       if (error) {
         showFailure({ message: `Error Invalid or Expired Code please try again: ${error.message}` });
       } else {
-        router.replace("/"); //navigate to index and allow redirects to happen naturally
+        const { data, error } = await get<ExternalPathString>({ key: "rsvp_callback" });
+        const intendedPath = data; // Store before removing
+
+        // Attempt to remove the key regardless of whether it was found or if redirection will use it
+        const { error: removeError } = await remove({ key: "rsvp_callback" });
+        if (removeError) {
+          console.error("Error removing rsvp_callback from storage:", removeError);
+        }
+        console.log("printing recieved intended path callback", data);
+        if (error !== undefined) {
+          console.error(error);
+          showFailure({ message: "Error Getting intended path", url: "/" });
+        }
+        if (intendedPath) {
+          router.replace(intendedPath);
+        } else {
+          router.replace("/");
+        }
       }
     } catch (unexpectedError) {
       console.error("Unexpected verification error:", unexpectedError);

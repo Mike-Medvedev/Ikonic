@@ -119,11 +119,9 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
       return;
     }
     if (Object.keys(userUpdate).length === 0) {
-      console.log("Update object is empty! returning");
       setLoading(false);
       return;
     }
-    console.log(userUpdate, profile);
     updateProfileMutation.mutate({ ...userUpdate, user_id });
   }
   const styles = StyleSheet.create({

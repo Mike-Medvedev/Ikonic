@@ -21,13 +21,11 @@ export const AuthService = {
 
   /** Sign in with OTP */
   signIn: async (phone: string): Promise<{ error: Error | null }> => {
-    try {
-      const { error } = await supabase.auth.signInWithOtp({ phone });
-      console.log(error?.message, error?.cause);
+    const { error } = await supabase.auth.signInWithOtp({ phone });
+    if (error) {
+      console.error(error);
       return { error };
-    } catch (error) {
-      return { error: error as Error };
-    }
+    } else return { error: null };
   },
 
   /** Verify OTP */

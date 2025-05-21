@@ -11,6 +11,7 @@ export const DEFAULT_APP_PATH = `/trips`;
 export const PROFILE_PATH = `/profile`;
 export const PLANNER_PATH = `/plan`;
 export const ONBOARDING_PATH = `/onboard`;
+export const RSVP_PATH = `/rsvp`;
 
 export const MAX_NET_RETRIES = 3;
 

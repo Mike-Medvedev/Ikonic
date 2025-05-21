@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { TripService } from "@/features/Trips/Services/tripService";
 import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
 import { useQuery } from "@tanstack/react-query";
-import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
+import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router";
 
 /**
  * Layout for a selected trip and its children at /trips/<trip-id>, overides tabs from parent tab layout
@@ -42,7 +42,7 @@ export default function TripsNoTabLayout() {
               title={getHeaderTitle(route.name)}
               isOwner={isOwner}
               selectedTripId={selectedTripId}
-              callback={() => navigation.goBack()}
+              callback={() => (navigation.canGoBack() ? navigation.goBack() : router.replace("/"))}
             />
           ),
         };

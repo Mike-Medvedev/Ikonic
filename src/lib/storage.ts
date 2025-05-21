@@ -25,8 +25,6 @@ const storageClient = {
       return;
     }
 
-    console.log(bucket, path);
-
     const mimeType = image.mimeType || "image/jpeg";
     const blobPath = path;
 

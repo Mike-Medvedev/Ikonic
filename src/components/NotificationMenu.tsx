@@ -67,7 +67,6 @@ export default function NotificationMenu() {
               disabled={loadingAction === "reject"}
               onPress={() => {
                 setLoadingAction("accept");
-                console.log("im being pressed during loading");
                 respondToRequestMutation.mutate({ id: friendRequest.id, status: "accepted" });
               }}
             />

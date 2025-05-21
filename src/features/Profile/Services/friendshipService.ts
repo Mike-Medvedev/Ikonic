@@ -24,7 +24,6 @@ export const FriendshipService = {
         console.error(`Friends List fetch was not successful`);
         throw new ApiError(500, "Error: Friends List fetch was not successful");
       }
-      console.log("PRINTING FROM FRENSHIP SERVICE GET FRIEDNS!", res.data.data);
       return res.data.data;
     } catch (error) {
       console.error(error);
