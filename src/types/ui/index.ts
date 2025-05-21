@@ -4,7 +4,6 @@
 
 import { TripUpdateParsed } from "@/types/domain";
 
-export type RSVPStatus = "accepted" | "pending" | "uncertain" | "declined";
 export interface AttendanceCount {
   accepted: number;
   pending: number;

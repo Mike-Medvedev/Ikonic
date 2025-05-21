@@ -1,4 +1,4 @@
-import { AttendanceList, RSVPStatus } from "@/types";
+import { AttendanceList, InvitationEnum } from "@/types";
 import { View } from "react-native";
 import { Avatar, useTheme } from "react-native-paper";
 import UserAvatar from "@/components/UserAvatar";
@@ -7,7 +7,7 @@ const MAX_AVATARS = 5;
 
 interface UsersAvatarListProps {
   attendees: AttendanceList | undefined;
-  rsvp: RSVPStatus;
+  rsvp: InvitationEnum;
   size?: number;
   labelFontSize?: number;
 }

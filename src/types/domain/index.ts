@@ -24,7 +24,7 @@ export {
   // Invite endpoints
   getInvitedUsersApiV1TripsTripIdInvitesGet,
   inviteUsersApiV1TripsTripIdInvitesPost,
-  rsvpApiV1TripsTripIdInvitesUserIdPatch,
+  rsvpApiV1TripsTripIdInvitesPatch,
 
   // User endpoints
   getUsersApiV1UsersGet,
@@ -63,7 +63,7 @@ export {
   Passenger,
   PassengerCreate,
   PassengerPublic,
-  InvitationRsvp,
+  InvitationUpdate,
   UserPublic,
   UserUpdate,
   ValidationError,
@@ -82,6 +82,7 @@ export {
   InvitationCreate,
   RegisteredInvitee,
   ExternalInvitee,
+  InvitationEnum,
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {

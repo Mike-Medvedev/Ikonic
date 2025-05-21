@@ -1,7 +1,7 @@
 import useToast from "@/hooks/useToast";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
-import { RSVPStatus } from "@/types";
+import { InvitationEnum } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Pressable, View, StyleSheet } from "react-native";
@@ -15,7 +15,10 @@ import TripTitleDetail from "@/components/TripTitleDetail";
  * Render RSVP page for a selected trip where users can decide to rsvp
  */
 export default function RsvpView() {
-  const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
+  const { selectedTrip: selectedTripId, invite_token } = useLocalSearchParams() as {
+    selectedTrip: string;
+    invite_token: string;
+  };
   const { session } = useAuth();
   const theme = useTheme();
   const userId = session?.user.id;
@@ -31,14 +34,14 @@ export default function RsvpView() {
   /**
    * Event handler for rsvp selection and redirects user upon rsvp
    */
-  async function rsvpHandler(userResponse: RSVPStatus) {
+  async function rsvpHandler(userResponse: InvitationEnum) {
     if (!userId) {
       showFailure({ message: "Invalid User Id please sign in again" });
       return;
     }
     try {
-      await InviteService.rsvp(selectedTripId, userId, { rsvp: userResponse });
-      showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}` });
+      await InviteService.rsvp(selectedTripId, { inviteToken: invite_token, rsvp: userResponse });
+      showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}/details` });
     } catch (error) {
       showFailure({ message: `Error, ${(error as Error).message}` });
       console.error(error);

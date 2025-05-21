@@ -114,9 +114,11 @@ export type InvitationCreate = {
     invitees: Array<RegisteredInvitee | ExternalInvitee>;
 };
 
-export type InvitationRsvp = {
-    rsvp?: string | null;
-    paid?: number | null;
+export type InvitationEnum = 'accepted' | 'pending' | 'uncertain' | 'declined';
+
+export type InvitationUpdate = {
+    inviteToken: string;
+    rsvp: InvitationEnum;
 };
 
 export type Passenger = {
@@ -648,6 +650,33 @@ export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponses = {
 
 export type GetInvitedUsersApiV1TripsTripIdInvitesGetResponse = GetInvitedUsersApiV1TripsTripIdInvitesGetResponses[keyof GetInvitedUsersApiV1TripsTripIdInvitesGetResponses];
 
+export type RsvpApiV1TripsTripIdInvitesPatchData = {
+    body: InvitationUpdate;
+    path: {
+        trip_id: string;
+    };
+    query?: never;
+    url: '/api/v1/trips/{trip_id}/invites';
+};
+
+export type RsvpApiV1TripsTripIdInvitesPatchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RsvpApiV1TripsTripIdInvitesPatchError = RsvpApiV1TripsTripIdInvitesPatchErrors[keyof RsvpApiV1TripsTripIdInvitesPatchErrors];
+
+export type RsvpApiV1TripsTripIdInvitesPatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoBool;
+};
+
+export type RsvpApiV1TripsTripIdInvitesPatchResponse = RsvpApiV1TripsTripIdInvitesPatchResponses[keyof RsvpApiV1TripsTripIdInvitesPatchResponses];
+
 export type InviteUsersApiV1TripsTripIdInvitesPostData = {
     body: InvitationCreate;
     path: {
@@ -674,34 +703,6 @@ export type InviteUsersApiV1TripsTripIdInvitesPostResponses = {
 };
 
 export type InviteUsersApiV1TripsTripIdInvitesPostResponse = InviteUsersApiV1TripsTripIdInvitesPostResponses[keyof InviteUsersApiV1TripsTripIdInvitesPostResponses];
-
-export type RsvpApiV1TripsTripIdInvitesUserIdPatchData = {
-    body: InvitationRsvp;
-    path: {
-        trip_id: string;
-        user_id: string;
-    };
-    query?: never;
-    url: '/api/v1/trips/{trip_id}/invites/{user_id}';
-};
-
-export type RsvpApiV1TripsTripIdInvitesUserIdPatchErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RsvpApiV1TripsTripIdInvitesUserIdPatchError = RsvpApiV1TripsTripIdInvitesUserIdPatchErrors[keyof RsvpApiV1TripsTripIdInvitesUserIdPatchErrors];
-
-export type RsvpApiV1TripsTripIdInvitesUserIdPatchResponses = {
-    /**
-     * Successful Response
-     */
-    200: DtoBool;
-};
-
-export type RsvpApiV1TripsTripIdInvitesUserIdPatchResponse = RsvpApiV1TripsTripIdInvitesUserIdPatchResponses[keyof RsvpApiV1TripsTripIdInvitesUserIdPatchResponses];
 
 export type GetFriendsApiV1FriendshipsMeGetData = {
     body?: never;

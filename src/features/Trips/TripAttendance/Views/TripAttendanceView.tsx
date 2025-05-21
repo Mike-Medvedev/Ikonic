@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
-import { RSVPStatus, UserPublic } from "@/types";
+import { InvitationEnum, UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import { Background, Text } from "@/design-system/components";
@@ -18,7 +18,7 @@ import useProfileModal from "@/hooks/useProfileModal";
  * @todo undefined selected Trip Id slips through and errors, we need to fix this globally
  */
 export default function TripAttendanceView() {
-  const [selectedPill, setSelectedPill] = useState<RSVPStatus>("accepted");
+  const [selectedPill, setSelectedPill] = useState<InvitationEnum>("accepted");
   const { setModalState, ProfileModal } = useProfileModal();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   // prettier-ignore
@@ -40,7 +40,7 @@ export default function TripAttendanceView() {
     enabled: !!selectedTripId,
   });
 
-  function CalculateIcon(rsvp: RSVPStatus) {
+  function CalculateIcon(rsvp: InvitationEnum) {
     switch (rsvp) {
       case "accepted":
         return <Icon source="check" size={16} />;
@@ -83,7 +83,7 @@ export default function TripAttendanceView() {
         <AsyncStateWrapper loading={isFetching} error={error}>
           <ScrollView horizontal style={styles.pillsContainer}>
             {attendees &&
-              (Object.entries(attendees) as [RSVPStatus, UserPublic[]][]).map(([rsvp, users], index) => (
+              (Object.entries(attendees) as [InvitationEnum, UserPublic[]][]).map(([rsvp, users], index) => (
                 <Pill
                   label={rsvp}
                   count={users.length}

@@ -3,6 +3,8 @@ import { Text } from "@/design-system/components";
 import { useTheme } from "react-native-paper";
 import { TripPublicParsed } from "@/types";
 import { formatDateRangeShort } from "@/utils/dateUtils";
+import { useEffect } from "react";
+
 /**
  * Reusable Component for display Trip Title with a detail
  */
@@ -19,13 +21,18 @@ export default function TripTitleDetail({ trip }: { trip: TripPublicParsed | und
       alignItems: "center",
     },
   });
+
+  if (!trip || !trip.startDate || !trip.endDate) {
+    return null;
+  }
+
   return (
     <View>
       <Text style={styles.title} variant="titleLarge">
-        {trip?.title ?? ""}
+        {trip.title ?? ""}
       </Text>
       <Text style={styles.label}>
-        {formatDateRangeShort(trip?.startDate ?? "", trip?.endDate ?? "")} • {trip?.mountain}
+        {formatDateRangeShort(trip.startDate, trip.endDate)} • {trip.mountain}
       </Text>
     </View>
   );

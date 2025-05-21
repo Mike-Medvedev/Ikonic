@@ -28,6 +28,10 @@ export function getDaysUntil(startDateInput: Date | string): string {
  * Assumes the start and end dates are in the same month and year for this specific format.
  */
 export function formatDateRangeShort(startDateInput: Date | string, endDateInput: Date | string): string {
+  if (!startDateInput || !endDateInput) {
+    console.error("Empty Start or EndDate in formatDateRangeShort");
+    return "Empty Date(s)";
+  }
   const startDate = startDateInput instanceof Date ? startDateInput : new Date(startDateInput);
   const endDate = endDateInput instanceof Date ? endDateInput : new Date(endDateInput);
 

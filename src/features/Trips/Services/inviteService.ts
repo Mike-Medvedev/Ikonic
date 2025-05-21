@@ -1,10 +1,10 @@
 import {
   getInvitedUsersApiV1TripsTripIdInvitesGet,
-  rsvpApiV1TripsTripIdInvitesUserIdPatch,
+  rsvpApiV1TripsTripIdInvitesPatch,
   inviteUsersApiV1TripsTripIdInvitesPost,
 } from "@/types";
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
-import type { AttendanceList, InvitationRsvp, InvitationCreate, InvitationBatchResponseData } from "@/types";
+import type { AttendanceList, InvitationUpdate, InvitationCreate, InvitationBatchResponseData } from "@/types";
 import { withError } from "@/lib/errors";
 
 export const InviteService = {
@@ -19,10 +19,10 @@ export const InviteService = {
   },
 
   /** RSVP to an invite */
-  rsvp: async (tripId: string, userId: string, payload: InvitationRsvp): Promise<boolean> => {
+  rsvp: async (tripId: string, payload: InvitationUpdate): Promise<boolean> => {
     const client = await createAuthenticatedClient();
-    const res = await rsvpApiV1TripsTripIdInvitesUserIdPatch<true>({
-      path: { trip_id: tripId, user_id: userId },
+    const res = await rsvpApiV1TripsTripIdInvitesPatch<true>({
+      path: { trip_id: tripId },
       body: payload,
       client,
     });

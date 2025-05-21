@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { Stack, usePathname } from "expo-router";
+import { Stack, useGlobalSearchParams, usePathname } from "expo-router";
 import { ActivityIndicator, PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -69,11 +69,17 @@ function AppNavigation() {
   const { session, isLoading: authIsLoading } = useAuth();
   const { set } = useLocalStorage();
   const pathname = usePathname();
+  const { path } = useGlobalSearchParams();
 
   useEffect(() => {
     const storeIntendedPath = async () => {
       if (pathname.includes(RSVP_PATH)) {
-        const { error } = await set({ key: "rsvp_callback", value: pathname });
+        console.log(path);
+        if (typeof path !== "string" || path === "") {
+          console.warn("Invalid or empty 'path' found in globalSearchParams. Not storing callback.");
+          return;
+        }
+        const { error } = await set({ key: "rsvp_callback", value: path });
         if (error !== undefined) console.error(error);
       }
     };
