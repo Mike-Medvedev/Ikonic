@@ -11,10 +11,9 @@ import Pill from "@/design-system/components/Pill";
 import FriendsList from "@/features/Trips/TripInvite/Components/FriendsList";
 import ContactsList from "@/features/Trips/TripInvite/Components/ContactsList";
 import ManualInvite from "@/features/Trips/TripInvite/Components/ManualInvite";
-import { ExternalInvitee } from "@/types";
+import { ExternalInvitee, RegisteredInvitee } from "@/types";
 import useInvite from "@/hooks/useInvite";
 import useToast from "@/hooks/useToast";
-import { RegisteredInvitee } from "@/types";
 
 /**
  * Route for displaying Invite Friends page

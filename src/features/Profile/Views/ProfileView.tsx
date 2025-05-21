@@ -1,4 +1,4 @@
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import ProfileCard from "@/features/Profile/Components/ProfileCard";
