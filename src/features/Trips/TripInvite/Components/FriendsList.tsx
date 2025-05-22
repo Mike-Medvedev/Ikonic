@@ -1,7 +1,7 @@
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UserCard from "@/components/UserCard";
 import { Text, Checkbox } from "@/design-system/components";
-import { ExternalInvitee, RegisteredInvitee, UserPublic, UserWithFriendshipInfo } from "@/types";
+import { ExternalInvitee, RegisteredInvitee, UserWithFriendshipInfo } from "@/types";
 import { View, StyleSheet, FlatList } from "react-native";
 
 interface FriendsListProps {

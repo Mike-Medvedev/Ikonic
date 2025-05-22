@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { ExternalPathString, router, Stack, useNavigation, usePathname } from "expo-router";
+import { ExternalPathString, router, Stack } from "expo-router";
 import { ActivityIndicator, PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -12,7 +12,7 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES, RSVP_PATH } from "@/constants/constants";
 import Background from "@/design-system/components/Background";

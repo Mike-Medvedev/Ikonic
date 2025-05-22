@@ -5,7 +5,7 @@ import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
 import { TabParamList } from "@/types";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { router, Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 /**
  * Layout for a selected trip and its children at /trips/<trip-id>, overides tabs from parent tab layout

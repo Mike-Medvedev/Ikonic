@@ -11,7 +11,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import storageClient from "@/lib/storage";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "@/design-system/components";
 import { useAuth } from "@/context/AuthContext";
 
