@@ -24,8 +24,6 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
       retry: (failureCount, error) => {
         if (error instanceof NetworkError && failureCount < MAX_NET_RETRIES) return true;
         if (error instanceof ApiError) return false;
