@@ -55,6 +55,7 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["users", profile.id] });
+      queryClient.invalidateQueries({ queryKey: ["attendees"], exact: false });
       setLoading(false);
     },
   });
