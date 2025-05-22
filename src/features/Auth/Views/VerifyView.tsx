@@ -33,7 +33,7 @@ export default function VerifyView() {
     }
     setIsLoading(true);
     try {
-      const phone = `1${phoneNumber}`;
+      const phone = phoneNumber;
       const otp = code.join("");
       const { error } = await verifyOTP(phone, otp);
       if (error) {
@@ -99,14 +99,14 @@ export default function VerifyView() {
         Verify Your Number
       </Text>
       <Text variant="labelLarge" style={styles.centerText}>
-        We&apos;ve sent a code to {`+1 ${phoneNumber}`}
+        We&apos;ve sent a code to {phoneNumber}
       </Text>
       <OTPForm code={code} setCode={setCode} />
       <Button mode="contained" onPress={handleVerify} loading={isLoading} disabled={isLoading}>
         Verify
       </Button>
       <Text style={[styles.label, styles.centerText, styles.resendCodeContainer]}>
-        Didn&apos;t receive code?{" "}
+        Didn&apos;t receive code?
         <Text onPress={handleResendCode} style={styles.resendCode}>
           Resend
         </Text>

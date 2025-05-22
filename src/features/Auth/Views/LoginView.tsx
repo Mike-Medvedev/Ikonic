@@ -1,15 +1,17 @@
 import React, { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { useTheme, TextInput as PaperInput } from "react-native-paper";
-import { phoneValidator } from "@/utils/validators";
+import { useTheme } from "react-native-paper";
 import { useAuth } from "@/context/AuthContext";
 import { SimpleForm } from "@/types";
 import useToast from "@/hooks/useToast";
-import { Text, TextInput, Button, DividerText } from "@/design-system/components";
+import { Text, Button, DividerText } from "@/design-system/components";
+import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
+import { PhoneInputField } from "@/components/PhoneNumberInput";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { VERIFY_PATH } from "@/constants/constants";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
-  countryCode: SimpleForm<string>;
 }
 
 /**
@@ -23,18 +25,17 @@ export default function LoginView() {
   // const { callback: rsvpPathCallback } = useLocalSearchParams(); // Example usage if needed
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
-    countryCode: { value: "1", error: "" },
   });
 
   /**
    * Helper Function that validates whether a phone number is a valid number
    */
   function validateLogin(): boolean {
-    const phoneError = phoneValidator(loginForm.phoneNumber.value);
-    if (phoneError) {
+    const validPhone = isPossiblePhoneNumber(loginForm.phoneNumber.value);
+    if (!validPhone) {
       setLoginForm((prev) => ({
         ...prev,
-        phoneNumber: { value: prev.phoneNumber.value, error: phoneError },
+        phoneNumber: { value: prev.phoneNumber.value, error: "Please enter a valid phone number" },
       }));
       return false;
     }
@@ -48,7 +49,7 @@ export default function LoginView() {
     }
     setIsLoading(true);
     try {
-      const phoneNumber = `${loginForm.countryCode.value}${loginForm.phoneNumber.value}`;
+      const phoneNumber = loginForm.phoneNumber.value;
 
       const { error } = await signIn(phoneNumber);
       if (error) {
@@ -56,7 +57,7 @@ export default function LoginView() {
       } else {
         showSuccess({
           message: "We sent you a OTP",
-          url: "/(auth)/verify",
+          url: VERIFY_PATH,
           params: { phoneNumber: loginForm.phoneNumber.value },
         });
       }
@@ -68,10 +69,10 @@ export default function LoginView() {
     }
   }
 
-  function handlePhoneChange(text: string) {
+  function handlePhoneChange(value?: Value | undefined) {
     setLoginForm((prev) => ({
       ...prev,
-      phoneNumber: { value: text, error: "" },
+      phoneNumber: { value: value ?? "", error: "" },
     }));
   }
 
@@ -107,21 +108,15 @@ export default function LoginView() {
         Sign in to plan your next mountain adventure
       </Text>
       <View style={styles.formContainer}>
-        <Text variant="labelLarge" style={styles.label}>
-          Phone Number
-        </Text>
-        <TextInput
-          placeholder="(555) 000-000"
-          returnKeyType="done"
+        <PhoneInput
+          country="US"
           value={loginForm.phoneNumber.value}
-          onChangeText={handlePhoneChange}
+          onChange={handlePhoneChange}
           error={!!loginForm.phoneNumber.error}
           errorText={loginForm.phoneNumber.error}
-          autoCapitalize="none"
-          textContentType="telephoneNumber"
-          keyboardType="phone-pad"
-          maxLength={10}
-          left={<PaperInput.Affix text="+1 " />}
+          //eslint-disable-next-line @typescript-eslint/no-explicit-any
+          inputComponent={PhoneInputField as any}
+          maxLength={16}
         />
       </View>
       <Text style={styles.secondaryLabel}>* We will send you a one time code</Text>

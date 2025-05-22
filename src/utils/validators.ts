@@ -1,4 +1,5 @@
 import { ILLEGAL_WORDS } from "@/constants/constants";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 /** Validate Emails */
 export function emailValidator(email: string) {
@@ -60,12 +61,6 @@ export function fullnameValidator(fullname: string | null | undefined): string {
   if (trimmedName.length > maxLength) {
     return `Full name cannot exceed ${maxLength} characters.`;
   }
-
-  return "";
-}
-/** Validate Phones */
-export function phoneValidator(phone: string) {
-  if (!phone || phone.length !== 10) return "Phone Number cannot be empty or non 10-digit";
 
   return "";
 }

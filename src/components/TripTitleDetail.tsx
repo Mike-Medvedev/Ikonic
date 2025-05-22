@@ -3,7 +3,6 @@ import { Text } from "@/design-system/components";
 import { useTheme } from "react-native-paper";
 import { TripPublicParsed } from "@/types";
 import { formatDateRangeShort } from "@/utils/dateUtils";
-import { useEffect } from "react";
 
 /**
  * Reusable Component for display Trip Title with a detail
