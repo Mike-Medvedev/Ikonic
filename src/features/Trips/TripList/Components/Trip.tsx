@@ -1,8 +1,8 @@
-import { router, usePathname } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, Text, Icon } from "react-native-paper";
-import { TabParamList, TripPublicParsed } from "@/types";
+import { TripPublicParsed } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/design-system/components";
 import UsersAvatarList from "@/components/UsersAvatarList";
