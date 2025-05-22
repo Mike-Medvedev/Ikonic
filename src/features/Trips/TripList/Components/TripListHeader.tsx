@@ -28,7 +28,7 @@ export default function TripListHeader({ tripLength }: { tripLength: number }) {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.title}>
-        <Text variant="headlineSmall">My Trips</Text>
+        <Text variant="headlineSmall">Upcoming Trips</Text>
         <Badge size={30} style={styles.badge}>
           {tripLength ?? 0}
         </Badge>

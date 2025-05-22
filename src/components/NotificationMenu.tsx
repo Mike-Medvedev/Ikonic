@@ -33,7 +33,7 @@ export default function NotificationMenu() {
     refetchOnMount: true,
     refetchOnWindowFocus: true
     })
-  const [l, sL] = useState<LayoutRectangle | undefined>(undefined);
+  const [bellIconDimensions, setBellIconDimensions] = useState<LayoutRectangle | undefined>(undefined);
   const [visible, setVisible] = useState<boolean>(false);
   const styles = StyleSheet.create({
     content: { width: "100%", padding: 16, flexDirection: "row", alignItems: "center" },
@@ -96,14 +96,14 @@ export default function NotificationMenu() {
       <IconButton
         icon="bell"
         onPress={() => setVisible((prev) => !prev)}
-        onLayout={(layout) => sL(layout.nativeEvent.layout)}
+        onLayout={(layout) => setBellIconDimensions(layout.nativeEvent.layout)}
       />
       {visible && (
         <Surface
           elevation={1}
           style={{
             position: "absolute",
-            top: l?.height,
+            top: bellIconDimensions?.height,
             right: 0,
             width: 300,
             maxHeight: 300,

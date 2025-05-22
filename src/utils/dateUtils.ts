@@ -2,11 +2,11 @@
  * Calculates the number of days remaining until a given start date.
  * Rounds up to the nearest whole day. Returns "0 days" if the date is today or in the past.
  */
-export function getDaysUntil(startDateInput: Date | string): string {
+export function getDaysUntil(startDateInput: Date | string): number {
   const startDate = startDateInput instanceof Date ? startDateInput : new Date(startDateInput);
 
   if (isNaN(startDate.getTime())) {
-    return "Invalid date";
+    return -1;
   }
 
   const now = Date.now();
@@ -15,12 +15,12 @@ export function getDaysUntil(startDateInput: Date | string): string {
   const diffMilliseconds = startTime - now;
 
   if (diffMilliseconds <= 0) {
-    return "0 days";
+    return 0;
   }
 
   const daysRemaining = Math.ceil(diffMilliseconds / (1000 * 60 * 60 * 24));
 
-  return `${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`;
+  return daysRemaining;
 }
 
 /**

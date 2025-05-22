@@ -6,6 +6,7 @@ import { TripService } from "@/features/Trips/Services/tripService";
 import { Text, useTheme } from "react-native-paper";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Background from "@/design-system/components/Background";
+import { getDaysUntil } from "@/utils/dateUtils";
 /**
  * Render the UI for the page that displays List of selectable Trips and their quick information
  */
@@ -17,18 +18,18 @@ export default function TripListView() {
       return TripService.getAll();
     },
   });
-  // useRefreshOnFocus(refetch);
-
+  const filterPassedTrips = trips?.filter((trip) => getDaysUntil(trip.startDate) > 0);
+  const sortTrips = filterPassedTrips?.sort((a, b) => getDaysUntil(a.startDate) - getDaysUntil(b.startDate));
   const emptyFallback = () => {
     return <Text style={{ color: theme.colors.secondary, opacity: 0.5 }}>No Trips Planned Yet</Text>;
   };
   return (
     <Background>
       <View style={styles.container}>
-        <TripListHeader tripLength={trips?.length ?? 0} />
+        <TripListHeader tripLength={filterPassedTrips?.length ?? 0} />
         <AsyncStateWrapper loading={isFetching} error={error}>
           <FlatList
-            data={trips}
+            data={sortTrips}
             keyExtractor={(item) => item?.id?.toString()}
             renderItem={({ item }) => <Trip trip={item} />}
             onRefresh={refetch}

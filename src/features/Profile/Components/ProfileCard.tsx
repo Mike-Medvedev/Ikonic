@@ -68,7 +68,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
   });
   const theme = useTheme();
   const styles = StyleSheet.create({
-    container: { padding: 16 },
+    container: { padding: 16, flex: 1 },
     profileCardContainer: { flexDirection: "row", alignItems: "center", gap: 16 },
     profileCardContent: { gap: 8, flex: 1 },
     label: { textTransform: "capitalize", color: theme.colors.secondary, fontSize: 16 },
@@ -90,7 +90,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
     },
     squareLabel: { textTransform: "capitalize", color: theme.colors.secondary, fontSize: 14 },
 
-    recentTripsContainer: { marginVertical: 0 },
+    recentTripsContainer: { marginVertical: 0, flex: 1 },
     recentTripsHeader: { flexDirection: "row", justifyContent: "space-between", marginVertical: 16 },
     recentTrip: {
       flexDirection: "row",

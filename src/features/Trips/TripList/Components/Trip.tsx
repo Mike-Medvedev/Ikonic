@@ -10,7 +10,6 @@ import { InviteService } from "@/features/Trips/Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort, getDaysUntil } from "@/utils/dateUtils";
 import storageClient from "@/lib/storage";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -20,8 +19,6 @@ export interface TripProps {
  * @todo DELETE TRIP BLOB WHEN DELETING TRIP
  */
 export default function Trip({ trip }: TripProps) {
-  const pathname = usePathname();
-  const navigation = useNavigation<NavigationProp<TabParamList>>();
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
@@ -78,7 +75,9 @@ export default function Trip({ trip }: TripProps) {
 
             <View style={styles.chip}>
               <Icon source="calendar" color={theme.colors.secondary} size={20} />
-              <Text style={styles.label}>{getDaysUntil(trip.startDate)}</Text>
+              <Text
+                style={styles.label}
+              >{`${getDaysUntil(trip.startDate)} day${getDaysUntil(trip.startDate) === 1 ? "" : "s"}`}</Text>
             </View>
           </View>
         </View>

@@ -2,14 +2,15 @@ import useToast from "@/hooks/useToast";
 import { TripService } from "@/features/Trips/Services/tripService";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import { InvitationEnum } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Pressable, View, StyleSheet } from "react-native";
 import { Avatar, Divider, Icon, useTheme } from "react-native-paper";
-import { useAuth } from "@/context/AuthContext";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { Background, Text } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
+import { ApiError, NetworkError } from "@/lib/errors";
+import { DEFAULT_APP_PATH } from "@/constants/constants";
 
 /**
  * Render RSVP page for a selected trip where users can decide to rsvp
@@ -19,10 +20,30 @@ export default function RsvpView() {
     selectedTrip: string;
     invite_token: string;
   };
-  const { session } = useAuth();
+  const queryClient = useQueryClient();
   const theme = useTheme();
-  const userId = session?.user.id;
   const { showSuccess, showFailure } = useToast();
+  const rsvpMutation = useMutation<boolean, Error, { tripId: string; inviteToken: string; rsvp: InvitationEnum }>({
+    mutationFn: ({ tripId, inviteToken, rsvp }) => InviteService.rsvp(tripId, { inviteToken, rsvp }),
+    onError: (error) => {
+      console.error(error);
+      if (error instanceof NetworkError) {
+        showFailure({ message: "Error RSVPing Please check your network" });
+      } else if (error instanceof ApiError) {
+        if (error.status === 409) {
+          showFailure({ message: "Error Invitation has already been Rsvp'ed" });
+        }
+      } else {
+        showFailure({ message: `Error RSVPing` });
+      }
+    },
+    onSuccess: () => {
+      showSuccess({ message: "Successfully Rsvped!", url: DEFAULT_APP_PATH });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+    },
+  });
 
   //prettier-ignore
   const { data: tripData, isFetching, error,
@@ -30,23 +51,6 @@ export default function RsvpView() {
     queryKey: ["trip", selectedTripId],
     queryFn: async () => TripService.getOne(selectedTripId),
   });
-
-  /**
-   * Event handler for rsvp selection and redirects user upon rsvp
-   */
-  async function rsvpHandler(userResponse: InvitationEnum) {
-    if (!userId) {
-      showFailure({ message: "Invalid User Id please sign in again" });
-      return;
-    }
-    try {
-      await InviteService.rsvp(selectedTripId, { inviteToken: invite_token, rsvp: userResponse });
-      showSuccess({ message: "Successfully Rsvped!", url: `/trips/${selectedTripId}/details` });
-    } catch (error) {
-      showFailure({ message: `Error, ${(error as Error).message}` });
-      console.error(error);
-    }
-  }
 
   const styles = StyleSheet.create({
     rsvpContainer: {
@@ -82,7 +86,12 @@ export default function RsvpView() {
           </Text>
 
           <View style={{ gap: 16, marginVertical: 16 }}>
-            <Pressable style={styles.rsvpContainer} onPress={() => rsvpHandler("accepted")}>
+            <Pressable
+              style={styles.rsvpContainer}
+              onPress={() =>
+                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "accepted" })
+              }
+            >
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Icon source="check" size={32} color={theme.colors.secondary} />
                 <View>
@@ -91,7 +100,12 @@ export default function RsvpView() {
                 </View>
               </View>
             </Pressable>
-            <Pressable style={styles.rsvpContainer} onPress={() => rsvpHandler("uncertain")}>
+            <Pressable
+              style={styles.rsvpContainer}
+              onPress={() =>
+                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "uncertain" })
+              }
+            >
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Icon source="help" size={32} color={theme.colors.secondary} />
                 <View>
@@ -100,7 +114,12 @@ export default function RsvpView() {
                 </View>
               </View>
             </Pressable>
-            <Pressable style={styles.rsvpContainer} onPress={() => rsvpHandler("declined")}>
+            <Pressable
+              style={styles.rsvpContainer}
+              onPress={() =>
+                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "declined" })
+              }
+            >
               <View style={{ flexDirection: "row", gap: 16 }}>
                 <Icon source="close" size={32} color={theme.colors.secondary} />
                 <View>
@@ -109,21 +128,6 @@ export default function RsvpView() {
                 </View>
               </View>
             </Pressable>
-            {/* <Button
-              icon="check"
-              i
-              theme={{ roundness: theme.roundness }}
-              mode="outlined"
-              onPress={() => rsvpHandler("accepted")}
-            >
-              Going✅
-            </Button> */}
-            {/* <Button mode="contained" onPress={() => rsvpHandler("uncertain")}>
-              Maybe🤔
-            </Button>
-            <Button mode="contained" onPress={() => rsvpHandler("declined")}>
-              Cant🚫
-            </Button> */}
           </View>
         </AsyncStateWrapper>
       </View>
