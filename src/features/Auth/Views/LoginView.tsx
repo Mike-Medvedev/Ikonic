@@ -108,6 +108,9 @@ export default function LoginView() {
         Sign in to plan your next mountain adventure
       </Text>
       <View style={styles.formContainer}>
+        <Text variant="labelLarge" style={{ marginBottom: 4 }}>
+          Phone Number
+        </Text>
         <PhoneInput
           country="US"
           value={loginForm.phoneNumber.value}

@@ -8,10 +8,11 @@ import { TextInput as NativeTextInput } from "react-native";
 type PhoneInputFieldProps = Omit<PaperTextInputProps, "onChange"> & {
   errorText: string;
   onChange: (text: string) => void;
+  rightIcon?: React.ReactNode;
 };
 
 export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, ref: Ref<NativeTextInput>) => {
-  const { value, onChange, error, errorText, maxLength, ...rest } = props;
+  const { value, onChange, error, errorText, maxLength, rightIcon, ...rest } = props;
 
   const handleTextChange = useCallback(
     (text: string) => {
@@ -24,9 +25,6 @@ export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, re
 
   return (
     <>
-      <PaperText variant="labelLarge" style={{ marginBottom: 4 }}>
-        Phone Number
-      </PaperText>
       <PaperTextInput
         mode="outlined"
         ref={ref}
@@ -39,6 +37,7 @@ export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, re
         textContentType="telephoneNumber"
         keyboardType="phone-pad"
         maxLength={maxLength}
+        right={<PaperTextInput.Icon icon={() => rightIcon} />}
         {...rest}
       />
       {error && errorText && <PaperText style={{ color: "red", fontSize: 12 }}>{errorText}</PaperText>}

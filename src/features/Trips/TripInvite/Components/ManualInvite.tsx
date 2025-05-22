@@ -1,6 +1,6 @@
 import { Pressable, View, TextInput as NativeInput, StyleSheet } from "react-native";
-import { Icon, useTheme, TextInput as PaperInput, IconButton } from "react-native-paper";
-import { DividerText, Text, TextInput } from "@/design-system/components";
+import { Icon, useTheme, IconButton } from "react-native-paper";
+import { DividerText, Text } from "@/design-system/components";
 import * as Clipboard from "expo-clipboard";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
@@ -8,6 +8,9 @@ import { SimpleForm } from "@/types";
 import useInvite from "@/hooks/useInvite";
 import { useLocalSearchParams } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
+import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
+import { PhoneInputField } from "@/components/PhoneNumberInput";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
 /**
  * Renders a Component to manually invite a user via phone number directly
  */
@@ -65,40 +68,47 @@ export default function ManualInvite() {
       justifyContent: "center",
       alignItems: "center",
     },
-    inputContainer: { flexDirection: "row" },
+    inputContainer: {},
   });
+  function handlePhoneChange(value?: Value | undefined) {
+    setPhone({
+      value: value ?? "",
+      error: "",
+    });
+  }
+
+  function handleManualInvite(phone: string) {
+    const isValidNumber = isPossiblePhoneNumber(phone);
+    if (!isValidNumber) {
+      setPhone((prev) => ({ ...prev, error: "Please enter a valid phone number" }));
+      return;
+    }
+    inviteUsersMutation.mutate({
+      tripId: selectedTripId,
+      invitees: [{ type: "external", phoneNumber: phone }],
+    });
+  }
+
   return (
     <View>
       <Text style={styles.label}>Invite By Phone</Text>
       <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="(555) 000-000"
-          returnKeyType="done"
-          value={phone?.value}
-          onChangeText={(text) => setPhone({ value: text, error: "" })}
+        <PhoneInput
+          country="US"
+          value={phone.value}
+          onChange={handlePhoneChange}
           error={!!phone.error}
           errorText={phone.error}
-          autoCapitalize="none"
-          textContentType="telephoneNumber"
-          keyboardType="phone-pad"
-          maxLength={10}
-          left={<PaperInput.Affix text="+1 " />}
-          right={
-            <PaperInput.Icon
-              icon={() => (
-                <IconButton
-                  loading={inviteUsersMutation.isPending}
-                  disabled={inviteUsersMutation.isPending}
-                  onPress={() => {
-                    inviteUsersMutation.mutate({
-                      tripId: selectedTripId,
-                      invitees: [{ type: "external", phoneNumber: `+1${phone.value}` }],
-                    });
-                  }}
-                  icon="send"
-                  size={24}
-                />
-              )}
+          //eslint-disable-next-line @typescript-eslint/no-explicit-any
+          inputComponent={PhoneInputField as any}
+          maxLength={16}
+          rightIcon={
+            <IconButton
+              loading={inviteUsersMutation.isPending}
+              disabled={inviteUsersMutation.isPending}
+              onPress={() => handleManualInvite(phone.value)}
+              icon="send"
+              size={24}
             />
           }
         />

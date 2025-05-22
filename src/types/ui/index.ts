@@ -45,10 +45,21 @@ export type TripsStackParamList = {
   invite: undefined;
   edit: undefined;
 };
-export type RouteParamList = {
-  edit: { selectedTrip: string };
+
+export type TabParamList = {
+  "trips/index": undefined;
+  "trips/[selectedTrip]": { selectedTrip: string };
+  plan: undefined;
+  "profile/[profileId]/index": { profileId: string };
 };
 
+// For nested navigators within trips/[selectedTrip]
+export type RouteParamList = {
+  details: { selectedTrip: string };
+  rsvp: { invite_token?: string };
+  edit: { selectedTrip: string };
+  // Add other routes in your trip stack here
+};
 export interface ReactNativeFileLikeObject {
   uri: string;
   name: string;

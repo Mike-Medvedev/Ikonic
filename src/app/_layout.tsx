@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { Stack, useGlobalSearchParams, usePathname } from "expo-router";
+import { ExternalPathString, router, Stack, useNavigation, usePathname } from "expo-router";
 import { ActivityIndicator, PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -12,12 +12,12 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES, RSVP_PATH } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
 import { View } from "react-native";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import * as Linking from "expo-linking";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,24 +67,37 @@ registerTranslation("en", {
  */
 function AppNavigation() {
   const { session, isLoading: authIsLoading } = useAuth();
-  const { set } = useLocalStorage();
-  const pathname = usePathname();
-  const { path } = useGlobalSearchParams();
-
+  const callback = useRef<string | undefined>(undefined);
   useEffect(() => {
-    const storeIntendedPath = async () => {
-      if (pathname.includes(RSVP_PATH)) {
-        console.log(path);
-        if (typeof path !== "string" || path === "") {
-          console.warn("Invalid or empty 'path' found in globalSearchParams. Not storing callback.");
-          return;
+    const storeRsvpCallback = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      if (!initialUrl) return;
+      const url = new URL(initialUrl);
+      let pathnameFromUrl = url.pathname;
+      //** CLEAN URL FOR EXPO GO DEVELOPMENT /--/ PREFIX */
+      if (pathnameFromUrl.startsWith("/--/")) {
+        pathnameFromUrl = pathnameFromUrl.substring(4);
+        if (pathnameFromUrl && !pathnameFromUrl.startsWith("/")) {
+          pathnameFromUrl = "/" + pathnameFromUrl;
         }
-        const { error } = await set({ key: "rsvp_callback", value: path });
-        if (error !== undefined) console.error(error);
+      }
+      const inviteTokenFromUrl = url.searchParams.get("invite_token");
+
+      if (pathnameFromUrl.includes(RSVP_PATH) && inviteTokenFromUrl) {
+        const callbackValue = `${pathnameFromUrl}?invite_token=${encodeURIComponent(inviteTokenFromUrl)}`;
+        callback.current = callbackValue;
       }
     };
-    storeIntendedPath();
-  }, [pathname]);
+    storeRsvpCallback();
+  }, []);
+
+  useEffect(() => {
+    if (callback.current && !authIsLoading) {
+      router.replace(callback.current as ExternalPathString);
+      callback.current = undefined;
+    }
+  }, [authIsLoading]);
+
   useEffect(() => {
     if (!authIsLoading) {
       SplashScreen.hideAsync();

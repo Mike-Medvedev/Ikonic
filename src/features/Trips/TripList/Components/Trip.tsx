@@ -1,16 +1,16 @@
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import React from "react";
 import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, Text, Icon } from "react-native-paper";
-import { TripPublicParsed } from "@/types";
+import { TabParamList, TripPublicParsed } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/design-system/components";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { formatDateRangeShort, getDaysUntil } from "@/utils/dateUtils";
-import { DEFAULT_APP_PATH } from "@/constants/constants";
 import storageClient from "@/lib/storage";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export interface TripProps {
   trip: TripPublicParsed;
@@ -20,6 +20,8 @@ export interface TripProps {
  * @todo DELETE TRIP BLOB WHEN DELETING TRIP
  */
 export default function Trip({ trip }: TripProps) {
+  const pathname = usePathname();
+  const navigation = useNavigation<NavigationProp<TabParamList>>();
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
@@ -41,7 +43,11 @@ export default function Trip({ trip }: TripProps) {
   const theme = useTheme();
 
   const handleTripSelect = () => {
-    router.push({ pathname: `${DEFAULT_APP_PATH}/[selectedTrip]/details`, params: { selectedTrip: trip.id } });
+    router.push(`/trips/${trip.id}/details`);
+    // navigation.navigate("trips/[selectedTrip]", {
+    //   selectedTrip: trip.id,
+    //   screen: "details",
+    // });
   };
 
   const styles = StyleSheet.create({

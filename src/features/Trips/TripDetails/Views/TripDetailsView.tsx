@@ -11,7 +11,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import UsersAvatarList from "@/components/UsersAvatarList";
 import { InviteService } from "@/features/Trips/Services/inviteService";
 import storageClient from "@/lib/storage";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/design-system/components";
 import { useAuth } from "@/context/AuthContext";
 
@@ -21,7 +21,6 @@ import { useAuth } from "@/context/AuthContext";
  */
 export default function TripDetailsView() {
   const { selectedTrip: selectedTripID } = useLocalSearchParams() as { selectedTrip: string };
-  const [imageLoading, setImageLoading] = useState<boolean>(false);
   const { session } = useAuth();
   if (!session) return null;
   // const [modalVisible, setModalVisible] = useState(false);
@@ -94,13 +93,8 @@ export default function TripDetailsView() {
           <View style={styles.imageContainer}>
             {cacheBustedUrl ? (
               <>
-                <Image
-                  source={{ uri: imageUrl! }}
-                  style={styles.image}
-                  onLoadStart={() => setImageLoading(true)}
-                  onLoadEnd={() => setImageLoading(false)}
-                />
-                {imageLoading && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
+                <Image source={{ uri: imageUrl! }} style={styles.image} />
+                {fetchingImage && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
               </>
             ) : (
               <Text style={{ textAlign: "center", color: theme.colors.primary }}>Tap the Cog to upload an image</Text>

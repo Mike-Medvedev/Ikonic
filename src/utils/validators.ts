@@ -1,5 +1,5 @@
 import { ILLEGAL_WORDS } from "@/constants/constants";
-import { isValidPhoneNumber } from "react-phone-number-input";
+import { isValidPhoneNumber, parsePhoneNumber } from "react-phone-number-input";
 
 /** Validate Emails */
 export function emailValidator(email: string) {
@@ -78,4 +78,50 @@ export function descriptionValidator(description: string) {
     return "Please Remove Illegal Words";
   }
   return "";
+}
+
+// Function to standardize US phone numbers to +1XXXXXXXXXX format
+export function standardizeUSPhoneNumber(phoneNumber: string | undefined) {
+  if (!phoneNumber) return null;
+
+  try {
+    // First, try to parse with react-phone-number-input
+    if (isValidPhoneNumber(phoneNumber, "US")) {
+      const parsed = parsePhoneNumber(phoneNumber, "US");
+      return parsed?.format("E.164") || null;
+    }
+
+    // If that fails, do manual cleaning
+    // Remove all non-digit characters except +
+    let cleaned = phoneNumber.replace(/[^\d+]/g, "");
+
+    // Handle special cases like "1800MYAPPLE" - remove letters
+    cleaned = cleaned.replace(/[A-Za-z]/g, "");
+
+    // If it starts with +1, keep it as is (if 11 digits total)
+    if (cleaned.startsWith("+1") && cleaned.length === 12) {
+      return cleaned;
+    }
+
+    // If it starts with 1 and has 11 digits, add +
+    if (cleaned.startsWith("1") && cleaned.length === 11) {
+      return "+" + cleaned;
+    }
+
+    // If it has 10 digits (no country code), add +1
+    if (cleaned.length === 10) {
+      return "+1" + cleaned;
+    }
+
+    // If it starts with + but not +1, and has 11 digits after removing +, assume it's +1
+    if (cleaned.startsWith("+") && cleaned.length === 11) {
+      return "+1" + cleaned.substring(1);
+    }
+
+    // Return null if we can't standardize it
+    return null;
+  } catch (error) {
+    console.warn("Error standardizing phone number:", phoneNumber, error);
+    return null;
+  }
 }

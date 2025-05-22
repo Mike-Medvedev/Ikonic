@@ -4,6 +4,7 @@ import { FlatList, View, StyleSheet, Linking, Platform } from "react-native";
 import { Checkbox } from "@/design-system/components";
 import * as Contacts from "expo-contacts";
 import { ExternalInvitee, RegisteredInvitee, UserPublic } from "@/types";
+import { standardizeUSPhoneNumber } from "@/utils/validators";
 
 interface ContactsListProps {
   query: string;
@@ -33,9 +34,15 @@ export default function ContactsList({ query, selectedInvitees, setSelectedInvit
   const filteredContacts =
     contacts?.filter((contact): contact is Contacts.Contact & { id: string; phoneNumbers: Contacts.PhoneNumber[] } => {
       const hasId = !!contact.id;
-      const hasPhone = (contact.phoneNumbers?.length ?? 0) > 0;
+      const hasPhone = contact.phoneNumbers && (contact.phoneNumbers?.length ?? 0) > 0;
 
       if (!hasId || !hasPhone) return false;
+
+      if (contact.phoneNumbers?.[0]?.countryCode !== "us") return false;
+      const originalNumber = contact.phoneNumbers[0]?.number || contact.phoneNumbers[0]?.digits;
+      const standardizedNumber = standardizeUSPhoneNumber(originalNumber);
+
+      if (!standardizedNumber) return false;
 
       if (query && query.trim() !== "") {
         const name = contact.name ?? "";

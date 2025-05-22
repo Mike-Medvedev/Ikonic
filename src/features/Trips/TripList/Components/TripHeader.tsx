@@ -35,11 +35,7 @@ const TripHeader = ({ isOwner, selectedTripId, title, callback }: TripHeaderProp
    * If there are screens in the current navigator, useNavigation calls gobBack() for current nav
    */
   function handlePress() {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      callback();
-    }
+    callback();
   }
   return (
     <View style={styles.container}>

@@ -40,14 +40,13 @@ export default function VerifyView() {
         showFailure({ message: `Error Invalid or Expired Code please try again: ${error.message}` });
       } else {
         const { data, error } = await get<ExternalPathString>({ key: "rsvp_callback" });
-        const intendedPath = data; // Store before removing
+        const intendedPath = data;
 
         // Attempt to remove the key regardless of whether it was found or if redirection will use it
         const { error: removeError } = await remove({ key: "rsvp_callback" });
         if (removeError) {
           console.error("Error removing rsvp_callback from storage:", removeError);
         }
-        console.log("printing recieved intended path callback", data);
         if (error !== undefined) {
           console.error(error);
           showFailure({ message: "Error Getting intended path", url: "/" });
