@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { ExternalPathString, router, Stack } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -12,9 +12,9 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { MAX_NET_RETRIES, RSVP_PATH } from "@/constants/constants";
+import { MAX_NET_RETRIES } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
 import * as Linking from "expo-linking";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -64,45 +64,40 @@ registerTranslation("en", {
  * This will be rendered once fonts are loaded and inside AuthProvider.
  */
 function AppNavigation() {
-  const { session, isLoading: authIsLoading } = useAuth();
-  const callback = useRef<string | undefined>(undefined);
-  useEffect(() => {
-    const storeRsvpCallback = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      if (!initialUrl) return;
-      const url = new URL(initialUrl);
-      let pathnameFromUrl = url.pathname;
-      //** CLEAN URL FOR EXPO GO DEVELOPMENT /--/ PREFIX */
-      if (pathnameFromUrl.startsWith("/--/")) {
-        pathnameFromUrl = pathnameFromUrl.substring(4);
-        if (pathnameFromUrl && !pathnameFromUrl.startsWith("/")) {
-          pathnameFromUrl = "/" + pathnameFromUrl;
-        }
-      }
-      const inviteTokenFromUrl = url.searchParams.get("invite_token");
+  const { session, isLoading } = useAuth();
+  const url = Linking.useURL();
+  const router = useRouter();
 
-      if (pathnameFromUrl.includes(RSVP_PATH) && inviteTokenFromUrl) {
-        const callbackValue = `${pathnameFromUrl}?invite_token=${encodeURIComponent(inviteTokenFromUrl)}`;
-        callback.current = callbackValue;
-      }
-    };
-    storeRsvpCallback();
-  }, []);
+  const [hasHandledDeepLink, setHasHandledDeepLink] = useState<string | null>(null);
 
   useEffect(() => {
-    if (callback.current && !authIsLoading) {
-      router.replace(callback.current as ExternalPathString);
-      callback.current = undefined;
+    console.log("Printing URL: ", url);
+
+    if (!url) return;
+    if (hasHandledDeepLink === url) return;
+    const p = Linking.parse(url);
+    if (!p.path) return;
+
+    setHasHandledDeepLink(url);
+
+    if (session) {
+      console.log("User is authed and will be deeplinked now to url: ", p);
+      router.replace({
+        pathname: p.path as "/",
+        params: p.queryParams ?? undefined,
+      });
+    } else {
+      console.log("user has deeplinked in but not authed so will get re-authed with url: ", p.path, session);
+      router.replace("/");
     }
-  }, [authIsLoading]);
-
+  }, [url, session, hasHandledDeepLink]);
   useEffect(() => {
-    if (!authIsLoading) {
+    if (!isLoading) {
       SplashScreen.hideAsync();
     }
-  }, [authIsLoading]);
+  }, [isLoading]);
 
-  if (authIsLoading) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 

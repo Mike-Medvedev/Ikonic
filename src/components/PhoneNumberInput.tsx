@@ -1,4 +1,4 @@
-import React, { Ref, useCallback } from "react";
+import React, { Ref } from "react";
 import {
   TextInput as PaperTextInput,
   Text as PaperText,
@@ -14,14 +14,11 @@ type PhoneInputFieldProps = Omit<PaperTextInputProps, "onChange"> & {
 export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, ref: Ref<NativeTextInput>) => {
   const { value, onChange, error, errorText, maxLength, rightIcon, ...rest } = props;
 
-  const handleTextChange = useCallback(
-    (text: string) => {
-      if (onChange) {
-        onChange(text);
-      }
-    },
-    [onChange],
-  );
+  const handleTextChange = (text: string) => {
+    if (onChange) {
+      onChange(text);
+    }
+  };
 
   return (
     <>

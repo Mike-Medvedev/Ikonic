@@ -11,6 +11,7 @@ import { Background, Text } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
+import { useEffect } from "react";
 
 /**
  * Render RSVP page for a selected trip where users can decide to rsvp
@@ -20,6 +21,9 @@ export default function RsvpView() {
     selectedTrip: string;
     invite_token: string;
   };
+  useEffect(() => {
+    console.log("PRINTING INVITE TOKEN FROM RSVP PAGE: ", invite_token);
+  }, [invite_token]);
   const queryClient = useQueryClient();
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
