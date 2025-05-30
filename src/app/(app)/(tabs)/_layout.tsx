@@ -6,7 +6,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import HeaderTitle from "@/components/HeaderTitle";
 import { useAuth } from "@/context/AuthContext";
-import { APP_GROUP, PROFILE_PATH, TAB_GROUP } from "@/constants/constants";
+import { PROFILE_PATH } from "@/constants/constants";
 import NotificationMenu from "@/components/NotificationMenu";
 /**
  * Layout for Expo (tabs) which represent selectable tabs in a mobile app
@@ -66,7 +66,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile/[profileId]/index"
         options={{
-          href: `/${APP_GROUP}/${TAB_GROUP}/${PROFILE_PATH}/${session.user.id}`,
+          href: `${PROFILE_PATH}/${session.user.id}`,
           title: "Profile",
           tabBarIcon: ({ color }) => <FontAwesome6 name="user-circle" size={24} color={color} />,
           headerTitle: HeaderTitle,

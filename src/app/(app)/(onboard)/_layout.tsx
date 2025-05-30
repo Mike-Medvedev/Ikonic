@@ -36,5 +36,3 @@ export default function OnboardingLayout() {
     </Stack>
   );
 }
-
-// No need for the styles here if HeaderTitle handles its own styles

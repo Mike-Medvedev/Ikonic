@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, View, StyleSheet } from "react-native";
 import { useTheme, Text, Icon } from "react-native-paper";
@@ -19,6 +19,7 @@ export interface TripProps {
  * @todo DELETE TRIP BLOB WHEN DELETING TRIP
  */
 export default function Trip({ trip }: TripProps) {
+  const router = useRouter();
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
@@ -40,7 +41,7 @@ export default function Trip({ trip }: TripProps) {
   const theme = useTheme();
 
   const handleTripSelect = () => {
-    router.push(`/trips/${trip.id}/details`);
+    router.navigate({ pathname: `/trips/[selectedTrip]/details`, params: { selectedTrip: trip.id } });
     // navigation.navigate("trips/[selectedTrip]", {
     //   selectedTrip: trip.id,
     //   screen: "details",

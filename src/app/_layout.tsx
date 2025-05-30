@@ -1,6 +1,6 @@
 import "react-native-url-polyfill";
 import { ExternalPathString, router, Stack } from "expo-router";
-import { ActivityIndicator, PaperProvider } from "react-native-paper";
+import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { theme } from "@/design-system/theme/NativePaperTheme";
@@ -16,8 +16,8 @@ import { useEffect, useRef } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES, RSVP_PATH } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
-import { View } from "react-native";
 import * as Linking from "expo-linking";
+import LoadingScreen from "@/components/LoadingScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -103,22 +103,17 @@ function AppNavigation() {
   }, [authIsLoading]);
 
   if (authIsLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={!session}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(app)" />
       </Stack.Protected>
-      <Stack.Screen name="index" />
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
     </Stack>
   );
 }

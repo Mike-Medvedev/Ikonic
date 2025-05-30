@@ -2,10 +2,8 @@ import { TripHeaderTitles } from "@/constants/constants";
 import { useAuth } from "@/context/AuthContext";
 import { TripService } from "@/features/Trips/Services/tripService";
 import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
-import { TabParamList } from "@/types";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 /**
  * Layout for a selected trip and its children at /trips/<trip-id>, overides tabs from parent tab layout
@@ -13,7 +11,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
  */
 export default function TripsNoTabLayout() {
   const { session } = useAuth();
-  const navigation = useNavigation<NavigationProp<TabParamList>>();
+  const router = useRouter();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   // prettier-ignore
   const { data: trip, isFetching: fTrips, error: eTrips } = useQuery({
@@ -45,7 +43,7 @@ export default function TripsNoTabLayout() {
               isOwner={isOwner}
               selectedTripId={selectedTripId}
               callback={() => {
-                navigation.navigate("trips/index"); //use the tabs navigator
+                router.back();
               }}
             />
           ),

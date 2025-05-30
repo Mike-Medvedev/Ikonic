@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useTheme, Appbar } from "react-native-paper";
 import OTPForm from "@/features/Auth/Components/OTPForm";
-import { ExternalPathString, router, useLocalSearchParams } from "expo-router";
+import { ExternalPathString, useRouter, useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
 import useToast from "@/hooks/useToast";
 
@@ -16,6 +16,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 export default function VerifyView() {
   const theme = useTheme();
   const { get, remove } = useLocalStorage();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, verifyOTP } = useAuth();
   const { showSuccess, showFailure } = useToast();

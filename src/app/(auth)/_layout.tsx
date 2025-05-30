@@ -10,7 +10,7 @@ export default function AuthLayout() {
   return (
     <Background>
       <SafeAreaView style={styles.layout}>
-        <Slot />
+        <Slot initialRouteName="login" />
       </SafeAreaView>
     </Background>
   );
