@@ -35,7 +35,7 @@ export default function NotFoundScreen() {
         <Text variant="headlineMedium" style={styles.title}>
           This screen doesn't exist.
         </Text>
-        <Text style={styles.description}>Sorry, we couldn't find the page you're looking for.</Text>
+        <Text style={styles.description}>Sorry, we couldn&apos;t find the page you&apos;re looking for.</Text>
         <Link href="/" style={styles.link}>
           Go to home screen!
         </Link>
