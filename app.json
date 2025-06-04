@@ -11,6 +11,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.medvedevm.ikonic",
+      "deploymentTarget": "17.0",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -42,7 +43,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/penguin.png",
+          "image": "./assets/images/mike.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
