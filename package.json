@@ -62,7 +62,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "^0.20.0",
     "react-native-webview": "13.13.5",
-    "react-phone-number-input": "^3.4.12"
+    "react-phone-number-input": "^3.4.12",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

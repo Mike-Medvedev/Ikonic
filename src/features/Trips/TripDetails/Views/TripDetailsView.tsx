@@ -41,7 +41,6 @@ export default function TripDetailsView() {
      queryFn: async () => InviteService.getInvitedUsers(selectedTripID),
      enabled: !!selectedTripID,
    });
-
   const {
     data: imageUrl,
     isFetching: fetchingImage,

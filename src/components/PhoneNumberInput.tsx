@@ -14,12 +14,6 @@ type PhoneInputFieldProps = Omit<PaperTextInputProps, "onChange"> & {
 export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, ref: Ref<NativeTextInput>) => {
   const { value, onChange, error, errorText, maxLength, rightIcon, ...rest } = props;
 
-  const handleTextChange = (text: string) => {
-    if (onChange) {
-      onChange(text);
-    }
-  };
-
   return (
     <>
       <PaperTextInput
@@ -28,7 +22,7 @@ export const PhoneInputField = React.forwardRef((props: PhoneInputFieldProps, re
         placeholder="(555) 000-0000"
         returnKeyType="done"
         value={value}
-        onChangeText={handleTextChange}
+        onChangeText={onChange}
         error={error}
         autoCapitalize="none"
         textContentType="telephoneNumber"

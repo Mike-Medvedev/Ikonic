@@ -9,6 +9,7 @@ import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
 import { PhoneInputField } from "@/components/PhoneNumberInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { VERIFY_PATH } from "@/constants/constants";
+import { useDebouncedCallback } from "use-debounce";
 
 export interface LoginForm {
   phoneNumber: SimpleForm<string>;
@@ -26,6 +27,12 @@ export default function LoginView() {
   const [loginForm, setLoginForm] = useState<LoginForm>({
     phoneNumber: { value: "", error: "" },
   });
+  const handlePhoneChange = useDebouncedCallback((value?: Value | undefined) => {
+    setLoginForm((prev) => ({
+      ...prev,
+      phoneNumber: { value: value ?? "", error: "" },
+    }));
+  }, 300);
 
   /**
    * Helper Function that validates whether a phone number is a valid number
@@ -67,13 +74,6 @@ export default function LoginView() {
     } finally {
       setIsLoading(false);
     }
-  }
-
-  function handlePhoneChange(value?: Value | undefined) {
-    setLoginForm((prev) => ({
-      ...prev,
-      phoneNumber: { value: value ?? "", error: "" },
-    }));
   }
 
   const styles = useMemo(() => {

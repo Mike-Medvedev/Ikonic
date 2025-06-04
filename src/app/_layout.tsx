@@ -12,7 +12,7 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
@@ -65,32 +65,34 @@ registerTranslation("en", {
  */
 function AppNavigation() {
   const { session, isLoading } = useAuth();
-  const url = Linking.useURL();
   const router = useRouter();
-
-  const [hasHandledDeepLink, setHasHandledDeepLink] = useState<string | null>(null);
+  // Track last handled URL to prevent loops
+  const lastHandledUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    console.log("Printing URL: ", url);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink(url);
+      }
+    });
 
+    const subscription = Linking.addEventListener("url", ({ url }) => {
+      handleDeepLink(url);
+    });
+
+    return () => subscription?.remove();
+  }, []);
+
+  const handleDeepLink = (url: string | null) => {
     if (!url) return;
-    if (hasHandledDeepLink === url) return;
-    const p = Linking.parse(url);
-    if (!p.path) return;
+    const modifiedUrl = url.replace("/--/", "/");
+    if (lastHandledUrlRef.current === modifiedUrl) return;
+    lastHandledUrlRef.current = modifiedUrl;
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    router.navigate(url as any);
+    console.log("Handling deeplink! ", modifiedUrl);
+  };
 
-    setHasHandledDeepLink(url);
-
-    if (session) {
-      console.log("User is authed and will be deeplinked now to url: ", p);
-      router.replace({
-        pathname: p.path as "/",
-        params: p.queryParams ?? undefined,
-      });
-    } else {
-      console.log("user has deeplinked in but not authed so will get re-authed with url: ", p.path, session);
-      router.replace("/");
-    }
-  }, [url, session, hasHandledDeepLink]);
   useEffect(() => {
     if (!isLoading) {
       SplashScreen.hideAsync();
