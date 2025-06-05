@@ -4,9 +4,12 @@ import { AuthService } from "@/features/Auth/Services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { UserPublic } from "@/types";
 import { UserService } from "@/features/Profile/Services/userService";
+import { ParsedURL } from "expo-linking";
 
 type AuthContextType = {
   session: Session | null;
+  callback: ParsedURL | null;
+  setCallback: React.Dispatch<React.SetStateAction<ParsedURL | null>>;
   isLoading: boolean;
   isOnboarded: boolean;
   signIn: (phone: string) => Promise<{ error: Error | null }>;
@@ -32,6 +35,7 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
+  const [callback, setCallback] = useState<ParsedURL | null>(null);
   //prettier-ignore
   const { data: userProfile, isLoading: isLoadingUserProfile,
   } = useQuery<UserPublic>({
@@ -67,6 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     session,
     isLoading,
     isOnboarded,
+    callback,
+    setCallback,
     signIn: AuthService.signIn,
     verifyOTP: AuthService.verifyOtp,
     signOut: AuthService.signOut,

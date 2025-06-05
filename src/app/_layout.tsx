@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { useRouter, Stack } from "expo-router";
+import { ExternalPathString, Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -12,7 +12,7 @@ import Fallback from "@/components/Fallback";
 import { QueryClient, QueryClientProvider, QueryErrorResetBoundary } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { MAX_NET_RETRIES } from "@/constants/constants";
 import Background from "@/design-system/components/Background";
@@ -64,34 +64,15 @@ registerTranslation("en", {
  * This will be rendered once fonts are loaded and inside AuthProvider.
  */
 function AppNavigation() {
-  const { session, isLoading } = useAuth();
-  const router = useRouter();
-  // Track last handled URL to prevent loops
-  const lastHandledUrlRef = useRef<string | null>(null);
+  const { session, isLoading, setCallback } = useAuth();
+  const link = Linking.useURL();
 
   useEffect(() => {
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        handleDeepLink(url);
-      }
-    });
-
-    const subscription = Linking.addEventListener("url", ({ url }) => {
-      handleDeepLink(url);
-    });
-
-    return () => subscription?.remove();
-  }, []);
-
-  const handleDeepLink = (url: string | null) => {
-    if (!url) return;
-    const modifiedUrl = url.replace("/--/", "/");
-    if (lastHandledUrlRef.current === modifiedUrl) return;
-    lastHandledUrlRef.current = modifiedUrl;
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.navigate(url as any);
-    console.log("Handling deeplink! ", modifiedUrl);
-  };
+    if (link && !session) {
+      const parsedLink = Linking.parse(link);
+      setCallback(parsedLink);
+    }
+  }, [link]);
 
   useEffect(() => {
     if (!isLoading) {

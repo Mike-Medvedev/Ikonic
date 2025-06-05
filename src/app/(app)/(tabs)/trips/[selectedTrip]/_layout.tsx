@@ -1,7 +1,8 @@
-import { TripHeaderTitles } from "@/constants/constants";
+import { DEFAULT_APP_PATH, TripHeaderTitles } from "@/constants/constants";
 import { useAuth } from "@/context/AuthContext";
 import { TripService } from "@/features/Trips/Services/tripService";
 import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
+import { CommonActions } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
@@ -10,7 +11,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
  * @todo ensure this tab layout proper
  */
 export default function TripsNoTabLayout() {
-  const { session } = useAuth();
+  const { session, callback } = useAuth();
   const router = useRouter();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   // prettier-ignore
@@ -35,7 +36,7 @@ export default function TripsNoTabLayout() {
    */
   return (
     <Stack
-      screenOptions={({ route }) => {
+      screenOptions={({ route, navigation }) => {
         return {
           header: () => (
             <TripHeader
@@ -43,7 +44,11 @@ export default function TripsNoTabLayout() {
               isOwner={isOwner}
               selectedTripId={selectedTripId}
               callback={() => {
-                router.back();
+                const parent = navigation.getParent();
+                const currentState = navigation.getState();
+                if (parent && currentState.index === 0) {
+                  parent.navigate("index");
+                } else router.back();
               }}
             />
           ),

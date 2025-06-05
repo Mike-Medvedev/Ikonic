@@ -14,8 +14,6 @@ import { DEFAULT_APP_PATH, LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
 import storageClient from "@/lib/storage";
 import useImagePicker from "@/hooks/useImagePicker";
-import { ExternalPathString } from "expo-router";
-import useLocalStorage from "@/hooks/useLocalStorage";
 interface OnBoardForm {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
@@ -29,7 +27,6 @@ export default function OnboardView() {
   if (!session) return null;
   const { image, pickImage } = useImagePicker();
   const [loading, setLoading] = useState<boolean>(false);
-  const { get, remove } = useLocalStorage();
 
   const updateProfileMutation = useMutation<UserPublic, Error, UserUpdate & { user_id: string }>({
     mutationFn: ({ user_id, ...UserUpdate }) => UserService.updateOne(UserUpdate, user_id),
@@ -68,16 +65,7 @@ export default function OnboardView() {
       }
     },
     onSuccess: async () => {
-      const { data, error } = await get<ExternalPathString>({ key: "rsvp_callback" });
-      const intendedPath = data; // Store before removing
-
-      // Attempt to remove the key regardless of whether it was found or if redirection will use it
-      const { error: removeError } = await remove({ key: "rsvp_callback" });
-      if (removeError) {
-        console.error("Error removing rsvp_callback from storage:", removeError);
-      }
-      if (error !== undefined) console.error(error);
-      showSuccess({ message: "Successfully Onboarded", url: intendedPath ? intendedPath : DEFAULT_APP_PATH });
+      showSuccess({ message: "Successfully Onboarded", url: "/" });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["user", "me"] });
