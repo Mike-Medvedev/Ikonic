@@ -7,7 +7,6 @@ import { useState } from "react";
 import { SimpleForm } from "@/types";
 import useInvite from "@/hooks/useInvite";
 import { useLocalSearchParams } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
 import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
 import { PhoneInputField } from "@/components/PhoneNumberInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
@@ -16,7 +15,6 @@ import { isPossiblePhoneNumber } from "react-phone-number-input";
  */
 export default function ManualInvite() {
   const theme = useTheme();
-  const queryClient = useQueryClient();
   const { showSuccess, showFailure } = useToast();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   const { inviteUsersMutation } = useInvite({

@@ -1,5 +1,5 @@
 import "react-native-url-polyfill";
-import { ExternalPathString, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";

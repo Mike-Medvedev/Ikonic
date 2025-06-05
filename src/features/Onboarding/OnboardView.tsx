@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { useAuth } from "@/context/AuthContext";
-import { DEFAULT_APP_PATH, LOGIN_PATH } from "@/constants/constants";
+import { LOGIN_PATH } from "@/constants/constants";
 import SelectProfileAvatar from "@/design-system/components/SelectProfileAvatar";
 import storageClient from "@/lib/storage";
 import useImagePicker from "@/hooks/useImagePicker";

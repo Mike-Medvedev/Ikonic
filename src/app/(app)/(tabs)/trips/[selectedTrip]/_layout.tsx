@@ -1,8 +1,7 @@
-import { DEFAULT_APP_PATH, TripHeaderTitles } from "@/constants/constants";
+import { TripHeaderTitles } from "@/constants/constants";
 import { useAuth } from "@/context/AuthContext";
 import { TripService } from "@/features/Trips/Services/tripService";
 import TripHeader from "@/features/Trips/TripList/Components/TripHeader";
-import { CommonActions } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
