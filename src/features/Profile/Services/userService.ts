@@ -5,6 +5,8 @@ import {
   updateUserApiV1UsersUserIdPatch,
   UserUpdate,
   completeOnboardingApiV1UsersOnboardingPost,
+  InvitationPublic,
+  getInvitationsApiV1UsersUserIdInvitesGet,
 } from "@/types";
 
 import { createAuthenticatedClient } from "@/lib/createAuthenticatedClient";
@@ -52,4 +54,13 @@ export const UserService = {
     }
     return res.data.data;
   }),
+  getInvitations: async (user_id: string): Promise<InvitationPublic[]> => {
+    /** Get In */
+    const client = await createAuthenticatedClient();
+    const res = await getInvitationsApiV1UsersUserIdInvitesGet<true>({
+      path: { user_id },
+      client,
+    });
+    return res.data.data;
+  },
 };

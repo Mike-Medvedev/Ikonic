@@ -9,7 +9,7 @@ export type AttendanceList = {
 
 export type CarCreate = {
     seatCount?: number;
-    passengers?: Array<Passenger>;
+    passengers?: Array<UserPublic>;
 };
 
 export type CarPublic = {
@@ -60,6 +60,10 @@ export type DtoListFriendshipPublic = {
     data: Array<FriendshipPublic>;
 };
 
+export type DtoListInvitationPublic = {
+    data: Array<InvitationPublic>;
+};
+
 export type DtoListPassengerPublic = {
     data: Array<PassengerPublic>;
 };
@@ -89,8 +93,8 @@ export type FriendshipCreate = {
 
 export type FriendshipPublic = {
     id: string;
-    requester: User;
-    addressee: User;
+    requester: UserPublic;
+    addressee: UserPublic;
     status: FriendshipStatus;
 };
 
@@ -116,15 +120,18 @@ export type InvitationCreate = {
 
 export type InvitationEnum = 'accepted' | 'pending' | 'uncertain' | 'declined';
 
+export type InvitationPublic = {
+    id: string;
+    tripId: string;
+    tripOwner: string;
+    tripTitle: string;
+    rsvp: InvitationEnum;
+    recipientId: string;
+};
+
 export type InvitationUpdate = {
     inviteToken: string;
     rsvp: InvitationEnum;
-};
-
-export type Passenger = {
-    user_id: string;
-    car_id: string;
-    seat_position?: number | null;
 };
 
 export type PassengerCreate = {
@@ -171,18 +178,6 @@ export type TripUpdate = {
     mountain?: string | null;
     desc?: string | null;
     tripImageStoragePath?: string | null;
-};
-
-export type User = {
-    id: string;
-    phone?: string | null;
-    firstname?: string | null;
-    lastname?: string | null;
-    username?: string | null;
-    rider_type?: RiderType | null;
-    is_onboarded?: boolean;
-    avatar_storage_path?: string | null;
-    avatar_public_url?: string | null;
 };
 
 export type UserPublic = {
@@ -317,6 +312,33 @@ export type CompleteOnboardingApiV1UsersOnboardingPostResponses = {
 };
 
 export type CompleteOnboardingApiV1UsersOnboardingPostResponse = CompleteOnboardingApiV1UsersOnboardingPostResponses[keyof CompleteOnboardingApiV1UsersOnboardingPostResponses];
+
+export type GetInvitationsApiV1UsersUserIdInvitesGetData = {
+    body?: never;
+    path: {
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/users/{user_id}/invites';
+};
+
+export type GetInvitationsApiV1UsersUserIdInvitesGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetInvitationsApiV1UsersUserIdInvitesGetError = GetInvitationsApiV1UsersUserIdInvitesGetErrors[keyof GetInvitationsApiV1UsersUserIdInvitesGetErrors];
+
+export type GetInvitationsApiV1UsersUserIdInvitesGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: DtoListInvitationPublic;
+};
+
+export type GetInvitationsApiV1UsersUserIdInvitesGetResponse = GetInvitationsApiV1UsersUserIdInvitesGetResponses[keyof GetInvitationsApiV1UsersUserIdInvitesGetResponses];
 
 export type GetTripsApiV1TripsGetData = {
     body?: never;
