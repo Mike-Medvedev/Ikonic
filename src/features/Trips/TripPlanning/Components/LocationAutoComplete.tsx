@@ -21,7 +21,7 @@ const LocationAutoComplete = <T extends NewTripForm | TripUpdateForm>({
   // Debounce the search query update
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setDebouncedSearchQuery(value);
-  }, 300);
+  }, 100);
 
   // Update debounced value when search query changes
   useEffect(() => {
@@ -50,14 +50,17 @@ const LocationAutoComplete = <T extends NewTripForm | TripUpdateForm>({
     }
     setTripForm((prev) => ({ ...prev, mountain: { value: text, error: "" } }));
   }
-
+  useEffect(() => {
+    console.log(tripForm?.mountain?.value);
+  }, [tripForm?.mountain?.value]);
   function handleSelection(place: unknown) {
+    console.log(place);
     isSelectionRef.current = true;
     setIsDropDownVisible(false);
     debouncedSearch.cancel(); // Cancel any pending API calls
     setTripForm((prev) => ({
       ...prev,
-      mountain: { value: place as { description: string }, error: "" },
+      mountain: { value: (place as { description: string }).description, error: "" },
     }));
     // Reset the ref after a short delay to allow for the state update
     setTimeout(() => {
@@ -96,6 +99,9 @@ const LocationAutoComplete = <T extends NewTripForm | TripUpdateForm>({
         errorText={tripForm?.mountain?.error}
         autoCapitalize="words"
         keyboardType="default"
+        autoCorrect={false} // Disable autocorrect
+        autoComplete="off" // Disable autocomplete
+        spellCheck={false} // Disable spell check
         mode="outlined"
         multiline={false}
         numberOfLines={1}
