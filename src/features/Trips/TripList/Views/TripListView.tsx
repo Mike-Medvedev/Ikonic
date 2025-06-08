@@ -7,6 +7,7 @@ import { Text, useTheme } from "react-native-paper";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Background from "@/design-system/components/Background";
 import { getDaysUntil } from "@/utils/dateUtils";
+
 /**
  * Render the UI for the page that displays List of selectable Trips and their quick information
  */

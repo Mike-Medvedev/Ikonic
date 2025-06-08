@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { InvitationEnum, UserPublic } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { InviteService } from "@/features/Trips/Services/inviteService";
@@ -12,12 +12,15 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import Pill from "@/design-system/components/Pill";
 import { TripService } from "@/features/Trips/Services/tripService";
 import useProfileModal from "@/hooks/useProfileModal";
+import { useAuth } from "@/context/AuthContext";
 
 /**
  * Renders the UI for Trip Attendance page that displays Trip attendance and a modal for inviting users to a trip
  * @todo undefined selected Trip Id slips through and errors, we need to fix this globally
  */
 export default function TripAttendanceView() {
+  const router = useRouter();
+  const { session } = useAuth();
   const [selectedPill, setSelectedPill] = useState<InvitationEnum>("accepted");
   const { setModalState, ProfileModal } = useProfileModal();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
@@ -28,6 +31,7 @@ export default function TripAttendanceView() {
       },
       enabled: !!selectedTripId,
     });
+  const isOwner = session?.user.id === trip?.owner?.id;
   const theme = useTheme();
   //prettier-ignore
   const {
@@ -74,11 +78,13 @@ export default function TripAttendanceView() {
             <TripTitleDetail trip={trip} />
           </AsyncStateWrapper>
 
-          <Pressable onPress={() => router.push("./invite")}>
-            <View style={{ backgroundColor: theme.colors.primary, borderRadius: 50, padding: 4 }}>
-              <Icon source="plus" color={theme.colors.surface} size={32}></Icon>
-            </View>
-          </Pressable>
+          {isOwner && (
+            <Pressable onPress={() => router.push("./invite")}>
+              <View style={{ backgroundColor: theme.colors.primary, borderRadius: 50, padding: 4 }}>
+                <Icon source="plus" color={theme.colors.surface} size={32}></Icon>
+              </View>
+            </Pressable>
+          )}
         </View>
         <AsyncStateWrapper loading={isFetching} error={error}>
           <ScrollView horizontal style={styles.pillsContainer}>

@@ -16,6 +16,7 @@ import { FriendshipService } from "@/features/Profile/Services/friendshipService
 import { useAuth } from "@/context/AuthContext";
 import SpinningAddFriendIcon from "@/features/Profile/Components/SpinningAddFriend";
 import useToast from "@/hooks/useToast";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ProfileCardProps {
   profile: UserPublic;
@@ -39,6 +40,9 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
     queryKey: ["trips", "past"],
     queryFn: async () => TripService.getAll({ past: true }),
   })
+  const orderedRecentTrips = recentTrips?.sort(
+    (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+  );
   //prettier-ignore
   const { data: friends, isFetching: isFriendsFetching, error: friendsError} = useQuery({ 
     queryKey: ["friends", profile.id ],
@@ -182,8 +186,8 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
         </View>
         <AsyncStateWrapper loading={isFetching} error={error}>
           <ScrollView>
-            {recentTrips
-              ? recentTrips.map((trip) => (
+            {orderedRecentTrips
+              ? orderedRecentTrips.map((trip) => (
                   <Pressable
                     style={styles.recentTrip}
                     key={trip.id}
@@ -223,15 +227,6 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
       {isOwner && (
         <ProfileEditModal profile={profile} visible={editModalVisible} callback={() => setEditModalVisible(false)} />
       )}
-
-      {/* <AsyncStateWrapper loading={isFetching} error={error}>
-        <FlatList
-          data={recentTrips}
-          keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => <Trip trip={item} />}
-          ListEmptyComponent={<Text>No Items</Text>}
-        />
-        </AsyncStateWrapper> */}
     </View>
   );
 }

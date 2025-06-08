@@ -19,7 +19,7 @@ export default function TripPlannerView() {
   const queryClient = useQueryClient();
   const createTripMutation = useMutation<TripPublicParsed, Error, TripCreateParsed>({
     mutationFn: (trip: TripCreateParsed) => TripService.create(trip),
-    onSuccess: (data) => {
+    onSuccess: () => {
       resetForm();
       showSuccess({
         message: `Success! Trip planned to ${tripForm.mountain.value} on ${tripForm.startDate.value!.toDateString()}`,

@@ -1,4 +1,3 @@
-import { SafeAreaView } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { UserService } from "@/features/Profile/Services/userService";
 import ProfileCard from "@/features/Profile/Components/ProfileCard";
@@ -22,11 +21,9 @@ export default function ProfileView() {
 
   return (
     <Background>
-      <SafeAreaView style={{ flex: 1 }}>
-        <AsyncStateWrapper loading={isLoading} error={error}>
-          {profile && <ProfileCard profile={profile} isOwner />}
-        </AsyncStateWrapper>
-      </SafeAreaView>
+      <AsyncStateWrapper loading={isLoading} error={error}>
+        {profile && <ProfileCard profile={profile} isOwner />}
+      </AsyncStateWrapper>
     </Background>
   );
 }
