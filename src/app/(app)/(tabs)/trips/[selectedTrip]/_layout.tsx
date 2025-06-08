@@ -10,7 +10,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
  * @todo ensure this tab layout proper
  */
 export default function TripsNoTabLayout() {
-  const { session, callback } = useAuth();
+  const { session } = useAuth();
   const router = useRouter();
   const { selectedTrip: selectedTripId } = useLocalSearchParams() as { selectedTrip: string };
   // prettier-ignore

@@ -42,10 +42,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/mike.png",
+          "image": "./assets/images/ikonic-splash-removebg-preview.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#000000"
         }
       ],
       [

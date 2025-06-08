@@ -1,6 +1,4 @@
-import { RouteParamList } from "@/types";
-import { NavigationProp } from "@react-navigation/native";
-import { useNavigation, useSegments } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 import { View, StyleSheet, Pressable } from "react-native";
 import { Appbar, Divider, Icon, useTheme } from "react-native-paper";
 
@@ -12,8 +10,8 @@ interface TripHeaderProps {
 }
 const TripHeader = ({ isOwner, selectedTripId, title, callback }: TripHeaderProps) => {
   const theme = useTheme();
+  const router = useRouter();
 
-  const navigation = useNavigation<NavigationProp<RouteParamList>>();
   const segments = useSegments();
   const lastSegment = segments[segments.length - 1];
 
@@ -43,7 +41,11 @@ const TripHeader = ({ isOwner, selectedTripId, title, callback }: TripHeaderProp
         <Appbar.BackAction onPress={handlePress} />
         <Appbar.Content title={title} />
         {lastSegment === "details" && isOwner && (
-          <Pressable onPress={() => navigation.navigate("edit", { selectedTrip: selectedTripId })}>
+          <Pressable
+            onPress={() =>
+              router.push({ pathname: "/trips/[selectedTrip]/edit", params: { selectedTrip: selectedTripId } })
+            }
+          >
             <Icon source="cog" size={24} />
           </Pressable>
         )}
