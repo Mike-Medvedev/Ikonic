@@ -1,7 +1,6 @@
 import "react-native-url-polyfill";
 import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
-import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { theme } from "@/design-system/theme/NativePaperTheme";
 import { registerTranslation } from "react-native-paper-dates";
@@ -118,17 +117,15 @@ export default function RootLayout() {
         >
           <PaperProvider theme={theme}>
             <GestureHandlerRootView style={{ flex: 1 }}>
-              <AutocompleteDropdownContextProvider>
-                <QueryClientProvider client={queryClient}>
-                  <AuthProvider>
-                    <SafeAreaProvider>
-                      <Background>
-                        <AppNavigation />
-                      </Background>
-                    </SafeAreaProvider>
-                  </AuthProvider>
-                </QueryClientProvider>
-              </AutocompleteDropdownContextProvider>
+              <QueryClientProvider client={queryClient}>
+                <AuthProvider>
+                  <SafeAreaProvider>
+                    <Background>
+                      <AppNavigation />
+                    </Background>
+                  </SafeAreaProvider>
+                </AuthProvider>
+              </QueryClientProvider>
             </GestureHandlerRootView>
           </PaperProvider>
         </ErrorBoundary>

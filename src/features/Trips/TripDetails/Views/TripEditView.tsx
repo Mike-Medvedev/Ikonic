@@ -1,7 +1,7 @@
 import { ScrollView, View, StyleSheet, Image } from "react-native";
 import { Background, Button, Text, TextInput } from "@/design-system/components";
 import { useTheme } from "react-native-paper";
-import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMountain";
+import LocationAutoComplete from "@/features/Trips/TripPlanning/Components/LocationAutoComplete";
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
 import { TripUpdateForm, TripUpdateParsed } from "@/types";
 import { useLocalSearchParams } from "expo-router";
@@ -152,7 +152,7 @@ export default function TripEditView() {
           <Text variant="labelMedium" style={styles.label}>
             Destination
           </Text>
-          <SelectMountain tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
+          <LocationAutoComplete tripForm={updateTripForm} setTripForm={setUpdateTripForm} />
           <Text variant="labelMedium" style={styles.label}>
             Dates
           </Text>

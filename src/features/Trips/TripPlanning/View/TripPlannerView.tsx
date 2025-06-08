@@ -1,4 +1,4 @@
-import SelectMountain from "@/features/Trips/TripPlanning/Components/SelectMountain";
+import LocationAutoComplete from "@/features/Trips/TripPlanning/Components/LocationAutoComplete";
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
 import { useTheme } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
@@ -103,10 +103,6 @@ export default function TripPlannerView() {
   return (
     <Background>
       <View style={styles.tripPlannerContainer}>
-        {/* <Text variant="headlineMedium">Plan your trip</Text> */}
-        <Text variant="labelMedium" style={(styles.label, { marginBottom: -2 })}>
-          Trip Title
-        </Text>
         <TextInput
           label="Name Your Trip"
           returnKeyType="next"
@@ -118,19 +114,11 @@ export default function TripPlannerView() {
           keyboardType="default"
           mode="outlined"
         />
-        <Text variant="labelMedium" style={styles.label}>
-          Destination
-        </Text>
-        <SelectMountain tripForm={tripForm} setTripForm={setTripForm} />
-
-        <Text variant="labelMedium" style={styles.label}>
-          Dates
-        </Text>
+        <LocationAutoComplete tripForm={tripForm} setTripForm={setTripForm} />
         <TripDatePicker tripForm={tripForm} setTripForm={setTripForm} />
-        <Text variant="labelMedium" style={styles.label}>
-          Trip Description (Optional)
-        </Text>
+
         <TextInput
+          label=" Trip Description (Optional)"
           multiline
           style={{ height: 80 }}
           placeholder="Add any notes or details about your trip..."
