@@ -1,7 +1,7 @@
 import LocationAutoComplete from "@/features/Trips/TripPlanning/Components/LocationAutoComplete";
 import TripDatePicker from "@/features/Trips/TripPlanning/Components/TripDatePicker";
 import { useTheme } from "react-native-paper";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Keyboard } from "react-native";
 import { dateValidator, descriptionValidator, nameValidator } from "@/utils/validators";
 import { useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
@@ -10,7 +10,7 @@ import { CreatePayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError, NetworkError } from "@/lib/errors";
-import { Background, Button, Text, TextInput } from "@/design-system/components";
+import { Background, Button, TextInput } from "@/design-system/components";
 
 /**
  * Renders the UI for the trip planning page
@@ -120,7 +120,7 @@ export default function TripPlannerView() {
         <TextInput
           label=" Trip Description (Optional)"
           multiline
-          style={{ height: 80 }}
+          style={{ height: 80, zIndex: -1 }}
           placeholder="Add any notes or details about your trip..."
           returnKeyType="done"
           value={tripForm?.desc?.value}
@@ -130,9 +130,13 @@ export default function TripPlannerView() {
           autoCapitalize="sentences"
           keyboardType="default"
           mode="outlined"
+          submitBehavior={"blurAndSubmit"}
+          onSubmitEditing={() => {
+            Keyboard.dismiss(); // Explicitly dismiss keyboard
+          }}
         />
 
-        <View style={{ gap: 16 }}>
+        <View style={{ gap: 16, zIndex: -10 }}>
           <Button onPress={handleSubmit} mode="contained">
             Create Trip
           </Button>

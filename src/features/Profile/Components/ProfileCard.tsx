@@ -16,7 +16,6 @@ import { FriendshipService } from "@/features/Profile/Services/friendshipService
 import { useAuth } from "@/context/AuthContext";
 import SpinningAddFriendIcon from "@/features/Profile/Components/SpinningAddFriend";
 import useToast from "@/hooks/useToast";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ProfileCardProps {
   profile: UserPublic;

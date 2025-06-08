@@ -55,13 +55,14 @@ export default function TripDatePicker<T extends NewTripForm | TripUpdateForm>({
       borderColor: theme.colors.outlineVariant,
       borderWidth: 1,
       padding: 12,
+      zIndex: -1,
     },
     placeholder: { color: theme.colors.onSurfaceVariant },
     error: { borderColor: theme.colors.error },
   });
 
   return (
-    <View>
+    <View style={{ zIndex: -2 }}>
       <View>
         <Pressable
           onPress={() => setOpen(true)}
