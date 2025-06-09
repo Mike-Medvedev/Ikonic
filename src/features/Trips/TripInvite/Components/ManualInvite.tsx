@@ -10,6 +10,7 @@ import { useLocalSearchParams } from "expo-router";
 import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
 import { PhoneInputField } from "@/components/PhoneNumberInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
+import * as Linking from "expo-linking";
 /**
  * Renders a Component to manually invite a user via phone number directly
  */
@@ -29,7 +30,12 @@ export default function ManualInvite() {
     },
   });
   const [phone, setPhone] = useState<SimpleForm<string>>({ value: "", error: "" });
-  const inviteLink = "https://tripapp.com/invite/winter-shred-2025";
+  const inviteLink = Linking.createURL(`trips/${selectedTripId}/rsvp`, {
+    scheme: "myapp",
+    queryParams: { invite_token: selectedTripId },
+    isTripleSlashed: true,
+  });
+  console.log(inviteLink);
 
   const copyToClipboard = async () => {
     try {
