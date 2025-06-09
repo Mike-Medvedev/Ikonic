@@ -161,8 +161,8 @@ export default function TripDetailsView() {
             </AsyncStateWrapper> */}
             </View>
           </View>
-          <Divider />
-          <View style={styles.tripDetails}>
+          {/* <Divider /> */}
+          {/* <View style={styles.tripDetails}>
             <Text variant="titleMedium" style={{ marginBottom: 16 }}>
               Trip Details
             </Text>
@@ -184,7 +184,7 @@ export default function TripDetailsView() {
                 <Text>$350</Text>
               </View>
             </View>
-          </View>
+          </View> */}
           <Divider style={{ marginVertical: 16 }} />
           {trip?.desc ? (
             <View style={styles.descritpion}>

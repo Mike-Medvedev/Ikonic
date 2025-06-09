@@ -111,18 +111,20 @@ const LocationAutoComplete = <T extends NewTripForm | TripUpdateForm>({
         contentStyle={{
           paddingVertical: 0,
         }}
-        rightIcon={() => (
-          <IconButton
-            icon="close"
-            onPress={() => {
-              debouncedSearch.cancel(); // Cancel pending searches
-              setTripForm((prev) => ({
-                ...prev,
-                mountain: { value: "", error: "" },
-              }));
-            }}
-          />
-        )}
+        rightIcon={() => {
+          return debouncedSearchQuery.length > 2 ? (
+            <IconButton
+              icon="close"
+              onPress={() => {
+                debouncedSearch.cancel(); // Cancel pending searches
+                setTripForm((prev) => ({
+                  ...prev,
+                  mountain: { value: "", error: "" },
+                }));
+              }}
+            />
+          ) : null;
+        }}
       />
       {searchResult?.predictions && isDropDownVisible && searchQuery.length > 2 && (
         <Surface
