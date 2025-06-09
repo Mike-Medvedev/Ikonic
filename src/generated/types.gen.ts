@@ -96,6 +96,7 @@ export type FriendshipPublic = {
     requester: UserPublic;
     addressee: UserPublic;
     status: FriendshipStatus;
+    createdAt: string;
 };
 
 export type FriendshipStatus = 'pending' | 'accepted' | 'rejected' | 'blocked';
@@ -127,6 +128,7 @@ export type InvitationPublic = {
     tripTitle: string;
     rsvp: InvitationEnum;
     recipientId: string;
+    createdAt: string;
 };
 
 export type InvitationUpdate = {

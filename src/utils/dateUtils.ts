@@ -59,3 +59,29 @@ export function formatDateRangeShort(startDateInput: Date | string, endDateInput
     return `${formattedStartDate} - ${formattedEndDate}`;
   }
 }
+
+export function calculateTimeElapsed(time: string): string {
+  try {
+    const givenTime = new Date(time);
+    const currentTime = new Date();
+
+    const elapsedMs = currentTime.getTime() - givenTime.getTime();
+
+    const seconds = Math.floor(elapsedMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) {
+      return `${seconds} ${seconds === 1 ? "second" : "seconds"}`;
+    } else if (minutes < 60) {
+      return `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+    } else if (hours < 24) {
+      return `${hours} ${hours === 1 ? "hour" : "hours"}`;
+    } else {
+      return `${days} ${days === 1 ? "day" : "days"}`;
+    }
+  } catch (error) {
+    return "Error Converting Date";
+  }
+}

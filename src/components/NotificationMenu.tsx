@@ -10,6 +10,7 @@ import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { FriendshipPublic, InvitationPublic } from "@/types";
 import { UserService } from "@/features/Profile/Services/userService";
 import { useRouter } from "expo-router";
+import { calculateTimeElapsed } from "@/utils/dateUtils";
 
 export default function NotificationMenu() {
   const theme = useTheme();
@@ -33,12 +34,14 @@ export default function NotificationMenu() {
     queryKey: ["friend-requests", "me", session.user.id],
     queryFn: async () => FriendshipService.getFriendRequests(session.user.id, "incoming"),
     refetchOnMount: true,
+    refetchOnWindowFocus: true
     })
   //prettier-ignore
   const { data: invitations, isFetching: isFetchingInvitations, error: invitationError} = useQuery({ 
     queryKey: ["invitations", "me", session.user.id],
     queryFn: async () => UserService.getInvitations(session.user.id),
     refetchOnMount: true,
+    refetchOnWindowFocus: true
     })
   const [bellIconDimensions, setBellIconDimensions] = useState<LayoutRectangle | undefined>(undefined);
   const [visible, setVisible] = useState<boolean>(false);
@@ -46,7 +49,7 @@ export default function NotificationMenu() {
     content: { width: "100%", padding: 16, flexDirection: "row", alignItems: "center" },
     iconContainer: { marginRight: 8 },
   });
-  //---------->INSERT CREATED AT COLUMNS IN DATA BASE FOR GETTING NOTIFICATION TIMESTAMPS<-----------------
+
   const Invitation = ({ invitation }: { invitation: InvitationPublic }) => {
     return (
       <>
@@ -75,10 +78,10 @@ export default function NotificationMenu() {
               <Text
                 style={{ textTransform: "capitalize" }}
               >{`${invitation.tripOwner.split(" ")[0]} ${invitation.tripOwner.split(" ")?.[1] ?? ""} `}</Text>
-              Has invited you to a trip!
+              has invited you to a trip!
             </Text>
             <Text style={{ color: theme.colors.secondary }} variant="bodySmall">
-              2 mins ago
+              {calculateTimeElapsed(invitation.createdAt)} ago
             </Text>
           </View>
           <Icon source="party-popper" size={24} />
@@ -103,7 +106,7 @@ export default function NotificationMenu() {
               wants to be your friend!
             </Text>
             <Text style={{ color: theme.colors.secondary }} variant="bodySmall">
-              2 mins ago
+              {calculateTimeElapsed(friendRequest.createdAt)} ago
             </Text>
           </View>
           <View style={{ flexDirection: "row" }}>
@@ -138,12 +141,11 @@ export default function NotificationMenu() {
   };
   return (
     <View>
-      {(friendRequests && friendRequests.length > 0) ||
-        (invitations && invitations.length > 0 && (
-          <Badge style={{ position: "absolute", zIndex: -100 }}>
-            {(friendRequests?.length ?? 0) + (invitations?.length ?? 0)}
-          </Badge>
-        ))}
+      {((friendRequests?.length ?? 0) > 0 || (invitations?.length ?? 0) > 0) && (
+        <Badge style={{ position: "absolute", zIndex: -100 }}>
+          {(friendRequests?.length ?? 0) + (invitations?.length ?? 0)}
+        </Badge>
+      )}
       <IconButton
         icon="bell"
         onPress={() => setVisible((prev) => !prev)}
