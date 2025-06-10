@@ -11,6 +11,7 @@ import PhoneInput, { Value } from "react-phone-number-input/react-native-input";
 import { PhoneInputField } from "@/components/PhoneNumberInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import * as Linking from "expo-linking";
+import { useDebouncedCallback } from "use-debounce";
 /**
  * Renders a Component to manually invite a user via phone number directly
  */
@@ -74,12 +75,13 @@ export default function ManualInvite() {
     },
     inputContainer: {},
   });
-  function handlePhoneChange(value?: Value | undefined) {
+
+  const handlePhoneChange = useDebouncedCallback((value?: Value | undefined) => {
     setPhone({
       value: value ?? "",
       error: "",
     });
-  }
+  }, 300);
 
   function handleManualInvite(phone: string) {
     const isValidNumber = isPossiblePhoneNumber(phone);
