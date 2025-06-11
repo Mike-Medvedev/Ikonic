@@ -88,8 +88,8 @@ export {
 } from "@/generated/types.gen";
 
 export type TripCreateParsed = Omit<TripCreate, "startDate" | "endDate"> & {
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
 };
 
 export type TripPublicParsed = Omit<TripPublic, "startDate" | "endDate"> & {

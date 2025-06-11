@@ -98,6 +98,7 @@ export default function TripEditView() {
   async function handleSubmit() {
     setLoading(true);
     let tripImageStoragePath = updateTripForm.tripImageStoragePath;
+    let startTime = updateTripForm.startTime;
     if (image && !image.canceled) {
       const imagePath = await storageClient.uploadImage({
         file: image,
@@ -111,6 +112,7 @@ export default function TripEditView() {
     const updateForm: TripUpdateForm = {
       ...updateTripForm,
       tripImageStoragePath,
+      startTime,
     };
     const parsedForm = UpdatePayloadFactory<TripUpdateParsed>(updateForm);
     updateTripMutation.mutate({ selectedTripId, form: parsedForm });

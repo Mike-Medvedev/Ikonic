@@ -2,7 +2,7 @@
  * Exports Frontend specific types
  */
 
-import { TripUpdateParsed } from "@/types/domain";
+import { TripCreateParsed, TripUpdateParsed } from "@/types/domain";
 
 export interface AttendanceCount {
   accepted: number;
@@ -20,20 +20,18 @@ export interface SimpleForm<T> {
   error: string;
 }
 
-export interface NewTripForm {
-  mountain: SimpleForm<string>;
-  startDate: SimpleForm<Date | undefined>;
-  endDate: SimpleForm<Date | undefined>;
-  title: SimpleForm<string>;
-  desc?: SimpleForm<string>;
-}
-
 type Formified<T> = {
   [K in keyof T]?: SimpleForm<T[K]>;
 };
-export type TripUpdateForm = Formified<TripUpdateParsed>;
 
-export interface TripComponentProps<T extends NewTripForm | TripUpdateForm> {
+type FormifiedStrict<T> = {
+  [K in keyof T]: SimpleForm<T[K]>;
+};
+
+export type TripUpdateForm = Formified<TripUpdateParsed>;
+export type TripCreateForm = FormifiedStrict<TripCreateParsed>;
+
+export interface TripComponentProps<T extends TripCreateForm | TripUpdateForm> {
   tripForm: T;
   setTripForm: React.Dispatch<React.SetStateAction<T>>;
 }

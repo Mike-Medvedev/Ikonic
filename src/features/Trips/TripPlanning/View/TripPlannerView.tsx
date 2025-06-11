@@ -5,7 +5,7 @@ import { View, StyleSheet, Keyboard } from "react-native";
 import { dateValidator, descriptionValidator, nameValidator } from "@/utils/validators";
 import { useState } from "react";
 import { TripService } from "@/features/Trips/Services/tripService";
-import { NewTripForm, TripCreateParsed, TripPublicParsed } from "@/types";
+import { TripCreateForm, TripCreateParsed, TripPublicParsed } from "@/types";
 import { CreatePayloadFactory, ValidateErrors } from "@/utils/FormBuilder";
 import useToast from "@/hooks/useToast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -45,8 +45,9 @@ export default function TripPlannerView() {
     endDate: { value: undefined, error: "" },
     title: { value: "", error: "" },
     desc: { value: "", error: "" },
+    startTime: { value: "", error: "" },
   };
-  const [tripForm, setTripForm] = useState<NewTripForm>(initialTripForm);
+  const [tripForm, setTripForm] = useState<TripCreateForm>(initialTripForm);
   const theme = useTheme();
   const { showSuccess, showFailure } = useToast();
   const resetForm = () => {
@@ -67,7 +68,7 @@ export default function TripPlannerView() {
     const payloadWithOptional = tripForm?.desc?.value
       ? { ...errors, desc: descriptionValidator(tripForm.desc.value) }
       : errors;
-    return ValidateErrors<NewTripForm>(payloadWithOptional, setTripForm);
+    return ValidateErrors<TripCreateForm>(payloadWithOptional, setTripForm);
   }
   /**
    * Event Handler for submitting trip planning form and creating a new trip
@@ -77,6 +78,7 @@ export default function TripPlannerView() {
       showFailure({ message: "Error! Please select a mountain and a date!" });
       return;
     }
+    let validatedPayload;
     //assert start and end date values so typescript is happy because we checked it in isFormvalid() already
     const basePayload = {
       startDate: { value: tripForm.startDate.value!, error: tripForm.startDate.error },
@@ -85,8 +87,12 @@ export default function TripPlannerView() {
       mountain: { value: tripForm.mountain.value, error: tripForm.mountain.error },
     };
 
-    const validatedPayload = tripForm.desc?.value
+    validatedPayload = tripForm.desc?.value
       ? { ...basePayload, desc: { value: tripForm.desc.value, error: tripForm.desc.error } }
+      : basePayload;
+
+    validatedPayload = tripForm?.startTime
+      ? { ...basePayload, startTime: { value: tripForm.startTime.value, error: "" } }
       : basePayload;
 
     const createTrip = CreatePayloadFactory<TripCreateParsed>(validatedPayload);
@@ -123,7 +129,7 @@ export default function TripPlannerView() {
           style={{ height: 80, zIndex: -1 }}
           placeholder="Add any notes or details about your trip..."
           returnKeyType="done"
-          value={tripForm?.desc?.value}
+          value={tripForm?.desc?.value as string | undefined}
           onChangeText={(text) => setTripForm((prev) => ({ ...prev, desc: { value: text, error: "" } }))}
           error={!!tripForm?.desc?.error}
           errorText={tripForm?.desc?.error}

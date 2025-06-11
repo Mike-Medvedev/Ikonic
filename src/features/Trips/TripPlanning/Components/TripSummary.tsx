@@ -1,9 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import { Card, Text, Avatar, useTheme } from "react-native-paper";
-import { NewTripForm } from "@/types";
+import { TripCreateForm } from "@/types";
 
-const TripSummary = ({ tripForm }: { tripForm: NewTripForm }) => {
+const TripSummary = ({ tripForm }: { tripForm: TripCreateForm }) => {
   const theme = useTheme();
   return (
     <>

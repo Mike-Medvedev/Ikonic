@@ -1,13 +1,13 @@
 import { LayoutRectangle, Pressable, ScrollView, View } from "react-native";
 import { Icon, Surface, useTheme, IconButton } from "react-native-paper";
-import { NewTripForm, TripComponentProps, TripUpdateForm } from "@/types";
+import { TripComponentProps, TripCreateForm, TripUpdateForm } from "@/types";
 import { TextInput, Text } from "@/design-system/components";
 import { useRef, useState, useEffect } from "react";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
 
-const LocationAutoComplete = <T extends NewTripForm | TripUpdateForm>({
+const LocationAutoComplete = <T extends TripCreateForm | TripUpdateForm>({
   tripForm,
   setTripForm,
 }: TripComponentProps<T>) => {

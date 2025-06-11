@@ -59,7 +59,7 @@ export function formatDateRangeShort(startDateInput: Date | string, endDateInput
     return `${formattedStartDate} - ${formattedEndDate}`;
   }
 }
-
+/** Calculate time elapsed between a given time and the current time */
 export function calculateTimeElapsed(time: string): string {
   try {
     const givenTime = new Date(time);
@@ -84,4 +84,13 @@ export function calculateTimeElapsed(time: string): string {
   } catch (error) {
     return "Error Converting Date";
   }
+}
+
+export function calculateTimeFromHoursAndMinutes(hours: number, minutes: number) {
+  const time =
+    hours <= 12
+      ? `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} AM`
+      : `${(hours - 12).toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} PM`;
+  console.log("Calculated TIme: ", time);
+  return time;
 }

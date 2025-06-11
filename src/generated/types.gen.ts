@@ -159,6 +159,7 @@ export type TripCreate = {
     startDate: string;
     endDate: string;
     mountain: string;
+    startTime?: string | null;
     desc?: string | null;
 };
 
@@ -167,6 +168,7 @@ export type TripPublic = {
     startDate: string;
     endDate: string;
     mountain: string;
+    startTime?: string | null;
     desc?: string | null;
     id: string;
     owner: UserPublic;
@@ -179,6 +181,7 @@ export type TripUpdate = {
     endDate?: string | null;
     mountain?: string | null;
     desc?: string | null;
+    startTime?: string | null;
     tripImageStoragePath?: string | null;
 };
 
