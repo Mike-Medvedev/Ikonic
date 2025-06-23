@@ -1,6 +1,6 @@
 # Ikonic
 
-Ski/Snowboard Trip Planner
+Casual Hang out planner
 
 Built with Expo and React native
 

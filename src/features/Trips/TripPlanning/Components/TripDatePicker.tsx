@@ -78,6 +78,7 @@ export default function TripDatePicker<T extends TripCreateForm | TripUpdateForm
       alignItems: "center",
       borderColor: theme.colors.outlineVariant,
       borderWidth: 1,
+      borderRadius: theme.roundness,
       padding: 12,
       zIndex: -1,
     },

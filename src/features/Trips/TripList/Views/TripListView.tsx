@@ -18,16 +18,17 @@ export default function TripListView() {
     queryKey: ["trips"], queryFn: async () => {
       return TripService.getAll();
     },
+    staleTime: 60 * 1000 //1 hour cache
    });
 
   // Get current date at midnight for consistent comparison
   const now = new Date();
-  const currentDateUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  const currentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   // Filter for active and upcoming trips
   const activeAndUpcomingTrips = trips?.filter((trip) => {
     // Trip is active or upcoming if it hasn't ended yet
-    return trip.endDate >= currentDateUTC;
+    return trip.endDate >= currentDate;
   });
 
   // Sort by start date (closest first)
@@ -39,20 +40,9 @@ export default function TripListView() {
 
   const renderTripItem = ({ item }: { item: TripPublicParsed }) => {
     // Check if trip is currently active
-    const isActive = currentDateUTC >= item.startDate && currentDateUTC <= item.endDate;
+    const isActive = currentDate >= item.startDate && currentDate <= item.endDate;
 
-    if (isActive) {
-      // Render active trip with dashed border
-      return (
-        <View style={[styles.activeTrip, { borderColor: theme.colors.primary }]}>
-          <Text style={[styles.activeTripText, { color: theme.colors.primary }]}>{item.title}</Text>
-          <Text style={[styles.activeLabel, { color: theme.colors.primary }]}>ACTIVE</Text>
-        </View>
-      );
-    } else {
-      // Render upcoming trip with normal Trip component
-      return <Trip trip={item} />;
-    }
+    return <Trip trip={item} isActive={isActive} />;
   };
 
   return (
@@ -78,23 +68,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-  },
-  activeTrip: {
-    padding: 16,
-    marginVertical: 8,
-    borderWidth: 2,
-    borderStyle: "dashed",
-    borderRadius: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  activeTripText: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  activeLabel: {
-    fontSize: 12,
-    fontWeight: "bold",
   },
 });

@@ -11,7 +11,8 @@ import { Background, Text } from "@/design-system/components";
 import TripTitleDetail from "@/components/TripTitleDetail";
 import { ApiError, NetworkError } from "@/lib/errors";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 /**
  * Render RSVP page for a selected trip where users can decide to rsvp
@@ -21,6 +22,7 @@ export default function RsvpView() {
     selectedTrip: string;
     invite_token: string;
   };
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     console.log("PRINTING INVITE TOKEN FROM RSVP PAGE: ", invite_token);
   }, [invite_token]);
@@ -45,6 +47,7 @@ export default function RsvpView() {
       showSuccess({ message: "Successfully Rsvped!", url: DEFAULT_APP_PATH });
     },
     onSettled: () => {
+      setLoading(false);
       queryClient.invalidateQueries({ queryKey: ["trips"] });
     },
   });
@@ -66,7 +69,6 @@ export default function RsvpView() {
       borderRadius: theme.roundness,
     },
   });
-
   return (
     <Background>
       <View style={{ padding: 20 }}>
@@ -84,56 +86,57 @@ export default function RsvpView() {
 
         <Divider />
 
-        <AsyncStateWrapper loading={isFetching} error={error}>
-          <Text variant="headlineSmall" style={{ marginVertical: 16, textTransform: "capitalize" }}>
-            {`You have been invited to ${tripData?.owner.firstname}'s trip🎉`}
-          </Text>
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          <AsyncStateWrapper loading={isFetching} error={error}>
+            <Text variant="headlineSmall" style={{ marginVertical: 16, textTransform: "capitalize" }}>
+              {`You have been invited to ${tripData?.owner.firstname}'s trip🎉`}
+            </Text>
 
-          <View style={{ gap: 16, marginVertical: 16 }}>
-            <Pressable
-              style={styles.rsvpContainer}
-              onPress={() =>
-                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "accepted" })
-              }
-            >
-              <View style={{ flexDirection: "row", gap: 16 }}>
-                <Icon source="check" size={32} color={theme.colors.secondary} />
-                <View>
+            <View style={{ gap: 16, marginVertical: 16 }}>
+              <Pressable
+                style={styles.rsvpContainer}
+                onPress={() => {
+                  setLoading(true);
+                  rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "accepted" });
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
+                  <Icon source="check" size={32} color={theme.colors.secondary} />
+
                   <Text>Count me in</Text>
-                  <Text>Ready to hit the slopes</Text>
                 </View>
-              </View>
-            </Pressable>
-            <Pressable
-              style={styles.rsvpContainer}
-              onPress={() =>
-                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "uncertain" })
-              }
-            >
-              <View style={{ flexDirection: "row", gap: 16 }}>
-                <Icon source="help" size={32} color={theme.colors.secondary} />
-                <View>
+              </Pressable>
+              <Pressable
+                style={styles.rsvpContainer}
+                onPress={() => {
+                  setLoading(true);
+                  rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "uncertain" });
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
+                  <Icon source="help" size={32} color={theme.colors.secondary} />
+
                   <Text>Need to check</Text>
-                  <Text>Still figuring things out</Text>
                 </View>
-              </View>
-            </Pressable>
-            <Pressable
-              style={styles.rsvpContainer}
-              onPress={() =>
-                rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "declined" })
-              }
-            >
-              <View style={{ flexDirection: "row", gap: 16 }}>
-                <Icon source="close" size={32} color={theme.colors.secondary} />
-                <View>
+              </Pressable>
+              <Pressable
+                style={styles.rsvpContainer}
+                onPress={() => {
+                  setLoading(true);
+                  rsvpMutation.mutate({ tripId: selectedTripId, inviteToken: invite_token, rsvp: "declined" });
+                }}
+              >
+                <View style={{ flexDirection: "row", gap: 16, alignItems: "center" }}>
+                  <Icon source="close" size={32} color={theme.colors.secondary} />
+
                   <Text>Can&apos;t make it</Text>
-                  <Text>Maybe next time!</Text>
                 </View>
-              </View>
-            </Pressable>
-          </View>
-        </AsyncStateWrapper>
+              </Pressable>
+            </View>
+          </AsyncStateWrapper>
+        )}
       </View>
     </Background>
   );

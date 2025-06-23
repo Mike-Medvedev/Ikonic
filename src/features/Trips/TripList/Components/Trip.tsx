@@ -13,18 +13,20 @@ import storageClient from "@/lib/storage";
 
 export interface TripProps {
   trip: TripPublicParsed;
+  isActive?: boolean;
 }
 /**
  * Renders the UI for a Trip in a Trip List which is selectable and navigates to a specific trips details
  * @todo DELETE TRIP BLOB WHEN DELETING TRIP
  */
-export default function Trip({ trip }: TripProps) {
+export default function Trip({ trip, isActive = false }: TripProps) {
   const router = useRouter();
   //prettier-ignore
   const { data: attendees, isFetching, error } = useQuery({
     queryKey: ["attendees", trip.id],
     queryFn: async () => InviteService.getInvitedUsers(trip.id),
     enabled: !!trip.id,
+    staleTime: 60 * 1000 //1 hour cache
   });
   const { data: imageUrl } = useQuery({
     queryKey: ["trip-image", trip.id],
@@ -36,6 +38,7 @@ export default function Trip({ trip }: TripProps) {
       });
     },
     enabled: !!trip.tripImageStoragePath,
+    staleTime: 60 * 1000, //1 hour cache
   });
 
   const theme = useTheme();
@@ -54,6 +57,10 @@ export default function Trip({ trip }: TripProps) {
     label: { color: theme.colors.secondary },
     iconStyle: { marginLeft: -4, marginRight: -4 },
     text: { marginBottom: 8 },
+    activeLabel: {
+      fontSize: 12,
+      fontWeight: "bold",
+    },
   });
 
   return (
@@ -75,10 +82,16 @@ export default function Trip({ trip }: TripProps) {
             </AsyncStateWrapper>
 
             <View style={styles.chip}>
-              <Icon source="calendar" color={theme.colors.secondary} size={20} />
-              <Text
-                style={styles.label}
-              >{`${getDaysUntil(trip.startDate)} day${getDaysUntil(trip.startDate) === 1 ? "" : "s"}`}</Text>
+              {isActive ? (
+                <Text style={[styles.activeLabel, { color: theme.colors.primary, textAlign: "center" }]}>ACTIVE</Text>
+              ) : (
+                <>
+                  <Icon source="calendar" color={theme.colors.secondary} size={20} />
+                  <Text
+                    style={styles.label}
+                  >{`${getDaysUntil(trip.startDate)} day${getDaysUntil(trip.startDate) === 1 ? "" : "s"}`}</Text>
+                </>
+              )}
             </View>
           </View>
         </View>

@@ -34,6 +34,7 @@ const CardComponent = ({ uri, date, children }: CardProps) => {
         <PaperCard.Cover
           style={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
           source={{ uri: uri ?? undefined }}
+          resizeMode="cover"
         />
         <View style={styles.overlay}>
           <Chip style={{ borderRadius: 20 }}>{date}</Chip>

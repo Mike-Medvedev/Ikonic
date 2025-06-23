@@ -1,7 +1,7 @@
 import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import { Background, Button, Text, TextInput, SelectProfileAvatar, SignOutButton } from "@/design-system/components";
 import { useTheme, Icon } from "react-native-paper";
-import { SimpleForm, UserPublic, UserUpdate, RiderType } from "@/types";
+import { SimpleForm, UserPublic, UserUpdate } from "@/types";
 import useToast from "@/hooks/useToast";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -22,7 +22,6 @@ interface ProfileEditProps {
 type UpdateProfileForm = {
   fullname: SimpleForm<string>;
   username: SimpleForm<string>;
-  riderType: SimpleForm<RiderType | null>;
 };
 /**
  * Render the ui for Profile Edit page for users to update profile
@@ -62,7 +61,6 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
   const [profileForm, setProfileForm] = useState<UpdateProfileForm>({
     fullname: { value: `${profile?.firstname ?? ""} ${profile?.lastname ?? ""}`, error: "" },
     username: { value: profile?.username ?? "", error: "" },
-    riderType: { value: profile?.riderType ?? null, error: "" },
   });
 
   /**
@@ -111,7 +109,6 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
     if (profile.firstname != firstname) userUpdate.firstname = firstname;
     if (profile.lastname != lastname) userUpdate.lastname = lastname;
     if (profile.username != profileForm.username.value) userUpdate.username = profileForm.username.value;
-    if (profile.riderType != profileForm.riderType.value) userUpdate.riderType = profileForm.riderType.value;
 
     const user_id = session?.user?.id;
     if (!user_id) {
@@ -139,14 +136,6 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
       height: 72,
     },
     label: { marginBottom: 8 },
-    riderTypeContainer: {
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-      marginBottom: 32,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
   });
   return (
     <Background>
@@ -182,32 +171,6 @@ export default function ProfileEditView({ profile, close }: ProfileEditProps) {
           {/* <Text style={styles.label}>Email</Text>
         <TextInput placeholder="Enter your email" /> */}
 
-          <Text style={styles.label}>Rider Type:</Text>
-          <View style={styles.riderTypeContainer}>
-            <Button
-              icon="ski"
-              mode={profileForm.riderType.value === "skier" ? "contained" : "outlined"}
-              onPress={() => {
-                if (profileForm.riderType.value === "skier")
-                  setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
-                else setProfileForm((prev) => ({ ...prev, riderType: { value: "skier", error: "" } }));
-              }}
-            >
-              Skier
-            </Button>
-
-            <Button
-              icon="snowboard"
-              mode={profileForm.riderType.value === "snowboarder" ? "contained" : "outlined"}
-              onPress={() => {
-                if (profileForm.riderType.value === "snowboarder")
-                  setProfileForm((prev) => ({ ...prev, riderType: { value: null, error: "" } }));
-                else setProfileForm((prev) => ({ ...prev, riderType: { value: "snowboarder", error: "" } }));
-              }}
-            >
-              Snowboarder
-            </Button>
-          </View>
           <Button mode="contained" onPress={handleSubmit} loading={loading}>
             Save Changes
           </Button>

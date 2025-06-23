@@ -32,6 +32,7 @@ export default function TripDetailsView() {
       return TripService.getOne(selectedTripID as string);
     },
     enabled: !!selectedTripID,
+    staleTime: 60 * 1000 //1 hour cache
   });
   const isOwner = trip?.owner.id === session.user.id;
 
@@ -88,27 +89,23 @@ export default function TripDetailsView() {
   return (
     <Background>
       <AsyncStateWrapper loading={fTrips || fetchingImage} error={eTrips || imageError}>
-        <View style={styles.cover}>
-          <View style={styles.imageContainer}>
-            {cacheBustedUrl ? (
-              <>
-                <Image source={{ uri: imageUrl! }} style={styles.image} />
-                {fetchingImage && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
-              </>
-            ) : (
-              <Text style={{ textAlign: "center", color: theme.colors.primary }}>Tap the Cog to upload an image</Text>
-            )}
-          </View>
+        {cacheBustedUrl && (
+          <View style={styles.cover}>
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: imageUrl! }} style={styles.image} />
+              {fetchingImage && <ActivityIndicator style={StyleSheet.absoluteFill} color={theme.colors.surface} />}
+            </View>
 
-          {/* <View style={styles.coverActions}>
+            {/* <View style={styles.coverActions}>
             <IconButton icon="share-variant" size={20} iconColor={theme.colors.primary} mode="contained" />
             <IconButton icon="heart-outline" size={20} iconColor={theme.colors.primary} mode="contained" />
           </View> */}
-        </View>
+          </View>
+        )}
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.tripOverview}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text variant="titleLarge" style={styles.tripTitle}>
                   {trip?.title}
                 </Text>

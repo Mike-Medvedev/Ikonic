@@ -1,5 +1,5 @@
 import { View, StyleSheet, Pressable, ScrollView } from "react-native";
-import { Avatar, Icon, useTheme } from "react-native-paper";
+import { Icon, useTheme } from "react-native-paper";
 import { FriendshipCreate, UserPublic } from "@/types";
 import { Text } from "@/design-system/components";
 import { useState } from "react";
@@ -8,7 +8,6 @@ import ProfileEditModal from "@/features/Profile/Components/ProfileEditModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TripService } from "@/features/Trips/Services/tripService";
 import AsyncStateWrapper from "@/components/AsyncStateWrapper";
-import { formatDateRangeShort } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { DEFAULT_APP_PATH } from "@/constants/constants";
 import UserAvatar from "@/components/UserAvatar";
@@ -38,6 +37,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
   const { data: recentTrips, isFetching, error } = useQuery({
     queryKey: ["trips", "past"],
     queryFn: async () => TripService.getAll({ past: true }),
+    staleTime: 60 * 1000 //1 hour cache
   })
   const orderedRecentTrips = recentTrips?.sort(
     (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
@@ -104,32 +104,12 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
       borderColor: theme.colors.outlineVariant,
       borderRadius: theme.roundness,
     },
-    avatarOverlay: { position: "absolute", bottom: -10, right: 0 },
-    iconContainer: { backgroundColor: theme.colors.secondaryContainer },
   });
   return (
     <View style={styles.container}>
       <View style={styles.profileCardContainer}>
         <View>
           <UserAvatar profile={profile} size={64} />
-          <View style={styles.avatarOverlay}>
-            {profile.riderType === "skier" && (
-              <Avatar.Icon
-                icon="ski"
-                size={24}
-                color={theme.colors.onSecondaryContainer}
-                style={styles.iconContainer}
-              />
-            )}
-            {profile.riderType === "snowboarder" && (
-              <Avatar.Icon
-                icon="snowboard"
-                size={24}
-                color={theme.colors.onSecondaryContainer}
-                style={styles.iconContainer}
-              />
-            )}
-          </View>
         </View>
 
         <View style={styles.profileCardContent}>
@@ -162,10 +142,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
           <Text variant="headlineSmall">{recentTrips?.length || 0}</Text>
           <Text style={styles.squareLabel}>Trips</Text>
         </View>
-        <View style={styles.square}>
-          <Text variant="headlineSmall">8</Text>
-          <Text style={styles.squareLabel}>Resorts</Text>
-        </View>
+
         {isOwner ? (
           <Pressable style={styles.square} onPress={() => setFriendsModalVisible(true)}>
             <Text variant="headlineSmall">{friends?.length || 0}</Text>
@@ -203,7 +180,6 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
                       <Text style={{ color: theme.colors.secondary }}>{trip.mountain}</Text>
                       <Text style={{ color: theme.colors.secondary }}>{trip.startDate?.toDateString()}</Text>
                     </View>
-                    <Icon source="ski" size={24} color={theme.colors.onSurfaceVariant} />
                   </Pressable>
                 ))
               : null}
