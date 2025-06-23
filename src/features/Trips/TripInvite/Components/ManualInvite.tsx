@@ -36,8 +36,6 @@ export default function ManualInvite() {
     queryParams: { invite_token: selectedTripId },
     isTripleSlashed: true,
   });
-  console.log(inviteLink);
-
   const copyToClipboard = async () => {
     try {
       await Clipboard.setStringAsync(inviteLink);

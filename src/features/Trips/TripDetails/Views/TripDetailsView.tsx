@@ -156,35 +156,9 @@ export default function TripDetailsView() {
                   <Icon source="chevron-right" size={40} />
                 </View>
               </Pressable>
-              {/* <AsyncStateWrapper loading={isFetching} error={error}>
-              <UsersAvatarList attendees={attendees} rsvp="accepted" />
-            </AsyncStateWrapper> */}
             </View>
           </View>
-          {/* <Divider /> */}
-          {/* <View style={styles.tripDetails}>
-            <Text variant="titleMedium" style={{ marginBottom: 16 }}>
-              Trip Details
-            </Text>
 
-            <View style={styles.tripDetailsContent}>
-              <View style={{ flexDirection: "row", gap: 8 }}>
-                <Icon source="home" size={16} color={theme.colors.secondary} />
-                <Text style={{ flex: 1 }}>Accommodation</Text>
-                <Text>Slope-side Condo</Text>
-              </View>
-              <View style={{ flexDirection: "row", gap: 8 }}>
-                <Icon source="bed" size={16} color={theme.colors.secondary} />
-                <Text style={{ flex: 1 }}>Bedrooms</Text>
-                <Text>3 beds . 2 baths</Text>
-              </View>
-              <View style={{ flexDirection: "row", gap: 8 }}>
-                <Icon source="currency-usd" size={16} color={theme.colors.secondary} />
-                <Text style={{ flex: 1 }}>Price per night</Text>
-                <Text>$350</Text>
-              </View>
-            </View>
-          </View> */}
           <Divider style={{ marginVertical: 16 }} />
           {trip?.desc ? (
             <View style={styles.descritpion}>

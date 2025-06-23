@@ -201,9 +201,7 @@ export default function ProfileCard({ profile, isOwner }: ProfileCardProps) {
                     <View>
                       <Text variant="bodyLarge">{trip.title}</Text>
                       <Text style={{ color: theme.colors.secondary }}>{trip.mountain}</Text>
-                      <Text style={{ color: theme.colors.secondary }}>
-                        {formatDateRangeShort(trip.startDate, trip.endDate)}
-                      </Text>
+                      <Text style={{ color: theme.colors.secondary }}>{trip.startDate?.toDateString()}</Text>
                     </View>
                     <Icon source="ski" size={24} color={theme.colors.onSurfaceVariant} />
                   </Pressable>

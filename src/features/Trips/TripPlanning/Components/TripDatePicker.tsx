@@ -25,6 +25,8 @@ export default function TripDatePicker<T extends TripCreateForm | TripUpdateForm
   const theme = useTheme();
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [openTimePicker, setOpenTimePicker] = useState(false);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const onDismissTime = useCallback(() => {
     setOpenTimePicker(false);
@@ -48,14 +50,17 @@ export default function TripDatePicker<T extends TripCreateForm | TripUpdateForm
 
   const onConfirmDate = useCallback(
     ({ startDate, endDate }: { startDate: Date | undefined; endDate: Date | undefined }) => {
+      console.log(startDate, endDate);
       setOpenDatePicker(false);
       setDateRange({ startDate, endDate });
 
       const finalStartDate = startDate
-        ? new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
+        ? new Date(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate())
         : undefined;
 
-      const finalEndDate = endDate ? new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()) : undefined;
+      const finalEndDate = endDate
+        ? new Date(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate())
+        : undefined;
 
       setTripForm((prev) => ({
         ...prev,
@@ -126,9 +131,7 @@ export default function TripDatePicker<T extends TripCreateForm | TripUpdateForm
         startDate={dateRange.startDate}
         endDate={dateRange.endDate}
         onConfirm={onConfirmDate}
-        validRange={{ startDate: new Date(), endDate: undefined }}
-        startYear={2023}
-        endYear={2024}
+        validRange={{ startDate: today, endDate: undefined }}
         placeholder="HIHIHI"
       />
       <View style={{ justifyContent: "center", flex: 1, alignItems: "center" }}>
