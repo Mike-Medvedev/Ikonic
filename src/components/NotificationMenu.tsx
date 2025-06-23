@@ -140,7 +140,7 @@ export default function NotificationMenu() {
     );
   };
   return (
-    <View>
+    <View style={{ marginHorizontal: 8 }}>
       {((friendRequests?.length ?? 0) > 0 || (invitations?.length ?? 0) > 0) && (
         <Badge style={{ position: "absolute", zIndex: -100 }}>
           {(friendRequests?.length ?? 0) + (invitations?.length ?? 0)}
