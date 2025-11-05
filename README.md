@@ -6,7 +6,7 @@ Built with Expo and React native
 
 Tanstack Query for data management
 
-API Repo -> <a href="https://github.com/Mike-Medvedev/ikonic-api" target="_blank"/>
+API Repo -> <a href="https://github.com/Mike-Medvedev/ikonic-api" target="_blank">Ikonic API</a>
 
 # Images
 
