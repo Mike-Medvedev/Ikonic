@@ -6,6 +6,8 @@ Built with Expo and React native
 
 Tanstack Query for data management
 
+API Repo -> <a href="https://github.com/Mike-Medvedev/ikonic-api" target="_blank"/>
+
 # Images
 
 <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px;">
